@@ -24,6 +24,7 @@
         "axios",
         "confirmationservice",
         "fadein",
+        "nuxt",
         "pinia",
         "primevue",
         "toastservice",

@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts">
 import { useLayout } from '@/layout/composables/layout';
 import AppMenu from './AppMenu.vue';
 import AppTopbar from './AppTopbar.vue';
 
 const { layoutConfig, layoutState, isHorizontal } = useLayout();
 
-let timeout = null;
+let timeout: any = null;
 
 function onMouseEnter() {
     if (!layoutState.anchored) {
@@ -40,7 +40,7 @@ function onAnchorToggle() {
         @mouseleave="onMouseLeave"
     >
         <div class="sidebar-header">
-            <router-link class="logo">
+            <router-link to="/" class="logo">
                 <img
                     class="logo-image"
                     :src="
@@ -48,9 +48,9 @@ function onAnchorToggle() {
                             ? '/layout/images/logo-dark.svg'
                             : '/layout/images/logo-white.svg'
                     "
-                    alt="diamond-layout"
+                    alt="mirai-layout"
                 />
-                <span class="app-name title-h7">DIAMOND</span>
+                <span class="app-name title-h7">MIRAI</span>
             </router-link>
             <button
                 class="layout-sidebar-anchor"

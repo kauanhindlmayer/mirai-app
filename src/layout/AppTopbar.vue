@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useLayout } from '@/layout/composables/layout';
 import { useUserStore } from '@/stores/user';
 import { ref } from 'vue';
@@ -93,14 +93,14 @@ function logout() {
             <img
                 class="horizontal-logo"
                 src="/layout/images/logo-white.svg"
-                alt="diamond-layout"
+                alt="mirai-layout"
             />
             <span class="topbar-separator" />
             <AppBreadcrumb />
             <img
                 class="mobile-logo"
                 :src="`/layout/images/logo-${isDarkTheme ? 'white' : 'dark'}.svg`"
-                alt="diamond-layout"
+                alt="mirai-layout"
             />
         </div>
 
@@ -189,7 +189,7 @@ function logout() {
                             <li
                                 v-for="(item, index) of notifications.find(
                                     (f) => f.id === selectedNotificationBar
-                                ).data"
+                                )?.data"
                                 :key="index"
                             >
                                 <div

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useLayout } from '@/layout/composables/layout';
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import AppBreadcrumb from './AppBreadcrumb.vue';
@@ -9,7 +9,7 @@ import AppSidebar from './AppSidebar.vue';
 import AppTopbar from './AppTopbar.vue';
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
-const outsideClickListener = ref(null);
+const outsideClickListener = ref<any>(null);
 
 watch(isSidebarActive, (newVal) => {
     if (newVal) {
@@ -50,7 +50,7 @@ const containerClass = computed(() => {
 
 function bindOutsideClickListener() {
     if (!outsideClickListener.value) {
-        outsideClickListener.value = (event) => {
+        outsideClickListener.value = (event: any) => {
             if (isOutsideClicked(event)) {
                 layoutState.overlayMenuActive = false;
                 layoutState.overlaySubmenuActive = false;
@@ -73,7 +73,7 @@ function unbindOutsideClickListener() {
     }
 }
 
-function isOutsideClicked(event) {
+function isOutsideClicked(event: any) {
     const sidebarEl = document.querySelector('.layout-sidebar');
     const topbarButtonEl = document.querySelector('.topbar-left > a');
 

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue';
 
 defineProps({
@@ -18,7 +18,7 @@ defineProps({
 
 const isIntersecting = ref(false);
 const isLoaded = ref(false);
-const image = ref(null);
+const image = ref<any>(null);
 
 function handleLoad() {
     isLoaded.value = true;

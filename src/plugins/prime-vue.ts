@@ -3,6 +3,7 @@ import Aura from '@primevue/themes/aura';
 import PrimeVue from 'primevue/config';
 import ConfirmationService from 'primevue/confirmationservice';
 import ToastService from 'primevue/toastservice';
+import type { App } from 'vue';
 
 const defaultPreset = definePreset(Aura, {
     semantic: {
@@ -23,7 +24,7 @@ const defaultPreset = definePreset(Aura, {
 });
 
 const primeVue = {
-    install(app) {
+    install(app: App<Element>) {
         app.use(PrimeVue, {
             theme: {
                 preset: defaultPreset,

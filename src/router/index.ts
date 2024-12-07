@@ -1,8 +1,12 @@
 import AppLayout from '@/layout/AppLayout.vue';
 import AuthLayout from '@/layout/AuthLayout.vue';
-import { createRouter, createWebHistory } from 'vue-router';
+import {
+    createRouter,
+    createWebHistory,
+    type RouteRecordRaw
+} from 'vue-router';
 
-const routes = [
+const routes: Readonly<RouteRecordRaw[]> = [
     {
         path: '/',
         component: AppLayout,

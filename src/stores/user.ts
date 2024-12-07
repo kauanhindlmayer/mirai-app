@@ -7,13 +7,13 @@ export const useUserStore = defineStore('users', () => {
     const router = useRouter();
     const toast = useToast();
 
-    async function register({ firstName, lastName, email, password }) {
+    async function register(form: Record<string, string>) {
         try {
             await axios.post('/users/register', {
-                firstName,
-                lastName,
-                email,
-                password
+                firstName: form.firstName,
+                lastName: form.lastName,
+                email: form.email,
+                password: form.password
             });
             router.push({ name: 'login' });
         } catch {
@@ -26,15 +26,15 @@ export const useUserStore = defineStore('users', () => {
         }
     }
 
-    async function login({ email, password, shouldRememberCredentials }) {
+    async function login(form: Record<string, string>) {
         try {
-            const { accessToken } = await axios.post('/users/login', {
-                email,
-                password
+            const response = await axios.post('/users/login', {
+                email: form.email,
+                password: form.password
             });
 
-            if (shouldRememberCredentials) {
-                localStorage.setItem('accessToken', accessToken);
+            if (form.shouldRememberCredentials) {
+                localStorage.setItem('accessToken', response.data.accessToken);
             }
 
             router.push({ name: 'empty' });

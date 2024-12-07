@@ -1,17 +1,18 @@
-<script setup>
+<script setup lang="ts">
 import { useLayout } from '@/layout/composables/layout';
-import { ref } from 'vue';
+import type InputText from 'primevue/inputtext';
+import { useTemplateRef } from 'vue';
 
 const { layoutState } = useLayout();
 
-const searchInput = ref(null);
+const searchInputRef = useTemplateRef<any>('searchInput');
 
 function toggleSearchBar() {
     layoutState.searchBarActive = !layoutState.searchBarActive;
 }
 
 function focusOnInput() {
-    searchInput.value.$el.focus();
+    searchInputRef.value?.$el.focus();
 }
 </script>
 

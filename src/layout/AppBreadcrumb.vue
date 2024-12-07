@@ -1,13 +1,13 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const breadcrumbRoutes = ref([]);
+const breadcrumbRoutes = ref<string[]>([]);
 
 function setBreadcrumbRoutes() {
     if (route.meta.breadcrumb) {
-        breadcrumbRoutes.value = route.meta.breadcrumb;
+        breadcrumbRoutes.value = route.meta.breadcrumb as string[];
         return;
     }
 
