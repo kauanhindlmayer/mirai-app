@@ -1,10 +1,29 @@
 <script setup>
 import Logo from '@/components/Logo.vue';
+import { useUserStore } from '@/stores/user';
+import { yupResolver } from '@primevue/forms/resolvers/yup';
 import { ref } from 'vue';
+import { object, string } from 'yup';
+
+const userStore = useUserStore();
 
 const email = ref('');
 const password = ref('');
 const remember = ref(false);
+
+const resolver = ref(
+    yupResolver(
+        object({
+            email: string().email().required(),
+            password: string().required()
+        })
+    )
+);
+
+async function onFormSubmit({ valid }) {
+    if (!valid) return;
+    await userStore.login(email.value, password.value, remember.value);
+}
 </script>
 
 <template>
@@ -27,19 +46,39 @@ const remember = ref(false);
                         <p class="body-small mt-3.5 text-center lg:text-left">
                             Please enter your details
                         </p>
-                        <form>
-                            <InputText
-                                type="text"
-                                v-model="email"
-                                class="w-full"
-                                placeholder="Email"
-                            />
-                            <InputText
-                                type="password"
-                                v-model="password"
-                                class="w-full mt-4"
-                                placeholder="Password"
-                            />
+                        <Form :resolver @submit="onFormSubmit">
+                            <FormField v-slot="$field" name="email">
+                                <InputText
+                                    type="text"
+                                    v-model="email"
+                                    class="w-full"
+                                    placeholder="Email"
+                                />
+                                <Message
+                                    v-if="$field?.invalid"
+                                    severity="error"
+                                    size="small"
+                                    variant="simple"
+                                >
+                                    {{ $field.error?.message }}
+                                </Message>
+                            </FormField>
+                            <FormField v-slot="$field" name="password">
+                                <InputText
+                                    type="password"
+                                    v-model="password"
+                                    class="w-full mt-4"
+                                    placeholder="Password"
+                                />
+                                <Message
+                                    v-if="$field?.invalid"
+                                    severity="error"
+                                    size="small"
+                                    variant="simple"
+                                >
+                                    {{ $field.error?.message }}
+                                </Message>
+                            </FormField>
                             <div
                                 class="my-8 flex items-center justify-between"
                             >
@@ -54,7 +93,7 @@ const remember = ref(false);
                                     </label>
                                 </div>
                                 <router-link
-                                    to="/auth/forgot-password"
+                                    to="/forgot-password"
                                     class="body-small text-primary-500 hover:underline"
                                 >
                                     Forgot password?
@@ -63,7 +102,7 @@ const remember = ref(false);
                             <button type="submit" class="body-button w-full">
                                 Login
                             </button>
-                        </form>
+                        </Form>
                         <div class="mt-8 body-small text-center lg:text-left">
                             Not registered?
                             <router-link

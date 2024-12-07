@@ -1,10 +1,12 @@
 <script setup>
 import { useLayout } from '@/layout/composables/layout';
+import { useUserStore } from '@/stores/user';
 import { ref } from 'vue';
 import AppBreadcrumb from './AppBreadcrumb.vue';
 
 const { layoutState, isDarkTheme, onMenuToggle, onConfigSidebarToggle } =
     useLayout();
+const userStore = useUserStore();
 
 const notificationsBars = [
     {
@@ -76,6 +78,10 @@ const notifications = [
 function toggleSearchBar() {
     layoutState.searchBarActive = !layoutState.searchBarActive;
 }
+
+function logout() {
+    userStore.logout();
+}
 </script>
 
 <template>
@@ -138,8 +144,9 @@ function toggleSearchBar() {
                         >
                             <span
                                 class="label-small text-surface-950 dark:text-surface-0"
-                                >Notifications</span
                             >
+                                Notifications
+                            </span>
                             <button
                                 class="py-1 px-2 text-surface-950 dark:text-surface-0 label-x-small hover:bg-emphasis border border-surface rounded-lg shadow-[0px_1px_2px_0px_rgba(18,18,23,0.05)] transition-all"
                             >
@@ -286,6 +293,7 @@ function toggleSearchBar() {
                             <li>
                                 <a
                                     class="label-small dark:text-surface-400 flex gap-2 py-2 px-2.5 rounded-lg items-center hover:bg-emphasis transition-colors duration-150 cursor-pointer"
+                                    @click="logout"
                                 >
                                     <i class="pi pi-power-off" />
                                     <span>Log out</span>

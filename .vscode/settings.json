@@ -21,8 +21,10 @@
         "editor.formatOnSave": true
     },
     "cSpell.words": [
+        "axios",
         "confirmationservice",
         "fadein",
+        "pinia",
         "primevue",
         "toastservice",
         "Topbar"

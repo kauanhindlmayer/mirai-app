@@ -2,6 +2,7 @@
 import { useLayout } from '@/layout/composables/layout';
 import { nextTick, onBeforeMount, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+
 const route = useRoute();
 
 const {

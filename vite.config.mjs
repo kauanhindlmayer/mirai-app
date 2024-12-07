@@ -9,7 +9,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
     optimizeDeps: {
         noDiscovery: true,
-        include: ['quill']
+        include: ['quill', 'yup']
     },
     plugins: [
         vue(),
