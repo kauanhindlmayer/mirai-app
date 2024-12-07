@@ -7,14 +7,33 @@ export const useUserStore = defineStore('users', () => {
     const router = useRouter();
     const toast = useToast();
 
-    async function login(email, password, remember) {
+    async function register({ firstName, lastName, email, password }) {
+        try {
+            await axios.post('/users/register', {
+                firstName,
+                lastName,
+                email,
+                password
+            });
+            router.push({ name: 'login' });
+        } catch {
+            toast.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Email already exists',
+                life: 3000
+            });
+        }
+    }
+
+    async function login({ email, password, shouldRememberCredentials }) {
         try {
             const { accessToken } = await axios.post('/users/login', {
                 email,
                 password
             });
 
-            if (remember) {
+            if (shouldRememberCredentials) {
                 localStorage.setItem('accessToken', accessToken);
             }
 
@@ -35,6 +54,7 @@ export const useUserStore = defineStore('users', () => {
     }
 
     return {
+        register,
         login,
         logout
     };

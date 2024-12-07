@@ -7,22 +7,24 @@ import { object, string } from 'yup';
 
 const userStore = useUserStore();
 
-const email = ref('');
-const password = ref('');
-const remember = ref(false);
+const form = ref({
+    email: '',
+    password: '',
+    shouldRememberCredentials: false
+});
 
 const resolver = ref(
     yupResolver(
         object({
-            email: string().email().required(),
-            password: string().required()
+            Email: string().email().required(),
+            Password: string().required()
         })
     )
 );
 
 async function onFormSubmit({ valid }) {
     if (!valid) return;
-    await userStore.login(email.value, password.value, remember.value);
+    await userStore.login(form.value);
 }
 </script>
 
@@ -47,10 +49,10 @@ async function onFormSubmit({ valid }) {
                             Please enter your details
                         </p>
                         <Form :resolver @submit="onFormSubmit">
-                            <FormField v-slot="$field" name="email">
+                            <FormField v-slot="$field" name="Email">
                                 <InputText
                                     type="text"
-                                    v-model="email"
+                                    v-model="form.email"
                                     class="w-full"
                                     placeholder="Email"
                                 />
@@ -63,10 +65,10 @@ async function onFormSubmit({ valid }) {
                                     {{ $field.error?.message }}
                                 </Message>
                             </FormField>
-                            <FormField v-slot="$field" name="password">
+                            <FormField v-slot="$field" name="Password">
                                 <InputText
                                     type="password"
-                                    v-model="password"
+                                    v-model="form.password"
                                     class="w-full mt-4"
                                     placeholder="Password"
                                 />
@@ -85,7 +87,9 @@ async function onFormSubmit({ valid }) {
                                 <div class="flex items-center gap-2">
                                     <Checkbox
                                         inputId="remember"
-                                        v-model="remember"
+                                        v-model="
+                                            form.shouldRememberCredentials
+                                        "
                                         :binary="true"
                                     />
                                     <label for="remember" class="body-small">

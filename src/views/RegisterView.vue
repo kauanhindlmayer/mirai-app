@@ -1,20 +1,61 @@
 <script setup>
 import LazyImage from '@/components/LazyImage.vue';
 import Logo from '@/components/Logo.vue';
+import { useUserStore } from '@/stores/user';
+import { yupResolver } from '@primevue/forms/resolvers/yup';
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { object, string } from 'yup';
 
-const username = ref('');
-const email = ref('');
-const password = ref('');
-const remember = ref(false);
+const form = ref({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    hasAcceptedTerms: false
+});
 
-const router = useRouter();
+const userStore = useUserStore();
 
-function navigateToVerification() {
-    router.push({ path: '/auth/verification' });
+const resolver = ref(
+    yupResolver(
+        object({
+            firstName: string()
+                .required('First Name is a required field')
+                .matches(
+                    /^[a-zA-Z]+$/,
+                    'First Name must contain only letters'
+                ),
+            lastName: string()
+                .required('Last Name is a required field')
+                .matches(/^[a-zA-Z]+$/, 'Last Name must contain only letters'),
+            email: string()
+                .email('Please enter a valid email address')
+                .required('Email is a required field'),
+            password: string()
+                .required('Password is a required field')
+                .matches(
+                    /[A-Z]/,
+                    'Password must contain at least one uppercase letter'
+                )
+                .matches(
+                    /[a-z]/,
+                    'Password must contain at least one lowercase letter'
+                )
+                .matches(/[0-9]/, 'Password must contain at least one number')
+                .min(8, 'Password must be at least 8 characters long'),
+            hasAcceptedTerms: string().required(
+                'Please accept the Terms and Conditions'
+            )
+        })
+    )
+);
+
+async function onFormSubmit({ valid }) {
+    if (!valid) return;
+    await userStore.register(form.value);
 }
 </script>
+
 <template>
     <section
         class="min-h-screen flex items-center lg:items-start lg:py-20 justify-center animate-fadein animate-duration-300 animate-ease-in max-w-[100rem] mx-auto"
@@ -35,48 +76,110 @@ function navigateToVerification() {
                         <p class="body-small mt-3.5 text-center lg:text-left">
                             Let's get started
                         </p>
-                        <InputText
-                            type="text"
-                            v-model="username"
-                            class="w-full"
-                            placeholder="Username"
-                        />
-                        <InputText
-                            type="text"
-                            v-model="email"
-                            class="w-full mt-4"
-                            placeholder="Email"
-                        />
-                        <InputText
-                            type="password"
-                            v-model="password"
-                            class="w-full mt-4"
-                            placeholder="Password"
-                        />
-                        <div class="my-8 flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <Checkbox
-                                    inputId="remember"
-                                    v-model="remember"
-                                    :binary="true"
+                        <Form :resolver @submit="onFormSubmit">
+                            <FormField v-slot="$field" name="firstName">
+                                <InputText
+                                    type="text"
+                                    v-model="form.firstName"
+                                    class="w-full"
+                                    placeholder="First Name"
                                 />
-                                <label for="remember" class="body-small">
-                                    <span
-                                        class="label-small text-surface-950 dark:text-surface-0"
-                                    >
-                                        I have read the
-                                    </span>
-                                    Terms and Conditions
-                                </label>
-                            </div>
-                        </div>
-                        <button
-                            @click="navigateToVerification"
-                            type="button"
-                            class="body-button w-full"
-                        >
-                            Register
-                        </button>
+                                <Message
+                                    v-if="$field?.invalid"
+                                    severity="error"
+                                    size="small"
+                                    variant="simple"
+                                >
+                                    {{ $field.error?.message }}
+                                </Message>
+                            </FormField>
+                            <FormField v-slot="$field" name="lastName">
+                                <InputText
+                                    type="text"
+                                    v-model="form.lastName"
+                                    class="w-full mt-4"
+                                    placeholder="Last Name"
+                                />
+                                <Message
+                                    v-if="$field?.invalid"
+                                    severity="error"
+                                    size="small"
+                                    variant="simple"
+                                >
+                                    {{ $field.error?.message }}
+                                </Message>
+                            </FormField>
+                            <FormField v-slot="$field" name="email">
+                                <InputText
+                                    type="text"
+                                    v-model="form.email"
+                                    class="w-full mt-4"
+                                    placeholder="Email"
+                                />
+                                <Message
+                                    v-if="$field?.invalid"
+                                    severity="error"
+                                    size="small"
+                                    variant="simple"
+                                >
+                                    {{ $field.error?.message }}
+                                </Message>
+                            </FormField>
+                            <FormField v-slot="$field" name="password">
+                                <InputText
+                                    type="password"
+                                    v-model="form.password"
+                                    class="w-full mt-4"
+                                    placeholder="Password"
+                                />
+                                <Message
+                                    v-if="$field?.invalid"
+                                    severity="error"
+                                    size="small"
+                                    variant="simple"
+                                >
+                                    {{ $field.error?.message }}
+                                </Message>
+                            </FormField>
+                            <FormField
+                                v-slot="$field"
+                                name="hasAcceptedTerms"
+                                class="my-8"
+                            >
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <Checkbox
+                                            inputId="hasAcceptedTerms"
+                                            v-model="form.hasAcceptedTerms"
+                                            :binary="true"
+                                        />
+                                        <label
+                                            for="hasAcceptedTerms"
+                                            class="body-small"
+                                        >
+                                            <span
+                                                class="label-small text-surface-950 dark:text-surface-0"
+                                            >
+                                                I have read the
+                                            </span>
+                                            Terms and Conditions
+                                        </label>
+                                    </div>
+                                </div>
+                                <Message
+                                    v-if="$field?.invalid"
+                                    severity="error"
+                                    size="small"
+                                    variant="simple"
+                                >
+                                    {{ $field.error?.message }}
+                                </Message>
+                            </FormField>
+
+                            <button type="submit" class="body-button w-full">
+                                Register
+                            </button>
+                        </Form>
                         <div class="mt-8 body-small text-center lg:text-left">
                             Already have an account?
                             <router-link
