@@ -32,12 +32,8 @@ export const useUserStore = defineStore('users', () => {
                 email: form.email,
                 password: form.password
             });
-
-            if (form.shouldRememberCredentials) {
-                localStorage.setItem('accessToken', response.data.accessToken);
-            }
-
-            router.push({ name: 'empty' });
+            localStorage.setItem('accessToken', response.data.accessToken);
+            router.push({ name: 'projects-home' });
         } catch {
             toast.add({
                 severity: 'error',

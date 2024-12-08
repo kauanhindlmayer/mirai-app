@@ -1,6 +1,6 @@
 <script setup>
-import LazyImage from '@/components/LazyImage.vue';
-import Logo from '@/components/Logo.vue';
+import LazyImage from '@/components/shared/LazyImage.vue';
+import Logo from '@/components/shared/Logo.vue';
 import { useUserStore } from '@/stores/user';
 import { yupResolver } from '@primevue/forms/resolvers/yup';
 import { ref } from 'vue';

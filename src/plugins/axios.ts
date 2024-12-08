@@ -7,4 +7,15 @@ const axiosInstance = axios.create({
     }
 });
 
+axiosInstance.interceptors.request.use((config) => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) return config;
+    const publicRoutes = ['/users/login', '/users/register'];
+    const isPublicRoute = publicRoutes.includes(config.url!);
+    if (!isPublicRoute) {
+        config.headers = config.headers || {};
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
 export default axiosInstance;

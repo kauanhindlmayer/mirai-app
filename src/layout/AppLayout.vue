@@ -11,8 +11,8 @@ import AppTopbar from './AppTopbar.vue';
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 const outsideClickListener = ref<any>(null);
 
-watch(isSidebarActive, (newVal) => {
-    if (newVal) {
+watch(isSidebarActive, (newValue) => {
+    if (newValue) {
         bindOutsideClickListener();
     } else {
         unbindOutsideClickListener();

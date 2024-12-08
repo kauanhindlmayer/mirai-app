@@ -1,5 +1,4 @@
 import AppLayout from '@/layout/AppLayout.vue';
-import AuthLayout from '@/layout/AuthLayout.vue';
 import {
     createRouter,
     createWebHistory,
@@ -19,35 +18,36 @@ const routes: Readonly<RouteRecordRaw[]> = [
         ]
     },
     {
-        path: '/',
-        component: AuthLayout,
-        children: [
-            {
-                path: 'login',
-                name: 'login',
-                component: () => import('@/views/LoginView.vue')
-            },
-            {
-                path: 'register',
-                name: 'register',
-                component: () => import('@/views/RegisterView.vue')
-            },
-            {
-                path: 'oops',
-                name: 'oops',
-                component: () => import('@/views/Oops.vue')
-            }
-        ],
+        path: '/login',
+        name: 'login',
+        component: () => import('@/views/LoginView.vue'),
         meta: { scrollToTop: true }
     },
     {
-        path: '/pages/notfound',
-        name: 'notfound',
+        path: '/register',
+        name: 'register',
+        component: () => import('@/views/RegisterView.vue'),
+        meta: { scrollToTop: true }
+    },
+    {
+        path: '/oops',
+        name: 'oops',
+        component: () => import('@/views/Oops.vue'),
+        meta: { scrollToTop: true }
+    },
+    {
+        path: '/projects',
+        name: 'projects-home',
+        component: () => import('@/views/ProjectsHomeView.vue')
+    },
+    {
+        path: '/not-found',
+        name: 'not-found',
         component: () => import('@/views/NotFound.vue')
     },
     {
         path: '/:pathMatch(.*)*',
-        name: 'notfound',
+        name: 'not-found',
         component: () => import('@/views/NotFound.vue')
     }
 ];

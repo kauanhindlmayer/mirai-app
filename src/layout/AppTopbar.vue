@@ -8,6 +8,13 @@ const { layoutState, isDarkTheme, onMenuToggle, onConfigSidebarToggle } =
     useLayout();
 const userStore = useUserStore();
 
+defineProps({
+    showTopbarLeft: {
+        type: Boolean,
+        default: true
+    }
+});
+
 const notificationsBars = [
     {
         id: 'inbox',
@@ -26,54 +33,7 @@ const notificationsBars = [
 
 const selectedNotificationBar = ref(notificationsBars?.[0].id ?? 'inbox');
 
-const notifications = [
-    {
-        id: 'inbox',
-        data: []
-    },
-    {
-        id: 'general',
-        data: [
-            {
-                image: '/demo/images/avatar/avatar-square-f-1.jpg',
-                name: 'Alice Johnson',
-                description:
-                    'Reminder: Your subscription is about to expire in 3 days. Renew now to avoid interruption.',
-                time: '30 minutes ago',
-                new: true
-            },
-            {
-                image: '/demo/images/avatar/avatar-square-m-2.jpg',
-                name: 'Michael Lee',
-                description:
-                    'The server maintenance has been completed successfully. No further downtime is expected.',
-                time: 'Yesterday at 2:15 PM',
-                new: false
-            }
-        ]
-    },
-    {
-        id: 'archived',
-        data: [
-            {
-                image: '/demo/images/avatar/avatar-square-m-1.jpg',
-                name: 'Lucas Brown',
-                description:
-                    'Your appointment with Dr. Anderson has been confirmed for October 12th at 10:00 AM.',
-                time: '1 week ago',
-                new: true
-            },
-            {
-                image: '/demo/images/avatar/avatar-square-f-2.jpg',
-                name: 'Emily Davis',
-                description:
-                    'The document you uploaded has been successfully archived for future reference.',
-                time: '2 weeks ago',
-                new: false
-            }
-        ]
-    }
-];
+const notifications: any[] = [];
 
 function toggleSearchBar() {
     layoutState.searchBarActive = !layoutState.searchBarActive;
@@ -86,7 +46,7 @@ function logout() {
 
 <template>
     <div class="layout-topbar">
-        <div class="topbar-left">
+        <div v-if="showTopbarLeft" class="topbar-left">
             <a tabindex="0" class="menu-button" @click="onMenuToggle">
                 <i class="pi pi-chevron-left" />
             </a>
@@ -103,6 +63,7 @@ function logout() {
                 alt="mirai-layout"
             />
         </div>
+        <div v-else />
 
         <div class="topbar-right">
             <ul class="topbar-menu">
@@ -172,8 +133,9 @@ function logout() {
                                             : ''
                                     "
                                     class="label-small"
-                                    >{{ item.label }}</span
                                 >
+                                    {{ item.label }}
+                                </span>
                                 <Badge
                                     v-if="item?.badge"
                                     :value="item.badge"
@@ -210,16 +172,19 @@ function logout() {
                                         <div class="flex flex-col">
                                             <span
                                                 class="label-small text-left text-surface-950 dark:text-surface-0"
-                                                >{{ item.name }}</span
                                             >
+                                                {{ item.name }}
+                                            </span>
                                             <span
                                                 class="label-xsmall text-left line-clamp-1"
-                                                >{{ item.description }}</span
                                             >
+                                                {{ item.description }}
+                                            </span>
                                             <span
                                                 class="label-xsmall text-left"
-                                                >{{ item.time }}</span
                                             >
+                                                {{ item.time }}
+                                            </span>
                                         </div>
                                         <Badge
                                             v-if="item.new"

@@ -1,5 +1,5 @@
 <script setup>
-import LazyImage from '@/components/LazyImage.vue';
+import LazyImage from '@/components/shared/LazyImage.vue';
 import { useLayout } from '@/layout/composables/layout';
 
 const { isDarkTheme } = useLayout();
