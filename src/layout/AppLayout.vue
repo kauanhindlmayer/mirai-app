@@ -3,7 +3,6 @@ import { useLayout } from '@/layout/composables/layout';
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import AppBreadcrumb from './AppBreadcrumb.vue';
 import AppConfig from './AppConfig.vue';
-import AppFooter from './AppFooter.vue';
 import AppSearch from './AppSearch.vue';
 import AppSidebar from './AppSidebar.vue';
 import AppTopbar from './AppTopbar.vue';
@@ -96,7 +95,6 @@ function isOutsideClicked(event: any) {
                     <AppBreadcrumb />
                     <router-view />
                 </div>
-                <AppFooter />
             </div>
         </div>
         <AppConfig />

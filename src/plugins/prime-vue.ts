@@ -5,7 +5,7 @@ import ConfirmationService from 'primevue/confirmationservice';
 import ToastService from 'primevue/toastservice';
 import type { App } from 'vue';
 
-const defaultPreset = definePreset(Aura, {
+const preset = definePreset(Aura, {
     semantic: {
         primary: {
             50: '{blue.50}',
@@ -27,7 +27,7 @@ const primeVue = {
     install(app: App<Element>) {
         app.use(PrimeVue, {
             theme: {
-                preset: defaultPreset,
+                preset,
                 options: {
                     darkModeSelector: '.app-dark'
                 }

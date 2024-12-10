@@ -262,9 +262,9 @@ const checkActiveRoute = (item) => {
             "
         >
             <i :class="item.icon" class="layout-menuitem-icon" />
-            <span class="layout-menuitem-text label-small text-inherit">{{
-                item.label
-            }}</span>
+            <span class="layout-menuitem-text label-small text-inherit">
+                {{ item.label }}
+            </span>
             <i
                 class="pi pi-fw pi-angle-down layout-submenu-toggler"
                 v-if="item.items"
@@ -282,9 +282,9 @@ const checkActiveRoute = (item) => {
             "
         >
             <i :class="item.icon" class="layout-menuitem-icon" />
-            <span class="layout-menuitem-text label-small text-inherit">{{
-                item.label
-            }}</span>
+            <span class="layout-menuitem-text label-small text-inherit">
+                {{ item.label }}
+            </span>
             <i
                 class="pi pi-fw pi-angle-down layout-submenu-toggler"
                 v-if="item.items"

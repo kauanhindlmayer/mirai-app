@@ -732,9 +732,9 @@ watch(isDarkTheme, (newValue) => {
                 v-if="!simple && location === 'app'"
                 class="flex flex-col gap-2"
             >
-                <span class="text-lg text-muted-color font-semibold"
-                    >Menu Theme</span
-                >
+                <span class="text-lg text-muted-color font-semibold">
+                    Menu Theme
+                </span>
                 <SelectButton
                     :modelValue="menuTheme"
                     @change="onMenuThemeChange"

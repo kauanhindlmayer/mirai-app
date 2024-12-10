@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { useLayout } from '@/layout/composables/layout';
-import type InputText from 'primevue/inputtext';
+import type { InputText } from 'primevue';
 import { useTemplateRef } from 'vue';
 
 const { layoutState } = useLayout();
 
-const searchInputRef = useTemplateRef<any>('searchInput');
+type InputTextInstance = InstanceType<typeof InputText> & {
+    $el: HTMLElement;
+};
+const searchInputRef = useTemplateRef<InputTextInstance>('searchInput');
 
 function toggleSearchBar() {
     layoutState.searchBarActive = !layoutState.searchBarActive;

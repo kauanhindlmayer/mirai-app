@@ -50,7 +50,7 @@ function onAnchorToggle() {
                     "
                     alt="mirai-layout"
                 />
-                <span class="app-name title-h7">MIRAI</span>
+                <span class="app-name title-h7">Mirai</span>
             </router-link>
             <button
                 class="layout-sidebar-anchor"

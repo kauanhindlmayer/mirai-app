@@ -23,12 +23,15 @@
     "cSpell.words": [
         "axios",
         "confirmationservice",
+        "dismissable",
         "fadein",
+        "inputtext",
         "nuxt",
         "pinia",
         "primevue",
         "toastservice",
-        "Topbar"
+        "Topbar",
+        "xlarge"
     ],
     "workbench.colorTheme": "Material Theme Darker High Contrast",
     "workbench.iconTheme": "eq-material-theme-icons-darker"

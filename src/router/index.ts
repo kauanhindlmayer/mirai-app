@@ -7,13 +7,19 @@ import {
 
 const routes: Readonly<RouteRecordRaw[]> = [
     {
-        path: '/',
+        path: '/p/:projectName/',
         component: AppLayout,
         children: [
             {
-                path: '/empty',
+                path: 'empty',
                 name: 'empty',
                 component: () => import('@/views/Empty.vue')
+            },
+            {
+                path: 'summary',
+                name: 'project',
+                component: () => import('@/views/Empty.vue'),
+                meta: { breadcrumb: ['Summary'] }
             }
         ]
     },
