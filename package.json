@@ -14,7 +14,8 @@
     "lint:oxlint": "oxlint . --fix -D correctness --ignore-path .gitignore",
     "lint:eslint": "eslint . --fix",
     "lint": "run-s lint:*",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "prepare": "husky"
   },
   "dependencies": {
     "pinia": "^2.2.6",
@@ -36,7 +37,9 @@
     "eslint-plugin-oxlint": "^0.11.0",
     "eslint-plugin-playwright": "^2.1.0",
     "eslint-plugin-vue": "^9.30.0",
+    "husky": "^9.1.7",
     "jsdom": "^25.0.1",
+    "lint-staged": "^15.2.11",
     "npm-run-all2": "^7.0.1",
     "oxlint": "^0.11.0",
     "prettier": "^3.3.3",
@@ -45,5 +48,14 @@
     "vite-plugin-vue-devtools": "^7.6.5",
     "vitest": "^2.1.5",
     "vue-tsc": "^2.1.10"
+  },
+  "lint-staged": {
+    "*.{js,ts,vue}": [
+      "oxlint . --fix -D correctness --ignore-path .gitignore",
+      "vue-tsc --noEmit"
+    ],
+    "*.{js,ts,vue,json,md,html,css,scss}": [
+      "prettier --write"
+    ]
   }
 }
