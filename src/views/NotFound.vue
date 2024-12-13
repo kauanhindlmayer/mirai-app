@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import LazyImage from '@/components/shared/LazyImage.vue'
 import { useLayout } from '@/layout/composables/layout'
 

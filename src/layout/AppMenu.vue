@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type { MenuItem } from '@/types/layout'
 import { ref } from 'vue'
 import AppMenuItem from './AppMenuItem.vue'
 
-const menuItems = ref([
+const menuItems = ref<MenuItem[]>([
   {
     label: 'Overview',
     icon: 'pi pi-fw pi-home',

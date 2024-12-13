@@ -5,13 +5,13 @@ import AppTopbar from './AppTopbar.vue'
 
 const { layoutConfig, layoutState, isHorizontal } = useLayout()
 
-let timeout: any = null
+let timeoutId: null | ReturnType<typeof setTimeout> = null
 
 function onMouseEnter() {
   if (!layoutState.anchored) {
-    if (timeout) {
-      clearTimeout(timeout)
-      timeout = null
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+      timeoutId = null
     }
     layoutState.sidebarActive = true
   }
@@ -19,8 +19,8 @@ function onMouseEnter() {
 
 function onMouseLeave() {
   if (!layoutState.anchored) {
-    if (!timeout) {
-      timeout = setTimeout(() => (layoutState.sidebarActive = false), 300)
+    if (!timeoutId) {
+      timeoutId = setTimeout(() => (layoutState.sidebarActive = false), 300)
     }
   }
 }

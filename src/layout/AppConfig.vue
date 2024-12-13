@@ -1,22 +1,23 @@
-<script setup>
-import { useLayout } from '@/layout/composables/layout'
+<script setup lang="ts">
+import { ColorType, MenuMode, MenuTheme, Primary, Surface, type Color } from '@/types/layout'
 import { $t, updatePreset, updateSurfacePalette } from '@primevue/themes'
 import Aura from '@primevue/themes/aura'
 import Lara from '@primevue/themes/lara'
 import Nora from '@primevue/themes/nora'
+import type { SelectButtonChangeEvent } from 'primevue'
 import { computed, ref, watch } from 'vue'
+import { useLayout } from './composables/layout'
 
 const { layoutState, layoutConfig, isDarkTheme } = useLayout()
 
-defineProps({
-  location: {
-    type: String,
-    default: 'app',
-  },
-  simple: {
-    type: Boolean,
-    default: false,
-  },
+type Props = {
+  location?: string
+  simple?: boolean
+}
+
+withDefaults(defineProps<Props>(), {
+  location: 'app',
+  simple: false,
 })
 
 const presets = {
@@ -48,12 +49,12 @@ const cardStyleOptions = ref([
   { name: 'Transparent', value: 'transparent' },
   { name: 'Filled', value: 'filled' },
 ])
-const darkTheme = ref(layoutConfig.darkTheme)
+const darkTheme = ref(layoutConfig.isDarkTheme)
 const menuMode = ref(layoutConfig.menuMode)
 const menuTheme = computed(() => layoutConfig.menuTheme)
 const cardStyle = computed(() => layoutConfig.cardStyle)
 
-const primaryColors = ref([
+const primaryColors = ref<Color[]>([
   { name: 'noir', palette: {} },
   {
     name: 'emerald',
@@ -313,7 +314,7 @@ const primaryColors = ref([
   },
 ])
 
-const surfaces = ref([
+const surfaces = ref<Color[]>([
   {
     name: 'slate',
     palette: {
@@ -453,7 +454,7 @@ const surfaces = ref([
 ])
 
 function executeDarkModeToggle() {
-  layoutConfig.darkTheme = !layoutConfig.darkTheme
+  layoutConfig.isDarkTheme = !layoutConfig.isDarkTheme
   document.documentElement.classList.toggle('app-dark')
 }
 
@@ -469,20 +470,20 @@ function handleToggleDarkMode() {
   })
 }
 
-function updateColors(type, color) {
-  if (type === 'primary') {
-    layoutConfig.primary = color.name
-  } else if (type === 'surface') {
-    layoutConfig.surface = color.name
+function updateColors(type: string, color: Color) {
+  if (type === ColorType.Primary) {
+    layoutConfig.primary = color.name as Primary
+  } else if (type === ColorType.Surface) {
+    layoutConfig.surface = color.name as Surface
   }
 
   applyTheme(type, color)
 }
 
-function applyTheme(type, color) {
-  if (type === 'primary') {
+function applyTheme(type: string, color: Color) {
+  if (type === ColorType.Primary) {
     updatePreset(getPresetExt())
-  } else if (type === 'surface') {
+  } else if (type === ColorType.Surface) {
     updateSurfacePalette(color.palette)
   }
 }
@@ -499,24 +500,24 @@ function onPresetChange() {
     .use({ useDefaultOptions: true })
 }
 
-function onMenuThemeChange(event) {
+function onMenuThemeChange(event: SelectButtonChangeEvent) {
   layoutConfig.menuTheme = event.value
 }
 
-function onCardStyleChange(event) {
+function onCardStyleChange(event: SelectButtonChangeEvent) {
   layoutConfig.cardStyle = event.value
 }
 
-const handleSetMenuMode = (mode) => {
+function handleSetMenuMode(mode: MenuMode) {
   layoutConfig.menuMode = mode
 
-  if (mode === 'static') {
+  if (mode === MenuMode.Static) {
     layoutState.staticMenuDesktopInactive = false
   }
 }
 
 function getPresetExt() {
-  const color = primaryColors.value.find((c) => c.name === layoutConfig.primary)
+  const color = primaryColors.value.find((c) => c.name === layoutConfig.primary)!
 
   if (color.name === 'noir') {
     return {
@@ -606,8 +607,8 @@ function getPresetExt() {
 }
 
 watch(isDarkTheme, (newValue) => {
-  if (newValue && menuTheme.value === 'light') {
-    layoutConfig.menuTheme = 'dark'
+  if (newValue && menuTheme.value === MenuTheme.Light) {
+    layoutConfig.menuTheme = MenuTheme.Dark
   }
 })
 </script>
@@ -630,7 +631,7 @@ watch(isDarkTheme, (newValue) => {
             v-for="primaryColor of primaryColors"
             :key="primaryColor.name"
             type="button"
-            @click="updateColors('primary', primaryColor)"
+            @click="updateColors(ColorType.Primary, primaryColor)"
             class="w-6 h-6 cursor-pointer hover:shadow-lg rounded duration-150 flex items-center justify-center"
             :style="{
               backgroundColor: `${primaryColor.name === 'noir' ? 'var(--text-color)' : primaryColor.palette['500']}`,
@@ -648,7 +649,7 @@ watch(isDarkTheme, (newValue) => {
             v-for="surface of surfaces"
             :key="surface.name"
             type="button"
-            @click="updateColors('surface', surface)"
+            @click="updateColors(ColorType.Surface, surface)"
             class="w-6 h-6 cursor-pointer hover:shadow-lg rounded duration-150 flex items-center justify-center"
             :style="{
               backgroundColor: `${surface.palette['500']}`,

@@ -2,11 +2,13 @@
 import LazyImage from '@/components/shared/LazyImage.vue'
 import Logo from '@/components/shared/Logo.vue'
 import { useUserStore } from '@/stores/user'
+import type { RegisterUserRequest } from '@/types'
+import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { ref } from 'vue'
 import { object, string } from 'yup'
 
-const form = ref({
+const form = ref<RegisterUserRequest>({
   firstName: '',
   lastName: '',
   email: '',
@@ -39,7 +41,7 @@ const resolver = ref(
   ),
 )
 
-async function onFormSubmit({ valid }) {
+async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
   await userStore.register(form.value)
 }

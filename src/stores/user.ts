@@ -1,4 +1,5 @@
 import axios from '@/plugins/axios'
+import type { LoginUserRequest, RegisterUserRequest } from '@/types'
 import { defineStore } from 'pinia'
 import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
@@ -7,13 +8,13 @@ export const useUserStore = defineStore('users', () => {
   const router = useRouter()
   const toast = useToast()
 
-  async function register(form: Record<string, string>) {
+  async function register(request: RegisterUserRequest) {
     try {
       await axios.post('/users/register', {
-        firstName: form.firstName,
-        lastName: form.lastName,
-        email: form.email,
-        password: form.password,
+        firstName: request.firstName,
+        lastName: request.lastName,
+        email: request.email,
+        password: request.password,
       })
       router.push({ name: 'login' })
     } catch {
@@ -26,11 +27,11 @@ export const useUserStore = defineStore('users', () => {
     }
   }
 
-  async function login(form: Record<string, string>) {
+  async function login(request: LoginUserRequest) {
     try {
       const response = await axios.post('/users/login', {
-        email: form.email,
-        password: form.password,
+        email: request.email,
+        password: request.password,
       })
       localStorage.setItem('accessToken', response.data.accessToken)
       router.push({ name: 'projects-home' })

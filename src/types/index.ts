@@ -13,3 +13,17 @@ export type Project = {
   createdAt: string
   updatedAt: string
 }
+
+export type RegisterUserRequest = {
+  firstName: string
+  lastName: string
+  email: string
+  password: string
+  hasAcceptedTerms: boolean
+}
+
+export type LoginUserRequest = {
+  email: string
+  password: string
+  shouldRememberCredentials: boolean
+}

@@ -1,13 +1,12 @@
 <script setup lang="ts">
-defineProps({
-  className: {
-    type: String,
-    default: '',
-  },
-  reverseTheme: {
-    type: Boolean,
-    default: false,
-  },
+type Props = {
+  className?: string
+  reverseTheme?: boolean
+}
+
+withDefaults(defineProps<Props>(), {
+  className: '',
+  reverseTheme: false,
 })
 </script>
 

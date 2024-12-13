@@ -7,11 +7,12 @@ import AppBreadcrumb from './AppBreadcrumb.vue'
 const { layoutState, isDarkTheme, onMenuToggle, onConfigSidebarToggle } = useLayout()
 const userStore = useUserStore()
 
-defineProps({
-  showTopbarLeft: {
-    type: Boolean,
-    default: true,
-  },
+type Props = {
+  showTopbarLeft?: boolean
+}
+
+withDefaults(defineProps<Props>(), {
+  showTopbarLeft: true,
 })
 
 const notificationsBars = [
@@ -32,6 +33,7 @@ const notificationsBars = [
 
 const selectedNotificationBar = ref(notificationsBars?.[0].id ?? 'inbox')
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const notifications: any[] = []
 
 function toggleSearchBar() {

@@ -1,24 +1,20 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, useTemplateRef } from 'vue'
 
-defineProps({
-  src: {
-    type: String,
-    required: true,
-  },
-  alt: {
-    type: String,
-    default: '',
-  },
-  className: {
-    type: String,
-    default: '',
-  },
+type Props = {
+  src: string
+  alt?: string
+  className?: string
+}
+
+withDefaults(defineProps<Props>(), {
+  alt: '',
+  className: '',
 })
 
 const isIntersecting = ref(false)
 const isLoaded = ref(false)
-const image = ref<any>(null)
+const imageRef = useTemplateRef<HTMLImageElement>('image')
 
 function handleLoad() {
   isLoaded.value = true
@@ -29,13 +25,13 @@ onMounted(() => {
     ([entry]) => {
       if (entry.isIntersecting && entry.intersectionRatio >= 0.1) {
         isIntersecting.value = true
-        observer.unobserve(image.value)
+        observer.unobserve(imageRef.value!)
       }
     },
     { threshold: 0.1 },
   )
 
-  observer.observe(image.value)
+  observer.observe(imageRef.value!)
 })
 </script>
 

@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useLayout } from '@/layout/composables/layout'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import AppBreadcrumb from './AppBreadcrumb.vue'
 import AppConfig from './AppConfig.vue'
 import AppSearch from './AppSearch.vue'
 import AppSidebar from './AppSidebar.vue'
 import AppTopbar from './AppTopbar.vue'
+import { useLayout } from './composables/layout'
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout()
-const outsideClickListener = ref<any>(null)
+const outsideClickListener = ref<((event: MouseEvent) => void) | null>(null)
 
 watch(isSidebarActive, (newValue) => {
   if (newValue) {
@@ -46,7 +46,7 @@ const containerClass = computed(() => {
 
 function bindOutsideClickListener() {
   if (!outsideClickListener.value) {
-    outsideClickListener.value = (event: any) => {
+    outsideClickListener.value = (event: MouseEvent) => {
       if (isOutsideClicked(event)) {
         layoutState.overlayMenuActive = false
         layoutState.overlaySubmenuActive = false
@@ -57,7 +57,7 @@ function bindOutsideClickListener() {
     }
 
     setTimeout(() => {
-      document.addEventListener('click', outsideClickListener.value)
+      document.addEventListener('click', outsideClickListener.value!)
     }, 0)
   }
 }
@@ -69,15 +69,16 @@ function unbindOutsideClickListener() {
   }
 }
 
-function isOutsideClicked(event: any) {
+function isOutsideClicked(event: MouseEvent) {
   const sidebarEl = document.querySelector('.layout-sidebar')
   const topbarButtonEl = document.querySelector('.topbar-left > a')
+  const target = event.target as HTMLElement
 
   return !(
-    sidebarEl?.isSameNode(event.target) ||
-    sidebarEl?.contains(event.target) ||
-    topbarButtonEl?.isSameNode(event.target) ||
-    topbarButtonEl?.contains(event.target)
+    sidebarEl?.isSameNode(target) ||
+    sidebarEl?.contains(target) ||
+    topbarButtonEl?.isSameNode(target) ||
+    topbarButtonEl?.contains(target)
   )
 }
 </script>

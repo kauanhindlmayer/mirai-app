@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import Logo from '@/components/shared/Logo.vue'
 import { useUserStore } from '@/stores/user'
+import type { LoginUserRequest } from '@/types'
+import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { ref } from 'vue'
 import { object, string } from 'yup'
 
 const userStore = useUserStore()
 
-const form = ref({
+const isLoading = ref(false)
+const form = ref<LoginUserRequest>({
   email: '',
   password: '',
   shouldRememberCredentials: false,
@@ -22,9 +25,11 @@ const resolver = ref(
   ),
 )
 
-async function onFormSubmit({ valid }) {
+async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
+  isLoading.value = true
   await userStore.login(form.value)
+  isLoading.value = false
 }
 </script>
 
@@ -75,7 +80,7 @@ async function onFormSubmit({ valid }) {
                   Forgot password?
                 </router-link>
               </div>
-              <button type="submit" class="body-button w-full">Login</button>
+              <Button type="submit" class="body-button w-full" :loading="isLoading">Login</Button>
             </Form>
             <div class="mt-8 body-small text-center lg:text-left">
               Not registered?

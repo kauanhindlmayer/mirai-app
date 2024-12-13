@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useLayout } from '@/layout/composables/layout'
 import type { InputText } from 'primevue'
 import { useTemplateRef } from 'vue'
+import { useLayout } from './composables/layout'
 
 const { layoutState } = useLayout()
 
