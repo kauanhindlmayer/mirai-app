@@ -9,12 +9,12 @@ const routes: Readonly<RouteRecordRaw[]> = [
       {
         path: 'empty',
         name: 'empty',
-        component: () => import('@/views/Empty.vue'),
+        component: () => import('@/views/EmptyView.vue'),
       },
       {
         path: 'p/:projectName/summary',
         name: 'project',
-        component: () => import('@/views/Empty.vue'),
+        component: () => import('@/views/EmptyView.vue'),
         meta: { breadcrumb: ['Summary'] },
       },
     ],
@@ -34,7 +34,7 @@ const routes: Readonly<RouteRecordRaw[]> = [
   {
     path: '/oops',
     name: 'oops',
-    component: () => import('@/views/Oops.vue'),
+    component: () => import('@/views/OopsView.vue'),
     meta: { scrollToTop: true },
   },
   {
