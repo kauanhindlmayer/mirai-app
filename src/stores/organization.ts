@@ -1,5 +1,5 @@
-import axios from '@/plugins/axios'
 import type { Organization } from '@/types'
+import { httpClient } from '@/utils/httpClient'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -8,7 +8,7 @@ export const useOrganizationStore = defineStore('organizations', () => {
 
   async function createOrganization(organization: Partial<Organization>) {
     try {
-      await axios.post('/organizations', organization)
+      await httpClient.post('/v1/organizations', organization)
     } catch (error) {
       console.error(error)
     }
@@ -16,8 +16,7 @@ export const useOrganizationStore = defineStore('organizations', () => {
 
   async function listOrganizations() {
     try {
-      const response = await axios.get('/organizations')
-      organizations.value = response.data
+      organizations.value = await httpClient.get<Organization[]>('/v1/organizations')
     } catch (error) {
       console.error(error)
     }
