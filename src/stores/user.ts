@@ -34,7 +34,7 @@ export const useUserStore = defineStore('users', () => {
         password: request.password,
       })
       localStorage.setItem('accessToken', response.accessToken)
-      router.push({ name: 'projects-home' })
+      router.push({ name: 'projects' })
     } catch {
       toast.add({
         severity: 'error',

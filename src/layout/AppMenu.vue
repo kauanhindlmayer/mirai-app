@@ -1,7 +1,12 @@
 <script setup lang="ts">
+import { useProjectStore } from '@/stores/project'
 import type { MenuItem } from '@/types/layout'
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import AppMenuItem from './AppMenuItem.vue'
+
+const projectStore = useProjectStore()
+const { projectId } = storeToRefs(projectStore)
 
 const menuItems = ref<MenuItem[]>([
   {
@@ -11,17 +16,17 @@ const menuItems = ref<MenuItem[]>([
       {
         label: 'Summary',
         icon: 'pi pi-fw pi-file',
-        to: '/summary',
+        to: `/projects/${projectId}/summary`,
       },
       {
         label: 'Dashboard',
         icon: 'pi pi-fw pi-chart-bar',
-        to: '/dashboard',
+        to: `/projects/${projectId}/dashboard`,
       },
       {
         label: 'Wiki',
         icon: 'pi pi-fw pi-book',
-        to: '/wiki',
+        to: `/projects/${projectId}/wiki`,
       },
     ],
   },
@@ -33,7 +38,7 @@ const menuItems = ref<MenuItem[]>([
       {
         label: 'Work Items',
         icon: 'pi pi-fw pi-list',
-        to: '/work-items',
+        to: `/projects/${projectId}/work-items`,
       },
       {
         label: 'Boards',

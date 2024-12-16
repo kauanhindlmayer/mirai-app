@@ -1,13 +1,16 @@
 <script setup lang="ts">
+import { useProjectStore } from '@/stores/project'
 import type { Project } from '@/types'
 import { useRouter } from 'vue-router'
 
 const { project } = defineProps<{ project: Project }>()
 
+const projectStore = useProjectStore()
 const router = useRouter()
 
-function navigateToProject() {
-  router.push(`/p/${project.name}/summary`)
+function redirectToProjectSummary() {
+  projectStore.setProjectId(project.id)
+  router.push(`/projects/${project.id}/summary`)
 }
 
 function getInitials(): string {
@@ -22,7 +25,7 @@ function getInitials(): string {
 </script>
 
 <template>
-  <Card class="hover:cursor-pointer" @click="navigateToProject">
+  <Card class="hover:cursor-pointer" @click="redirectToProjectSummary">
     <template #content>
       <div class="flex items-center gap-4">
         <div class="self-start">

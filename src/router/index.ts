@@ -6,16 +6,26 @@ const routes: Readonly<RouteRecordRaw[]> = [
     path: '/',
     component: AppLayout,
     children: [
+      { path: '', redirect: '/projects' },
       {
-        path: 'empty',
-        name: 'empty',
-        component: () => import('@/views/EmptyView.vue'),
+        path: 'projects',
+        name: 'projects',
+        component: () => import('@/views/Projects/ProjectsList.vue'),
       },
       {
-        path: 'p/:projectName/summary',
-        name: 'project',
-        component: () => import('@/views/EmptyView.vue'),
-        meta: { breadcrumb: ['Summary'] },
+        path: 'projects/:projectId',
+        children: [
+          {
+            path: 'summary',
+            name: 'project-summary',
+            component: () => import('@/views/Projects/ProjectSummary.vue'),
+          },
+          {
+            path: 'work-items',
+            name: 'project-work-items',
+            component: () => import('@/views/WorkItems/WorkItemsList.vue'),
+          },
+        ],
       },
     ],
   },
@@ -36,11 +46,6 @@ const routes: Readonly<RouteRecordRaw[]> = [
     name: 'oops',
     component: () => import('@/views/OopsView.vue'),
     meta: { scrollToTop: true },
-  },
-  {
-    path: '/projects',
-    name: 'projects-home',
-    component: () => import('@/views/ProjectsHomeView.vue'),
   },
   {
     path: '/not-found',

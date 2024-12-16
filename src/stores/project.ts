@@ -5,6 +5,7 @@ import { ref } from 'vue'
 
 export const useProjectStore = defineStore('projects', () => {
   const projects = ref<Project[]>([])
+  const projectId = ref<string>('')
 
   async function createProject(project: Partial<Project>, organizationId: string) {
     try {
@@ -24,9 +25,15 @@ export const useProjectStore = defineStore('projects', () => {
     }
   }
 
+  function setProjectId(id: string) {
+    projectId.value = id
+  }
+
   return {
     projects,
+    projectId,
     createProject,
     listProjects,
+    setProjectId,
   }
 })
