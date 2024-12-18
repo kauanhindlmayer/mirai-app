@@ -1,11 +1,12 @@
 import type { Project } from '@/types'
 import { httpClient } from '@/utils/httpClient'
+import { useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useProjectStore = defineStore('projects', () => {
   const projects = ref<Project[]>([])
-  const projectId = ref<string>('')
+  const projectId = useStorage('projectId', '')
 
   async function createProject(project: Partial<Project>, organizationId: string) {
     try {

@@ -16,17 +16,17 @@ const menuItems = ref<MenuItem[]>([
       {
         label: 'Summary',
         icon: 'pi pi-fw pi-file',
-        to: `/projects/${projectId}/summary`,
+        to: `/projects/${projectId.value}/summary`,
       },
       {
         label: 'Dashboard',
         icon: 'pi pi-fw pi-chart-bar',
-        to: `/projects/${projectId}/dashboard`,
+        to: `/projects/${projectId.value}/dashboard`,
       },
       {
         label: 'Wiki',
         icon: 'pi pi-fw pi-book',
-        to: `/projects/${projectId}/wiki`,
+        to: `/projects/${projectId.value}/wiki`,
       },
     ],
   },
@@ -38,7 +38,7 @@ const menuItems = ref<MenuItem[]>([
       {
         label: 'Work Items',
         icon: 'pi pi-fw pi-list',
-        to: `/projects/${projectId}/work-items`,
+        to: `/projects/${projectId.value}/work-items`,
       },
       {
         label: 'Boards',

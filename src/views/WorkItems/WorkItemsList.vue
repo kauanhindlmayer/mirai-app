@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import { useWorkItemStore } from '@/stores/work-item'
-import { WorkItemStatus, WorkItemType, type WorkItem } from '@/types'
+import { WorkItemStatus, WorkItemType, type PaginationFilter, type WorkItem } from '@/types'
 import { formatDate } from '@/utils/date'
 import { storeToRefs } from 'pinia'
-import { useToast, type ContextMenu, type DataTableRowContextMenuEvent } from 'primevue'
+import {
+  useToast,
+  type ContextMenu,
+  type DataTablePageEvent,
+  type DataTableRowContextMenuEvent,
+} from 'primevue'
 import { onMounted, ref, useTemplateRef } from 'vue'
 
 const toast = useToast()
 
 const workItemStore = useWorkItemStore()
-const { workItems } = storeToRefs(workItemStore)
+const { workItems, isLoading } = storeToRefs(workItemStore)
 
 const selectedWorkItem = ref<WorkItem | null>(null)
 
@@ -57,7 +62,22 @@ function clearSelectedWorkItem() {
   selectedWorkItem.value = null
 }
 
-onMounted(workItemStore.listWorkItems)
+const filters = ref<PaginationFilter>({
+  pageNumber: 1,
+  pageSize: 10,
+  sortColumn: 'updatedAt',
+  sortOrder: 'desc',
+})
+
+function onPaginate(event: DataTablePageEvent) {
+  filters.value.pageNumber = event.page + 1
+  filters.value.pageSize = event.rows
+  filters.value.sortColumn = event.sortField as string
+  filters.value.sortOrder = event.sortOrder === 1 ? 'asc' : 'desc'
+  workItemStore.listWorkItems(filters.value)
+}
+
+onMounted(() => workItemStore.listWorkItems(filters.value))
 
 function getStatusSeverity(status: WorkItemStatus): string {
   const severityMap: Record<WorkItemStatus, string> = {
@@ -118,12 +138,17 @@ function getTypeLabel(type: WorkItemType): string {
         <ContextMenu ref="menu" :model="items" @hide="clearSelectedWorkItem" />
         <DataTable
           v-model:context-menu-selection="selectedWorkItem"
-          :value="workItems"
-          :rows="10"
+          :value="workItems.items"
+          :rows="filters.pageSize"
+          :total-records="workItems.totalCount"
           :rows-per-page-options="[5, 10, 20, 50]"
+          :loading="isLoading"
+          :page-count="workItems.totalPages"
+          lazy
           paginator
           table-style="min-width: 50rem"
           context-menu
+          @page="onPaginate"
           @row-contextmenu="onRowContextMenu"
         >
           <Column field="code" header="ID" />

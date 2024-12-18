@@ -74,3 +74,20 @@ export enum WorkItemType {
   Epic = 'Epic',
   Feature = 'Feature',
 }
+
+export type PagedList<T> = {
+  items: T[]
+  totalCount: number
+  pageSize: number
+  pageNumber: number
+  hasNextPage: boolean
+  hasPreviousPage: boolean
+  totalPages: number
+}
+
+export type PaginationFilter = {
+  pageNumber: number
+  pageSize: number
+  sortColumn: string
+  sortOrder: 'asc' | 'desc'
+}
