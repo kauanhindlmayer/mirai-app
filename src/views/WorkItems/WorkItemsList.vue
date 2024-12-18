@@ -1,11 +1,61 @@
 <script setup lang="ts">
 import { useWorkItemStore } from '@/stores/work-item'
-import { WorkItemStatus, WorkItemType } from '@/types'
+import { WorkItemStatus, WorkItemType, type WorkItem } from '@/types'
+import { formatDate } from '@/utils/date'
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
+import { useToast, type ContextMenu, type DataTableRowContextMenuEvent } from 'primevue'
+import { onMounted, ref, useTemplateRef } from 'vue'
+
+const toast = useToast()
 
 const workItemStore = useWorkItemStore()
 const { workItems } = storeToRefs(workItemStore)
+
+const selectedWorkItem = ref<WorkItem | null>(null)
+
+const menuRef = useTemplateRef<InstanceType<typeof ContextMenu>>('menu')
+const items = [
+  {
+    label: 'Copy to Clipboard',
+    icon: 'pi pi-fw pi-clipboard',
+    command: copyWorkItemToClipboard,
+  },
+  {
+    label: 'Delete',
+    icon: 'pi pi-fw pi-trash',
+    command: deleteWorkItem,
+  },
+]
+
+function copyWorkItemToClipboard() {
+  if (!selectedWorkItem.value) return
+  const header = 'ID\tType\tTitle\tState'
+  const { code, type, title, status } = selectedWorkItem.value
+  const workItemDataString = `${code}\t${getTypeLabel(type)}\t${title}\t${getStatusLabel(status)}`
+  const workItemString = [header, workItemDataString].join('\n')
+  navigator.clipboard.writeText(workItemString).then(() => {
+    toast.add({
+      severity: 'success',
+      summary: 'Work Item Copied',
+      detail: 'Work item data copied to clipboard',
+    })
+  })
+  clearSelectedWorkItem()
+}
+
+async function deleteWorkItem() {
+  if (!selectedWorkItem.value?.id) return
+  await workItemStore.deleteWorkItem(selectedWorkItem.value.id)
+  clearSelectedWorkItem()
+}
+
+function onRowContextMenu(event: DataTableRowContextMenuEvent) {
+  menuRef.value?.show(event.originalEvent)
+}
+
+function clearSelectedWorkItem() {
+  selectedWorkItem.value = null
+}
 
 onMounted(workItemStore.listWorkItems)
 
@@ -65,13 +115,16 @@ function getTypeLabel(type: WorkItemType): string {
     <div class="col-span-12">
       <div class="card">
         <div class="font-semibold text-xl mb-4">Work Items</div>
+        <ContextMenu ref="menu" :model="items" @hide="clearSelectedWorkItem" />
         <DataTable
+          v-model:context-menu-selection="selectedWorkItem"
           :value="workItems"
-          striped-rows
-          paginator
           :rows="10"
           :rows-per-page-options="[5, 10, 20, 50]"
+          paginator
           table-style="min-width: 50rem"
+          context-menu
+          @row-contextmenu="onRowContextMenu"
         >
           <Column field="code" header="ID" />
           <Column field="type" header="Type">
@@ -80,7 +133,14 @@ function getTypeLabel(type: WorkItemType): string {
             </template>
           </Column>
           <Column field="title" header="Title" />
-          <Column field="assignedTo" header="Assigned To" />
+          <Column field="assignedTo" header="Assigned To">
+            <template #body="{ data }">
+              <div class="flex items-center gap-2">
+                <Avatar shape="circle" icon="pi pi-user" />
+                {{ data.assignedTo ? data.assignedTo.name : 'Unassigned' }}
+              </div>
+            </template>
+          </Column>
           <Column field="status" header="State">
             <template #body="{ data }">
               <div class="flex items-center gap-2">
@@ -98,7 +158,11 @@ function getTypeLabel(type: WorkItemType): string {
               </div>
             </template>
           </Column>
-          <Column field="updatedAt" header="Activity Date" />
+          <Column field="updatedAt" header="Activity Date">
+            <template #body="{ data }">
+              {{ formatDate(data.updatedAt, 'mm/dd/yyyy hh:mm') }}
+            </template>
+          </Column>
         </DataTable>
       </div>
     </div>
