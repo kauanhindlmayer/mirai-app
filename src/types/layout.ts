@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
+import type { Project } from '@/types'
+
 export type LayoutConfig = {
   preset: Preset
   primary: Primary
@@ -89,7 +92,6 @@ export type MenuItem = {
   url?: string
   target?: string
   disabled?: boolean
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   command?: Function
 }
 
@@ -102,3 +104,10 @@ export enum ColorType {
   Primary = 'primary',
   Surface = 'surface',
 }
+
+export type Breadcrumb = {
+  label: string
+  route: string
+}
+
+export type BreadcrumbResolver = (project: Project) => Breadcrumb[]

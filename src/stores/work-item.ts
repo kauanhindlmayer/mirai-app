@@ -1,5 +1,5 @@
 import type { PagedList, PaginationFilter, WorkItem } from '@/types'
-import { httpClient } from '@/utils/httpClient'
+import { httpClient } from '@/utils/http-client'
 import { defineStore, storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useProjectStore } from './project'

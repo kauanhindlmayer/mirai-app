@@ -1,5 +1,5 @@
 import type { LoginUserRequest, LoginUserResponse, RegisterUserRequest } from '@/types'
-import { httpClient } from '@/utils/httpClient'
+import { httpClient } from '@/utils/http-client'
 import { defineStore } from 'pinia'
 import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'

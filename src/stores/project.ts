@@ -1,5 +1,5 @@
 import type { Project } from '@/types'
-import { httpClient } from '@/utils/httpClient'
+import { httpClient } from '@/utils/http-client'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 

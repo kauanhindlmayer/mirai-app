@@ -7,7 +7,7 @@ export async function ensureProjectLoaded(
   _: RouteLocationNormalized,
   next: NavigationGuardNext,
 ) {
-  const projectId = to.params.projectId as string | undefined
+  const projectId = to.params.projectId as string
   if (!projectId) return next()
 
   const store = useProjectStore()

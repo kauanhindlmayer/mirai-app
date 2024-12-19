@@ -1,35 +1,9 @@
-import AppLayout from '@/layout/AppLayout.vue'
+import { ensureProjectLoaded } from '@/router/guards'
+import projectRoutes from '@/router/modules/project'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-import { ensureProjectLoaded } from './guards'
 
 const routes: Readonly<RouteRecordRaw[]> = [
-  {
-    path: '/',
-    component: AppLayout,
-    children: [
-      { path: '', redirect: '/projects' },
-      {
-        path: 'projects',
-        name: 'projects',
-        component: () => import('@/views/Projects/ProjectsList.vue'),
-      },
-      {
-        path: 'projects/:projectId',
-        children: [
-          {
-            path: 'summary',
-            name: 'project-summary',
-            component: () => import('@/views/Projects/ProjectSummary.vue'),
-          },
-          {
-            path: 'work-items',
-            name: 'project-work-items',
-            component: () => import('@/views/WorkItems/WorkItemsList.vue'),
-          },
-        ],
-      },
-    ],
-  },
+  ...projectRoutes,
   {
     path: '/login',
     name: 'login',
