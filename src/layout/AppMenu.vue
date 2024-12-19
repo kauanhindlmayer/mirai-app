@@ -2,13 +2,13 @@
 import { useProjectStore } from '@/stores/project'
 import type { MenuItem } from '@/types/layout'
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { computed } from 'vue'
 import AppMenuItem from './AppMenuItem.vue'
 
 const projectStore = useProjectStore()
-const { projectId } = storeToRefs(projectStore)
+const { project } = storeToRefs(projectStore)
 
-const menuItems = ref<MenuItem[]>([
+const menuItems = computed<MenuItem[]>(() => [
   {
     label: 'Overview',
     icon: 'pi pi-fw pi-home',
@@ -16,17 +16,17 @@ const menuItems = ref<MenuItem[]>([
       {
         label: 'Summary',
         icon: 'pi pi-fw pi-file',
-        to: `/projects/${projectId.value}/summary`,
+        to: `/projects/${project.value?.id}/summary`,
       },
       {
         label: 'Dashboard',
         icon: 'pi pi-fw pi-chart-bar',
-        to: `/projects/${projectId.value}/dashboard`,
+        to: `/projects/${project.value?.id}/dashboard`,
       },
       {
         label: 'Wiki',
         icon: 'pi pi-fw pi-book',
-        to: `/projects/${projectId.value}/wiki`,
+        to: `/projects/${project.value?.id}/wiki`,
       },
     ],
   },
@@ -38,7 +38,7 @@ const menuItems = ref<MenuItem[]>([
       {
         label: 'Work Items',
         icon: 'pi pi-fw pi-list',
-        to: `/projects/${projectId.value}/work-items`,
+        to: `/projects/${project.value?.id}/work-items`,
       },
       {
         label: 'Boards',
@@ -59,6 +59,26 @@ const menuItems = ref<MenuItem[]>([
         label: 'Queries',
         icon: 'pi pi-fw pi-search',
         to: '/queries',
+      },
+      {
+        label: 'Personas',
+        icon: 'pi pi-fw pi-users',
+        to: '/personas',
+      },
+      {
+        label: 'Retrospectives',
+        icon: 'pi pi-fw pi-comments',
+        to: '/retrospectives',
+      },
+      {
+        label: 'Estimate',
+        icon: 'pi pi-fw pi-stopwatch',
+        to: '/estimates',
+      },
+      {
+        label: 'Tags',
+        icon: 'pi pi-fw pi-tags',
+        to: '/tags',
       },
     ],
   },

@@ -8,7 +8,7 @@ export const useOrganizationStore = defineStore('organizations', () => {
 
   async function createOrganization(organization: Partial<Organization>) {
     try {
-      await httpClient.post('/v1/organizations', organization)
+      await httpClient.post('/organizations', organization)
     } catch (error) {
       console.error(error)
     }
@@ -16,7 +16,7 @@ export const useOrganizationStore = defineStore('organizations', () => {
 
   async function listOrganizations() {
     try {
-      organizations.value = await httpClient.get<Organization[]>('/v1/organizations')
+      organizations.value = await httpClient.get<Organization[]>('/organizations')
     } catch (error) {
       console.error(error)
     }

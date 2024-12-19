@@ -88,6 +88,6 @@ export type PagedList<T> = {
 export type PaginationFilter = {
   pageNumber: number
   pageSize: number
-  sortColumn: string
+  sortField: string
   sortOrder: 'asc' | 'desc'
 }

@@ -10,7 +10,7 @@ export const useUserStore = defineStore('users', () => {
 
   async function register(request: RegisterUserRequest) {
     try {
-      await httpClient.post('/v1/users/register', {
+      await httpClient.post('/users/register', {
         firstName: request.firstName,
         lastName: request.lastName,
         email: request.email,
@@ -29,7 +29,7 @@ export const useUserStore = defineStore('users', () => {
 
   async function login(request: LoginUserRequest) {
     try {
-      const response = await httpClient.post<LoginUserResponse>('/v1/users/login', {
+      const response = await httpClient.post<LoginUserResponse>('/users/login', {
         email: request.email,
         password: request.password,
       })

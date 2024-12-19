@@ -8,6 +8,7 @@ import {
   type ContextMenu,
   type DataTablePageEvent,
   type DataTableRowContextMenuEvent,
+  type DataTableSortEvent,
 } from 'primevue'
 import { onMounted, ref, useTemplateRef } from 'vue'
 
@@ -65,19 +66,23 @@ function clearSelectedWorkItem() {
 const filters = ref<PaginationFilter>({
   pageNumber: 1,
   pageSize: 10,
-  sortColumn: 'updatedAt',
+  sortField: 'updatedAt',
   sortOrder: 'desc',
 })
 
-function onPaginate(event: DataTablePageEvent) {
-  filters.value.pageNumber = event.page + 1
-  filters.value.pageSize = event.rows
-  filters.value.sortColumn = event.sortField as string
+function onSort(event: DataTableSortEvent) {
+  filters.value.sortField = event.sortField as string
   filters.value.sortOrder = event.sortOrder === 1 ? 'asc' : 'desc'
   workItemStore.listWorkItems(filters.value)
 }
 
-onMounted(() => workItemStore.listWorkItems(filters.value))
+function onPaginate(event: DataTablePageEvent) {
+  filters.value.pageNumber = event.page + 1
+  filters.value.pageSize = event.rows
+  workItemStore.listWorkItems(filters.value)
+}
+
+onMounted(async () => await workItemStore.listWorkItems(filters.value))
 
 function getStatusSeverity(status: WorkItemStatus): string {
   const severityMap: Record<WorkItemStatus, string> = {
@@ -148,16 +153,17 @@ function getTypeLabel(type: WorkItemType): string {
           paginator
           table-style="min-width: 50rem"
           context-menu
+          @sort="onSort"
           @page="onPaginate"
           @row-contextmenu="onRowContextMenu"
         >
-          <Column field="code" header="ID" />
-          <Column field="type" header="Type">
+          <Column field="code" header="ID" sortable />
+          <Column field="type" header="Type" sortable>
             <template #body="{ data }">
               <Tag :value="getTypeLabel(data.type)" :severity="getTypeSeverity(data.type)" />
             </template>
           </Column>
-          <Column field="title" header="Title" />
+          <Column field="title" header="Title" sortable />
           <Column field="assignedTo" header="Assigned To">
             <template #body="{ data }">
               <div class="flex items-center gap-2">
@@ -166,7 +172,7 @@ function getTypeLabel(type: WorkItemType): string {
               </div>
             </template>
           </Column>
-          <Column field="status" header="State">
+          <Column field="status" header="State" sortable>
             <template #body="{ data }">
               <div class="flex items-center gap-2">
                 <Badge :severity="getStatusSeverity(data.status)" />
@@ -183,9 +189,9 @@ function getTypeLabel(type: WorkItemType): string {
               </div>
             </template>
           </Column>
-          <Column field="updatedAt" header="Activity Date">
+          <Column field="updatedAt" header="Activity Date" sortable>
             <template #body="{ data }">
-              {{ formatDate(data.updatedAt, 'mm/dd/yyyy hh:mm') }}
+              {{ formatDate(data.updatedAt, 'MM/dd/yyyy hh:mm') }}
             </template>
           </Column>
         </DataTable>

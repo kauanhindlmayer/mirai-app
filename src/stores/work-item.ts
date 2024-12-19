@@ -1,11 +1,12 @@
 import type { PagedList, PaginationFilter, WorkItem } from '@/types'
 import { httpClient } from '@/utils/httpClient'
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useProjectStore } from './project'
 
 export const useWorkItemStore = defineStore('workItems', () => {
   const projectStore = useProjectStore()
+  const { project } = storeToRefs(projectStore)
   const workItems = ref<PagedList<WorkItem>>({
     items: [],
     totalCount: 0,
@@ -21,7 +22,7 @@ export const useWorkItemStore = defineStore('workItems', () => {
     try {
       isLoading.value = true
       workItems.value = await httpClient.get<PagedList<WorkItem>>(
-        `/v1/projects/${projectStore.projectId}/work-items`,
+        `/projects/${project.value?.id}/work-items`,
         { params: filters as unknown as Record<string, string> },
       )
     } catch (error) {
@@ -33,7 +34,7 @@ export const useWorkItemStore = defineStore('workItems', () => {
 
   async function deleteWorkItem(workItemId: string) {
     try {
-      await httpClient.delete(`/v1/projects/${projectStore.projectId}/work-items/${workItemId}`)
+      await httpClient.delete(`/projects/${project.value?.id}/work-items/${workItemId}`)
     } catch (error) {
       console.error(error)
     }

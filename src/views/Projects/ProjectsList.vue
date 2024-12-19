@@ -64,10 +64,3 @@ onBeforeMount(async () => {
   </Tabs>
   <CreateOrganizationDialog ref="createOrganizationDialog" />
 </template>
-
-<style>
-.p-listbox-list-container {
-  max-height: 100% !important;
-  overflow-y: auto;
-}
-</style>

@@ -9,7 +9,7 @@ const projectStore = useProjectStore()
 const router = useRouter()
 
 function redirectToProjectSummary() {
-  projectStore.setProjectId(project.id)
+  projectStore.getProject(project.id)
   router.push(`/projects/${project.id}/summary`)
 }
 

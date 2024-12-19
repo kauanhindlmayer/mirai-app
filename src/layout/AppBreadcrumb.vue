@@ -18,7 +18,7 @@ function setBreadcrumbRoutes() {
     .map((item) => item.charAt(0).toUpperCase() + item.slice(1))
 }
 
-watch(route, setBreadcrumbRoutes, { immediate: true })
+watch(route, setBreadcrumbRoutes, { immediate: true, deep: true })
 </script>
 
 <template>

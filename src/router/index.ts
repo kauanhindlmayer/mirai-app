@@ -1,5 +1,6 @@
 import AppLayout from '@/layout/AppLayout.vue'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import { ensureProjectLoaded } from './guards'
 
 const routes: Readonly<RouteRecordRaw[]> = [
   {
@@ -66,5 +67,7 @@ const router = createRouter({
     return { left: 0, top: 0 }
   },
 })
+
+router.beforeEach(ensureProjectLoaded)
 
 export default router
