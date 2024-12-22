@@ -38,11 +38,47 @@ export const useWikiPageStore = defineStore('wikiPages', () => {
     }
   }
 
+  async function addComment(wikiPageId: string, content: string) {
+    try {
+      await httpClient.post(`/projects/${project.value?.id}/wiki-pages/${wikiPageId}/comments`, {
+        content,
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async function deleteComment(wikiPageId: string, commentId: string) {
+    try {
+      await httpClient.delete(
+        `/projects/${project.value?.id}/wiki-pages/${wikiPageId}/comments/${commentId}`,
+      )
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async function updateComment(wikiPageId: string, commentId: string, content: string) {
+    try {
+      await httpClient.put(
+        `/projects/${project.value?.id}/wiki-pages/${wikiPageId}/comments/${commentId}`,
+        {
+          content,
+        },
+      )
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return {
     wikiPages,
     wikiPage,
     listWikiPages,
     getWikiPage,
     deleteWikiPage,
+    addComment,
+    deleteComment,
+    updateComment,
   }
 })

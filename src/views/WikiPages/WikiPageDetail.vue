@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import AppComment from '@/components/shared/AppComment.vue'
 import { useWikiPageStore } from '@/stores/wiki-page'
-import type { WikiPageDetail } from '@/types'
+import type { Comment, WikiPageDetail } from '@/types'
 import { formatRelativeTime } from '@/utils/date'
 import { Menu, useConfirm } from 'primevue'
+import type { MenuItem } from 'primevue/menuitem'
 import { ref, useTemplateRef } from 'vue'
 
 const { wikiPage } = defineProps<{
@@ -13,7 +15,7 @@ const wikiPageStore = useWikiPageStore()
 const confirm = useConfirm()
 
 const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
-const menuItems = ref([
+const menuItems = ref<MenuItem[]>([
   { label: 'Print', icon: 'pi pi-print', command: printWikiPage },
   { label: 'Link Work Items', icon: 'pi pi-link', disabled: true },
   { label: 'View Revisions', icon: 'pi pi-history', disabled: true },
@@ -58,7 +60,7 @@ function deleteWikiPage() {
   })
 }
 
-const commentText = ref('')
+const commentContent = ref('')
 const isActionButtonsVisible = ref(false)
 
 function showActionButtons() {
@@ -66,7 +68,7 @@ function showActionButtons() {
 }
 
 function hideActionButtons() {
-  if (!commentText.value) {
+  if (!commentContent.value) {
     isActionButtonsVisible.value = false
     return
   }
@@ -82,10 +84,21 @@ function hideActionButtons() {
       severity: 'danger',
     },
     accept: () => {
-      commentText.value = ''
+      commentContent.value = ''
       isActionButtonsVisible.value = false
     },
   })
+}
+
+async function addComment() {
+  if (!commentContent.value) return
+  await wikiPageStore.addComment(wikiPage.id, commentContent.value)
+  await wikiPageStore.getWikiPage(wikiPage.id)
+}
+
+async function deleteComment(comment: Comment) {
+  await wikiPageStore.deleteComment(wikiPage.id, comment.id)
+  await wikiPageStore.getWikiPage(wikiPage.id)
 }
 </script>
 
@@ -148,31 +161,17 @@ function hideActionButtons() {
     </div>
     <ul class="list-none p-0 m-0">
       <li
-        v-for="(comment, index) in wikiPage?.comments"
+        v-for="comment in wikiPage?.comments"
         :key="comment.id"
-        class="flex p-4 mb-4 border border-surface-200 dark:border-surface-700 rounded"
+        class="flex justify-between p-4 mb-4 border border-surface-200 dark:border-surface-700 rounded"
       >
-        <img
-          v-if="comment.author.imageUrl"
-          class="w-12 h-12 mr-4 flex-shrink-0"
-          :alt="'Image' + index"
-        />
-        <Avatar v-else size="large" shape="circle" icon="pi pi-user" class="mr-4 flex-shrink-0" />
-        <div>
-          <span class="font-semibold text-surface-900 dark:text-surface-0">
-            {{ comment.author.name }}
-          </span>
-          <p class="font-semibold text-surface-600 dark:text-surface-200 m-0 text-sm">
-            {{ formatRelativeTime(comment.createdAt) }} {{ comment.updatedAt ? '(edited)' : '' }}
-          </p>
-          <p class="leading-normal mb-0 my-4">{{ comment.content }}</p>
-        </div>
+        <AppComment :comment="comment" @delete-comment="deleteComment" />
       </li>
       <li class="flex flex-col p-4 mb-4">
         <div class="flex mb-4">
           <Avatar size="large" shape="circle" icon="pi pi-user" class="mr-4 flex-shrink-0" />
           <Textarea
-            v-model="commentText"
+            v-model="commentContent"
             placeholder="Add a comment..."
             class="w-full"
             @click="showActionButtons"
@@ -180,7 +179,7 @@ function hideActionButtons() {
         </div>
         <div v-if="isActionButtonsVisible" class="flex justify-end gap-4">
           <Button label="Cancel" severity="secondary" @click="hideActionButtons" />
-          <Button label="Add" />
+          <Button label="Add" @click="addComment" />
         </div>
       </li>
     </ul>
