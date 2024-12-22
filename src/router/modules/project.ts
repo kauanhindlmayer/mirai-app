@@ -41,7 +41,7 @@ const routes: RouteRecordRaw[] = [
             },
           },
           {
-            path: 'wiki',
+            path: 'wiki-pages',
             name: 'project-wiki-pages',
             component: () => import('@/views/WikiPages/WikiPagesList.vue'),
             meta: {

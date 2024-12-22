@@ -1,14 +1,62 @@
 <script setup lang="ts">
+import { useWikiPageStore } from '@/stores/wiki-page'
 import type { WikiPageDetail } from '@/types'
 import { formatRelativeTime } from '@/utils/date'
-import { useConfirm } from 'primevue'
-import { ref } from 'vue'
+import { Menu, useConfirm } from 'primevue'
+import { ref, useTemplateRef } from 'vue'
 
-defineProps<{
+const { wikiPage } = defineProps<{
   wikiPage: WikiPageDetail
 }>()
 
+const wikiPageStore = useWikiPageStore()
 const confirm = useConfirm()
+
+const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
+const menuItems = ref([
+  { label: 'Print', icon: 'pi pi-print', command: printWikiPage },
+  { label: 'Link Work Items', icon: 'pi pi-link', disabled: true },
+  { label: 'View Revisions', icon: 'pi pi-history', disabled: true },
+  { label: 'Delete', icon: 'pi pi-trash', class: 'text-danger', command: deleteWikiPage },
+])
+
+function toggleMenuItems(event: MouseEvent) {
+  menuRef.value?.toggle(event)
+}
+
+function printWikiPage() {
+  const iframe = document.createElement('iframe')
+  document.body.appendChild(iframe)
+  const contentDocument = iframe.contentWindow?.document || iframe.contentDocument
+  contentDocument?.open()
+  contentDocument?.write(`
+    <h2>${wikiPage.title}</h2>
+    <p>${wikiPage.content}</p>
+  `)
+  contentDocument?.close()
+  iframe.contentWindow?.focus()
+  iframe.contentWindow?.print()
+  document.body.removeChild(iframe)
+}
+
+function deleteWikiPage() {
+  confirm.require({
+    header: `Delete '${wikiPage.title}'?`,
+    message: `'${wikiPage.title}' page and its sub-pages (if any) will be deleted. Are you sure you want to delete?`,
+    rejectProps: {
+      label: 'Cancel',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Delete',
+      severity: 'danger',
+    },
+    accept: () => {
+      wikiPageStore.deleteWikiPage(wikiPage.id)
+    },
+  })
+}
 
 const commentText = ref('')
 const isActionButtonsVisible = ref(false)
@@ -23,7 +71,7 @@ function hideActionButtons() {
     return
   }
   confirm.require({
-    message: 'Are you sure you want to discard this draft?',
+    header: 'Are you sure you want to discard this draft?',
     rejectProps: {
       label: 'Cancel',
       severity: 'secondary',
@@ -75,7 +123,14 @@ function hideActionButtons() {
       </div>
       <div class="flex items-center justify-center">
         <Button label="Edit" severity="secondary" class="mr-4" disabled />
-        <Button icon="pi pi-ellipsis-v" severity="secondary" variant="text" />
+        <Button
+          icon="pi pi-ellipsis-v"
+          severity="secondary"
+          text
+          rounded
+          @click="toggleMenuItems"
+        />
+        <Menu ref="menu" popup :model="menuItems" />
       </div>
     </div>
 
@@ -113,7 +168,7 @@ function hideActionButtons() {
           <p class="leading-normal mb-0 my-4">{{ comment.content }}</p>
         </div>
       </li>
-      <li class="flex flex-col p-4 mb-4 border border-surface-200 dark:border-surface-700 rounded">
+      <li class="flex flex-col p-4 mb-4">
         <div class="flex mb-4">
           <Avatar size="large" shape="circle" icon="pi pi-user" class="mr-4 flex-shrink-0" />
           <Textarea
@@ -129,6 +184,6 @@ function hideActionButtons() {
         </div>
       </li>
     </ul>
-    <ConfirmPopup />
+    <ConfirmDialog style="width: 450px" />
   </div>
 </template>

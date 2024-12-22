@@ -24,9 +24,9 @@ const menuItems = computed<MenuItem[]>(() => [
         to: `/projects/${project.value?.id}/dashboard`,
       },
       {
-        label: 'Wiki',
+        label: 'Wiki Pages',
         icon: 'pi pi-fw pi-book',
-        to: `/projects/${project.value?.id}/wiki`,
+        to: `/projects/${project.value?.id}/wiki-pages`,
       },
     ],
   },

@@ -30,10 +30,19 @@ export const useWikiPageStore = defineStore('wikiPages', () => {
     }
   }
 
+  async function deleteWikiPage(wikiPageId: string) {
+    try {
+      await httpClient.delete(`/projects/${project.value?.id}/wiki-pages/${wikiPageId}`)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return {
     wikiPages,
     wikiPage,
     listWikiPages,
     getWikiPage,
+    deleteWikiPage,
   }
 })
