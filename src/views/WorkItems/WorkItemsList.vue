@@ -191,7 +191,7 @@ function getTypeLabel(type: WorkItemType): string {
           </Column>
           <Column field="updatedAt" header="Activity Date" sortable>
             <template #body="{ data }">
-              {{ formatDate(data.updatedAt, 'MM/dd/yyyy hh:mm') }}
+              {{ formatDate(data.updatedAt ?? data.createdAt, 'MM/dd/yyyy hh:mm') }}
             </template>
           </Column>
         </DataTable>

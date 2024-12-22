@@ -1,5 +1,9 @@
-import { format } from 'date-fns'
+import { format, formatDistanceToNow } from 'date-fns'
 
-export function formatDate(date: Date, formatString: string = 'dd/MM/yyyy'): string {
+export function formatDate(date: Date | string, formatString: string = 'dd/MM/yyyy'): string {
   return format(date, formatString)
+}
+
+export function formatRelativeTime(date: string): string {
+  return formatDistanceToNow(new Date(date), { addSuffix: true })
 }

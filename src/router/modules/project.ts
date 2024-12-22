@@ -40,6 +40,18 @@ const routes: RouteRecordRaw[] = [
               ],
             },
           },
+          {
+            path: 'wiki',
+            name: 'project-wiki-pages',
+            component: () => import('@/views/WikiPages/WikiPagesList.vue'),
+            meta: {
+              breadcrumbResolver: (project: Project) => [
+                { label: project.name, route: `/projects/${project.id}/summary` },
+                { label: 'Overview', route: `/projects/${project.id}/wiki-pages` },
+                { label: 'Wiki', route: `/projects/${project.id}/wiki-pages` },
+              ],
+            },
+          },
         ],
       },
     ],

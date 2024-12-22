@@ -91,3 +91,32 @@ export type PaginationFilter = {
   sortField: string
   sortOrder: 'asc' | 'desc'
 }
+
+export type WikiPage = {
+  id: string
+  title: string
+  subPages: WikiPage[]
+}
+
+export type WikiPageDetail = {
+  id: string
+  projectId: string
+  title: string
+  content: string
+  comments: Comment[]
+  createdAt: string
+  updatedAt: string
+}
+
+export type Comment = {
+  id: string
+  author: Author
+  content: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type Author = {
+  name: string
+  imageUrl: string
+}

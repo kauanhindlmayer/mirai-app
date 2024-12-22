@@ -19,7 +19,7 @@ const menuItems = computed<MenuItem[]>(() => [
         to: `/projects/${project.value?.id}/summary`,
       },
       {
-        label: 'Dashboard',
+        label: 'Dashboards',
         icon: 'pi pi-fw pi-chart-bar',
         to: `/projects/${project.value?.id}/dashboard`,
       },
