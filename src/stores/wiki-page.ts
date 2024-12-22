@@ -1,4 +1,4 @@
-import type { WikiPage, WikiPageDetail } from '@/types'
+import type { WikiPage, WikiPageStats, WikiPageSummary } from '@/types'
 import { httpClient } from '@/utils/http-client'
 import { defineStore, storeToRefs } from 'pinia'
 import { ref } from 'vue'
@@ -7,12 +7,13 @@ import { useProjectStore } from './project'
 export const useWikiPageStore = defineStore('wikiPages', () => {
   const projectStore = useProjectStore()
   const { project } = storeToRefs(projectStore)
-  const wikiPages = ref<WikiPage[]>([])
-  const wikiPage = ref<WikiPageDetail | null>(null)
+  const wikiPages = ref<WikiPageSummary[]>([])
+  const wikiPage = ref<WikiPage | null>(null)
+  const wikiPageStats = ref<WikiPageStats | null>(null)
 
   async function listWikiPages() {
     try {
-      wikiPages.value = await httpClient.get<WikiPage[]>(
+      wikiPages.value = await httpClient.get<WikiPageSummary[]>(
         `/projects/${project.value?.id}/wiki-pages`,
       )
     } catch (error) {
@@ -22,8 +23,18 @@ export const useWikiPageStore = defineStore('wikiPages', () => {
 
   async function getWikiPage(wikiPageId: string) {
     try {
-      wikiPage.value = await httpClient.get<WikiPageDetail>(
+      wikiPage.value = await httpClient.get<WikiPage>(
         `/projects/${project.value?.id}/wiki-pages/${wikiPageId}`,
+      )
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async function getWikiPageStats(wikiPageId: string) {
+    try {
+      wikiPageStats.value = await httpClient.get(
+        `/projects/${project.value?.id}/wiki-pages/${wikiPageId}/stats?pageViewsForDays=30`,
       )
     } catch (error) {
       console.error(error)
@@ -74,8 +85,10 @@ export const useWikiPageStore = defineStore('wikiPages', () => {
   return {
     wikiPages,
     wikiPage,
+    wikiPageStats,
     listWikiPages,
     getWikiPage,
+    getWikiPageStats,
     deleteWikiPage,
     addComment,
     deleteComment,

@@ -1,5 +1,6 @@
 import { definePreset } from '@primevue/themes'
 import Aura from '@primevue/themes/aura'
+import { Tooltip } from 'primevue'
 import PrimeVue from 'primevue/config'
 import ConfirmationService from 'primevue/confirmationservice'
 import ToastService from 'primevue/toastservice'
@@ -35,6 +36,7 @@ const primeVue = {
     })
     app.use(ToastService)
     app.use(ConfirmationService)
+    app.directive('tooltip', Tooltip)
   },
 }
 

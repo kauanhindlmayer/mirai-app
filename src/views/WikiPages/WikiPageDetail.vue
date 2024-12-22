@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import AppComment from '@/components/shared/AppComment.vue'
 import { useWikiPageStore } from '@/stores/wiki-page'
-import type { Comment, WikiPageDetail } from '@/types'
-import { formatRelativeTime } from '@/utils/date'
+import type { Comment, WikiPage, WikiPageStats } from '@/types'
+import { formatDate, formatRelativeTime } from '@/utils/date'
 import { Menu, useConfirm } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { ref, useTemplateRef } from 'vue'
+import { computed, ref, useTemplateRef } from 'vue'
 
 const { wikiPage } = defineProps<{
-  wikiPage: WikiPageDetail
+  wikiPage: WikiPage
+  wikiPageStats: WikiPageStats | null
 }>()
 
 const wikiPageStore = useWikiPageStore()
@@ -100,6 +101,10 @@ async function deleteComment(comment: Comment) {
   await wikiPageStore.deleteComment(wikiPage.id, comment.id)
   await wikiPageStore.getWikiPage(wikiPage.id)
 }
+
+const wikiPageLastUpdated = computed(() =>
+  formatDate(wikiPage.updatedAt, "MMM d, yyyy 'at' h:mm a"),
+)
 </script>
 
 <template>
@@ -116,10 +121,11 @@ async function deleteComment(comment: Comment) {
             class="inline-flex items-center py-2 px-4 font-medium border border-surface-200 dark:border-surface-700 rounded"
           >
             <i class="pi pi-user text-primary mr-2" />
-            <span class="text-surface-900 dark:text-surface-0">Jane Cooper</span>
+            <span class="text-surface-900 dark:text-surface-0">{{ wikiPage.author.name }}</span>
           </span>
           <span
             class="inline-flex items-center py-2 px-4 font-medium border border-surface-200 dark:border-surface-700 rounded"
+            v-tooltip.bottom="wikiPageLastUpdated"
           >
             <i class="pi pi-clock text-primary mr-2" />
             <span class="text-surface-900 dark:text-surface-0">
@@ -130,7 +136,9 @@ async function deleteComment(comment: Comment) {
             class="inline-flex items-center py-2 px-4 font-medium border border-surface-200 dark:border-surface-700 rounded"
           >
             <i class="pi pi-eye text-primary mr-2" />
-            <span class="text-surface-900 dark:text-surface-0">124</span>
+            <span class="text-surface-900 dark:text-surface-0">
+              {{ wikiPageStats?.views }} visits in the last 30 days
+            </span>
           </span>
         </div>
       </div>

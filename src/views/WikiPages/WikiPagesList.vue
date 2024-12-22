@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useWikiPageStore } from '@/stores/wiki-page'
-import type { WikiPage } from '@/types'
+import type { WikiPageSummary } from '@/types'
 import { storeToRefs } from 'pinia'
 import type { TreeSelectionKeys } from 'primevue'
 import type { TreeNode } from 'primevue/treenode'
@@ -8,11 +8,11 @@ import { computed, onBeforeMount, ref, watchEffect } from 'vue'
 import WikiPageDetail from './WikiPageDetail.vue'
 
 const wikiPageStore = useWikiPageStore()
-const { wikiPage } = storeToRefs(wikiPageStore)
+const { wikiPage, wikiPageStats } = storeToRefs(wikiPageStore)
 
 const nodes = computed(() => wikiPageStore.wikiPages.map(toNode))
 
-function toNode(page: WikiPage): TreeNode {
+function toNode(page: WikiPageSummary): TreeNode {
   return {
     key: page.id,
     label: page.title,
@@ -23,10 +23,11 @@ function toNode(page: WikiPage): TreeNode {
 
 const selectedKey = ref<TreeSelectionKeys | undefined>(undefined)
 
-watchEffect(() => {
+watchEffect(async () => {
   if (!selectedKey.value) return
   const [wikiPageId] = Object.keys(selectedKey.value as object)
-  wikiPageStore.getWikiPage(wikiPageId)
+  await wikiPageStore.getWikiPage(wikiPageId)
+  await wikiPageStore.getWikiPageStats(wikiPageId)
 })
 
 onBeforeMount(async () => {
@@ -45,7 +46,7 @@ onBeforeMount(async () => {
       </div>
     </div>
     <div class="col-span-9">
-      <WikiPageDetail v-if="wikiPage" :wiki-page="wikiPage" />
+      <WikiPageDetail v-if="wikiPage" :wiki-page="wikiPage" :wiki-page-stats="wikiPageStats" />
     </div>
   </div>
 </template>
