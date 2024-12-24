@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import AppComment from '@/components/shared/AppComment.vue'
+import { useProjectStore } from '@/stores/project'
 import { useWikiPageStore } from '@/stores/wiki-page'
 import type { Comment, WikiPage, WikiPageStats } from '@/types'
 import { formatDate, formatRelativeTime } from '@/utils/date'
 import { Menu, useConfirm } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import { computed, ref, useTemplateRef } from 'vue'
+import { useRouter } from 'vue-router'
 
 const { wikiPage } = defineProps<{
   wikiPage: WikiPage
@@ -95,6 +97,7 @@ async function addComment() {
   if (!commentContent.value) return
   await wikiPageStore.addComment(wikiPage.id, commentContent.value)
   await wikiPageStore.getWikiPage(wikiPage.id)
+  commentContent.value = ''
 }
 
 async function deleteComment(comment: Comment) {
@@ -105,6 +108,13 @@ async function deleteComment(comment: Comment) {
 const wikiPageLastUpdated = computed(() =>
   formatDate(wikiPage.updatedAt, "MMM d, yyyy 'at' h:mm a"),
 )
+
+const router = useRouter()
+const projectStore = useProjectStore()
+
+function redirectToEditPage() {
+  router.push(`/projects/${projectStore.project?.id}/wiki-pages/${wikiPage.id}/edit`)
+}
 </script>
 
 <template>
@@ -143,7 +153,7 @@ const wikiPageLastUpdated = computed(() =>
         </div>
       </div>
       <div class="flex items-center justify-center">
-        <Button label="Edit" severity="secondary" class="mr-4" disabled />
+        <Button label="Edit" severity="secondary" class="mr-4" @click="redirectToEditPage" />
         <Button
           icon="pi pi-ellipsis-v"
           severity="secondary"
@@ -191,6 +201,5 @@ const wikiPageLastUpdated = computed(() =>
         </div>
       </li>
     </ul>
-    <ConfirmDialog style="width: 450px" />
   </div>
 </template>

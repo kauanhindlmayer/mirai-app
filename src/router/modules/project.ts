@@ -30,7 +30,7 @@ const routes: RouteRecordRaw[] = [
           },
           {
             path: 'work-items',
-            name: 'project-work-items',
+            name: 'work-items',
             component: () => import('@/views/WorkItems/WorkItemsList.vue'),
             meta: {
               breadcrumbResolver: (project: Project) => [
@@ -41,8 +41,8 @@ const routes: RouteRecordRaw[] = [
             },
           },
           {
-            path: 'wiki-pages',
-            name: 'project-wiki-pages',
+            path: 'wiki-pages/:wikiPageId?',
+            name: 'wiki-pages',
             component: () => import('@/views/WikiPages/WikiPagesList.vue'),
             meta: {
               breadcrumbResolver: (project: Project) => [
@@ -51,6 +51,12 @@ const routes: RouteRecordRaw[] = [
                 { label: 'Wiki', route: `/projects/${project.id}/wiki-pages` },
               ],
             },
+          },
+          {
+            path: 'wiki-pages/:wikiPageId/edit',
+            name: 'wiki-page-edit',
+            component: () => import('@/views/WikiPages/WikiPagesList.vue'),
+            props: { isEditing: true },
           },
         ],
       },

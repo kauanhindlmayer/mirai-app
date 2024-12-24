@@ -82,6 +82,10 @@ export const useWikiPageStore = defineStore('wikiPages', () => {
     }
   }
 
+  function resetWikiPage() {
+    wikiPage.value = null
+  }
+
   return {
     wikiPages,
     wikiPage,
@@ -93,5 +97,6 @@ export const useWikiPageStore = defineStore('wikiPages', () => {
     addComment,
     deleteComment,
     updateComment,
+    resetWikiPage,
   }
 })
