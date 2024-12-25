@@ -11,6 +11,40 @@ export const useWikiPageStore = defineStore('wikiPages', () => {
   const wikiPage = ref<WikiPage | null>(null)
   const wikiPageStats = ref<WikiPageStats | null>(null)
 
+  async function createWikiPage(title: string, content: string, parentWikiPageId?: string) {
+    try {
+      await httpClient.post(`/projects/${project.value?.id}/wiki-pages`, {
+        title,
+        content,
+        parentWikiPageId,
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async function updateWikiPage(wikiPageId: string, title: string, content: string) {
+    try {
+      await httpClient.put(`/projects/${project.value?.id}/wiki-pages/${wikiPageId}`, {
+        title,
+        content,
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async function moveWikiPage(wikiPageId: string, TargetParentId: string, targetPosition: number) {
+    try {
+      await httpClient.put(`/projects/${project.value?.id}/wiki-pages/${wikiPageId}/move`, {
+        TargetParentId,
+        targetPosition,
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   async function listWikiPages() {
     try {
       wikiPages.value = await httpClient.get<WikiPageSummary[]>(
@@ -90,6 +124,9 @@ export const useWikiPageStore = defineStore('wikiPages', () => {
     wikiPages,
     wikiPage,
     wikiPageStats,
+    createWikiPage,
+    updateWikiPage,
+    moveWikiPage,
     listWikiPages,
     getWikiPage,
     getWikiPageStats,

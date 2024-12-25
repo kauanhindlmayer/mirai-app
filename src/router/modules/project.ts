@@ -12,6 +12,9 @@ const routes: RouteRecordRaw[] = [
         path: 'projects',
         name: 'projects',
         component: () => import('@/views/Projects/ProjectsList.vue'),
+        meta: {
+          title: 'Projects - Home',
+        },
       },
       {
         path: 'projects/:projectId',
@@ -21,6 +24,7 @@ const routes: RouteRecordRaw[] = [
             name: 'project-summary',
             component: () => import('@/views/Projects/ProjectSummary.vue'),
             meta: {
+              title: 'Summary - Overview',
               breadcrumbResolver: (project: Project) => [
                 { label: project.name, route: `/projects/${project.id}/summary` },
                 { label: 'Overview', route: `/projects/${project.id}/summary` },
@@ -33,6 +37,7 @@ const routes: RouteRecordRaw[] = [
             name: 'work-items',
             component: () => import('@/views/WorkItems/WorkItemsList.vue'),
             meta: {
+              title: 'Work Items - Boards',
               breadcrumbResolver: (project: Project) => [
                 { label: project.name, route: `/projects/${project.id}/summary` },
                 { label: 'Boards', route: `/projects/${project.id}/work-items` },
@@ -45,6 +50,7 @@ const routes: RouteRecordRaw[] = [
             name: 'wiki-pages',
             component: () => import('@/views/WikiPages/WikiPagesList.vue'),
             meta: {
+              title: 'Wiki Pages - Overview',
               breadcrumbResolver: (project: Project) => [
                 { label: project.name, route: `/projects/${project.id}/summary` },
                 { label: 'Overview', route: `/projects/${project.id}/wiki-pages` },

@@ -6,6 +6,7 @@ export default {
   plugins: [require('tailwindcss-primeui')],
   theme: {
     extend: {
+      display: ['group-hover'],
       animation: {
         'infinite-scroll': 'infinite-scroll 25s linear infinite',
         float: 'float 3.5s ease-in-out infinite',
