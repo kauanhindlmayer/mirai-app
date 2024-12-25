@@ -1,3 +1,4 @@
+import { displayError } from '@/composables/displayError'
 import type { WikiPage, WikiPageStats, WikiPageSummary } from '@/types'
 import { httpClient } from '@/utils/http-client'
 import { defineStore, storeToRefs } from 'pinia'
@@ -18,8 +19,8 @@ export const useWikiPageStore = defineStore('wikiPages', () => {
         content,
         parentWikiPageId,
       })
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      displayError(error)
     }
   }
 
@@ -29,8 +30,8 @@ export const useWikiPageStore = defineStore('wikiPages', () => {
         title,
         content,
       })
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      displayError(error)
     }
   }
 
@@ -40,8 +41,8 @@ export const useWikiPageStore = defineStore('wikiPages', () => {
         TargetParentId,
         targetPosition,
       })
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      displayError(error)
     }
   }
 
@@ -50,8 +51,8 @@ export const useWikiPageStore = defineStore('wikiPages', () => {
       wikiPages.value = await httpClient.get<WikiPageSummary[]>(
         `/projects/${project.value?.id}/wiki-pages`,
       )
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      displayError(error)
     }
   }
 
@@ -60,8 +61,8 @@ export const useWikiPageStore = defineStore('wikiPages', () => {
       wikiPage.value = await httpClient.get<WikiPage>(
         `/projects/${project.value?.id}/wiki-pages/${wikiPageId}`,
       )
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      displayError(error)
     }
   }
 
@@ -70,16 +71,16 @@ export const useWikiPageStore = defineStore('wikiPages', () => {
       wikiPageStats.value = await httpClient.get(
         `/projects/${project.value?.id}/wiki-pages/${wikiPageId}/stats?pageViewsForDays=30`,
       )
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      displayError(error)
     }
   }
 
   async function deleteWikiPage(wikiPageId: string) {
     try {
       await httpClient.delete(`/projects/${project.value?.id}/wiki-pages/${wikiPageId}`)
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      displayError(error)
     }
   }
 
@@ -88,8 +89,8 @@ export const useWikiPageStore = defineStore('wikiPages', () => {
       await httpClient.post(`/projects/${project.value?.id}/wiki-pages/${wikiPageId}/comments`, {
         content,
       })
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      displayError(error)
     }
   }
 
@@ -98,8 +99,8 @@ export const useWikiPageStore = defineStore('wikiPages', () => {
       await httpClient.delete(
         `/projects/${project.value?.id}/wiki-pages/${wikiPageId}/comments/${commentId}`,
       )
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      displayError(error)
     }
   }
 
@@ -111,8 +112,8 @@ export const useWikiPageStore = defineStore('wikiPages', () => {
           content,
         },
       )
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      displayError(error)
     }
   }
 

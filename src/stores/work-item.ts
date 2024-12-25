@@ -1,3 +1,4 @@
+import { displayError } from '@/composables/displayError'
 import type { PagedList, PaginationFilter, WorkItem } from '@/types'
 import { httpClient } from '@/utils/http-client'
 import { defineStore, storeToRefs } from 'pinia'
@@ -25,8 +26,8 @@ export const useWorkItemStore = defineStore('workItems', () => {
         `/projects/${project.value?.id}/work-items`,
         { params: filters as unknown as Record<string, string> },
       )
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      displayError(error)
     } finally {
       isLoading.value = false
     }
@@ -35,8 +36,8 @@ export const useWorkItemStore = defineStore('workItems', () => {
   async function deleteWorkItem(workItemId: string) {
     try {
       await httpClient.delete(`/projects/${project.value?.id}/work-items/${workItemId}`)
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      displayError(error)
     }
   }
 

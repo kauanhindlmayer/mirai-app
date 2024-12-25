@@ -12,7 +12,9 @@ const { wikiPage, parentWikiPageId } = defineProps<{
 
 const confirm = useConfirm()
 const router = useRouter()
-const wikiPageStore = useWikiPageStore()
+const store = useWikiPageStore()
+
+const isEditing = computed(() => !!wikiPage)
 
 const title = ref<string>(wikiPage?.title || '')
 const content = ref<string>(wikiPage?.content || '')
@@ -20,7 +22,10 @@ const content = ref<string>(wikiPage?.content || '')
 const emit = defineEmits(['close'])
 
 const isWikiPageUnchanged = computed(() => {
-  return title.value === wikiPage?.title && content.value === wikiPage?.content
+  return (
+    (isEditing.value && title.value === wikiPage?.title && content.value === wikiPage?.content) ||
+    (!isEditing.value && !title.value && !content.value)
+  )
 })
 
 function close() {
@@ -55,7 +60,7 @@ function closeForm() {
 }
 
 async function save() {
-  // Save wiki page
+  store.createWikiPage(title.value, content.value, parentWikiPageId)
 }
 </script>
 

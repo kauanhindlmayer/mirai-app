@@ -33,7 +33,7 @@ function onAnchorToggle() {
 <template>
   <div class="layout-sidebar" @mouseenter="onMouseEnter" @mouseleave="onMouseLeave">
     <div class="sidebar-header">
-      <router-link to="/" class="logo">
+      <RouterLink to="/" class="logo">
         <img
           class="logo-image"
           :src="
@@ -44,7 +44,7 @@ function onAnchorToggle() {
           alt="mirai-layout"
         />
         <span class="app-name title-h7">Mirai</span>
-      </router-link>
+      </RouterLink>
       <button class="layout-sidebar-anchor" type="button" @click="onAnchorToggle" />
     </div>
     <div class="layout-menu-container">

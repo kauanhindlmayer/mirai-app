@@ -10,7 +10,7 @@ const routes: RouteRecordRaw[] = [
       { path: '', redirect: '/projects' },
       {
         path: 'projects',
-        name: 'projects',
+        name: 'projects-home',
         component: () => import('@/views/Projects/ProjectsList.vue'),
         meta: {
           title: 'Projects - Home',

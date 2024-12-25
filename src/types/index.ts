@@ -19,13 +19,11 @@ export type RegisterUserRequest = {
   lastName: string
   email: string
   password: string
-  hasAcceptedTerms: boolean
 }
 
 export type LoginUserRequest = {
   email: string
   password: string
-  shouldRememberCredentials: boolean
 }
 
 export type LoginUserResponse = {

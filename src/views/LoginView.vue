@@ -7,14 +7,13 @@ import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { ref } from 'vue'
 import { object, string } from 'yup'
 
-const userStore = useUserStore()
+const store = useUserStore()
 
-const isLoading = ref(false)
 const form = ref<LoginUserRequest>({
   email: '',
   password: '',
-  shouldRememberCredentials: false,
 })
+const shouldRememberCredentials = ref(false)
 
 const resolver = ref(
   yupResolver(
@@ -27,9 +26,7 @@ const resolver = ref(
 
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
-  isLoading.value = true
-  await userStore.login(form.value)
-  isLoading.value = false
+  await store.loginUser(form.value)
 }
 </script>
 
@@ -39,9 +36,9 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
   >
     <div class="flex w-full h-full justify-center gap-12">
       <div class="flex flex-col py-20 lg:min-w-[30rem]">
-        <router-link to="/" class="flex items-center justify-center lg:justify-start mb-8">
+        <RouterLink to="/" class="flex items-center justify-center lg:justify-start mb-8">
           <Logo />
-        </router-link>
+        </RouterLink>
         <div class="flex flex-col justify-center flex-grow">
           <div class="max-w-md mx-auto w-full">
             <h5 class="title-h5 text-center lg:text-left">Login</h5>
@@ -66,27 +63,23 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
               </FormField>
               <div class="my-8 flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                  <Checkbox
-                    inputId="remember"
-                    v-model="form.shouldRememberCredentials"
-                    :binary="true"
-                  />
+                  <Checkbox inputId="remember" v-model="shouldRememberCredentials" :binary="true" />
                   <label for="remember" class="body-small"> Remember me </label>
                 </div>
-                <router-link
+                <RouterLink
                   to="/forgot-password"
                   class="body-small text-primary-500 hover:underline"
                 >
                   Forgot password?
-                </router-link>
+                </RouterLink>
               </div>
-              <Button type="submit" class="body-button w-full" :loading="isLoading">Login</Button>
+              <Button type="submit" class="body-button w-full">Login</Button>
             </Form>
             <div class="mt-8 body-small text-center lg:text-left">
               Not registered?
-              <router-link to="/register" class="text-primary-500 hover:underline">
+              <RouterLink to="/register" class="text-primary-500 hover:underline">
                 Create an Account
-              </router-link>
+              </RouterLink>
             </div>
           </div>
         </div>

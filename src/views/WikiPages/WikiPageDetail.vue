@@ -14,7 +14,7 @@ const { wikiPage } = defineProps<{
   wikiPageStats: WikiPageStats | null
 }>()
 
-const wikiPageStore = useWikiPageStore()
+const store = useWikiPageStore()
 const confirm = useConfirm()
 
 const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
@@ -58,7 +58,7 @@ function deleteWikiPage() {
       severity: 'danger',
     },
     accept: () => {
-      wikiPageStore.deleteWikiPage(wikiPage.id)
+      store.deleteWikiPage(wikiPage.id)
     },
   })
 }
@@ -95,14 +95,14 @@ function hideActionButtons() {
 
 async function addComment() {
   if (!commentContent.value) return
-  await wikiPageStore.addComment(wikiPage.id, commentContent.value)
-  await wikiPageStore.getWikiPage(wikiPage.id)
+  await store.addComment(wikiPage.id, commentContent.value)
+  await store.getWikiPage(wikiPage.id)
   commentContent.value = ''
 }
 
 async function deleteComment(comment: Comment) {
-  await wikiPageStore.deleteComment(wikiPage.id, comment.id)
-  await wikiPageStore.getWikiPage(wikiPage.id)
+  await store.deleteComment(wikiPage.id, comment.id)
+  await store.getWikiPage(wikiPage.id)
 }
 
 const wikiPageLastUpdated = computed(() =>

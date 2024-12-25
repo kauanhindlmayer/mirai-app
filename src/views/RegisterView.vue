@@ -13,10 +13,10 @@ const form = ref<RegisterUserRequest>({
   lastName: '',
   email: '',
   password: '',
-  hasAcceptedTerms: false,
 })
+const hasAcceptedTerms = ref(false)
 
-const userStore = useUserStore()
+const store = useUserStore()
 
 const resolver = ref(
   yupResolver(
@@ -43,7 +43,7 @@ const resolver = ref(
 
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
-  await userStore.register(form.value)
+  await store.registerUser(form.value)
 }
 </script>
 
@@ -53,9 +53,9 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
   >
     <div class="flex w-full h-full justify-center gap-12">
       <div class="flex flex-col py-20 lg:min-w-[30rem]">
-        <router-link to="/" class="flex items-center justify-center lg:justify-start mb-8">
+        <RouterLink to="/" class="flex items-center justify-center lg:justify-start mb-8">
           <Logo />
-        </router-link>
+        </RouterLink>
         <div class="flex flex-col justify-center flex-grow">
           <div class="max-w-md mx-auto w-full">
             <h5 class="title-h5 text-center lg:text-left">Register</h5>
@@ -110,7 +110,7 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
                   <div class="flex items-center gap-2">
                     <Checkbox
                       inputId="hasAcceptedTerms"
-                      v-model="form.hasAcceptedTerms"
+                      v-model="hasAcceptedTerms"
                       :binary="true"
                     />
                     <label for="hasAcceptedTerms" class="body-small">
@@ -130,9 +130,7 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
             </Form>
             <div class="mt-8 body-small text-center lg:text-left">
               Already have an account?
-              <router-link to="/login" class="text-primary-500 hover:underline">
-                Login
-              </router-link>
+              <RouterLink to="/login" class="text-primary-500 hover:underline"> Login </RouterLink>
             </div>
           </div>
         </div>

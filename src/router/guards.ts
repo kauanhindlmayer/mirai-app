@@ -1,5 +1,4 @@
 import { useProjectStore } from '@/stores/project'
-import { storeToRefs } from 'pinia'
 import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 
 export async function ensureProjectLoaded(
@@ -11,14 +10,8 @@ export async function ensureProjectLoaded(
   if (!projectId) return next()
 
   const store = useProjectStore()
-  const { project } = storeToRefs(store)
-
-  if (!project.value || project.value.id !== projectId) {
-    try {
-      await store.getProject(projectId)
-    } catch {
-      return next({ name: 'projects' })
-    }
+  if (!store.project || store.project.id !== projectId) {
+    await store.getProject(projectId)
   }
 
   next()

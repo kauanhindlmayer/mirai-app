@@ -1,3 +1,4 @@
+import { displayError } from '@/composables/displayError'
 import type { Project } from '@/types'
 import { httpClient } from '@/utils/http-client'
 import { defineStore } from 'pinia'
@@ -10,22 +11,24 @@ export const useProjectStore = defineStore('projects', () => {
   async function createProject(project: Partial<Project>, organizationId: string) {
     try {
       await httpClient.post(`/organizations/${organizationId}/projects`, project)
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      displayError(error)
     }
   }
 
   async function getProject(projectId: string) {
-    const response = await httpClient.get<Project>(`/projects/${projectId}`)
-    project.value = response
-    return response
+    try {
+      project.value = await httpClient.get<Project>(`/projects/${projectId}`)
+    } catch (error: unknown) {
+      displayError(error)
+    }
   }
 
   async function listProjects(organizationId: string) {
     try {
       projects.value = await httpClient.get<Project[]>(`/organizations/${organizationId}/projects`)
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      displayError(error)
     }
   }
 

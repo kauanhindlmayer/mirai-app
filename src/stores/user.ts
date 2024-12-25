@@ -1,47 +1,28 @@
+import { displayError } from '@/composables/displayError'
 import type { LoginUserRequest, LoginUserResponse, RegisterUserRequest } from '@/types'
 import { httpClient } from '@/utils/http-client'
 import { defineStore } from 'pinia'
-import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
 
 export const useUserStore = defineStore('users', () => {
   const router = useRouter()
-  const toast = useToast()
 
-  async function register(request: RegisterUserRequest) {
+  async function registerUser(request: RegisterUserRequest) {
     try {
-      await httpClient.post('/users/register', {
-        firstName: request.firstName,
-        lastName: request.lastName,
-        email: request.email,
-        password: request.password,
-      })
+      await httpClient.post('/users/register', request)
       router.push({ name: 'login' })
-    } catch {
-      toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Email already exists',
-        life: 3000,
-      })
+    } catch (error: unknown) {
+      displayError(error)
     }
   }
 
-  async function login(request: LoginUserRequest) {
+  async function loginUser(request: LoginUserRequest) {
     try {
-      const response = await httpClient.post<LoginUserResponse>('/users/login', {
-        email: request.email,
-        password: request.password,
-      })
+      const response = await httpClient.post<LoginUserResponse>('/users/login', request)
       localStorage.setItem('accessToken', response.accessToken)
-      router.push({ name: 'projects' })
-    } catch {
-      toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Invalid credentials',
-        life: 3000,
-      })
+      router.push({ name: 'projects-home' })
+    } catch (error: unknown) {
+      displayError(error)
     }
   }
 
@@ -51,8 +32,8 @@ export const useUserStore = defineStore('users', () => {
   }
 
   return {
-    register,
-    login,
+    registerUser,
+    loginUser,
     logout,
   }
 })

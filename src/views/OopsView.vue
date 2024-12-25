@@ -16,8 +16,8 @@ const { isDarkTheme } = useLayout()
     />
     <h1 class="title-h5 lg:title-h1 mt-8">Oops!</h1>
     <p class="body-small lg:body-large mt-2 lg:mt-4">There is nothing here</p>
-    <router-link to="/" class="body-button bg-orange-600 w-fit mt-8 hover:bg-orange-500 px-4">
+    <RouterLink to="/" class="body-button bg-orange-600 w-fit mt-8 hover:bg-orange-500 px-4">
       Go to Dashboard
-    </router-link>
+    </RouterLink>
   </section>
 </template>

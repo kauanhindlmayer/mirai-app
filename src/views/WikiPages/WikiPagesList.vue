@@ -36,7 +36,10 @@ const selectedWikiPageId = ref('')
 watch(
   () => selectedKey.value,
   async () => {
-    if (!selectedKey.value) return
+    if (!selectedKey.value) {
+      router.push({ name: 'wiki-pages', params: { wikiPageId: '' } })
+      return
+    }
     isFormVisible.value = false
     const [wikiPageId] = Object.keys(selectedKey.value)
     selectedWikiPageId.value = wikiPageId

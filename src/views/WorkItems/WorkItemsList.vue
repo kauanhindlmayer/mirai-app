@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import { useAppToast } from '@/composables/useAppToast'
 import { useWorkItemStore } from '@/stores/work-item'
 import { WorkItemStatus, WorkItemType, type PaginationFilter, type WorkItem } from '@/types'
 import { formatDate } from '@/utils/date'
 import { storeToRefs } from 'pinia'
 import {
-  useToast,
   type ContextMenu,
   type DataTablePageEvent,
   type DataTableRowContextMenuEvent,
@@ -12,7 +12,7 @@ import {
 } from 'primevue'
 import { onMounted, ref, useTemplateRef } from 'vue'
 
-const toast = useToast()
+const toast = useAppToast()
 
 const workItemStore = useWorkItemStore()
 const { workItems, isLoading } = storeToRefs(workItemStore)
@@ -40,8 +40,7 @@ function copyWorkItemToClipboard() {
   const workItemDataString = `${code}\t${getTypeLabel(type)}\t${title}\t${getStatusLabel(status)}`
   const workItemString = [header, workItemDataString].join('\n')
   navigator.clipboard.writeText(workItemString).then(() => {
-    toast.add({
-      severity: 'success',
+    toast.showSuccess({
       summary: 'Work Item Copied',
       detail: 'Work item data copied to clipboard',
     })

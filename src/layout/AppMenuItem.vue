@@ -237,7 +237,7 @@ function isActiveRoute(item: MenuItem) {
       </span>
       <i class="pi pi-fw pi-angle-down layout-submenu-toggler" v-if="item.items" />
     </a>
-    <router-link
+    <RouterLink
       v-if="item.to && !item.items && item.visible !== false"
       @click="handleItemClick($event, item)"
       :class="[item.class, { 'active-route': isActiveRoute(item) }]"
@@ -251,7 +251,7 @@ function isActiveRoute(item: MenuItem) {
         {{ item.label }}
       </span>
       <i class="pi pi-fw pi-angle-down layout-submenu-toggler" v-if="item.items" />
-    </router-link>
+    </RouterLink>
 
     <ul
       ref="subMenu"
