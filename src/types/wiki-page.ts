@@ -13,6 +13,7 @@ export type WikiPage = {
 export type WikiPageSummary = {
   id: string
   title: string
+  position: number
   subPages: WikiPageSummary[]
 }
 

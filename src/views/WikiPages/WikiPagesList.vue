@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import MoveWikiPageDialog from '@/components/MoveWikiPageDialog.vue'
+import { useAppToast } from '@/composables/useAppToast'
 import { useProjectStore } from '@/stores/project'
 import { useWikiPageStore } from '@/stores/wiki-page'
 import type { WikiPageSummary } from '@/types/wiki-page'
@@ -16,6 +18,7 @@ const { wikiPage } = storeToRefs(store)
 const { project } = storeToRefs(useProjectStore())
 
 const confirm = useConfirm()
+const toast = useAppToast()
 const route = useRoute()
 const router = useRouter()
 
@@ -60,6 +63,7 @@ function openNewPageForm() {
 
 function closeForm() {
   isAdding.value = false
+  parentWikiPageId.value = ''
   if (isEditing) {
     router.push(`/projects/${project.value!.id}/wiki-pages/${wikiPage.value!.id}`)
   } else {
@@ -69,9 +73,9 @@ function closeForm() {
 
 const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
 const menuItems = ref<MenuItem[]>([
-  { label: 'Add Sub-Page', icon: 'pi pi-plus', command: openNewPageForm },
-  { label: 'Copy Page Path', icon: 'pi pi-copy', disabled: true },
-  { label: 'Move Page', icon: 'pi pi-arrow-right', disabled: true },
+  { label: 'Add Sub-Page', icon: 'pi pi-plus', command: addSubPage },
+  { label: 'Copy Page Path', icon: 'pi pi-copy', command: copyPagePath },
+  { label: 'Move Page', icon: 'pi pi-arrow-right', command: openMoveWikiPageDialog },
   { label: 'Edit', icon: 'pi pi-pencil', command: redirectToEditPage },
   { label: 'Delete', icon: 'pi pi-trash', command: deleteWikiPage },
   { label: 'Open in New Tab', icon: 'pi pi-external-link', command: openInNewTab },
@@ -79,6 +83,25 @@ const menuItems = ref<MenuItem[]>([
 
 function toggleMenuItems(event: MouseEvent) {
   menuRef.value?.toggle(event)
+}
+
+const parentWikiPageId = ref('')
+
+function addSubPage() {
+  parentWikiPageId.value = wikiPage.value!.id
+  openNewPageForm()
+}
+
+function copyPagePath() {
+  navigator.clipboard.writeText(`/projects/${project.value?.id}/wiki-pages/${wikiPage.value?.id}`)
+  toast.showSuccess({ detail: 'Page path copied to clipboard' })
+}
+
+type MoveWikiPageDialogType = typeof MoveWikiPageDialog
+const moveWikiPageDialogRef = useTemplateRef<MoveWikiPageDialogType>('moveWikiPageDialog')
+
+function openMoveWikiPageDialog() {
+  moveWikiPageDialogRef.value?.openDialog()
 }
 
 function redirectToEditPage() {
@@ -155,9 +178,14 @@ function openInNewTab() {
       </div>
     </div>
     <div class="flex-1">
-      <WikiPageForm v-if="isAdding || isEditing" @close="closeForm" />
+      <WikiPageForm
+        v-if="isAdding || isEditing"
+        :parent-wiki-page-id="parentWikiPageId"
+        @close="closeForm"
+      />
       <WikiPageDetail v-else />
     </div>
+    <MoveWikiPageDialog ref="moveWikiPageDialog" @move-wiki-page="store.listWikiPages" />
     <ConfirmDialog style="width: 450px" />
   </div>
 </template>

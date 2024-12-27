@@ -8,6 +8,8 @@ const confirm = useConfirm()
 const store = useWikiPageStore()
 const { wikiPage } = storeToRefs(store)
 
+const { parentWikiPageId } = defineProps<{ parentWikiPageId?: string }>()
+
 const emit = defineEmits<{
   (event: 'close'): void
 }>()
@@ -54,7 +56,7 @@ async function save() {
     await store.updateWikiPage(wikiPage.value!.id, { title: title.value, content: content.value })
     await store.getWikiPage(wikiPage.value!.id)
   } else {
-    await store.createWikiPage({ title: title.value, content: content.value })
+    await store.createWikiPage({ title: title.value, content: content.value, parentWikiPageId })
   }
   await store.listWikiPages()
   emit('close')
