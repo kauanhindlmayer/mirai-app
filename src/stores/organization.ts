@@ -1,24 +1,25 @@
 import { displayError } from '@/composables/displayError'
+import type OrganizationGateway from '@/gateways/OrganizationGateway'
 import type { Organization } from '@/types'
-import { httpClient } from '@/utils/http-client'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 
 export const useOrganizationStore = defineStore('organizations', () => {
+  const organizationGateway = inject<OrganizationGateway>('organizationGateway')!
   const organizations = ref<Organization[]>([])
 
   async function createOrganization(organization: Partial<Organization>) {
     try {
-      await httpClient.post('/organizations', organization)
-    } catch (error: unknown) {
+      await organizationGateway.createOrganization(organization)
+    } catch (error) {
       displayError(error)
     }
   }
 
   async function listOrganizations() {
     try {
-      organizations.value = await httpClient.get<Organization[]>('/organizations')
-    } catch (error: unknown) {
+      organizations.value = await organizationGateway.listOrganizations()
+    } catch (error) {
       displayError(error)
     }
   }

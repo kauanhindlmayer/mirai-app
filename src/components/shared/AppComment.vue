@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Comment } from '@/types'
+import type { Comment } from '@/types/wiki-page'
 import { formatRelativeTime } from '@/utils/date'
 import { useConfirm, type Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
@@ -10,7 +10,7 @@ const { comment } = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (event: 'delete-comment', comment: Comment): void
+  (event: 'delete-comment', commentId: string): void
   (event: 'update-comment', commentId: string, content: string): void
 }>()
 
@@ -38,7 +38,7 @@ async function deleteComment() {
       severity: 'danger',
     },
     accept: () => {
-      emit('delete-comment', comment)
+      emit('delete-comment', comment.id)
     },
   })
 }

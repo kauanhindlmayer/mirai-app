@@ -2,11 +2,11 @@
 import AppComment from '@/components/shared/AppComment.vue'
 import { useProjectStore } from '@/stores/project'
 import { useWikiPageStore } from '@/stores/wiki-page'
-import type { Comment, WikiPage, WikiPageStats } from '@/types'
+import type { WikiPage, WikiPageStats } from '@/types/wiki-page'
 import { formatDate, formatRelativeTime } from '@/utils/date'
 import { Menu, useConfirm } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { computed, ref, useTemplateRef } from 'vue'
+import { computed, ref, toRef, useTemplateRef } from 'vue'
 import { useRouter } from 'vue-router'
 
 const { wikiPage } = defineProps<{
@@ -16,6 +16,12 @@ const { wikiPage } = defineProps<{
 
 const store = useWikiPageStore()
 const confirm = useConfirm()
+const router = useRouter()
+const project = toRef(useProjectStore(), 'project')
+
+const emit = defineEmits<{
+  (event: 'delete-wiki-page', wikiPageId: string): void
+}>()
 
 const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
 const menuItems = ref<MenuItem[]>([
@@ -45,25 +51,10 @@ function printWikiPage() {
 }
 
 function deleteWikiPage() {
-  confirm.require({
-    header: `Delete '${wikiPage.title}'?`,
-    message: `'${wikiPage.title}' page and its sub-pages (if any) will be deleted. Are you sure you want to delete?`,
-    rejectProps: {
-      label: 'Cancel',
-      severity: 'secondary',
-      outlined: true,
-    },
-    acceptProps: {
-      label: 'Delete',
-      severity: 'danger',
-    },
-    accept: () => {
-      store.deleteWikiPage(wikiPage.id)
-    },
-  })
+  emit('delete-wiki-page', wikiPage.id)
 }
 
-const commentContent = ref('')
+const newComment = ref('')
 const isActionButtonsVisible = ref(false)
 
 function showActionButtons() {
@@ -71,7 +62,7 @@ function showActionButtons() {
 }
 
 function hideActionButtons() {
-  if (!commentContent.value) {
+  if (!newComment.value) {
     isActionButtonsVisible.value = false
     return
   }
@@ -87,21 +78,21 @@ function hideActionButtons() {
       severity: 'danger',
     },
     accept: () => {
-      commentContent.value = ''
+      newComment.value = ''
       isActionButtonsVisible.value = false
     },
   })
 }
 
 async function addComment() {
-  if (!commentContent.value) return
-  await store.addComment(wikiPage.id, commentContent.value)
+  if (!newComment.value) return
+  await store.addComment(wikiPage.id, { content: newComment.value })
   await store.getWikiPage(wikiPage.id)
-  commentContent.value = ''
+  newComment.value = ''
 }
 
-async function deleteComment(comment: Comment) {
-  await store.deleteComment(wikiPage.id, comment.id)
+async function deleteComment(commentId: string) {
+  await store.deleteComment(wikiPage.id, commentId)
   await store.getWikiPage(wikiPage.id)
 }
 
@@ -109,11 +100,8 @@ const wikiPageLastUpdated = computed(() =>
   formatDate(wikiPage.updatedAt, "MMM d, yyyy 'at' h:mm a"),
 )
 
-const router = useRouter()
-const projectStore = useProjectStore()
-
 function redirectToEditPage() {
-  router.push(`/projects/${projectStore.project?.id}/wiki-pages/${wikiPage.id}/edit`)
+  router.push(`/projects/${project.value?.id}/wiki-pages/${wikiPage.id}/edit`)
 }
 </script>
 
@@ -189,7 +177,7 @@ function redirectToEditPage() {
         <div class="flex mb-4">
           <Avatar size="large" shape="circle" icon="pi pi-user" class="mr-4 flex-shrink-0" />
           <Textarea
-            v-model="commentContent"
+            v-model="newComment"
             placeholder="Add a comment..."
             class="w-full"
             @click="showActionButtons"

@@ -2,7 +2,7 @@
 import LazyImage from '@/components/shared/LazyImage.vue'
 import Logo from '@/components/shared/Logo.vue'
 import { useUserStore } from '@/stores/user'
-import type { RegisterUserRequest } from '@/types'
+import type { RegisterUserRequest } from '@/types/user'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { ref } from 'vue'

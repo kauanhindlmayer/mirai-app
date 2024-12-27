@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import { useProjectStore } from '@/stores/project'
 import type { Breadcrumb } from '@/types/layout'
-import { storeToRefs } from 'pinia'
-import { ref, watch } from 'vue'
+import { ref, toRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
-const breadcrumbs = ref<Breadcrumb[]>([])
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const breadcrumbs = ref<Breadcrumb[]>([])
+const project = toRef(useProjectStore(), 'project')
 
 function setBreadcrumbRoutes() {
   if (!hasBreadcrumbResolver()) return

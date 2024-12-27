@@ -1,27 +1,30 @@
 import { displayError } from '@/composables/displayError'
-import type { LoginUserRequest, LoginUserResponse, RegisterUserRequest } from '@/types'
-import { httpClient } from '@/utils/http-client'
+import type UserGateway from '@/gateways/UserGateway'
+import type { LoginUserRequest, RegisterUserRequest, User } from '@/types/user'
 import { defineStore } from 'pinia'
+import { inject, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 export const useUserStore = defineStore('users', () => {
+  const userGateway = inject<UserGateway>('userGateway')!
   const router = useRouter()
+  const user = ref<User | null>(null)
 
   async function registerUser(request: RegisterUserRequest) {
     try {
-      await httpClient.post('/users/register', request)
+      await userGateway.registerUser(request)
       router.push({ name: 'login' })
-    } catch (error: unknown) {
+    } catch (error) {
       displayError(error)
     }
   }
 
   async function loginUser(request: LoginUserRequest) {
     try {
-      const response = await httpClient.post<LoginUserResponse>('/users/login', request)
+      const response = await userGateway.loginUser(request)
       localStorage.setItem('accessToken', response.accessToken)
       router.push({ name: 'projects-home' })
-    } catch (error: unknown) {
+    } catch (error) {
       displayError(error)
     }
   }
@@ -31,9 +34,18 @@ export const useUserStore = defineStore('users', () => {
     router.push({ name: 'login' })
   }
 
+  async function getCurrentUser() {
+    try {
+      user.value = await userGateway.getCurrentUser()
+    } catch (error) {
+      displayError(error)
+    }
+  }
+
   return {
     registerUser,
     loginUser,
     logout,
+    getCurrentUser,
   }
 })

@@ -1,13 +1,14 @@
 import { displayError } from '@/composables/displayError'
-import type { PagedList, PaginationFilter, WorkItem } from '@/types'
-import { httpClient } from '@/utils/http-client'
-import { defineStore, storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import type WorkItemGateway from '@/gateways/WorkItemGateway'
+import type { PagedList, PaginationFilter } from '@/types'
+import type { WorkItem } from '@/types/work-item'
+import { defineStore } from 'pinia'
+import { inject, ref, toRef } from 'vue'
 import { useProjectStore } from './project'
 
 export const useWorkItemStore = defineStore('workItems', () => {
-  const projectStore = useProjectStore()
-  const { project } = storeToRefs(projectStore)
+  const workItemGateway = inject<WorkItemGateway>('workItemGateway')!
+  const project = toRef(useProjectStore(), 'project')
   const workItems = ref<PagedList<WorkItem>>({
     items: [],
     totalCount: 0,
@@ -22,11 +23,8 @@ export const useWorkItemStore = defineStore('workItems', () => {
   async function listWorkItems(filters: PaginationFilter) {
     try {
       isLoading.value = true
-      workItems.value = await httpClient.get<PagedList<WorkItem>>(
-        `/projects/${project.value?.id}/work-items`,
-        { params: filters as unknown as Record<string, string> },
-      )
-    } catch (error: unknown) {
+      workItems.value = await workItemGateway.listWorkItems(project.value!.id, filters)
+    } catch (error) {
       displayError(error)
     } finally {
       isLoading.value = false
@@ -35,8 +33,8 @@ export const useWorkItemStore = defineStore('workItems', () => {
 
   async function deleteWorkItem(workItemId: string) {
     try {
-      await httpClient.delete(`/projects/${project.value?.id}/work-items/${workItemId}`)
-    } catch (error: unknown) {
+      await workItemGateway.deleteWorkItem(project.value!.id, workItemId)
+    } catch (error) {
       displayError(error)
     }
   }

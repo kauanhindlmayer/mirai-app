@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useAppToast } from '@/composables/useAppToast'
 import { useWorkItemStore } from '@/stores/work-item'
-import { WorkItemStatus, WorkItemType, type PaginationFilter, type WorkItem } from '@/types'
+import type { PaginationFilter } from '@/types'
+import { WorkItemStatus, WorkItemType, type WorkItem } from '@/types/work-item'
 import { formatDate } from '@/utils/date'
 import { storeToRefs } from 'pinia'
 import {

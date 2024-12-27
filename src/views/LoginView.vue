@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Logo from '@/components/shared/Logo.vue'
 import { useUserStore } from '@/stores/user'
-import type { LoginUserRequest } from '@/types'
+import type { LoginUserRequest } from '@/types/user'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { ref } from 'vue'

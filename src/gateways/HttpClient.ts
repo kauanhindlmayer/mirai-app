@@ -1,7 +1,9 @@
+import { useAppToast } from '@/composables/useAppToast'
+import { useUserStore } from '@/stores/user'
 import type { HttpClient, RequestConfig } from '@/types'
-import axios, { type AxiosInstance, type InternalAxiosRequestConfig } from 'axios'
+import axios, { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig } from 'axios'
 
-class AxiosAdapter implements HttpClient {
+export class AxiosAdapter implements HttpClient {
   private axiosInstance: AxiosInstance
 
   constructor() {
@@ -10,6 +12,7 @@ class AxiosAdapter implements HttpClient {
       headers: { 'Content-Type': 'application/json' },
     })
     this.axiosInstance.interceptors.request.use(this.setAuthorizationHeader)
+    this.axiosInstance.interceptors.response.use(undefined, this.handleApiError)
   }
 
   async get<T>(url: string, config?: RequestConfig): Promise<T> {
@@ -43,6 +46,17 @@ class AxiosAdapter implements HttpClient {
     }
     return config
   }
-}
 
-export const httpClient: HttpClient = new AxiosAdapter()
+  private handleApiError(error: AxiosError) {
+    const toast = useAppToast()
+    const Status401Unauthorized = 401
+
+    if (error.response?.status === Status401Unauthorized) {
+      const userStore = useUserStore()
+      toast.showError({ detail: 'Your session has expired. Please log in again.' })
+      userStore.logout()
+    }
+
+    return Promise.reject(error)
+  }
+}

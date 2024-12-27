@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useWikiPageStore } from '@/stores/wiki-page'
-import type { WikiPage } from '@/types'
+import type { WikiPage } from '@/types/wiki-page'
 import { useConfirm } from 'primevue'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -27,6 +27,8 @@ const isWikiPageUnchanged = computed(() => {
     (!isEditing.value && !title.value && !content.value)
   )
 })
+
+const isSaveButtonDisabled = computed(() => !title.value || !content.value)
 
 function close() {
   if (isWikiPageUnchanged.value) {
@@ -60,7 +62,15 @@ function closeForm() {
 }
 
 async function save() {
-  store.createWikiPage(title.value, content.value, parentWikiPageId)
+  if (isEditing.value) {
+    await store.updateWikiPage(wikiPage!.id, { title: title.value, content: content.value })
+    store.wikiPage!.title = title.value
+    store.wikiPage!.content = content.value
+  } else {
+    await store.createWikiPage({ title: title.value, content: content.value, parentWikiPageId })
+  }
+  await store.listWikiPages()
+  closeForm()
 }
 </script>
 
@@ -71,7 +81,12 @@ async function save() {
         <div class="flex gap-2 mb-4">
           <InputText v-model="title" class="w-11/12" />
           <Button label="Close" severity="secondary" @click="close" />
-          <Button label="Save" severity="secondary" :disabled="isWikiPageUnchanged" @click="save" />
+          <Button
+            label="Save"
+            severity="secondary"
+            :disabled="isSaveButtonDisabled"
+            @click="save"
+          />
         </div>
         <Editor v-model="content" editor-style="height: 320px" />
       </div>

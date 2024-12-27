@@ -1,118 +1,115 @@
 import { displayError } from '@/composables/displayError'
-import type { WikiPage, WikiPageStats, WikiPageSummary } from '@/types'
-import { httpClient } from '@/utils/http-client'
-import { defineStore, storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { useAppToast } from '@/composables/useAppToast'
+import type WikiPageGateway from '@/gateways/WikiPageGateway'
+import type {
+  AddCommentRequest,
+  CreateWikiPageRequest,
+  MoveWikiPageRequest,
+  UpdateCommentRequest,
+  UpdateWikiPageRequest,
+  WikiPage,
+  WikiPageStats,
+  WikiPageSummary,
+} from '@/types/wiki-page'
+import { defineStore } from 'pinia'
+import { inject, ref, toRef } from 'vue'
 import { useProjectStore } from './project'
 
 export const useWikiPageStore = defineStore('wikiPages', () => {
-  const projectStore = useProjectStore()
-  const { project } = storeToRefs(projectStore)
+  const wikiPageGateway = inject<WikiPageGateway>('wikiPageGateway')!
+  const project = toRef(useProjectStore(), 'project')
+  const toast = useAppToast()
   const wikiPages = ref<WikiPageSummary[]>([])
   const wikiPage = ref<WikiPage | null>(null)
   const wikiPageStats = ref<WikiPageStats | null>(null)
 
-  async function createWikiPage(title: string, content: string, parentWikiPageId?: string) {
+  async function createWikiPage(request: CreateWikiPageRequest) {
     try {
-      await httpClient.post(`/projects/${project.value?.id}/wiki-pages`, {
-        title,
-        content,
-        parentWikiPageId,
-      })
-    } catch (error: unknown) {
+      await wikiPageGateway.createWikiPage(project.value!.id, request)
+      toast.showSuccess({ detail: 'Wiki page created successfully' })
+    } catch (error) {
       displayError(error)
     }
   }
 
-  async function updateWikiPage(wikiPageId: string, title: string, content: string) {
+  async function updateWikiPage(wikiPageId: string, request: UpdateWikiPageRequest) {
     try {
-      await httpClient.put(`/projects/${project.value?.id}/wiki-pages/${wikiPageId}`, {
-        title,
-        content,
-      })
-    } catch (error: unknown) {
+      await wikiPageGateway.updateWikiPage(project.value!.id, wikiPageId, request)
+      toast.showSuccess({ detail: 'Wiki page updated successfully' })
+    } catch (error) {
       displayError(error)
     }
   }
 
-  async function moveWikiPage(wikiPageId: string, TargetParentId: string, targetPosition: number) {
+  async function moveWikiPage(wikiPageId: string, request: MoveWikiPageRequest) {
     try {
-      await httpClient.put(`/projects/${project.value?.id}/wiki-pages/${wikiPageId}/move`, {
-        TargetParentId,
-        targetPosition,
-      })
-    } catch (error: unknown) {
+      await wikiPageGateway.moveWikiPage(project.value!.id, wikiPageId, request)
+      toast.showSuccess({ detail: 'Wiki page moved successfully' })
+    } catch (error) {
       displayError(error)
     }
   }
 
   async function listWikiPages() {
     try {
-      wikiPages.value = await httpClient.get<WikiPageSummary[]>(
-        `/projects/${project.value?.id}/wiki-pages`,
-      )
-    } catch (error: unknown) {
+      wikiPages.value = await wikiPageGateway.listWikiPages(project.value!.id)
+    } catch (error) {
       displayError(error)
     }
   }
 
   async function getWikiPage(wikiPageId: string) {
     try {
-      wikiPage.value = await httpClient.get<WikiPage>(
-        `/projects/${project.value?.id}/wiki-pages/${wikiPageId}`,
-      )
-    } catch (error: unknown) {
+      wikiPage.value = await wikiPageGateway.getWikiPage(project.value!.id, wikiPageId)
+    } catch (error) {
       displayError(error)
     }
   }
 
   async function getWikiPageStats(wikiPageId: string) {
     try {
-      wikiPageStats.value = await httpClient.get(
-        `/projects/${project.value?.id}/wiki-pages/${wikiPageId}/stats?pageViewsForDays=30`,
-      )
-    } catch (error: unknown) {
+      wikiPageStats.value = await wikiPageGateway.getWikiPageStats(project.value!.id, wikiPageId)
+    } catch (error) {
       displayError(error)
     }
   }
 
   async function deleteWikiPage(wikiPageId: string) {
     try {
-      await httpClient.delete(`/projects/${project.value?.id}/wiki-pages/${wikiPageId}`)
-    } catch (error: unknown) {
+      await wikiPageGateway.deleteWikiPage(project.value!.id, wikiPageId)
+      toast.showSuccess({ detail: 'Wiki page deleted successfully' })
+    } catch (error) {
       displayError(error)
     }
   }
 
-  async function addComment(wikiPageId: string, content: string) {
+  async function addComment(wikiPageId: string, request: AddCommentRequest) {
     try {
-      await httpClient.post(`/projects/${project.value?.id}/wiki-pages/${wikiPageId}/comments`, {
-        content,
-      })
-    } catch (error: unknown) {
+      await wikiPageGateway.addComment(project.value!.id, wikiPageId, request)
+      toast.showSuccess({ detail: 'Comment added successfully' })
+    } catch (error) {
       displayError(error)
     }
   }
 
   async function deleteComment(wikiPageId: string, commentId: string) {
     try {
-      await httpClient.delete(
-        `/projects/${project.value?.id}/wiki-pages/${wikiPageId}/comments/${commentId}`,
-      )
-    } catch (error: unknown) {
+      await wikiPageGateway.deleteComment(project.value!.id, wikiPageId, commentId)
+      toast.showSuccess({ detail: 'Comment deleted successfully' })
+    } catch (error) {
       displayError(error)
     }
   }
 
-  async function updateComment(wikiPageId: string, commentId: string, content: string) {
+  async function updateComment(
+    wikiPageId: string,
+    commentId: string,
+    request: UpdateCommentRequest,
+  ) {
     try {
-      await httpClient.put(
-        `/projects/${project.value?.id}/wiki-pages/${wikiPageId}/comments/${commentId}`,
-        {
-          content,
-        },
-      )
-    } catch (error: unknown) {
+      await wikiPageGateway.updateComment(project.value!.id, wikiPageId, commentId, request)
+      toast.showSuccess({ detail: 'Comment updated successfully' })
+    } catch (error) {
       displayError(error)
     }
   }

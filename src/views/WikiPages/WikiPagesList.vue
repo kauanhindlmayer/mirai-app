@@ -1,25 +1,27 @@
 <script setup lang="ts">
 import { useProjectStore } from '@/stores/project'
 import { useWikiPageStore } from '@/stores/wiki-page'
-import type { WikiPageSummary } from '@/types'
+import type { WikiPageSummary } from '@/types/wiki-page'
 import { storeToRefs } from 'pinia'
-import type { Menu, TreeSelectionKeys } from 'primevue'
+import { useConfirm, type Menu, type TreeSelectionKeys } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import type { TreeNode } from 'primevue/treenode'
-import { computed, onBeforeMount, ref, useTemplateRef, watch } from 'vue'
+import { computed, onBeforeMount, ref, toRef, useTemplateRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import WikiPageDetail from './WikiPageDetail.vue'
 import WikiPageForm from './WikiPageForm.vue'
 
-const wikiPageStore = useWikiPageStore()
-const { wikiPage, wikiPageStats } = storeToRefs(wikiPageStore)
+const project = toRef(useProjectStore(), 'project')
+const store = useWikiPageStore()
+const { wikiPage, wikiPageStats } = storeToRefs(store)
 
+const confirm = useConfirm()
 const route = useRoute()
 const router = useRouter()
 
 const { isEditing } = defineProps<{ isEditing?: boolean }>()
 
-const nodes = computed(() => wikiPageStore.wikiPages.map(toNode))
+const nodes = computed(() => store.wikiPages.map(toNode))
 
 function toNode(page: WikiPageSummary): TreeNode {
   return {
@@ -44,16 +46,13 @@ watch(
     const [wikiPageId] = Object.keys(selectedKey.value)
     selectedWikiPageId.value = wikiPageId
     router.push({ name: 'wiki-pages', params: { wikiPageId } })
-    await Promise.all([
-      wikiPageStore.getWikiPage(wikiPageId),
-      wikiPageStore.getWikiPageStats(wikiPageId),
-    ])
+    await Promise.all([store.getWikiPage(wikiPageId), store.getWikiPageStats(wikiPageId)])
   },
 )
 
 onBeforeMount(async () => {
-  await wikiPageStore.listWikiPages()
-  const wikiPageId = route.params.wikiPageId || wikiPageStore.wikiPages[0].id
+  await store.listWikiPages()
+  const wikiPageId = route.params.wikiPageId || store.wikiPages[0].id
   selectedKey.value = { [wikiPageId as string]: true }
 })
 
@@ -68,12 +67,12 @@ const isFormVisible = ref(isEditing)
 
 function startCreation() {
   selectedKey.value = undefined
-  wikiPageStore.resetWikiPage()
+  store.resetWikiPage()
   isFormVisible.value = true
 }
 
 function stopCreation() {
-  selectedKey.value = { [wikiPageStore.wikiPages[0].id as string]: true }
+  selectedKey.value = { [store.wikiPages[0].id as string]: true }
   isFormVisible.value = false
 }
 
@@ -83,7 +82,7 @@ const menuItems = ref<MenuItem[]>([
   { label: 'Copy Page Path', icon: 'pi pi-copy', disabled: true },
   { label: 'Move Page', icon: 'pi pi-arrow-right', disabled: true },
   { label: 'Edit', icon: 'pi pi-pencil', command: redirectToEditPage },
-  { label: 'Delete', icon: 'pi pi-trash', disabled: true },
+  { label: 'Delete', icon: 'pi pi-trash', command: deleteWikiPage },
   { label: 'Open in New Tab', icon: 'pi pi-external-link', command: openInNewTab },
 ])
 
@@ -91,12 +90,32 @@ function toggleMenuItems(event: MouseEvent) {
   menuRef.value?.toggle(event)
 }
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
-
 function redirectToEditPage() {
   router.push(`/projects/${project.value?.id}/wiki-pages/${selectedWikiPageId.value}/edit`)
   isFormVisible.value = true
+}
+
+function deleteWikiPage() {
+  confirm.require({
+    header: `Delete '${wikiPage.value?.title}'?`,
+    message:
+      `'${wikiPage.value?.title}' page and its sub-pages (if any) will be deleted.` +
+      'Are you sure you want to delete?',
+    rejectProps: {
+      label: 'Cancel',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Delete',
+      severity: 'danger',
+    },
+    accept: async () => {
+      await store.deleteWikiPage(wikiPage.value!.id)
+      await store.listWikiPages()
+      selectedKey.value = { [store.wikiPages[0].id as string]: true }
+    },
+  })
 }
 
 function openInNewTab() {
