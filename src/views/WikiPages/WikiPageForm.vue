@@ -1,38 +1,32 @@
 <script setup lang="ts">
 import { useWikiPageStore } from '@/stores/wiki-page'
-import type { WikiPage } from '@/types/wiki-page'
+import { storeToRefs } from 'pinia'
 import { useConfirm } from 'primevue'
 import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
-
-const { wikiPage, parentWikiPageId } = defineProps<{
-  wikiPage: WikiPage | null
-  parentWikiPageId?: string
-}>()
 
 const confirm = useConfirm()
-const router = useRouter()
 const store = useWikiPageStore()
+const { wikiPage } = storeToRefs(store)
 
-const isEditing = computed(() => !!wikiPage)
+const emit = defineEmits<{
+  (event: 'close'): void
+}>()
 
-const title = ref<string>(wikiPage?.title || '')
-const content = ref<string>(wikiPage?.content || '')
+const title = ref<string>(wikiPage.value?.title || '')
+const content = ref<string>(wikiPage.value?.content || '')
 
-const emit = defineEmits(['close'])
-
-const isWikiPageUnchanged = computed(() => {
-  return (
-    (isEditing.value && title.value === wikiPage?.title && content.value === wikiPage?.content) ||
-    (!isEditing.value && !title.value && !content.value)
-  )
-})
-
+const isEditing = computed(() => !!wikiPage.value)
 const isSaveButtonDisabled = computed(() => !title.value || !content.value)
+const isWikiPageUnchanged = computed(() => {
+  const isEmpty = !title.value && !content.value
+  const isSameContent =
+    title.value === wikiPage.value?.title && content.value === wikiPage.value?.content
+  return isEmpty || isSameContent
+})
 
 function close() {
   if (isWikiPageUnchanged.value) {
-    closeForm()
+    emit('close')
     return
   }
   confirm.require({
@@ -49,28 +43,21 @@ function close() {
       label: 'Continue Editing',
       severity: 'primary',
     },
-    reject: closeForm,
+    reject: () => {
+      emit('close')
+    },
   })
-}
-
-function closeForm() {
-  if (wikiPage) {
-    router.back()
-  } else {
-    emit('close')
-  }
 }
 
 async function save() {
   if (isEditing.value) {
-    await store.updateWikiPage(wikiPage!.id, { title: title.value, content: content.value })
-    store.wikiPage!.title = title.value
-    store.wikiPage!.content = content.value
+    await store.updateWikiPage(wikiPage.value!.id, { title: title.value, content: content.value })
+    await store.getWikiPage(wikiPage.value!.id)
   } else {
-    await store.createWikiPage({ title: title.value, content: content.value, parentWikiPageId })
+    await store.createWikiPage({ title: title.value, content: content.value })
   }
   await store.listWikiPages()
-  closeForm()
+  emit('close')
 }
 </script>
 

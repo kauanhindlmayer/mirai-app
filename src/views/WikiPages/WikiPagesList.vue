@@ -6,14 +6,14 @@ import { storeToRefs } from 'pinia'
 import { useConfirm, type Menu, type TreeSelectionKeys } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import type { TreeNode } from 'primevue/treenode'
-import { computed, onBeforeMount, ref, toRef, useTemplateRef, watch } from 'vue'
+import { computed, onBeforeMount, ref, useTemplateRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import WikiPageDetail from './WikiPageDetail.vue'
 import WikiPageForm from './WikiPageForm.vue'
 
-const project = toRef(useProjectStore(), 'project')
 const store = useWikiPageStore()
-const { wikiPage, wikiPageStats } = storeToRefs(store)
+const { wikiPage } = storeToRefs(store)
+const { project } = storeToRefs(useProjectStore())
 
 const confirm = useConfirm()
 const route = useRoute()
@@ -21,6 +21,7 @@ const router = useRouter()
 
 const { isEditing } = defineProps<{ isEditing?: boolean }>()
 
+const selectedKey = ref<TreeSelectionKeys | undefined>(undefined)
 const nodes = computed(() => store.wikiPages.map(toNode))
 
 function toNode(page: WikiPageSummary): TreeNode {
@@ -32,19 +33,12 @@ function toNode(page: WikiPageSummary): TreeNode {
   }
 }
 
-const selectedKey = ref<TreeSelectionKeys | undefined>(undefined)
-const selectedWikiPageId = ref('')
-
 watch(
   () => selectedKey.value,
   async () => {
-    if (!selectedKey.value) {
-      router.push({ name: 'wiki-pages', params: { wikiPageId: '' } })
-      return
-    }
-    isFormVisible.value = false
-    const [wikiPageId] = Object.keys(selectedKey.value)
-    selectedWikiPageId.value = wikiPageId
+    if (!selectedKey.value) return
+    isAdding.value = false
+    const [wikiPageId] = Object.keys(selectedKey.value!)
     router.push({ name: 'wiki-pages', params: { wikiPageId } })
     await Promise.all([store.getWikiPage(wikiPageId), store.getWikiPageStats(wikiPageId)])
   },
@@ -56,29 +50,26 @@ onBeforeMount(async () => {
   selectedKey.value = { [wikiPageId as string]: true }
 })
 
-watch(
-  () => isEditing,
-  (value) => {
-    isFormVisible.value = value
-  },
-)
+const isAdding = ref(false)
 
-const isFormVisible = ref(isEditing)
-
-function startCreation() {
+function openNewPageForm() {
+  isAdding.value = true
   selectedKey.value = undefined
   store.resetWikiPage()
-  isFormVisible.value = true
 }
 
-function stopCreation() {
-  selectedKey.value = { [store.wikiPages[0].id as string]: true }
-  isFormVisible.value = false
+function closeForm() {
+  isAdding.value = false
+  if (isEditing) {
+    router.push(`/projects/${project.value!.id}/wiki-pages/${wikiPage.value!.id}`)
+  } else {
+    selectedKey.value = { [store.wikiPages[0].id as string]: true }
+  }
 }
 
 const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
 const menuItems = ref<MenuItem[]>([
-  { label: 'Add Sub-Page', icon: 'pi pi-plus', command: startCreation },
+  { label: 'Add Sub-Page', icon: 'pi pi-plus', command: openNewPageForm },
   { label: 'Copy Page Path', icon: 'pi pi-copy', disabled: true },
   { label: 'Move Page', icon: 'pi pi-arrow-right', disabled: true },
   { label: 'Edit', icon: 'pi pi-pencil', command: redirectToEditPage },
@@ -91,8 +82,7 @@ function toggleMenuItems(event: MouseEvent) {
 }
 
 function redirectToEditPage() {
-  router.push(`/projects/${project.value?.id}/wiki-pages/${selectedWikiPageId.value}/edit`)
-  isFormVisible.value = true
+  router.push(`/projects/${project.value!.id}/wiki-pages/${wikiPage.value!.id}/edit`)
 }
 
 function deleteWikiPage() {
@@ -119,7 +109,7 @@ function deleteWikiPage() {
 }
 
 function openInNewTab() {
-  window.open(`/projects/${project.value?.id}/wiki-pages/${selectedWikiPageId.value}`)
+  window.open(`/projects/${project.value?.id}/wiki-pages/${wikiPage.value!.id}`)
 }
 </script>
 
@@ -128,7 +118,7 @@ function openInNewTab() {
     <div class="w-16rem">
       <div class="card p-2">
         <Tree
-          v-model:selectionKeys="selectedKey"
+          v-model:selection-keys="selectedKey"
           :value="nodes"
           filter
           selection-mode="single"
@@ -160,13 +150,13 @@ function openInNewTab() {
           icon="pi pi-plus"
           variant="text"
           class="w-full mt-4"
-          @click="startCreation"
+          @click="openNewPageForm"
         />
       </div>
     </div>
     <div class="flex-1">
-      <WikiPageForm v-if="isFormVisible" :wiki-page="wikiPage" @close="stopCreation" />
-      <WikiPageDetail v-else-if="wikiPage" :wiki-page="wikiPage" :wiki-page-stats="wikiPageStats" />
+      <WikiPageForm v-if="isAdding || isEditing" @close="closeForm" />
+      <WikiPageDetail v-else />
     </div>
     <ConfirmDialog style="width: 450px" />
   </div>

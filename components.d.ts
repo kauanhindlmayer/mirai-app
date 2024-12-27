@@ -15,6 +15,7 @@ declare module 'vue' {
     Checkbox: typeof import('primevue/checkbox')['default']
     Column: typeof import('primevue/column')['default']
     Comment: typeof import('./src/components/shared/Comment.vue')['default']
+    CommentsSection: typeof import('./src/components/shared/CommentsSection.vue')['default']
     ConfirmDialog: typeof import('primevue/confirmdialog')['default']
     ConfirmPopup: typeof import('primevue/confirmpopup')['default']
     ContextMenu: typeof import('primevue/contextmenu')['default']
