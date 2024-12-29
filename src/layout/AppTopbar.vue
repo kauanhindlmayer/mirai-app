@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { useLayout } from '@/layout/composables/layout'
 import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import AppBreadcrumb from './AppBreadcrumb.vue'
 
+const store = useUserStore()
+const { user } = storeToRefs(store)
 const { layoutState, isDarkTheme, onMenuToggle, onConfigSidebarToggle } = useLayout()
-const userStore = useUserStore()
 
 type Props = {
   showTopbarLeft?: boolean
@@ -41,7 +43,7 @@ function toggleSearchBar() {
 }
 
 function logout() {
-  userStore.logout()
+  store.logout()
 }
 </script>
 
@@ -179,7 +181,8 @@ function logout() {
             }"
           >
             <Avatar
-              image="/layout/images/profile.jpg"
+              :image="user?.imageUrl || undefined"
+              :icon="user?.imageUrl ? undefined : 'pi pi-user'"
               pt:image:class="!rounded-lg"
               class="!w-10 !h-10"
             />

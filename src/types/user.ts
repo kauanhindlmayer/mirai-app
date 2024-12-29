@@ -3,6 +3,8 @@ export type User = {
   email: string
   firstName: string
   lastName: string
+  fullName: string
+  imageUrl: string
 }
 
 export type RegisterUserRequest = {

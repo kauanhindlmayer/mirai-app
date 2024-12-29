@@ -58,6 +58,7 @@ const isAdding = ref(false)
 function openNewPageForm() {
   isAdding.value = true
   selectedKey.value = undefined
+  router.push({ name: 'wiki-pages', params: { wikiPageId: '' } })
   store.resetWikiPage()
 }
 
@@ -183,7 +184,7 @@ function openInNewTab() {
         :parent-wiki-page-id="parentWikiPageId"
         @close="closeForm"
       />
-      <WikiPageDetail v-else />
+      <WikiPageDetail @delete-wiki-page="deleteWikiPage" v-else />
     </div>
     <MoveWikiPageDialog ref="moveWikiPageDialog" @move-wiki-page="store.listWikiPages" />
     <ConfirmDialog style="width: 450px" />

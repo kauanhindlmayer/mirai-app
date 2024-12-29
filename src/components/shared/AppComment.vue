@@ -84,10 +84,11 @@ function updateComment() {
     <Avatar
       size="large"
       shape="circle"
-      :image="comment.author.imageUrl"
-      :icon="comment.author.imageUrl ? '' : 'pi pi-user'"
+      :image="comment.author.imageUrl || undefined"
+      :icon="comment.author.imageUrl ? undefined : 'pi pi-user'"
       class="mr-4 flex-shrink-0"
     />
+
     <div class="flex-grow">
       <span class="font-semibold text-surface-900 dark:text-surface-0">
         {{ comment.author.name }}

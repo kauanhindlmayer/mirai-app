@@ -27,6 +27,7 @@ const resolver = ref(
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
   await store.loginUser(form.value)
+  await store.getCurrentUser()
 }
 </script>
 
