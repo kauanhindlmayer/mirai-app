@@ -43,7 +43,7 @@ const menuItems = computed<MenuItem[]>(() => [
       {
         label: 'Boards',
         icon: 'pi pi-fw pi-th-large',
-        to: '/boards',
+        to: `/projects/${project.value?.id}/boards`,
       },
       {
         label: 'Backlogs',

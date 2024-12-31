@@ -2,7 +2,8 @@
 import { useAppToast } from '@/composables/useAppToast'
 import { useWorkItemStore } from '@/stores/work-item'
 import type { PaginationFilter } from '@/types'
-import { WorkItemStatus, WorkItemType, type WorkItem } from '@/types/work-item'
+import { type WorkItem } from '@/types/work-item'
+import { getStatusLabel, getStatusSeverity, getTypeLabel, getTypeSeverity } from '@/utils'
 import { formatDate } from '@/utils/date'
 import { storeToRefs } from 'pinia'
 import {
@@ -83,56 +84,6 @@ function onPaginate(event: DataTablePageEvent) {
 }
 
 onMounted(async () => await workItemStore.listWorkItems(filters.value))
-
-function getStatusSeverity(status: WorkItemStatus): string {
-  const severityMap: Record<WorkItemStatus, string> = {
-    [WorkItemStatus.New]: 'info',
-    [WorkItemStatus.InProgress]: 'warning',
-    [WorkItemStatus.Resolved]: 'success',
-    [WorkItemStatus.Closed]: 'success',
-    [WorkItemStatus.Reopened]: 'warning',
-    [WorkItemStatus.Removed]: 'danger',
-  }
-
-  return severityMap[status] || 'info'
-}
-
-function getStatusLabel(status: WorkItemStatus): string {
-  const statusMap: Record<WorkItemStatus, string> = {
-    [WorkItemStatus.New]: 'New',
-    [WorkItemStatus.InProgress]: 'In Progress',
-    [WorkItemStatus.Resolved]: 'Resolved',
-    [WorkItemStatus.Closed]: 'Closed',
-    [WorkItemStatus.Reopened]: 'Reopened',
-    [WorkItemStatus.Removed]: 'Removed',
-  }
-
-  return statusMap[status] || 'Unknown'
-}
-
-function getTypeSeverity(type: WorkItemType): string {
-  const severityMap: Record<WorkItemType, string> = {
-    [WorkItemType.UserStory]: 'info',
-    [WorkItemType.Bug]: 'danger',
-    [WorkItemType.Defect]: 'danger',
-    [WorkItemType.Epic]: 'primary',
-    [WorkItemType.Feature]: 'primary',
-  }
-
-  return severityMap[type] || 'info'
-}
-
-function getTypeLabel(type: WorkItemType): string {
-  const typeMap: Record<WorkItemType, string> = {
-    [WorkItemType.UserStory]: 'User Story',
-    [WorkItemType.Bug]: 'Bug',
-    [WorkItemType.Defect]: 'Defect',
-    [WorkItemType.Epic]: 'Epic',
-    [WorkItemType.Feature]: 'Feature',
-  }
-
-  return typeMap[type] || 'Unknown'
-}
 </script>
 
 <template>

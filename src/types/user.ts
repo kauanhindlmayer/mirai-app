@@ -22,3 +22,8 @@ export type LoginUserRequest = {
 export type LoginUserResponse = {
   accessToken: string
 }
+
+export type UpdateUserProfileRequest = {
+  firstName: string
+  lastName: string
+}

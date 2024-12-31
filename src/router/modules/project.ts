@@ -11,7 +11,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'projects',
         name: 'projects-home',
-        component: () => import('@/views/Projects/ProjectsList.vue'),
+        component: () => import('@/views/projects/ProjectsList.vue'),
         meta: {
           title: 'Projects - Home',
         },
@@ -22,7 +22,7 @@ const routes: RouteRecordRaw[] = [
           {
             path: 'summary',
             name: 'project-summary',
-            component: () => import('@/views/Projects/ProjectSummary.vue'),
+            component: () => import('@/views/projects/ProjectSummary.vue'),
             meta: {
               title: 'Summary - Overview',
               breadcrumbResolver: (project: Project) => [
@@ -35,7 +35,7 @@ const routes: RouteRecordRaw[] = [
           {
             path: 'work-items',
             name: 'work-items',
-            component: () => import('@/views/WorkItems/WorkItemsList.vue'),
+            component: () => import('@/views/work-items/WorkItemsList.vue'),
             meta: {
               title: 'Work Items - Boards',
               breadcrumbResolver: (project: Project) => [
@@ -48,7 +48,7 @@ const routes: RouteRecordRaw[] = [
           {
             path: 'wiki-pages/:wikiPageId?',
             name: 'wiki-pages',
-            component: () => import('@/views/WikiPages/WikiPagesList.vue'),
+            component: () => import('@/views/wiki-pages/WikiPagesList.vue'),
             meta: {
               title: 'Wiki Pages - Overview',
               breadcrumbResolver: (project: Project) => [
@@ -61,8 +61,13 @@ const routes: RouteRecordRaw[] = [
           {
             path: 'wiki-pages/:wikiPageId/edit',
             name: 'wiki-page-edit',
-            component: () => import('@/views/WikiPages/WikiPagesList.vue'),
+            component: () => import('@/views/wiki-pages/WikiPagesList.vue'),
             props: { isEditing: true },
+          },
+          {
+            path: 'boards',
+            name: 'boards',
+            component: () => import('@/views/boards/BoardsList.vue'),
           },
         ],
       },

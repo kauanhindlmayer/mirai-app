@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CreateOrganizationDialog from '@/components/CreateOrganizationDialog.vue'
-import ProjectCard from '@/components/ProjectCard.vue'
+import ProjectCard from '@/components/projects/ProjectCard.vue'
 import { useOrganizationStore } from '@/stores/organization'
 import { useProjectStore } from '@/stores/project'
 import type { Organization } from '@/types'
