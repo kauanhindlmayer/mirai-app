@@ -10,7 +10,13 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: AppLayout,
-    children: [...projectsRoutes, ...workItemsRoutes, ...wikiPagesRoutes, ...boardsRoutes],
+    children: [
+      ...projectsRoutes,
+      {
+        path: 'projects/:projectId',
+        children: [...workItemsRoutes, ...wikiPagesRoutes, ...boardsRoutes],
+      },
+    ],
   },
   {
     path: '/login',

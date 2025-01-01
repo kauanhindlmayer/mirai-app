@@ -2,7 +2,7 @@ import type { RouteRecordRaw } from 'vue-router'
 
 const boardsRoutes: RouteRecordRaw[] = [
   {
-    path: 'projects/:projectId/boards',
+    path: 'boards',
     name: 'boards',
     component: () => import('@/views/boards/BoardsList.vue'),
   },
