@@ -1,9 +1,17 @@
+import AppLayout from '@/layout/AppLayout.vue'
 import { ensureProjectLoaded } from '@/router/guards'
-import projectRoutes from '@/router/modules/project'
+import boardsRoutes from '@/router/modules/boards'
+import projectsRoutes from '@/router/modules/projects'
+import wikiPagesRoutes from '@/router/modules/wiki-pages'
+import workItemsRoutes from '@/router/modules/work-items'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
-const routes: Readonly<RouteRecordRaw[]> = [
-  ...projectRoutes,
+const routes: RouteRecordRaw[] = [
+  {
+    path: '/',
+    component: AppLayout,
+    children: [...projectsRoutes, ...workItemsRoutes, ...wikiPagesRoutes, ...boardsRoutes],
+  },
   {
     path: '/login',
     name: 'login',
