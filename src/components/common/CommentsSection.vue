@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AppComment from '@/components/shared/AppComment.vue'
+import AppComment from '@/components/common/AppComment.vue'
 import type { Comment } from '@/types/wiki-page'
 import { useConfirm } from 'primevue'
 import { ref } from 'vue'

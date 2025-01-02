@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CommentsSection from '@/components/shared/CommentsSection.vue'
+import CommentsSection from '@/components/common/CommentsSection.vue'
 import { useProjectStore } from '@/stores/project'
 import { useWikiPageStore } from '@/stores/wiki-page'
 import { formatDate, formatRelativeTime } from '@/utils/date'

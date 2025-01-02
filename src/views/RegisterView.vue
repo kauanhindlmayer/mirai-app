@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import LazyImage from '@/components/shared/LazyImage.vue'
-import Logo from '@/components/shared/Logo.vue'
+import LazyImage from '@/components/common/LazyImage.vue'
+import Logo from '@/components/common/Logo.vue'
 import { useUserStore } from '@/stores/user'
 import type { RegisterUserRequest } from '@/types/user'
 import type { FormSubmitEvent } from '@primevue/forms'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Logo from '@/components/shared/Logo.vue'
+import Logo from '@/components/common/Logo.vue'
 import { useUserStore } from '@/stores/user'
 import type { LoginUserRequest } from '@/types/user'
 import type { FormSubmitEvent } from '@primevue/forms'

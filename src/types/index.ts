@@ -27,7 +27,7 @@ export interface HttpClient {
   delete<T>(url: string, config?: RequestConfig): Promise<T>
 }
 
-export type PagedList<T> = {
+export type PaginatedList<T> = {
   items: T[]
   totalCount: number
   pageSize: number
