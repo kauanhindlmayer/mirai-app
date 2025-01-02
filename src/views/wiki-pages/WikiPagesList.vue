@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MoveWikiPageDialog from '@/components/MoveWikiPageDialog.vue'
+import MoveWikiPageDialog from '@/components/wiki-pages/MoveWikiPageDialog.vue'
 import { useAppToast } from '@/composables/useAppToast'
 import { useProjectStore } from '@/stores/project'
 import { useWikiPageStore } from '@/stores/wiki-page'
