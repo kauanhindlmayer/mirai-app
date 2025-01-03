@@ -9,7 +9,9 @@ defineProps<{
 </script>
 
 <template>
-  <div class="flex gap-4">
-    <BoardColumn v-for="column in board.columns" :key="column.id" :column="column" />
+  <div class="p-4 h-full overflow-auto">
+    <div class="flex flex-row items-start">
+      <BoardColumn v-for="column in board.columns" :key="column.id" :column="column" />
+    </div>
   </div>
 </template>

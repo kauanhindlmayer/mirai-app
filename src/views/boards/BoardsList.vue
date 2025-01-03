@@ -34,11 +34,11 @@ onBeforeMount(async () => {
             v-model="selectedBoard"
             :options="boards"
             option-label="name"
-            class="w-full md:w-56"
+            class="w-full md:w-56 ml-2"
           />
           <Button label="View as Backlog" severity="secondary" icon="pi pi-fw pi-arrow-right" />
         </div>
-        <Board v-if="board" :board="board" />
+        <Board v-if="board" :board="board" class="mt-4" />
       </div>
     </div>
   </div>

@@ -62,6 +62,7 @@ const storyPoints = ref(card.workItem.storyPoints)
   position: relative;
   overflow: hidden;
   border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 .side-color {
   position: absolute;
