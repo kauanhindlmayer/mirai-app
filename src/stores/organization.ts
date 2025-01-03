@@ -1,11 +1,12 @@
 import { displayError } from '@/composables/displayError'
 import type OrganizationGateway from '@/gateways/OrganizationGateway'
 import type { Organization } from '@/types'
+import { organizationGatewayKey } from '@/utils/injection-keys'
 import { defineStore } from 'pinia'
 import { inject, ref } from 'vue'
 
 export const useOrganizationStore = defineStore('organizations', () => {
-  const organizationGateway = inject<OrganizationGateway>('organizationGateway')!
+  const organizationGateway = inject(organizationGatewayKey) as OrganizationGateway
   const organizations = ref<Organization[]>([])
 
   async function createOrganization(organization: Partial<Organization>) {

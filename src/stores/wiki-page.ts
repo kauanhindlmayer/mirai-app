@@ -11,12 +11,13 @@ import type {
   WikiPageStats,
   WikiPageSummary,
 } from '@/types/wiki-page'
+import { wikiPageGatewayKey } from '@/utils/injection-keys'
 import { defineStore } from 'pinia'
 import { inject, ref, toRef } from 'vue'
 import { useProjectStore } from './project'
 
 export const useWikiPageStore = defineStore('wikiPages', () => {
-  const wikiPageGateway = inject<WikiPageGateway>('wikiPageGateway')!
+  const wikiPageGateway = inject(wikiPageGatewayKey) as WikiPageGateway
   const project = toRef(useProjectStore(), 'project')
   const toast = useAppToast()
   const wikiPages = ref<WikiPageSummary[]>([])

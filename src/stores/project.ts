@@ -1,11 +1,12 @@
 import { displayError } from '@/composables/displayError'
 import type ProjectGateway from '@/gateways/ProjectGateway'
 import type { Project } from '@/types'
+import { projectGatewayKey } from '@/utils/injection-keys'
 import { defineStore } from 'pinia'
 import { inject, ref } from 'vue'
 
 export const useProjectStore = defineStore('projects', () => {
-  const projectGateway = inject<ProjectGateway>('projectGateway')!
+  const projectGateway = inject(projectGatewayKey) as ProjectGateway
   const projects = ref<Project[]>([])
   const project = ref<Project | null>(null)
 

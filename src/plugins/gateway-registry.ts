@@ -5,6 +5,14 @@ import { ProjectGatewayHttp } from '@/gateways/ProjectGateway'
 import { UserGatewayHttp } from '@/gateways/UserGateway'
 import { WikiPageGatewayHttp } from '@/gateways/WikiPageGateway'
 import { WorkItemGatewayHttp } from '@/gateways/WorkItemGateway'
+import {
+  boardGatewayKey,
+  organizationGatewayKey,
+  projectGatewayKey,
+  userGatewayKey,
+  wikiPageGatewayKey,
+  workItemGatewayKey,
+} from '@/utils/injection-keys'
 import type { App } from 'vue'
 
 const httpClient = new AxiosAdapter()
@@ -17,12 +25,12 @@ const boardGateway = new BoardGatewayHttp(httpClient)
 
 const gatewayRegistry = {
   install(app: App<Element>) {
-    app.provide('userGateway', userGateway)
-    app.provide('organizationGateway', organizationGateway)
-    app.provide('projectGateway', projectGateway)
-    app.provide('wikiPageGateway', wikiPageGateway)
-    app.provide('workItemGateway', workItemGateway)
-    app.provide('boardGateway', boardGateway)
+    app.provide(userGatewayKey, userGateway)
+    app.provide(organizationGatewayKey, organizationGateway)
+    app.provide(projectGatewayKey, projectGateway)
+    app.provide(wikiPageGatewayKey, wikiPageGateway)
+    app.provide(workItemGatewayKey, workItemGateway)
+    app.provide(boardGatewayKey, boardGateway)
   },
 }
 

@@ -1,12 +1,13 @@
 import { displayError } from '@/composables/displayError'
 import type UserGateway from '@/gateways/UserGateway'
 import type { LoginUserRequest, RegisterUserRequest, User } from '@/types/user'
+import { userGatewayKey } from '@/utils/injection-keys'
 import { defineStore } from 'pinia'
 import { inject, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 export const useUserStore = defineStore('users', () => {
-  const userGateway = inject<UserGateway>('userGateway')!
+  const userGateway = inject(userGatewayKey) as UserGateway
   const router = useRouter()
   const user = ref<User | null>(null)
 

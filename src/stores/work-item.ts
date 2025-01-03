@@ -2,12 +2,13 @@ import { displayError } from '@/composables/displayError'
 import type WorkItemGateway from '@/gateways/WorkItemGateway'
 import type { PaginatedList, PaginationFilter } from '@/types'
 import type { WorkItem } from '@/types/work-item'
+import { workItemGatewayKey } from '@/utils/injection-keys'
 import { defineStore } from 'pinia'
 import { inject, ref, toRef } from 'vue'
 import { useProjectStore } from './project'
 
 export const useWorkItemStore = defineStore('workItems', () => {
-  const workItemGateway = inject<WorkItemGateway>('workItemGateway')!
+  const workItemGateway = inject(workItemGatewayKey) as WorkItemGateway
   const project = toRef(useProjectStore(), 'project')
   const workItems = ref<PaginatedList<WorkItem>>({
     items: [],
