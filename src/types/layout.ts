@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-function-type */
-import type { Project } from '@/types'
+import type { Project } from '@/types/project'
 
 export type LayoutConfig = {
   preset: Preset

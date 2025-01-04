@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useProjectStore } from '@/stores/project'
-import type { Project } from '@/types'
+import type { Project } from '@/types/project'
 import { useRouter } from 'vue-router'
 
 const { project } = defineProps<{ project: Project }>()

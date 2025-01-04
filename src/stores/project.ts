@@ -1,6 +1,6 @@
 import { displayError } from '@/composables/displayError'
 import type ProjectGateway from '@/gateways/ProjectGateway'
-import type { Project } from '@/types'
+import type { CreateProjectRequest, Project } from '@/types/project'
 import { projectGatewayKey } from '@/utils/injection-keys'
 import { defineStore } from 'pinia'
 import { inject, ref } from 'vue'
@@ -10,9 +10,9 @@ export const useProjectStore = defineStore('projects', () => {
   const projects = ref<Project[]>([])
   const project = ref<Project | null>(null)
 
-  async function createProject(project: Partial<Project>, organizationId: string) {
+  async function createProject(request: CreateProjectRequest, organizationId: string) {
     try {
-      await projectGateway.createProject(organizationId, project)
+      await projectGateway.createProject(organizationId, request)
     } catch (error) {
       displayError(error)
     }

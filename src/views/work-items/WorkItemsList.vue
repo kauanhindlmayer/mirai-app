@@ -3,8 +3,8 @@ import { useAppToast } from '@/composables/useAppToast'
 import { useWorkItemStore } from '@/stores/work-item'
 import type { PaginationFilter } from '@/types'
 import { type WorkItem } from '@/types/work-item'
-import { getStatusLabel, getStatusSeverity, getTypeLabel, getTypeSeverity } from '@/utils'
 import { formatDate } from '@/utils/date'
+import { getStatusLabel, getStatusSeverity, getTypeLabel, getTypeSeverity } from '@/utils/work-item'
 import { storeToRefs } from 'pinia'
 import {
   type ContextMenu,

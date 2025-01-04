@@ -16,27 +16,27 @@ export default interface UserGateway {
 }
 
 export class UserGatewayHttp implements UserGateway {
-  constructor(readonly httpClient: HttpClient) {}
+  constructor(readonly http: HttpClient) {}
 
   registerUser(request: RegisterUserRequest): Promise<string> {
-    return this.httpClient.post('/users/register', request)
+    return this.http.post('/users/register', request)
   }
 
   loginUser(request: LoginUserRequest): Promise<LoginUserResponse> {
-    return this.httpClient.post('/users/login', request)
+    return this.http.post('/users/login', request)
   }
 
   getCurrentUser(): Promise<User> {
-    return this.httpClient.get('/users/me')
+    return this.http.get('/users/me')
   }
 
   updateUserProfile(request: UpdateUserProfileRequest): Promise<void> {
-    return this.httpClient.put('/users/profile', request)
+    return this.http.put('/users/profile', request)
   }
 
   updateProfilePicture(file: File): Promise<void> {
     const formData = new FormData()
     formData.append('file', file)
-    return this.httpClient.post('/users/profile/picture', formData)
+    return this.http.post('/users/profile/picture', formData)
   }
 }

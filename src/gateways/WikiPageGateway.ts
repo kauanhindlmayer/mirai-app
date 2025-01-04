@@ -33,10 +33,10 @@ export default interface WikiPageGateway {
 }
 
 export class WikiPageGatewayHttp implements WikiPageGateway {
-  constructor(readonly httpClient: HttpClient) {}
+  constructor(readonly http: HttpClient) {}
 
   createWikiPage(projectId: string, request: CreateWikiPageRequest): Promise<string> {
-    return this.httpClient.post(`/projects/${projectId}/wiki-pages`, request)
+    return this.http.post(`/projects/${projectId}/wiki-pages`, request)
   }
 
   updateWikiPage(
@@ -44,31 +44,31 @@ export class WikiPageGatewayHttp implements WikiPageGateway {
     wikiPageId: string,
     request: UpdateWikiPageRequest,
   ): Promise<void> {
-    return this.httpClient.put(`/projects/${projectId}/wiki-pages/${wikiPageId}`, request)
+    return this.http.put(`/projects/${projectId}/wiki-pages/${wikiPageId}`, request)
   }
 
   moveWikiPage(projectId: string, wikiPageId: string, request: MoveWikiPageRequest): Promise<void> {
-    return this.httpClient.put(`/projects/${projectId}/wiki-pages/${wikiPageId}/move`, request)
+    return this.http.put(`/projects/${projectId}/wiki-pages/${wikiPageId}/move`, request)
   }
 
   getWikiPage(projectId: string, wikiPageId: string): Promise<WikiPage> {
-    return this.httpClient.get(`/projects/${projectId}/wiki-pages/${wikiPageId}`)
+    return this.http.get(`/projects/${projectId}/wiki-pages/${wikiPageId}`)
   }
 
   getWikiPageStats(projectId: string, wikiPageId: string): Promise<WikiPageStats> {
-    return this.httpClient.get(`/projects/${projectId}/wiki-pages/${wikiPageId}/stats`)
+    return this.http.get(`/projects/${projectId}/wiki-pages/${wikiPageId}/stats`)
   }
 
   listWikiPages(projectId: string): Promise<WikiPageSummary[]> {
-    return this.httpClient.get(`/projects/${projectId}/wiki-pages`)
+    return this.http.get(`/projects/${projectId}/wiki-pages`)
   }
 
   deleteWikiPage(projectId: string, wikiPageId: string): Promise<void> {
-    return this.httpClient.delete(`/projects/${projectId}/wiki-pages/${wikiPageId}`)
+    return this.http.delete(`/projects/${projectId}/wiki-pages/${wikiPageId}`)
   }
 
   addComment(projectId: string, wikiPageId: string, request: AddCommentRequest): Promise<void> {
-    return this.httpClient.post(`/projects/${projectId}/wiki-pages/${wikiPageId}/comments`, request)
+    return this.http.post(`/projects/${projectId}/wiki-pages/${wikiPageId}/comments`, request)
   }
 
   updateComment(
@@ -77,15 +77,13 @@ export class WikiPageGatewayHttp implements WikiPageGateway {
     commentId: string,
     request: UpdateCommentRequest,
   ): Promise<void> {
-    return this.httpClient.put(
+    return this.http.put(
       `/projects/${projectId}/wiki-pages/${wikiPageId}/comments/${commentId}`,
       request,
     )
   }
 
   deleteComment(projectId: string, wikiPageId: string, commentId: string): Promise<void> {
-    return this.httpClient.delete(
-      `/projects/${projectId}/wiki-pages/${wikiPageId}/comments/${commentId}`,
-    )
+    return this.http.delete(`/projects/${projectId}/wiki-pages/${wikiPageId}/comments/${commentId}`)
   }
 }

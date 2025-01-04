@@ -1,23 +1,24 @@
-import type { HttpClient, Project } from '@/types'
+import type { HttpClient } from '@/types'
+import type { CreateProjectRequest, Project } from '@/types/project'
 
 export default interface ProjectGateway {
-  createProject(organizationId: string, project: Partial<Project>): Promise<string>
+  createProject(organizationId: string, project: CreateProjectRequest): Promise<string>
   getProject(projectId: string): Promise<Project>
   listProjects(organizationId: string): Promise<Project[]>
 }
 
 export class ProjectGatewayHttp implements ProjectGateway {
-  constructor(readonly httpClient: HttpClient) {}
+  constructor(readonly http: HttpClient) {}
 
-  createProject(organizationId: string, project: Partial<Project>): Promise<string> {
-    return this.httpClient.post(`/organizations/${organizationId}/projects`, project)
+  createProject(organizationId: string, request: CreateProjectRequest): Promise<string> {
+    return this.http.post(`/organizations/${organizationId}/projects`, request)
   }
 
   getProject(projectId: string): Promise<Project> {
-    return this.httpClient.get(`/projects/${projectId}`)
+    return this.http.get(`/projects/${projectId}`)
   }
 
   listProjects(organizationId: string): Promise<Project[]> {
-    return this.httpClient.get(`/organizations/${organizationId}/projects`)
+    return this.http.get(`/organizations/${organizationId}/projects`)
   }
 }

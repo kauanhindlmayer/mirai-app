@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import type { Card } from '@/types/board'
-import { getStatusLabel, getStatusSeverity, getTypeColor } from '@/utils'
+import { getStatusLabel, getStatusSeverity, getTypeColor } from '@/utils/work-item'
 import { computed, ref } from 'vue'
 
 const { card } = defineProps<{ card: Card }>()

@@ -9,21 +9,21 @@ export default interface BoardGateway {
 }
 
 export class BoardGatewayHttp implements BoardGateway {
-  constructor(readonly httpClient: HttpClient) {}
+  constructor(readonly http: HttpClient) {}
 
   createBoard(projectId: string, request: CreateBoardRequest): Promise<string> {
-    return this.httpClient.post(`/projects/${projectId}/boards`, request)
+    return this.http.post(`/projects/${projectId}/boards`, request)
   }
 
   getBoard(projectId: string, boardId: string): Promise<Board> {
-    return this.httpClient.get(`/projects/${projectId}/boards/${boardId}`)
+    return this.http.get(`/projects/${projectId}/boards/${boardId}`)
   }
 
   listBoards(projectId: string): Promise<BoardSummary[]> {
-    return this.httpClient.get(`/projects/${projectId}/boards`)
+    return this.http.get(`/projects/${projectId}/boards`)
   }
 
   deleteBoard(projectId: string, boardId: string): Promise<void> {
-    return this.httpClient.delete(`/projects/${projectId}/boards/${boardId}`)
+    return this.http.delete(`/projects/${projectId}/boards/${boardId}`)
   }
 }

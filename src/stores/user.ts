@@ -2,14 +2,18 @@ import { displayError } from '@/composables/displayError'
 import type UserGateway from '@/gateways/UserGateway'
 import type { LoginUserRequest, RegisterUserRequest, User } from '@/types/user'
 import { userGatewayKey } from '@/utils/injection-keys'
+import { StorageSerializers, useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
-import { inject, ref } from 'vue'
+import { inject } from 'vue'
 import { useRouter } from 'vue-router'
 
 export const useUserStore = defineStore('users', () => {
   const userGateway = inject(userGatewayKey) as UserGateway
   const router = useRouter()
-  const user = ref<User | null>(null)
+  const user = useStorage<User | null>('user', null, undefined, {
+    serializer: StorageSerializers.object,
+  })
+  const accessToken = useStorage<string | null>('accessToken', null)
 
   async function registerUser(request: RegisterUserRequest) {
     try {
@@ -23,7 +27,7 @@ export const useUserStore = defineStore('users', () => {
   async function loginUser(request: LoginUserRequest) {
     try {
       const response = await userGateway.loginUser(request)
-      localStorage.setItem('accessToken', response.accessToken)
+      accessToken.value = response.accessToken
       router.push({ name: 'projects-home' })
     } catch (error) {
       displayError(error)
@@ -31,7 +35,7 @@ export const useUserStore = defineStore('users', () => {
   }
 
   function logout() {
-    localStorage.removeItem('accessToken')
+    accessToken.value = null
     router.push({ name: 'login' })
   }
 

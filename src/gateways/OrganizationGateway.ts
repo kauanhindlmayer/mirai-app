@@ -1,18 +1,19 @@
-import type { HttpClient, Organization } from '@/types'
+import type { HttpClient } from '@/types'
+import type { CreateOrganizationRequest, Organization } from '@/types/organization'
 
 export default interface OrganizationGateway {
-  createOrganization(organization: Partial<Organization>): Promise<string>
+  createOrganization(request: CreateOrganizationRequest): Promise<string>
   listOrganizations(): Promise<Organization[]>
 }
 
 export class OrganizationGatewayHttp implements OrganizationGateway {
-  constructor(readonly httpClient: HttpClient) {}
+  constructor(readonly http: HttpClient) {}
 
-  createOrganization(organization: Partial<Organization>): Promise<string> {
-    return this.httpClient.post('/organizations', organization)
+  createOrganization(request: CreateOrganizationRequest): Promise<string> {
+    return this.http.post('/organizations', request)
   }
 
   listOrganizations(): Promise<Organization[]> {
-    return this.httpClient.get('/organizations')
+    return this.http.get('/organizations')
   }
 }

@@ -3,7 +3,7 @@ import CreateOrganizationDialog from '@/components/projects/CreateOrganizationDi
 import ProjectCard from '@/components/projects/ProjectCard.vue'
 import { useOrganizationStore } from '@/stores/organization'
 import { useProjectStore } from '@/stores/project'
-import type { Organization } from '@/types'
+import type { Organization } from '@/types/organization'
 import { onBeforeMount, ref, useTemplateRef, watch } from 'vue'
 
 const organizationStore = useOrganizationStore()
