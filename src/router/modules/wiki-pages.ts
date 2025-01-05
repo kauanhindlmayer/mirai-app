@@ -1,4 +1,3 @@
-import type { Project } from '@/types/project'
 import type { RouteRecordRaw } from 'vue-router'
 
 const wikiPagesRoutes: RouteRecordRaw[] = [
@@ -6,14 +5,6 @@ const wikiPagesRoutes: RouteRecordRaw[] = [
     path: 'wiki-pages/:wikiPageId?',
     name: 'wiki-pages',
     component: () => import('@/views/wiki-pages/WikiPagesList.vue'),
-    meta: {
-      title: 'Wiki Pages - Overview',
-      breadcrumbResolver: (project: Project) => [
-        { label: project.name, route: `/projects/${project.id}/summary` },
-        { label: 'Overview', route: `/projects/${project.id}/wiki-pages` },
-        { label: 'Wiki', route: `/projects/${project.id}/wiki-pages` },
-      ],
-    },
   },
   {
     path: 'wiki-pages/:wikiPageId/edit',

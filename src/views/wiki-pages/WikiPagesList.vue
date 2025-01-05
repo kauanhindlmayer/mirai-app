@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import MoveWikiPageDialog from '@/components/wiki-pages/MoveWikiPageDialog.vue'
 import { useAppToast } from '@/composables/useAppToast'
+import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
 import { useWikiPageStore } from '@/stores/wiki-page'
 import type { WikiPageSummary } from '@/types/wiki-page'
@@ -13,6 +14,7 @@ import { useRoute, useRouter } from 'vue-router'
 import WikiPageDetail from './WikiPageDetail.vue'
 import WikiPageForm from './WikiPageForm.vue'
 
+const pageStore = usePageStore()
 const store = useWikiPageStore()
 const { wikiPage } = storeToRefs(store)
 const { project } = storeToRefs(useProjectStore())
@@ -51,7 +53,17 @@ onBeforeMount(async () => {
   await store.listWikiPages()
   const wikiPageId = route.params.wikiPageId || store.wikiPages[0].id
   selectedKey.value = { [wikiPageId as string]: true }
+  pageStore.setTitle('Wiki Pages - Overview')
+  setBreadcrumbs()
 })
+
+function setBreadcrumbs() {
+  pageStore.setBreadcrumbs([
+    { label: project.value!.name, route: `/projects/${project.value!.id}/summary` },
+    { label: 'Overview', route: `/projects/${project.value!.id}/wiki-pages` },
+    { label: 'Wiki', route: `/projects/${project.value!.id}/wiki-pages` },
+  ])
+}
 
 const isAdding = ref(false)
 

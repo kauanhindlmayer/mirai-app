@@ -2,12 +2,14 @@
 import CreateOrganizationDialog from '@/components/projects/CreateOrganizationDialog.vue'
 import ProjectCard from '@/components/projects/ProjectCard.vue'
 import { useOrganizationStore } from '@/stores/organization'
+import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
 import type { Organization } from '@/types/organization'
 import { onBeforeMount, ref, useTemplateRef, watch } from 'vue'
 
 const organizationStore = useOrganizationStore()
 const projectStore = useProjectStore()
+const pageStore = usePageStore()
 
 type CreateOrganizationDialogType = typeof CreateOrganizationDialog
 const createOrganizationDialogRef = useTemplateRef<CreateOrganizationDialogType>(
@@ -27,6 +29,7 @@ watch(
 onBeforeMount(async () => {
   await organizationStore.listOrganizations()
   selectedOrganization.value = organizationStore.organizations[0]
+  pageStore.setTitle('Projects - Home')
 })
 </script>
 

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useAppToast } from '@/composables/useAppToast'
+import { usePageStore } from '@/stores/page'
+import { useProjectStore } from '@/stores/project'
 import { useWorkItemStore } from '@/stores/work-item'
 import type { PaginationFilter } from '@/types'
 import { type WorkItem } from '@/types/work-item'
@@ -16,6 +18,9 @@ import { onMounted, ref, useTemplateRef } from 'vue'
 
 const toast = useAppToast()
 
+const pageStore = usePageStore()
+const projectStore = useProjectStore()
+const { project } = storeToRefs(projectStore)
 const workItemStore = useWorkItemStore()
 const { workItems, isLoading } = storeToRefs(workItemStore)
 
@@ -83,7 +88,19 @@ function onPaginate(event: DataTablePageEvent) {
   workItemStore.listWorkItems(filters.value)
 }
 
-onMounted(async () => await workItemStore.listWorkItems(filters.value))
+function setBreadcrumbs() {
+  pageStore.setBreadcrumbs([
+    { label: project.value!.name, route: `/projects/${project.value!.id}/summary` },
+    { label: 'Boards', route: `/projects/${project.value!.id}/work-items` },
+    { label: 'Work Items', route: `/projects/${project.value!.id}/work-items` },
+  ])
+}
+
+onMounted(async () => {
+  await workItemStore.listWorkItems(filters.value)
+  pageStore.setTitle('Work Items - Boards')
+  setBreadcrumbs()
+})
 </script>
 
 <template>

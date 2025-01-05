@@ -10,7 +10,7 @@ export const useProjectStore = defineStore('projects', () => {
   const projects = ref<Project[]>([])
   const project = ref<Project | null>(null)
 
-  async function createProject(request: CreateProjectRequest, organizationId: string) {
+  async function createProject(organizationId: string, request: CreateProjectRequest) {
     try {
       await projectGateway.createProject(organizationId, request)
     } catch (error) {

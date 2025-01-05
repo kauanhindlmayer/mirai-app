@@ -58,8 +58,4 @@ const router = createRouter({
 
 router.beforeEach(ensureProjectLoaded)
 
-router.beforeEach((to) => {
-  document.title = to.meta?.title ?? 'Mirai'
-})
-
 export default router
