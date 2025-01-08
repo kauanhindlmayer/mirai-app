@@ -24,6 +24,7 @@ export type Column = {
 
 export type Card = {
   id: string
+  columnId: string
   position: number
   workItem: WorkItem
   updatedAt: string
@@ -49,4 +50,25 @@ export type Assignee = {
 export type CreateBoardRequest = {
   name: string
   description: string
+}
+
+export type MoveCardRequest = {
+  targetColumnId: string
+  targetPosition: number
+}
+
+export type DraggableEvent<T> = {
+  moved?: {
+    element: T
+    oldIndex: number
+    newIndex: number
+  }
+  added?: {
+    element: T
+    newIndex: number
+  }
+  removed?: {
+    element: T
+    oldIndex: number
+  }
 }

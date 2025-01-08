@@ -1,11 +1,18 @@
 import type { HttpClient } from '@/types'
-import type { Board, BoardSummary, CreateBoardRequest } from '@/types/board'
+import type { Board, BoardSummary, CreateBoardRequest, MoveCardRequest } from '@/types/board'
 
 export default interface BoardGateway {
   createBoard(projectId: string, request: CreateBoardRequest): Promise<string>
   getBoard(projectId: string, boardId: string): Promise<Board>
   listBoards(projectId: string): Promise<BoardSummary[]>
   deleteBoard(projectId: string, boardId: string): Promise<void>
+  moveCard(
+    projectId: string,
+    boardId: string,
+    columnId: string,
+    cardId: string,
+    request: MoveCardRequest,
+  ): Promise<void>
 }
 
 export class BoardGatewayHttp implements BoardGateway {
@@ -25,5 +32,18 @@ export class BoardGatewayHttp implements BoardGateway {
 
   deleteBoard(projectId: string, boardId: string): Promise<void> {
     return this.http.delete(`/projects/${projectId}/boards/${boardId}`)
+  }
+
+  moveCard(
+    projectId: string,
+    boardId: string,
+    columnId: string,
+    cardId: string,
+    request: MoveCardRequest,
+  ): Promise<void> {
+    return this.http.post(
+      `/projects/${projectId}/boards/${boardId}/columns/${columnId}/cards/${cardId}/move`,
+      request,
+    )
   }
 }

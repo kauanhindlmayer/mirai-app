@@ -1,24 +1,23 @@
 <script setup lang="ts">
 import Board from '@/components/boards/Board.vue'
-import type BoardGateway from '@/gateways/BoardGateway'
+import { useBoardStore } from '@/stores/board'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
-import type { BoardSummary, Board as BoardType } from '@/types/board'
-import { boardGatewayKey } from '@/utils/injection-keys'
-import { inject, onBeforeMount, ref, toRef, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import { onBeforeMount, ref, watch } from 'vue'
 
 const pageStore = usePageStore()
-const project = toRef(useProjectStore(), 'project')
+const boardStore = useBoardStore()
+const { board, boards } = storeToRefs(boardStore)
+const { project } = storeToRefs(useProjectStore())
+
 const selectedBoard = ref()
-const boards = ref<BoardSummary[]>([])
-const boardGateway = inject(boardGatewayKey) as BoardGateway
-const board = ref<BoardType | null>(null)
 
 watch(
   () => selectedBoard.value,
   async (newSelectedBoard) => {
     if (!newSelectedBoard) return
-    board.value = await boardGateway.getBoard(project.value!.id, newSelectedBoard.id)
+    await boardStore.getBoard(newSelectedBoard.id)
     pageStore.setTitle(`${selectedBoard.value?.name} Stories Board - Boards`)
   },
 )
@@ -32,7 +31,7 @@ function setBreadcrumbs() {
 }
 
 onBeforeMount(async () => {
-  boards.value = await boardGateway.listBoards(project.value!.id)
+  await boardStore.listBoards()
   selectedBoard.value = boards.value[0]
   setBreadcrumbs()
 })
