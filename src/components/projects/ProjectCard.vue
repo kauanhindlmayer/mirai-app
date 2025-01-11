@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useProjectStore } from '@/stores/project'
 import type { Project } from '@/types/project'
+import { getInitials } from '@/utils'
 import { useRouter } from 'vue-router'
 
 const { project } = defineProps<{ project: Project }>()
@@ -12,16 +13,6 @@ function redirectToProjectSummary() {
   projectStore.getProject(project.id)
   router.push(`/projects/${project.id}/summary`)
 }
-
-function getInitials(): string {
-  const parts = project.name.split(' ')
-  if (parts.length < 2) {
-    return parts[0][0].toUpperCase()
-  }
-  const firstNameInitial = parts[0][0]
-  const lastNameInitial = parts[parts.length - 1][0]
-  return (firstNameInitial + lastNameInitial).toUpperCase()
-}
 </script>
 
 <template>
@@ -29,7 +20,7 @@ function getInitials(): string {
     <template #content>
       <div class="flex items-center gap-4">
         <div class="self-start">
-          <Avatar :label="getInitials()" size="xlarge" />
+          <Avatar :label="getInitials(project.name)" size="xlarge" />
         </div>
         <div class="w-9/12">
           <div class="text-lg font-semibold">

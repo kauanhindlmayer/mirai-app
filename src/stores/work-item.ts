@@ -18,6 +18,7 @@ export const useWorkItemStore = defineStore('workItems', () => {
     hasPreviousPage: false,
     totalPages: 0,
   })
+  const workItemsStats = ref({ workItemsCreated: 0, workItemsCompleted: 0 })
 
   async function listWorkItems(filters: PaginationFilter) {
     workItems.value = await workItemGateway.listWorkItems(project.value!.id, filters)
@@ -27,10 +28,16 @@ export const useWorkItemStore = defineStore('workItems', () => {
     await workItemGateway.deleteWorkItem(project.value!.id, workItemId)
   }
 
+  async function getWorkItemsStats(periodInDays: number) {
+    workItemsStats.value = await workItemGateway.getWorkItemsStats(project.value!.id, periodInDays)
+  }
+
   return {
     workItems,
+    workItemsStats,
     listWorkItems,
     deleteWorkItem,
+    getWorkItemsStats,
   }
 })
 

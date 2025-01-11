@@ -7,6 +7,11 @@ import { inject, ref } from 'vue'
 export const useOrganizationStore = defineStore('organizations', () => {
   const organizationGateway = inject(organizationGatewayKey) as OrganizationGateway
   const organizations = ref<Organization[]>([])
+  const organizationId = ref<string>('')
+
+  function setOrganizationId(id: string) {
+    organizationId.value = id
+  }
 
   async function createOrganization(request: CreateOrganizationRequest) {
     await organizationGateway.createOrganization(request)
@@ -18,6 +23,8 @@ export const useOrganizationStore = defineStore('organizations', () => {
 
   return {
     organizations,
+    organizationId,
+    setOrganizationId,
     createOrganization,
     listOrganizations,
   }

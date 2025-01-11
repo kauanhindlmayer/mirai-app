@@ -10,6 +10,7 @@ declare module 'vue' {
     AppComment: typeof import('./src/components/common/AppComment.vue')['default']
     AutoComplete: typeof import('primevue/autocomplete')['default']
     Avatar: typeof import('primevue/avatar')['default']
+    AvatarGroup: typeof import('primevue/avatargroup')['default']
     Badge: typeof import('primevue/badge')['default']
     Board: typeof import('./src/components/boards/Board.vue')['default']
     BoardCard: typeof import('./src/components/boards/BoardCard.vue')['default']
@@ -30,6 +31,7 @@ declare module 'vue' {
     Divider: typeof import('primevue/divider')['default']
     Drawer: typeof import('primevue/drawer')['default']
     Editor: typeof import('primevue/editor')['default']
+    EditProjectDialog: typeof import('./src/components/projects/EditProjectDialog.vue')['default']
     Fluid: typeof import('primevue/fluid')['default']
     Form: typeof import('@primevue/forms/form')['default']
     FormField: typeof import('@primevue/forms/formfield')['default']
@@ -58,6 +60,7 @@ declare module 'vue' {
     Textarea: typeof import('primevue/textarea')['default']
     Toast: typeof import('primevue/toast')['default']
     Tree: typeof import('primevue/tree')['default']
+    UpdateProjectDialog: typeof import('./src/components/projects/UpdateProjectDialog.vue')['default']
   }
   export interface ComponentCustomProperties {
     StyleClass: typeof import('primevue/styleclass')['default']

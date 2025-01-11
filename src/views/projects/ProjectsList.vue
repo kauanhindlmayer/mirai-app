@@ -23,6 +23,7 @@ watch(
   (newOrganization) => {
     if (!newOrganization?.id) return
     projectStore.listProjects(newOrganization.id)
+    organizationStore.setOrganizationId(newOrganization.id)
   },
 )
 

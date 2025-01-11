@@ -1,10 +1,15 @@
 import type { HttpClient } from '@/types'
-import type { CreateProjectRequest, Project } from '@/types/project'
+import type { CreateProjectRequest, Project, UpdateProjectRequest } from '@/types/project'
 
 export default interface ProjectGateway {
   createProject(organizationId: string, project: CreateProjectRequest): Promise<string>
   getProject(projectId: string): Promise<Project>
   listProjects(organizationId: string): Promise<Project[]>
+  updateProject(
+    organizationId: string,
+    projectId: string,
+    request: UpdateProjectRequest,
+  ): Promise<string>
 }
 
 export class ProjectGatewayHttp implements ProjectGateway {
@@ -20,5 +25,13 @@ export class ProjectGatewayHttp implements ProjectGateway {
 
   listProjects(organizationId: string): Promise<Project[]> {
     return this.http.get(`/organizations/${organizationId}/projects`)
+  }
+
+  updateProject(
+    organizationId: string,
+    projectId: string,
+    request: UpdateProjectRequest,
+  ): Promise<string> {
+    return this.http.put(`/organizations/${organizationId}/projects/${projectId}`, request)
   }
 }

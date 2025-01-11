@@ -1,9 +1,10 @@
 import type { HttpClient, PaginatedList, PaginationFilter } from '@/types'
-import type { WorkItem } from '@/types/work-item'
+import type { WorkItem, WorkItemsStats } from '@/types/work-item'
 
 export default interface WorkItemGateway {
   listWorkItems(projectId: string, filters: PaginationFilter): Promise<PaginatedList<WorkItem>>
   deleteWorkItem(projectId: string, workItemId: string): Promise<void>
+  getWorkItemsStats(projectId: string, periodInDays: number): Promise<WorkItemsStats>
 }
 
 export class WorkItemGatewayHttp implements WorkItemGateway {
@@ -17,5 +18,11 @@ export class WorkItemGatewayHttp implements WorkItemGateway {
 
   deleteWorkItem(projectId: string, workItemId: string): Promise<void> {
     return this.http.delete(`/projects/${projectId}/work-items/${workItemId}`)
+  }
+
+  getWorkItemsStats(projectId: string, periodInDays: number): Promise<WorkItemsStats> {
+    return this.http.get(`/projects/${projectId}/work-items/stats`, {
+      params: { periodInDays: periodInDays.toString() },
+    })
   }
 }

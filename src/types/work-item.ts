@@ -27,3 +27,8 @@ export enum WorkItemType {
   Epic = 'Epic',
   Feature = 'Feature',
 }
+
+export type WorkItemsStats = {
+  workItemsCreated: number
+  workItemsCompleted: number
+}
