@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { displayError } from '@/composables/displayError'
 import { useAppToast } from '@/composables/useAppToast'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
@@ -22,7 +23,7 @@ const pageStore = usePageStore()
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
 const workItemStore = useWorkItemStore()
-const { workItems, isLoading } = storeToRefs(workItemStore)
+const { workItems } = storeToRefs(workItemStore)
 
 const selectedWorkItem = ref<WorkItem | null>(null)
 
@@ -69,6 +70,19 @@ function clearSelectedWorkItem() {
   selectedWorkItem.value = null
 }
 
+const isLoading = ref(false)
+
+async function listWorkItems() {
+  isLoading.value = true
+  try {
+    await workItemStore.listWorkItems(filters.value)
+  } catch (error) {
+    displayError(error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
 const filters = ref<PaginationFilter>({
   pageNumber: 1,
   pageSize: 10,
@@ -76,16 +90,16 @@ const filters = ref<PaginationFilter>({
   sortOrder: 'desc',
 })
 
-function onSort(event: DataTableSortEvent) {
+async function onSort(event: DataTableSortEvent) {
   filters.value.sortField = event.sortField as string
   filters.value.sortOrder = event.sortOrder === 1 ? 'asc' : 'desc'
-  workItemStore.listWorkItems(filters.value)
+  await listWorkItems()
 }
 
-function onPaginate(event: DataTablePageEvent) {
+async function onPaginate(event: DataTablePageEvent) {
   filters.value.pageNumber = event.page + 1
   filters.value.pageSize = event.rows
-  workItemStore.listWorkItems(filters.value)
+  await listWorkItems()
 }
 
 function setBreadcrumbs() {
@@ -97,7 +111,7 @@ function setBreadcrumbs() {
 }
 
 onMounted(async () => {
-  await workItemStore.listWorkItems(filters.value)
+  await listWorkItems()
   pageStore.setTitle('Work Items - Boards')
   setBreadcrumbs()
 })

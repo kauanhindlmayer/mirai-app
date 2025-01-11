@@ -1,5 +1,5 @@
 import type { Breadcrumb } from '@/types/layout'
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const usePageStore = defineStore('page', () => {
@@ -23,3 +23,7 @@ export const usePageStore = defineStore('page', () => {
     setBreadcrumbs,
   }
 })
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(usePageStore, import.meta.hot))
+}

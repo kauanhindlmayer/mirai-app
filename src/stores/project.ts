@@ -1,8 +1,7 @@
-import { displayError } from '@/composables/displayError'
 import type ProjectGateway from '@/gateways/ProjectGateway'
 import type { CreateProjectRequest, Project } from '@/types/project'
 import { projectGatewayKey } from '@/utils/injection-keys'
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 import { inject, ref } from 'vue'
 
 export const useProjectStore = defineStore('projects', () => {
@@ -11,27 +10,15 @@ export const useProjectStore = defineStore('projects', () => {
   const project = ref<Project | null>(null)
 
   async function createProject(organizationId: string, request: CreateProjectRequest) {
-    try {
-      await projectGateway.createProject(organizationId, request)
-    } catch (error) {
-      displayError(error)
-    }
+    await projectGateway.createProject(organizationId, request)
   }
 
   async function getProject(projectId: string) {
-    try {
-      project.value = await projectGateway.getProject(projectId)
-    } catch (error) {
-      displayError(error)
-    }
+    project.value = await projectGateway.getProject(projectId)
   }
 
   async function listProjects(organizationId: string) {
-    try {
-      projects.value = await projectGateway.listProjects(organizationId)
-    } catch (error) {
-      displayError(error)
-    }
+    projects.value = await projectGateway.listProjects(organizationId)
   }
 
   return {
@@ -42,3 +29,7 @@ export const useProjectStore = defineStore('projects', () => {
     listProjects,
   }
 })
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useProjectStore, import.meta.hot))
+}

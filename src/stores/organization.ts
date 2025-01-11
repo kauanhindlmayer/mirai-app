@@ -1,8 +1,7 @@
-import { displayError } from '@/composables/displayError'
 import type OrganizationGateway from '@/gateways/OrganizationGateway'
 import type { CreateOrganizationRequest, Organization } from '@/types/organization'
 import { organizationGatewayKey } from '@/utils/injection-keys'
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 import { inject, ref } from 'vue'
 
 export const useOrganizationStore = defineStore('organizations', () => {
@@ -10,19 +9,11 @@ export const useOrganizationStore = defineStore('organizations', () => {
   const organizations = ref<Organization[]>([])
 
   async function createOrganization(request: CreateOrganizationRequest) {
-    try {
-      await organizationGateway.createOrganization(request)
-    } catch (error) {
-      displayError(error)
-    }
+    await organizationGateway.createOrganization(request)
   }
 
   async function listOrganizations() {
-    try {
-      organizations.value = await organizationGateway.listOrganizations()
-    } catch (error) {
-      displayError(error)
-    }
+    organizations.value = await organizationGateway.listOrganizations()
   }
 
   return {
@@ -31,3 +22,7 @@ export const useOrganizationStore = defineStore('organizations', () => {
     listOrganizations,
   }
 })
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useOrganizationStore, import.meta.hot))
+}

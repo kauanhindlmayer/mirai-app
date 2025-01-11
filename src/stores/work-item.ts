@@ -1,15 +1,14 @@
-import { displayError } from '@/composables/displayError'
 import type WorkItemGateway from '@/gateways/WorkItemGateway'
 import type { PaginatedList, PaginationFilter } from '@/types'
 import type { WorkItem } from '@/types/work-item'
 import { workItemGatewayKey } from '@/utils/injection-keys'
-import { defineStore } from 'pinia'
-import { inject, ref, toRef } from 'vue'
+import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
+import { inject, ref } from 'vue'
 import { useProjectStore } from './project'
 
 export const useWorkItemStore = defineStore('workItems', () => {
   const workItemGateway = inject(workItemGatewayKey) as WorkItemGateway
-  const project = toRef(useProjectStore(), 'project')
+  const { project } = storeToRefs(useProjectStore())
   const workItems = ref<PaginatedList<WorkItem>>({
     items: [],
     totalCount: 0,
@@ -19,31 +18,22 @@ export const useWorkItemStore = defineStore('workItems', () => {
     hasPreviousPage: false,
     totalPages: 0,
   })
-  const isLoading = ref(false)
 
   async function listWorkItems(filters: PaginationFilter) {
-    try {
-      isLoading.value = true
-      workItems.value = await workItemGateway.listWorkItems(project.value!.id, filters)
-    } catch (error) {
-      displayError(error)
-    } finally {
-      isLoading.value = false
-    }
+    workItems.value = await workItemGateway.listWorkItems(project.value!.id, filters)
   }
 
   async function deleteWorkItem(workItemId: string) {
-    try {
-      await workItemGateway.deleteWorkItem(project.value!.id, workItemId)
-    } catch (error) {
-      displayError(error)
-    }
+    await workItemGateway.deleteWorkItem(project.value!.id, workItemId)
   }
 
   return {
     workItems,
-    isLoading,
     listWorkItems,
     deleteWorkItem,
   }
 })
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useWorkItemStore, import.meta.hot))
+}

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Logo from '@/components/common/Logo.vue'
+import { displayError } from '@/composables/displayError'
 import { useUserStore } from '@/stores/user'
 import type { LoginUserRequest } from '@/types/user'
 import type { FormSubmitEvent } from '@primevue/forms'
@@ -26,8 +27,12 @@ const resolver = ref(
 
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
-  await store.loginUser(form.value)
-  await store.getCurrentUser()
+  try {
+    await store.loginUser(form.value)
+    await store.getCurrentUser()
+  } catch (error) {
+    displayError(error)
+  }
 }
 </script>
 

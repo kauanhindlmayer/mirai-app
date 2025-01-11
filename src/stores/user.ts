@@ -1,9 +1,8 @@
-import { displayError } from '@/composables/displayError'
 import type UserGateway from '@/gateways/UserGateway'
 import type { LoginUserRequest, RegisterUserRequest, User } from '@/types/user'
 import { userGatewayKey } from '@/utils/injection-keys'
 import { StorageSerializers, useStorage } from '@vueuse/core'
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 import { inject } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -16,35 +15,24 @@ export const useUserStore = defineStore('users', () => {
   const accessToken = useStorage<string | null>('accessToken', null)
 
   async function registerUser(request: RegisterUserRequest) {
-    try {
-      await userGateway.registerUser(request)
-      router.push({ name: 'login' })
-    } catch (error) {
-      displayError(error)
-    }
+    await userGateway.registerUser(request)
+    router.push({ name: 'login' })
   }
 
   async function loginUser(request: LoginUserRequest) {
-    try {
-      const response = await userGateway.loginUser(request)
-      accessToken.value = response.accessToken
-      router.push({ name: 'projects-home' })
-    } catch (error) {
-      displayError(error)
-    }
+    const response = await userGateway.loginUser(request)
+    accessToken.value = response.accessToken
+    router.push({ name: 'projects-home' })
   }
 
   function logout() {
+    user.value = null
     accessToken.value = null
     router.push({ name: 'login' })
   }
 
   async function getCurrentUser() {
-    try {
-      user.value = await userGateway.getCurrentUser()
-    } catch (error) {
-      displayError(error)
-    }
+    user.value = await userGateway.getCurrentUser()
   }
 
   return {
@@ -55,3 +43,7 @@ export const useUserStore = defineStore('users', () => {
     getCurrentUser,
   }
 })
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot))
+}
