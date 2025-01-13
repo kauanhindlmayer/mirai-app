@@ -1,6 +1,7 @@
 import { format, formatDistanceToNow } from 'date-fns'
 
 export function formatDate(date: Date | string, formatString: string = 'dd/MM/yyyy'): string {
+  if (!date) return ''
   return format(date, formatString)
 }
 

@@ -66,7 +66,7 @@ onBeforeMount(() => {
         </div>
       </div>
     </div>
-    <div class="col-span-8">
+    <div class="col-span-12 md:col-span-8">
       <div class="card">
         <div class="flex justify-between items-center">
           <div class="font-semibold text-xl">About this Project</div>
@@ -98,7 +98,7 @@ onBeforeMount(() => {
         </div>
       </div>
     </div>
-    <div class="col-span-4">
+    <div class="col-span-12 md:col-span-4">
       <div class="card mb-4">
         <div class="flex justify-between items-center mb-4">
           <div class="font-semibold text-xl mr-2">Project Stats</div>

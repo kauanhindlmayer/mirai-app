@@ -60,21 +60,6 @@
     line-height: inherit;
     font-size: 1.125rem;
   }
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border: 1px solid var(--p-primary-color);
-    transition: all 0.5s;
-    animation: clippath 3s infinite linear;
-    border-radius: 4px;
-    opacity: 1;
-  }
-
-  &::after {
-    animation: clippath 3s infinite -1.5s linear;
-  }
 }
 
 @keyframes clippath {

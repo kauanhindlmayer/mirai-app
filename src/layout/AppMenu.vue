@@ -5,8 +5,7 @@ import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 import AppMenuItem from './AppMenuItem.vue'
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = storeToRefs(useProjectStore())
 
 const menuItems = computed<MenuItem[]>(() => [
   {
@@ -19,7 +18,7 @@ const menuItems = computed<MenuItem[]>(() => [
         to: `/projects/${project.value?.id}/summary`,
       },
       {
-        label: 'Dashboards',
+        label: 'Dashboard',
         icon: 'pi pi-fw pi-chart-bar',
         to: `/projects/${project.value?.id}/dashboard`,
       },

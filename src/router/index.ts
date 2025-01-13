@@ -14,7 +14,16 @@ const routes: RouteRecordRaw[] = [
       ...projectsRoutes,
       {
         path: 'projects/:projectId',
-        children: [...workItemsRoutes, ...wikiPagesRoutes, ...boardsRoutes],
+        children: [
+          ...workItemsRoutes,
+          ...wikiPagesRoutes,
+          ...boardsRoutes,
+          {
+            path: 'dashboard',
+            name: 'dashboard',
+            component: () => import('@/views/DashboardView.vue'),
+          },
+        ],
       },
     ],
   },
