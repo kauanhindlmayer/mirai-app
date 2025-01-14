@@ -29,6 +29,7 @@ declare module 'vue' {
     ContextMenu: typeof import('primevue/contextmenu')['default']
     copy: typeof import('./src/components/CreateOrganizationDialog copy.vue')['default']
     CreateOrganizationDialog: typeof import('./src/components/projects/CreateOrganizationDialog.vue')['default']
+    CreateProjectDialog: typeof import('./src/components/projects/CreateProjectDialog.vue')['default']
     DataTable: typeof import('primevue/datatable')['default']
     Dialog: typeof import('primevue/dialog')['default']
     Divider: typeof import('primevue/divider')['default']
