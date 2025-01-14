@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import CreateOrganizationDialog from '@/components/projects/CreateOrganizationDialog.vue'
+import CreateProjectDialog from '@/components/projects/CreateProjectDialog.vue'
 import ProjectCard from '@/components/projects/ProjectCard.vue'
 import { useOrganizationStore } from '@/stores/organization'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
 import type { Organization } from '@/types/organization'
+import { storeToRefs } from 'pinia'
 import { onBeforeMount, ref, useTemplateRef, watch } from 'vue'
 
 const organizationStore = useOrganizationStore()
+const { organizations } = storeToRefs(organizationStore)
 const projectStore = useProjectStore()
 const pageStore = usePageStore()
 
-type CreateOrganizationDialogType = typeof CreateOrganizationDialog
-const createOrganizationDialogRef = useTemplateRef<CreateOrganizationDialogType>(
-  'createOrganizationDialog',
-)
+type CreateProjectDialogType = typeof CreateProjectDialog
+const createProjectDialogRef = useTemplateRef<CreateProjectDialogType>('createProjectDialog')
 
 const selectedOrganization = ref<Organization>()
 
@@ -36,14 +36,13 @@ onBeforeMount(async () => {
 
 <template>
   <header class="flex justify-between items-center">
-    <span class="title-h7 my-4">
-      {{ selectedOrganization?.name }}
-    </span>
-    <Button
-      label="New Project"
-      icon="pi pi-plus"
-      @click="createOrganizationDialogRef?.openDialog"
+    <Select
+      v-model="selectedOrganization"
+      :options="organizations"
+      class="my-4"
+      option-label="name"
     />
+    <Button label="New Project" icon="pi pi-plus" @click="createProjectDialogRef?.openDialog" />
   </header>
   <Tabs value="0">
     <TabList>
@@ -66,5 +65,5 @@ onBeforeMount(async () => {
       </TabPanel>
     </TabPanels>
   </Tabs>
-  <CreateOrganizationDialog ref="createOrganizationDialog" />
+  <CreateProjectDialog ref="createProjectDialog" />
 </template>

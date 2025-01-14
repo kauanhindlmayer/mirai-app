@@ -8,14 +8,6 @@ const store = useUserStore()
 const { user } = storeToRefs(store)
 const { layoutState, isDarkTheme, onMenuToggle, onConfigSidebarToggle } = useLayout()
 
-type Props = {
-  showTopbarLeft?: boolean
-}
-
-withDefaults(defineProps<Props>(), {
-  showTopbarLeft: true,
-})
-
 function toggleSearchBar() {
   layoutState.searchBarActive = !layoutState.searchBarActive
 }
@@ -27,7 +19,7 @@ function logout() {
 
 <template>
   <div class="layout-topbar">
-    <div v-if="showTopbarLeft" class="topbar-left">
+    <div class="topbar-left">
       <a tabindex="0" class="menu-button" @click="onMenuToggle">
         <i class="pi pi-chevron-left" />
       </a>

@@ -26,7 +26,7 @@ function redirectToProjectSummary() {
           <div class="text-lg font-semibold">
             {{ project.name }}
           </div>
-          <p class="text-sm text-gray-600 text-wrap">
+          <p class="text-sm text-gray-600 line-clamp-3">
             {{ project.description }}
           </p>
         </div>

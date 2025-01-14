@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useOrganizationStore } from '@/stores/organization'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { ref } from 'vue'
@@ -32,11 +31,8 @@ const resolver = ref(
   ),
 )
 
-const organizationStore = useOrganizationStore()
-
 function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
-  organizationStore.createOrganization(form.value)
 }
 
 defineExpose({
@@ -48,7 +44,7 @@ defineExpose({
 <template>
   <Dialog
     v-model:visible="isVisible"
-    header="Create New Organization"
+    header="Create New Project"
     :style="{
       width: '45rem',
       height: '98%',
