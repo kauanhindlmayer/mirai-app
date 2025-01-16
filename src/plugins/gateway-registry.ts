@@ -1,4 +1,5 @@
 import { BoardGatewayHttp } from '@/gateways/BoardGateway'
+import { DashboardGatewayFake } from '@/gateways/DashboardGateway'
 import { AxiosAdapter } from '@/gateways/HttpClient'
 import { OrganizationGatewayHttp } from '@/gateways/OrganizationGateway'
 import { ProjectGatewayHttp } from '@/gateways/ProjectGateway'
@@ -7,6 +8,7 @@ import { WikiPageGatewayHttp } from '@/gateways/WikiPageGateway'
 import { WorkItemGatewayHttp } from '@/gateways/WorkItemGateway'
 import {
   boardGatewayKey,
+  dashboardGatewayKey,
   organizationGatewayKey,
   projectGatewayKey,
   userGatewayKey,
@@ -22,6 +24,7 @@ const projectGateway = new ProjectGatewayHttp(httpClient)
 const wikiPageGateway = new WikiPageGatewayHttp(httpClient)
 const workItemGateway = new WorkItemGatewayHttp(httpClient)
 const boardGateway = new BoardGatewayHttp(httpClient)
+const dashboardGateway = new DashboardGatewayFake()
 
 const gatewayRegistry = {
   install(app: App<Element>) {
@@ -31,6 +34,7 @@ const gatewayRegistry = {
     app.provide(wikiPageGatewayKey, wikiPageGateway)
     app.provide(workItemGatewayKey, workItemGateway)
     app.provide(boardGatewayKey, boardGateway)
+    app.provide(dashboardGatewayKey, dashboardGateway)
   },
 }
 
