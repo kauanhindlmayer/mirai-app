@@ -14,7 +14,7 @@ const layoutConfig = reactive<LayoutConfig>({
   primary: Primary.Blue,
   surface: undefined,
   isDarkTheme: false,
-  menuMode: MenuMode.Drawer,
+  menuMode: MenuMode.Static,
   menuTheme: MenuTheme.Light,
   cardStyle: CardStyle.Transparent,
 })
@@ -63,6 +63,7 @@ export function useLayout() {
   }
 
   const isDarkTheme = computed(() => layoutConfig.isDarkTheme)
+  const isMenuDarkTheme = computed(() => layoutConfig.menuTheme === MenuTheme.Dark)
   const isSidebarActive = computed(() => {
     return (
       layoutState.overlayMenuActive ||
@@ -83,6 +84,7 @@ export function useLayout() {
     layoutConfig,
     layoutState,
     isDarkTheme,
+    isMenuDarkTheme,
     setActiveMenuItem,
     onConfigSidebarToggle,
     onMenuToggle,

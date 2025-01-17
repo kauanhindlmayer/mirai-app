@@ -171,7 +171,7 @@ onMounted(async () => {
               </div>
             </template>
           </Column>
-          <Column field="updatedAt" header="Activity Date" sortable>
+          <Column header="Activity Date" sortable>
             <template #body="{ data }">
               {{ formatDate(data.updatedAt ?? data.createdAt, 'MM/dd/yyyy hh:mm') }}
             </template>

@@ -42,17 +42,14 @@ defineExpose({
 </script>
 
 <template>
-  <Dialog
+  <Drawer
     v-model:visible="isVisible"
     header="Create New Project"
-    :style="{
-      width: '45rem',
-      height: '98%',
-      maxHeight: '98%',
+    position="right"
+    class="layout-rightmenu !w-full sm:!w-[36rem]"
+    :pt="{
+      pcCloseButton: { root: 'ml-auto' },
     }"
-    position="topright"
-    :modal="true"
-    :draggable="false"
   >
     <Form :resolver @submit="onFormSubmit" class="flex flex-col h-full">
       <div class="flex-grow">
@@ -76,12 +73,5 @@ defineExpose({
         <Button type="submit" label="Create" />
       </div>
     </Form>
-  </Dialog>
+  </Drawer>
 </template>
-
-<style>
-.p-dialog-content {
-  height: calc(100% - 4rem);
-  overflow-y: auto;
-}
-</style>

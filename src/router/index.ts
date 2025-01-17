@@ -23,6 +23,11 @@ const routes: RouteRecordRaw[] = [
             name: 'dashboard',
             component: () => import('@/views/DashboardView.vue'),
           },
+          {
+            path: 'tags',
+            name: 'tags',
+            component: () => import('@/views/TagsView.vue'),
+          },
         ],
       },
     ],

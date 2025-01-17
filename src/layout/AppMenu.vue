@@ -77,7 +77,7 @@ const menuItems = computed<MenuItem[]>(() => [
       {
         label: 'Tags',
         icon: 'pi pi-fw pi-tags',
-        to: '/tags',
+        to: `/projects/${project.value?.id}/tags`,
       },
     ],
   },

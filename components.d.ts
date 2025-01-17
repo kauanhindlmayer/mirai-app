@@ -8,6 +8,8 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AppComment: typeof import('./src/components/common/AppComment.vue')['default']
+    AppLogo: typeof import('./src/components/common/AppLogo.vue')['default']
+    AppTag: typeof import('./src/components/tags/AppTag.vue')['default']
     AutoComplete: typeof import('primevue/autocomplete')['default']
     Avatar: typeof import('primevue/avatar')['default']
     AvatarGroup: typeof import('primevue/avatargroup')['default']
@@ -21,6 +23,9 @@ declare module 'vue' {
     Card: typeof import('primevue/card')['default']
     Chart: typeof import('primevue/chart')['default']
     Checkbox: typeof import('primevue/checkbox')['default']
+    Chip: typeof import('primevue/chip')['default']
+    ColorPicker: typeof import('primevue/colorpicker')['default']
+    ColorSelect: typeof import('./src/components/tags/ColorSelect.vue')['default']
     Column: typeof import('primevue/column')['default']
     Comment: typeof import('./src/components/shared/Comment.vue')['default']
     CommentsSection: typeof import('./src/components/common/CommentsSection.vue')['default']
@@ -40,6 +45,8 @@ declare module 'vue' {
     Form: typeof import('@primevue/forms/form')['default']
     FormField: typeof import('@primevue/forms/formfield')['default']
     IconField: typeof import('primevue/iconfield')['default']
+    InputGroup: typeof import('primevue/inputgroup')['default']
+    InputGroupAddon: typeof import('primevue/inputgroupaddon')['default']
     InputIcon: typeof import('primevue/inputicon')['default']
     InputNumber: typeof import('primevue/inputnumber')['default']
     InputText: typeof import('primevue/inputtext')['default']

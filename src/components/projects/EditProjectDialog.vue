@@ -51,23 +51,20 @@ defineExpose({
 </script>
 
 <template>
-  <Dialog
+  <Drawer
     v-model:visible="isVisible"
     header="About this Project"
-    :style="{
-      width: '45rem',
-      height: '98%',
-      maxHeight: '98%',
+    position="right"
+    class="layout-rightmenu !w-full sm:!w-[36rem]"
+    :pt="{
+      pcCloseButton: { root: 'ml-auto' },
     }"
-    position="topright"
-    :modal="true"
-    :draggable="false"
   >
     <Form :resolver @submit="onFormSubmit" class="flex flex-col h-full">
       <div class="flex-grow">
         <FormField v-slot="$field" name="description">
           <label for="description">Description</label>
-          <Textarea inputId="description" v-model="form.description" rows="3" class="w-full" />
+          <Textarea inputId="description" v-model="form.description" rows="5" class="w-full" />
           <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
             {{ $field.error?.message }}
           </Message>
@@ -78,12 +75,5 @@ defineExpose({
         <Button type="submit" label="Save" />
       </div>
     </Form>
-  </Dialog>
+  </Drawer>
 </template>
-
-<style>
-.p-dialog-content {
-  height: calc(100% - 4rem);
-  overflow-y: auto;
-}
-</style>

@@ -3,7 +3,7 @@ import { useLayout } from '@/layout/composables/layout'
 import AppMenu from './AppMenu.vue'
 import AppTopbar from './AppTopbar.vue'
 
-const { layoutConfig, layoutState, isHorizontal } = useLayout()
+const { layoutState, isMenuDarkTheme, isHorizontal } = useLayout()
 
 let timeoutId: null | ReturnType<typeof setTimeout> = null
 
@@ -36,11 +36,7 @@ function onAnchorToggle() {
       <RouterLink to="/" class="logo">
         <img
           class="logo-image"
-          :src="
-            layoutConfig.menuTheme === 'light'
-              ? '/layout/images/logo-dark.svg'
-              : '/layout/images/logo-white.svg'
-          "
+          :src="`/layout/images/logo-${isMenuDarkTheme ? 'white' : 'dark'}.svg`"
           alt="mirai-layout"
         />
         <span class="app-name title-h7">Mirai</span>
