@@ -5,10 +5,16 @@ export type WorkItem = {
   description?: string
   type: WorkItemType
   status: WorkItemStatus
-  tags: string[]
+  tags: TagBriefResponse[]
   assignedTo: string
   createdAt?: string
   updatedAt: string
+}
+
+export type TagBriefResponse = {
+  id: string
+  name: string
+  color: string
 }
 
 export enum WorkItemStatus {

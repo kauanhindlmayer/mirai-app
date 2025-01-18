@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LazyImage from '@/components/common/LazyImage.vue'
 import EditProjectDialog from '@/components/projects/EditProjectDialog.vue'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
@@ -93,7 +94,6 @@ onBeforeMount(() => {
               @click="editProjectDialogRef?.openDialog"
             />
           </div>
-
           <LazyImage class="w-48 mr-4" src="/layout/images/onboarding.svg" alt="Onboarding Image" />
         </div>
       </div>

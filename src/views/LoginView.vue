@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import AppLogo from '@/components/common/AppLogo.vue'
 import { displayError } from '@/composables/displayError'
 import { useUserStore } from '@/stores/user'
 import type { LoginUserRequest } from '@/types/user'
@@ -43,7 +42,8 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
     <div class="flex w-full h-full justify-center gap-12">
       <div class="flex flex-col py-20 lg:min-w-[30rem]">
         <RouterLink to="/" class="flex items-center justify-center lg:justify-start mb-8">
-          <AppLogo />
+          <!-- <AppLogo /> -->
+          <span class="app-name title-h7">MIRAI</span>
         </RouterLink>
         <div class="flex flex-col justify-center flex-grow">
           <div class="max-w-md mx-auto w-full">

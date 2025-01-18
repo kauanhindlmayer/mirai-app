@@ -54,15 +54,15 @@ const menuItems = computed<MenuItem[]>(() => [
         icon: 'pi pi-fw pi-calendar-times',
         to: '/sprints',
       },
-      {
-        label: 'Queries',
-        icon: 'pi pi-fw pi-search',
-        to: '/queries',
-      },
+      // {
+      //   label: 'Queries',
+      //   icon: 'pi pi-fw pi-search',
+      //   to: '/queries',
+      // },
       {
         label: 'Personas',
         icon: 'pi pi-fw pi-users',
-        to: '/personas',
+        to: `/projects/${project.value?.id}/personas`,
       },
       {
         label: 'Retrospectives',

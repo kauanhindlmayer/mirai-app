@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import AppTag from '@/components/tags/AppTag.vue'
 import { displayError } from '@/composables/displayError'
 import { useAppToast } from '@/composables/useAppToast'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
 import { useWorkItemStore } from '@/stores/work-item'
 import type { PaginationFilter } from '@/types'
+import type { Tag } from '@/types/tag'
 import { type WorkItem } from '@/types/work-item'
 import { formatDate } from '@/utils/date'
 import { getStatusLabel, getStatusSeverity, getTypeLabel, getTypeSeverity } from '@/utils/work-item'
@@ -110,6 +112,13 @@ function setBreadcrumbs() {
   ])
 }
 
+function getMoreTagsTooltip(tags: Tag[]) {
+  return tags
+    .slice(2)
+    .map((tag) => tag.name)
+    .join(', ')
+}
+
 onMounted(async () => {
   await listWorkItems()
   pageStore.setTitle('Work Items - Boards')
@@ -165,9 +174,12 @@ onMounted(async () => {
           <Column field="tags" header="Tags">
             <template #body="{ data }">
               <div class="flex items-center gap-2">
-                <template v-for="tag in data.tags" :key="tag">
-                  <Tag :value="tag" />
+                <template v-for="tag in data.tags.slice(0, 2)" :key="tag.name">
+                  <AppTag :color="tag.color" :label="tag.name" />
                 </template>
+                <span v-if="data.tags.length > 2" v-tooltip.bottom="getMoreTagsTooltip(data.tags)">
+                  ...
+                </span>
               </div>
             </template>
           </Column>
