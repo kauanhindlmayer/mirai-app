@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import LazyImage from '@/components/common/LazyImage.vue'
-import EditProjectDialog from '@/components/projects/EditProjectDialog.vue'
+import EditProjectDrawer from '@/components/projects/EditProjectDrawer.vue'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
 import { useWorkItemStore } from '@/stores/work-item'
@@ -15,8 +15,8 @@ const pageStore = usePageStore()
 const workItemStore = useWorkItemStore()
 const { workItemsStats } = storeToRefs(workItemStore)
 
-type EditProjectDialogType = typeof EditProjectDialog
-const editProjectDialogRef = useTemplateRef<EditProjectDialogType>('editProjectDialog')
+type EditProjectDrawerType = InstanceType<typeof EditProjectDrawer>
+const editProjectDrawerRef = useTemplateRef<EditProjectDrawerType>('editProjectDrawer')
 
 function setBreadcrumbs() {
   pageStore.setBreadcrumbs([
@@ -77,7 +77,7 @@ onBeforeMount(() => {
             severity="secondary"
             variant="text"
             v-tooltip.bottom="'Edit Project Information'"
-            @click="editProjectDialogRef?.openDialog"
+            @click="editProjectDrawerRef?.openDrawer"
           />
         </div>
         <div v-if="hasProjectDescription">
@@ -91,7 +91,7 @@ onBeforeMount(() => {
               label="Add Project Description"
               icon="pi pi-plus"
               class="mt-4"
-              @click="editProjectDialogRef?.openDialog"
+              @click="editProjectDrawerRef?.openDrawer"
             />
           </div>
           <LazyImage class="w-48 mr-4" src="/layout/images/onboarding.svg" alt="Onboarding Image" />
@@ -144,5 +144,5 @@ onBeforeMount(() => {
       </div>
     </div>
   </div>
-  <EditProjectDialog ref="editProjectDialog" />
+  <EditProjectDrawer ref="editProjectDrawer" />
 </template>

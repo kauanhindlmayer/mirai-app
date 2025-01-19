@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CreateProjectDialog from '@/components/projects/CreateProjectDialog.vue'
+import CreateProjectDrawer from '@/components/projects/CreateProjectDrawer.vue'
 import ProjectCard from '@/components/projects/ProjectCard.vue'
 import { useOrganizationStore } from '@/stores/organization'
 import { usePageStore } from '@/stores/page'
@@ -13,8 +13,8 @@ const { organizations } = storeToRefs(organizationStore)
 const projectStore = useProjectStore()
 const pageStore = usePageStore()
 
-type CreateProjectDialogType = typeof CreateProjectDialog
-const createProjectDialogRef = useTemplateRef<CreateProjectDialogType>('createProjectDialog')
+type CreateProjectDrawerType = InstanceType<typeof CreateProjectDrawer>
+const createProjectDrawerRef = useTemplateRef<CreateProjectDrawerType>('createProjectDrawer')
 
 const selectedOrganization = ref<Organization>()
 
@@ -42,7 +42,7 @@ onBeforeMount(async () => {
       class="my-4"
       option-label="name"
     />
-    <Button label="New Project" icon="pi pi-plus" @click="createProjectDialogRef?.openDialog" />
+    <Button label="New Project" icon="pi pi-plus" @click="createProjectDrawerRef?.openDrawer" />
   </header>
   <Tabs value="0">
     <TabList>
@@ -65,5 +65,5 @@ onBeforeMount(async () => {
       </TabPanel>
     </TabPanels>
   </Tabs>
-  <CreateProjectDialog ref="createProjectDialog" />
+  <CreateProjectDrawer ref="createProjectDrawer" />
 </template>

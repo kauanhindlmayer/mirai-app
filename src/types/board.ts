@@ -72,3 +72,10 @@ export type DraggableEvent<T> = {
     oldIndex: number
   }
 }
+
+export type CreateBoardColumnRequest = {
+  name: string
+  position: number
+  wipLimit?: number
+  definitionOfDone?: string
+}

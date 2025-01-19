@@ -1,5 +1,5 @@
 import type BoardGateway from '@/gateways/BoardGateway'
-import type { Board, BoardSummary, MoveCardRequest } from '@/types/board'
+import type { Board, BoardSummary, CreateBoardColumnRequest, MoveCardRequest } from '@/types/board'
 import { boardGatewayKey } from '@/utils/injection-keys'
 import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
 import { inject, ref } from 'vue'
@@ -23,12 +23,22 @@ export const useBoardStore = defineStore('boards', () => {
     await boardGateway.moveCard(project.value!.id, board.value!.id, columnId, cardId, request)
   }
 
+  async function createColumn(request: CreateBoardColumnRequest) {
+    await boardGateway.createColumn(project.value!.id, board.value!.id, request)
+  }
+
+  async function deleteColumn(columnId: string) {
+    await boardGateway.deleteColumn(project.value!.id, board.value!.id, columnId)
+  }
+
   return {
     boards,
     board,
     listBoards,
     getBoard,
     moveCard,
+    createColumn,
+    deleteColumn,
   }
 })
 

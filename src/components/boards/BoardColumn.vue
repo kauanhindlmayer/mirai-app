@@ -1,6 +1,19 @@
 <template>
-  <div class="card flex-1 p-4 mr-4 rounded bg-gray-200 min-w-52">
-    <h2 class="text-lg font-semibold mb-2">{{ column.name }}</h2>
+  <div class="card p-4 mr-4 rounded bg-gray-200 w-72">
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="text-lg">{{ column.name }}</h2>
+      <div v-if="column.wipLimit">
+        <span
+          :class="[
+            column.cards.length > column.wipLimit ? 'text-red-700' : 'text-green-700',
+            'text-xl',
+          ]"
+        >
+          {{ column.cards.length }}
+        </span>
+        / {{ column.wipLimit }}
+      </div>
+    </div>
     <draggable v-model="cards" group="board" item-key="id" @change="onChange">
       <template #item="{ element: card }">
         <BoardCard :card="card" />

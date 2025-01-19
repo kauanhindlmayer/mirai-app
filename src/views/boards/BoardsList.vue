@@ -1,16 +1,22 @@
 <script setup lang="ts">
 import Board from '@/components/boards/Board.vue'
+import BoardSettingsDrawer from '@/components/boards/BoardSettingsDrawer.vue'
+import { useLayout } from '@/layout/composables/layout'
 import { useBoardStore } from '@/stores/board'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
 import { WorkItemType } from '@/types/work-item'
 import { storeToRefs } from 'pinia'
-import { onBeforeMount, ref, watch } from 'vue'
+import { onBeforeMount, ref, useTemplateRef, watch } from 'vue'
 
 const pageStore = usePageStore()
 const boardStore = useBoardStore()
 const { board, boards } = storeToRefs(boardStore)
 const { project } = storeToRefs(useProjectStore())
+const { onMenuToggle } = useLayout()
+
+type BoardSettingsDrawerType = InstanceType<typeof BoardSettingsDrawer>
+const boardSettingsDrawerRef = useTemplateRef<BoardSettingsDrawerType>('boardSettingsDrawer')
 
 const selectedBoard = ref()
 const selectedBacklogLevel = ref(WorkItemType.UserStory)
@@ -52,7 +58,7 @@ onBeforeMount(async () => {
           <Select v-model="selectedBoard" :options="boards" option-label="name" class="ml-2" />
           <Button label="View as Backlog" severity="secondary" icon="pi pi-fw pi-arrow-right" />
         </div>
-        <Tabs value="0">
+        <Tabs value="0" class="board-tabs">
           <TabList>
             <Tab value="0">Board</Tab>
             <Tab value="1" disabled>Analytics</Tab>
@@ -77,6 +83,7 @@ onBeforeMount(async () => {
                 variant="text"
                 class="ml-2"
                 v-tooltip.bottom="'Configure Board Settings'"
+                @click="boardSettingsDrawerRef?.openDrawer"
               />
               <Button
                 icon="pi pi-arrow-up-right-and-arrow-down-left-from-center"
@@ -84,6 +91,7 @@ onBeforeMount(async () => {
                 variant="text"
                 class="ml-2"
                 v-tooltip.bottom="'Enter Full Screen'"
+                @click="onMenuToggle"
               />
             </div>
           </TabList>
@@ -96,13 +104,14 @@ onBeforeMount(async () => {
       </div>
     </div>
   </div>
+  <BoardSettingsDrawer ref="boardSettingsDrawer" />
 </template>
 
 <style>
-.p-tablist-tab-list {
+.board-tabs .p-tablist-tab-list {
   border: none !important;
 }
-.p-tab.p-disabled {
+.board-tabs .p-tab.p-disabled {
   border: none !important;
 }
 </style>

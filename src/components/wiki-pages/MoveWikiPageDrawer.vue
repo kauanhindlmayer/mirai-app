@@ -31,37 +31,34 @@ async function moveWikiPage() {
   const [wikiPageId] = Object.keys(selectedKey.value!)
   await store.moveWikiPage(wikiPage.value!.id, { targetParentId: wikiPageId, targetPosition: 0 })
   emit('move-wiki-page')
-  closeDialog()
+  closeDrawer()
 }
 
 const isVisible = ref(false)
 
-function openDialog() {
+function openDrawer() {
   isVisible.value = true
 }
 
-function closeDialog() {
+function closeDrawer() {
   isVisible.value = false
 }
 
 defineExpose({
-  openDialog,
-  closeDialog,
+  openDrawer,
+  closeDrawer,
 })
 </script>
 
 <template>
-  <Dialog
+  <Drawer
     v-model:visible="isVisible"
     :header="header"
-    :style="{
-      width: '45rem',
-      height: '98%',
-      maxHeight: '98%',
+    position="right"
+    class="!w-full sm:!w-[36rem]"
+    :pt="{
+      pcCloseButton: { root: 'ml-auto' },
     }"
-    position="topright"
-    :modal="true"
-    :draggable="false"
   >
     <Form class="flex flex-col h-full">
       <div class="flex-grow">
@@ -74,11 +71,11 @@ defineExpose({
         />
       </div>
       <div class="flex justify-end mt-4 gap-2">
-        <Button type="button" label="Cancel" severity="secondary" @click="closeDialog" />
+        <Button type="button" label="Cancel" severity="secondary" @click="closeDrawer" />
         <Button type="submit" label="Move" :disabled="isSaveButtonDisabled" @click="moveWikiPage" />
       </div>
     </Form>
-  </Dialog>
+  </Drawer>
 </template>
 
 <style>

@@ -27,7 +27,7 @@
 
     <div class="grid grid-cols-2 gap-2 items-center">
       Story Points
-      <InputNumber v-model="storyPoints" fluid class="h-4rem" />
+      <InputNumber v-model="storyPoints" fluid class="h-4rem story-points-input" />
     </div>
   </div>
 </template>
@@ -44,11 +44,11 @@ const storyPoints = ref(card.workItem.storyPoints)
 </script>
 
 <style>
-.p-inputnumber-input {
+.story-points-input > .p-inputnumber-input {
   height: 1.25rem;
   border: none;
 }
-.p-inputnumber-input,
+.story-points-input > .p-inputnumber-input,
 .p-autocomplete-input {
   border: none !important;
   box-shadow: none !important;

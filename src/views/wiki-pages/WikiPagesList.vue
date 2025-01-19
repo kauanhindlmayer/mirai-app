@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MoveWikiPageDialog from '@/components/wiki-pages/MoveWikiPageDialog.vue'
+import MoveWikiPageDrawer from '@/components/wiki-pages/MoveWikiPageDrawer.vue'
 import { useAppToast } from '@/composables/useAppToast'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
@@ -88,7 +88,7 @@ const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
 const menuItems = ref<MenuItem[]>([
   { label: 'Add Sub-Page', icon: 'pi pi-plus', command: addSubPage },
   { label: 'Copy Page Path', icon: 'pi pi-copy', command: copyPagePath },
-  { label: 'Move Page', icon: 'pi pi-arrow-right', command: openMoveWikiPageDialog },
+  { label: 'Move Page', icon: 'pi pi-arrow-right', command: openMoveWikiPageDrawer },
   { label: 'Edit', icon: 'pi pi-pencil', command: redirectToEditPage },
   { label: 'Delete', icon: 'pi pi-trash', command: deleteWikiPage },
   { label: 'Open in New Tab', icon: 'pi pi-external-link', command: openInNewTab },
@@ -110,11 +110,11 @@ function copyPagePath() {
   toast.showSuccess({ detail: 'Page path copied to clipboard' })
 }
 
-type MoveWikiPageDialogType = typeof MoveWikiPageDialog
-const moveWikiPageDialogRef = useTemplateRef<MoveWikiPageDialogType>('moveWikiPageDialog')
+type MoveWikiPageDrawerType = InstanceType<typeof MoveWikiPageDrawer>
+const moveWikiPageDrawerRef = useTemplateRef<MoveWikiPageDrawerType>('moveWikiPageDrawer')
 
-function openMoveWikiPageDialog() {
-  moveWikiPageDialogRef.value?.openDialog()
+function openMoveWikiPageDrawer() {
+  moveWikiPageDrawerRef.value?.openDrawer()
 }
 
 function redirectToEditPage() {
@@ -198,7 +198,7 @@ function openInNewTab() {
       />
       <WikiPageDetail @delete-wiki-page="deleteWikiPage" v-else />
     </div>
-    <MoveWikiPageDialog ref="moveWikiPageDialog" @move-wiki-page="store.listWikiPages" />
+    <MoveWikiPageDrawer ref="moveWikiPageDrawer" @move-wiki-page="store.listWikiPages" />
     <ConfirmDialog style="width: 450px" />
   </div>
 </template>

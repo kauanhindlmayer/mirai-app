@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import LazyImage from '@/components/common/LazyImage.vue'
-import CreatePersonaDialog from '@/components/personas/CreatePersonaDialog.vue'
+import CreatePersonaDrawer from '@/components/personas/CreatePersonaDrawer.vue'
 import { useTemplateRef } from 'vue'
 
-type CreatePersonaDialogType = typeof CreatePersonaDialog
-const createPersonaDialogRef = useTemplateRef<CreatePersonaDialogType>('createPersonaDialog')
+type CreatePersonaDrawerType = InstanceType<typeof CreatePersonaDrawer>
+const createPersonaDrawerRef = useTemplateRef<CreatePersonaDrawerType>('createPersonaDrawer')
 </script>
 
 <template>
@@ -16,7 +16,7 @@ const createPersonaDialogRef = useTemplateRef<CreatePersonaDialogType>('createPe
           <Button
             icon="pi pi-plus"
             label="New Persona"
-            @click="createPersonaDialogRef?.openDialog"
+            @click="createPersonaDrawerRef?.openDrawer"
           />
         </div>
 
@@ -27,7 +27,7 @@ const createPersonaDialogRef = useTemplateRef<CreatePersonaDialogType>('createPe
             <div>Create Personas to help your team build the right things.</div>
           </div>
         </div>
-        <CreatePersonaDialog ref="createPersonaDialog" />
+        <CreatePersonaDrawer ref="createPersonaDrawer" />
       </div>
     </div>
   </div>

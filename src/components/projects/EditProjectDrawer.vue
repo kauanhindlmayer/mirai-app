@@ -10,16 +10,6 @@ import { object, string } from 'yup'
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
 
-const isVisible = ref(false)
-
-function openDialog() {
-  isVisible.value = true
-}
-
-function closeDialog() {
-  isVisible.value = false
-}
-
 const form = ref({
   name: project.value?.name || '',
   description: project.value?.description || '',
@@ -38,15 +28,25 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
   try {
     await projectStore.updateProject(project.value!.id, form.value)
     await projectStore.getProject(project.value!.id)
-    closeDialog()
+    closeDrawer()
   } catch (error) {
     displayError(error)
   }
 }
 
+const isVisible = ref(false)
+
+function openDrawer() {
+  isVisible.value = true
+}
+
+function closeDrawer() {
+  isVisible.value = false
+}
+
 defineExpose({
-  openDialog,
-  closeDialog,
+  openDrawer,
+  closeDrawer,
 })
 </script>
 
@@ -55,7 +55,7 @@ defineExpose({
     v-model:visible="isVisible"
     header="About this Project"
     position="right"
-    class="layout-rightmenu !w-full sm:!w-[36rem]"
+    class="!w-full sm:!w-[36rem]"
     :pt="{
       pcCloseButton: { root: 'ml-auto' },
     }"
@@ -71,7 +71,7 @@ defineExpose({
         </FormField>
       </div>
       <div class="flex justify-end mt-4 gap-2">
-        <Button type="button" label="Cancel" severity="secondary" @click="closeDialog" />
+        <Button type="button" label="Cancel" severity="secondary" @click="closeDrawer" />
         <Button type="submit" label="Save" />
       </div>
     </Form>

@@ -1,5 +1,11 @@
 import type { HttpClient } from '@/types'
-import type { Board, BoardSummary, CreateBoardRequest, MoveCardRequest } from '@/types/board'
+import type {
+  Board,
+  BoardSummary,
+  CreateBoardColumnRequest,
+  CreateBoardRequest,
+  MoveCardRequest,
+} from '@/types/board'
 
 export default interface BoardGateway {
   createBoard(projectId: string, request: CreateBoardRequest): Promise<string>
@@ -13,6 +19,8 @@ export default interface BoardGateway {
     cardId: string,
     request: MoveCardRequest,
   ): Promise<void>
+  createColumn(projectId: string, boardId: string, request: CreateBoardColumnRequest): Promise<void>
+  deleteColumn(projectId: string, boardId: string, columnId: string): Promise<void>
 }
 
 export class BoardGatewayHttp implements BoardGateway {
@@ -45,5 +53,17 @@ export class BoardGatewayHttp implements BoardGateway {
       `/projects/${projectId}/boards/${boardId}/columns/${columnId}/cards/${cardId}/move`,
       request,
     )
+  }
+
+  createColumn(
+    projectId: string,
+    boardId: string,
+    request: CreateBoardColumnRequest,
+  ): Promise<void> {
+    return this.http.post(`/projects/${projectId}/boards/${boardId}/columns`, request)
+  }
+
+  deleteColumn(projectId: string, boardId: string, columnId: string): Promise<void> {
+    return this.http.delete(`/projects/${projectId}/boards/${boardId}/columns/${columnId}`)
   }
 }
