@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useProjectStore } from '@/stores/project'
-import type { MenuItem } from '@/types/layout'
 import { storeToRefs } from 'pinia'
+import type { MenuItem } from 'primevue/menuitem'
 import { computed } from 'vue'
 import AppMenuItem from './AppMenuItem.vue'
 
@@ -54,11 +54,6 @@ const menuItems = computed<MenuItem[]>(() => [
         icon: 'pi pi-fw pi-calendar-times',
         to: '/sprints',
       },
-      // {
-      //   label: 'Queries',
-      //   icon: 'pi pi-fw pi-search',
-      //   to: '/queries',
-      // },
       {
         label: 'Personas',
         icon: 'pi pi-fw pi-users',
@@ -68,11 +63,6 @@ const menuItems = computed<MenuItem[]>(() => [
         label: 'Retrospectives',
         icon: 'pi pi-fw pi-comments',
         to: '/retrospectives',
-      },
-      {
-        label: 'Estimate',
-        icon: 'pi pi-fw pi-stopwatch',
-        to: '/estimates',
       },
       {
         label: 'Tags',

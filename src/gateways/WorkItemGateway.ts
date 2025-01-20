@@ -5,6 +5,7 @@ export default interface WorkItemGateway {
   listWorkItems(projectId: string, filters: PaginationFilter): Promise<PaginatedList<WorkItem>>
   deleteWorkItem(projectId: string, workItemId: string): Promise<void>
   getWorkItemsStats(projectId: string, periodInDays: number): Promise<WorkItemsStats>
+  getWorkItem(projectId: string, workItemId: string): Promise<WorkItem>
 }
 
 export class WorkItemGatewayHttp implements WorkItemGateway {
@@ -24,5 +25,9 @@ export class WorkItemGatewayHttp implements WorkItemGateway {
     return this.http.get(`/projects/${projectId}/work-items/stats`, {
       params: { periodInDays: periodInDays.toString() },
     })
+  }
+
+  getWorkItem(projectId: string, workItemId: string): Promise<WorkItem> {
+    return this.http.get(`/projects/${projectId}/work-items/${workItemId}`)
   }
 }

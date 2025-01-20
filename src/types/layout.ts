@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-function-type */
-import type { Project } from '@/types/project'
-
 export type LayoutConfig = {
   preset: Preset
   primary: Primary
@@ -81,20 +78,6 @@ export type LayoutState = {
   overlaySubmenuActive: boolean
 }
 
-export type MenuItem = {
-  label?: string
-  icon?: string
-  to?: string
-  items?: MenuItem[]
-  separator?: boolean
-  visible?: boolean
-  class?: string
-  url?: string
-  target?: string
-  disabled?: boolean
-  command?: Function
-}
-
 export type Color = {
   name: string
   palette: Record<number, string>
@@ -109,5 +92,3 @@ export type Breadcrumb = {
   label: string
   route: string
 }
-
-export type BreadcrumbResolver = (project: Project) => Breadcrumb[]

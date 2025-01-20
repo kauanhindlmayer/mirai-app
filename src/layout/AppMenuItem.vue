@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useLayout } from '@/layout/composables/layout'
-import type { MenuItem } from '@/types/layout'
+import type { MenuItem } from 'primevue/menuitem'
 import { nextTick, onBeforeMount, ref, useTemplateRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -260,7 +260,7 @@ function isActiveRoute(item: MenuItem) {
     >
       <app-menu-item
         v-for="(child, i) in item.items"
-        :key="child.label"
+        :key="child.key"
         :index="i"
         :item="child"
         :parentItemKey="itemKey"

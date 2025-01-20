@@ -9,6 +9,7 @@ import { useProjectStore } from './project'
 export const useWorkItemStore = defineStore('workItems', () => {
   const workItemGateway = inject(workItemGatewayKey) as WorkItemGateway
   const { project } = storeToRefs(useProjectStore())
+  const workItem = ref<WorkItem | null>(null)
   const workItems = ref<PaginatedList<WorkItem>>({
     items: [],
     totalCount: 0,
@@ -32,12 +33,18 @@ export const useWorkItemStore = defineStore('workItems', () => {
     workItemsStats.value = await workItemGateway.getWorkItemsStats(project.value!.id, periodInDays)
   }
 
+  async function getWorkItem(workItemId: string) {
+    workItem.value = await workItemGateway.getWorkItem(project.value!.id, workItemId)
+  }
+
   return {
+    workItem,
     workItems,
     workItemsStats,
     listWorkItems,
     deleteWorkItem,
     getWorkItemsStats,
+    getWorkItem,
   }
 })
 

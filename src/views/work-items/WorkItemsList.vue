@@ -149,7 +149,7 @@ onMounted(async () => {
           @row-contextmenu="onRowContextMenu"
         >
           <Column field="code" header="ID" sortable />
-          <Column field="type" header="Type" sortable>
+          <Column field="type" header="Type" sortable style="width: 10%">
             <template #body="{ data }">
               <Tag :value="getTypeLabel(data.type)" :severity="getTypeSeverity(data.type)" />
             </template>
@@ -163,7 +163,7 @@ onMounted(async () => {
               </div>
             </template>
           </Column>
-          <Column field="status" header="State" sortable>
+          <Column field="status" header="State" sortable style="width: 10%">
             <template #body="{ data }">
               <div class="flex items-center gap-2">
                 <Badge :severity="getStatusSeverity(data.status)" />
@@ -171,7 +171,7 @@ onMounted(async () => {
               </div>
             </template>
           </Column>
-          <Column field="tags" header="Tags">
+          <Column field="tags" header="Tags" style="width: 20%">
             <template #body="{ data }">
               <div class="flex items-center gap-2">
                 <template v-for="tag in data.tags.slice(0, 2)" :key="tag.name">
@@ -183,7 +183,7 @@ onMounted(async () => {
               </div>
             </template>
           </Column>
-          <Column header="Activity Date" sortable>
+          <Column header="Activity Date" sortable style="width: 15%">
             <template #body="{ data }">
               {{ formatDate(data.updatedAt ?? data.createdAt, 'MM/dd/yyyy hh:mm') }}
             </template>

@@ -7,6 +7,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Accordion: typeof import('primevue/accordion')['default']
+    AccordionContent: typeof import('primevue/accordioncontent')['default']
+    AccordionHeader: typeof import('primevue/accordionheader')['default']
+    AccordionPanel: typeof import('primevue/accordionpanel')['default']
     AppComment: typeof import('./src/components/common/AppComment.vue')['default']
     AppLogo: typeof import('./src/components/common/AppLogo.vue')['default']
     AppTag: typeof import('./src/components/tags/AppTag.vue')['default']
@@ -81,6 +85,7 @@ declare module 'vue' {
     Toast: typeof import('primevue/toast')['default']
     Tree: typeof import('primevue/tree')['default']
     UpdateProjectDialog: typeof import('./src/components/projects/UpdateProjectDialog.vue')['default']
+    WorkItemDialog: typeof import('./src/components/common/WorkItemDialog.vue')['default']
   }
   export interface ComponentCustomProperties {
     StyleClass: typeof import('primevue/styleclass')['default']

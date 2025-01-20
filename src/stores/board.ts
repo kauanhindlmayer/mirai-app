@@ -1,5 +1,11 @@
 import type BoardGateway from '@/gateways/BoardGateway'
-import type { Board, BoardSummary, CreateBoardColumnRequest, MoveCardRequest } from '@/types/board'
+import type {
+  Board,
+  BoardSummary,
+  Column,
+  CreateBoardColumnRequest,
+  MoveCardRequest,
+} from '@/types/board'
 import { boardGatewayKey } from '@/utils/injection-keys'
 import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
 import { inject, ref } from 'vue'
@@ -21,6 +27,22 @@ export const useBoardStore = defineStore('boards', () => {
 
   async function moveCard(columnId: string, cardId: string, request: MoveCardRequest) {
     await boardGateway.moveCard(project.value!.id, board.value!.id, columnId, cardId, request)
+    const { columns } = board.value!
+    const sourceColumn = columns.find((column) => column.id === columnId)!
+    const targetColumn = columns.find((column) => column.id === request.targetColumnId)!
+    const cardIndex = sourceColumn.cards.findIndex((card) => card.id === cardId)
+    const [card] = sourceColumn.cards.splice(cardIndex, 1)
+    card.columnId = request.targetColumnId
+    card.position = request.targetPosition
+    targetColumn.cards.splice(request.targetPosition, 0, card)
+    reorderCards(sourceColumn)
+    reorderCards(targetColumn)
+  }
+
+  function reorderCards(column: Column) {
+    column.cards.forEach((card, index) => {
+      card.position = index
+    })
   }
 
   async function createColumn(request: CreateBoardColumnRequest) {

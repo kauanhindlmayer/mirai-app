@@ -15,7 +15,7 @@ const layoutConfig = reactive<LayoutConfig>({
   surface: undefined,
   isDarkTheme: false,
   menuMode: MenuMode.Static,
-  menuTheme: MenuTheme.Light,
+  menuTheme: MenuTheme.Dark,
   cardStyle: CardStyle.Transparent,
 })
 

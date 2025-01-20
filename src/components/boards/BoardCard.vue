@@ -1,8 +1,32 @@
+<script setup lang="ts">
+import { useProjectStore } from '@/stores/project'
+import type { Card } from '@/types/board'
+import { getStatusLabel, getStatusSeverity, getTypeColor } from '@/utils/work-item'
+import { storeToRefs } from 'pinia'
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const { card } = defineProps<{ card: Card }>()
+const assignee = computed(() => card.workItem.assignee)
+
+const storyPoints = ref(card.workItem.storyPoints)
+
+const { project } = storeToRefs(useProjectStore())
+const router = useRouter()
+
+function openWorkItemDialog() {
+  router.push(`/projects/${project.value!.id}/boards?workItemId=${card.workItem.id}`)
+}
+</script>
+
 <template>
   <div class="card flex flex-col gap-2">
     <div class="side-color" :style="{ backgroundColor: getTypeColor(card.workItem.type) }" />
 
-    <div class="text-surface-900 dark:text-surface-0">
+    <div
+      class="text-surface-900 dark:text-surface-0 hover:underline cursor-pointer"
+      @click="openWorkItemDialog"
+    >
       <span class="font-medium mr-2">{{ card.workItem.code }}</span>
       {{ card.workItem.title }}
     </div>
@@ -32,17 +56,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import type { Card } from '@/types/board'
-import { getStatusLabel, getStatusSeverity, getTypeColor } from '@/utils/work-item'
-import { computed, ref } from 'vue'
-
-const { card } = defineProps<{ card: Card }>()
-const assignee = computed(() => card.workItem.assignee)
-
-const storyPoints = ref(card.workItem.storyPoints)
-</script>
-
 <style>
 .story-points-input > .p-inputnumber-input {
   height: 1.25rem;
@@ -61,7 +74,7 @@ const storyPoints = ref(card.workItem.storyPoints)
 .card {
   position: relative;
   overflow: hidden;
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
   margin-bottom: 0.5rem;
 }
 .side-color {
