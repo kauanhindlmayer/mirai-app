@@ -10,6 +10,7 @@ export type Board = {
 
 export type BoardSummary = {
   id: string
+  teamId: string
   name: string
 }
 

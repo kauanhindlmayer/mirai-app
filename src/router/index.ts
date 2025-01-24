@@ -19,8 +19,8 @@ const routes: RouteRecordRaw[] = [
           ...wikiPagesRoutes,
           ...boardsRoutes,
           {
-            path: 'dashboard',
-            name: 'dashboard',
+            path: 'dashboards',
+            name: 'dashboards',
             component: () => import('@/views/DashboardView.vue'),
           },
           {
@@ -32,6 +32,21 @@ const routes: RouteRecordRaw[] = [
             path: 'personas',
             name: 'personas',
             component: () => import('@/views/PersonasView.vue'),
+          },
+          {
+            path: 'backlogs',
+            name: 'backlogs',
+            component: () => import('@/views/BacklogView.vue'),
+          },
+          {
+            path: 'sprints',
+            name: 'sprints',
+            component: () => import('@/views/EmptyView.vue'),
+          },
+          {
+            path: 'retrospectives',
+            name: 'retrospectives',
+            component: () => import('@/views/EmptyView.vue'),
           },
         ],
       },

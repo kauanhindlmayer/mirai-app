@@ -36,12 +36,34 @@ onBeforeMount(async () => {
 
 <template>
   <header class="flex justify-between items-center">
-    <Select
-      v-model="selectedOrganization"
-      :options="organizations"
-      class="my-4"
-      option-label="name"
-    />
+    <div class="flex items-center space-x-2">
+      <Select
+        v-model="selectedOrganization"
+        :options="organizations"
+        class="my-4"
+        option-label="name"
+      >
+        <template #footer>
+          <div class="p-1">
+            <Button
+              label="New Organization"
+              fluid
+              severity="secondary"
+              text
+              size="small"
+              icon="pi pi-plus"
+            />
+          </div>
+        </template>
+      </Select>
+      <Button
+        icon="pi pi-cog"
+        severity="secondary"
+        text
+        v-tooltip.bottom="'Organization Settings'"
+        @click="createProjectDrawerRef?.openDrawer"
+      />
+    </div>
     <Button label="New Project" icon="pi pi-plus" @click="createProjectDrawerRef?.openDrawer" />
   </header>
   <Tabs value="0">

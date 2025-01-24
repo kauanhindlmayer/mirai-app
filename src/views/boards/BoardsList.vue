@@ -5,11 +5,14 @@ import { useLayout } from '@/layout/composables/layout'
 import { useBoardStore } from '@/stores/board'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
+import { useTeamStore } from '@/stores/team'
 import { WorkItemType } from '@/types/work-item'
 import { storeToRefs } from 'pinia'
 import { onBeforeMount, ref, useTemplateRef, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 const pageStore = usePageStore()
+const teamStore = useTeamStore()
 const boardStore = useBoardStore()
 const { board, boards } = storeToRefs(boardStore)
 const { project } = storeToRefs(useProjectStore())
@@ -30,10 +33,17 @@ watch(
   () => selectedBoard.value,
   async (newSelectedBoard) => {
     if (!newSelectedBoard) return
-    await boardStore.getBoard(newSelectedBoard.id)
     pageStore.setTitle(`${selectedBoard.value?.name} Stories Board - Boards`)
+    teamStore.setTeamId(newSelectedBoard.teamId)
+    await boardStore.getBoard(newSelectedBoard.id)
   },
 )
+
+const router = useRouter()
+
+function redirectToBacklogView() {
+  router.push(`/projects/${project.value?.id}/backlogs`)
+}
 
 function setBreadcrumbs() {
   pageStore.setBreadcrumbs([
@@ -55,8 +65,21 @@ onBeforeMount(async () => {
     <div class="col-span-12">
       <div class="card">
         <div class="flex justify-between items-center mb-4">
-          <Select v-model="selectedBoard" :options="boards" option-label="name" class="ml-2" />
-          <Button label="View as Backlog" severity="secondary" icon="pi pi-fw pi-arrow-right" />
+          <div class="flex items-center space-x-1">
+            <Select v-model="selectedBoard" :options="boards" option-label="name" class="ml-2" />
+            <Button
+              icon="pi pi-users"
+              severity="secondary"
+              text
+              v-tooltip.bottom="'Show Team Profile'"
+            />
+          </div>
+          <Button
+            label="View as Backlog"
+            severity="secondary"
+            icon="pi pi-fw pi-arrow-right"
+            @click="redirectToBacklogView"
+          />
         </div>
         <Tabs value="0" class="board-tabs">
           <TabList>

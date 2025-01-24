@@ -18,9 +18,9 @@ const menuItems = computed<MenuItem[]>(() => [
         to: `/projects/${project.value?.id}/summary`,
       },
       {
-        label: 'Dashboard',
+        label: 'Dashboards',
         icon: 'pi pi-fw pi-chart-bar',
-        to: `/projects/${project.value?.id}/dashboard`,
+        to: `/projects/${project.value?.id}/dashboards`,
       },
       {
         label: 'Wiki Pages',
@@ -47,12 +47,12 @@ const menuItems = computed<MenuItem[]>(() => [
       {
         label: 'Backlogs',
         icon: 'pi pi-fw pi-calendar',
-        to: '/backlogs',
+        to: `/projects/${project.value?.id}/backlogs`,
       },
       {
         label: 'Sprints',
         icon: 'pi pi-fw pi-calendar-times',
-        to: '/sprints',
+        to: `/projects/${project.value?.id}/sprints`,
       },
       {
         label: 'Personas',
@@ -62,7 +62,7 @@ const menuItems = computed<MenuItem[]>(() => [
       {
         label: 'Retrospectives',
         icon: 'pi pi-fw pi-comments',
-        to: '/retrospectives',
+        to: `/projects/${project.value?.id}/retrospectives`,
       },
       {
         label: 'Tags',

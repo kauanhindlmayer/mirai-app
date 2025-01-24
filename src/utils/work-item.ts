@@ -1,3 +1,4 @@
+import { BacklogLevel } from '@/types/team'
 import { WorkItemStatus, WorkItemType } from '@/types/work-item'
 
 export function getStatusSeverity(status: WorkItemStatus): string {
@@ -48,6 +49,16 @@ export function getTypeLabel(type: WorkItemType): string {
   }
 
   return typeMap[type] || 'Unknown'
+}
+
+export function getBacklogLevelLabel(level: BacklogLevel): string {
+  const levelMap: Record<BacklogLevel, string> = {
+    [BacklogLevel.Epic]: 'Epic',
+    [BacklogLevel.Feature]: 'Feature',
+    [BacklogLevel.UserStory]: 'User Story',
+  }
+
+  return levelMap[level] || 'Unknown'
 }
 
 export function getTypeColor(type: WorkItemType): string {

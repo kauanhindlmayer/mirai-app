@@ -4,6 +4,7 @@ import { AxiosAdapter } from '@/gateways/HttpClient'
 import { OrganizationGatewayHttp } from '@/gateways/OrganizationGateway'
 import { ProjectGatewayHttp } from '@/gateways/ProjectGateway'
 import { TagGatewayHttp } from '@/gateways/TagGateway'
+import { TeamGatewayHttp } from '@/gateways/TeamGateway'
 import { UserGatewayHttp } from '@/gateways/UserGateway'
 import { WikiPageGatewayHttp } from '@/gateways/WikiPageGateway'
 import { WorkItemGatewayHttp } from '@/gateways/WorkItemGateway'
@@ -13,6 +14,7 @@ import {
   organizationGatewayKey,
   projectGatewayKey,
   tagGatewayKey,
+  teamGatewayKey,
   userGatewayKey,
   wikiPageGatewayKey,
   workItemGatewayKey,
@@ -28,6 +30,7 @@ const workItemGateway = new WorkItemGatewayHttp(httpClient)
 const boardGateway = new BoardGatewayHttp(httpClient)
 const dashboardGateway = new DashboardGatewayFake()
 const tagGateway = new TagGatewayHttp(httpClient)
+const teamGateway = new TeamGatewayHttp(httpClient)
 
 const gatewayRegistry = {
   install(app: App<Element>) {
@@ -39,6 +42,7 @@ const gatewayRegistry = {
     app.provide(boardGatewayKey, boardGateway)
     app.provide(dashboardGatewayKey, dashboardGateway)
     app.provide(tagGatewayKey, tagGateway)
+    app.provide(teamGatewayKey, teamGateway)
   },
 }
 

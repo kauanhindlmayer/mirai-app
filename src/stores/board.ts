@@ -10,23 +10,25 @@ import { boardGatewayKey } from '@/utils/injection-keys'
 import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
 import { inject, ref } from 'vue'
 import { useProjectStore } from './project'
+import { useTeamStore } from './team'
 
 export const useBoardStore = defineStore('boards', () => {
   const boardGateway = inject(boardGatewayKey) as BoardGateway
   const boards = ref<BoardSummary[]>([])
   const board = ref<Board | null>(null)
   const { project } = storeToRefs(useProjectStore())
+  const { teamId } = storeToRefs(useTeamStore())
 
   async function listBoards() {
-    boards.value = await boardGateway.listBoards(project.value!.id)
+    boards.value = await boardGateway.listBoardsByProjectId(project.value!.id)
   }
 
   async function getBoard(boardId: string) {
-    board.value = await boardGateway.getBoard(project.value!.id, boardId)
+    board.value = await boardGateway.getBoard(teamId.value!, boardId)
   }
 
   async function moveCard(columnId: string, cardId: string, request: MoveCardRequest) {
-    await boardGateway.moveCard(project.value!.id, board.value!.id, columnId, cardId, request)
+    await boardGateway.moveCard(teamId.value!, board.value!.id, columnId, cardId, request)
     const { columns } = board.value!
     const sourceColumn = columns.find((column) => column.id === columnId)!
     const targetColumn = columns.find((column) => column.id === request.targetColumnId)!
@@ -46,11 +48,11 @@ export const useBoardStore = defineStore('boards', () => {
   }
 
   async function createColumn(request: CreateBoardColumnRequest) {
-    await boardGateway.createColumn(project.value!.id, board.value!.id, request)
+    await boardGateway.createColumn(teamId.value!, board.value!.id, request)
   }
 
   async function deleteColumn(columnId: string) {
-    await boardGateway.deleteColumn(project.value!.id, board.value!.id, columnId)
+    await boardGateway.deleteColumn(teamId.value!, board.value!.id, columnId)
   }
 
   return {
