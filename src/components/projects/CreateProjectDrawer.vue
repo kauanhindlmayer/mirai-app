@@ -44,24 +44,30 @@ defineExpose({
 <template>
   <Drawer
     v-model:visible="isVisible"
-    header="Create New Project"
     position="right"
     class="!w-full sm:!w-[36rem]"
     :pt="{
       pcCloseButton: { root: 'ml-auto' },
     }"
   >
+    <template #header>
+      <span class="text-surface-900 dark:text-surface-0 text-xl font-bold">Create New Project</span>
+    </template>
     <Form :resolver @submit="onFormSubmit" class="flex flex-col h-full">
       <div class="flex-grow">
         <FormField v-slot="$field" name="name">
-          <label for="name"> Name <small class="text-red-400">*</small> </label>
+          <label for="name" class="font-medium text-surface-900 dark:text-surface-0">
+            Name <small class="text-red-400">*</small>
+          </label>
           <InputText inputId="name" type="text" v-model="form.name" class="w-full" />
           <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
             {{ $field.error?.message }}
           </Message>
         </FormField>
         <FormField v-slot="$field" name="description" class="mt-2">
-          <label for="description">Description</label>
+          <label for="description" class="font-medium text-surface-900 dark:text-surface-0">
+            Description
+          </label>
           <Textarea inputId="description" v-model="form.description" rows="3" class="w-full" />
           <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
             {{ $field.error?.message }}

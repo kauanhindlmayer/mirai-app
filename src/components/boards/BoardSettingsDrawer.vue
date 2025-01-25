@@ -180,17 +180,21 @@ defineExpose({
 <template>
   <Drawer
     v-model:visible="isVisible"
-    header="Settings"
     position="right"
     class="!w-full sm:!w-[48rem]"
     :pt="{
       pcCloseButton: { root: 'ml-auto' },
     }"
   >
+    <template #header>
+      <span class="text-surface-900 dark:text-surface-0 text-xl font-bold">Settings</span>
+    </template>
     <div class="h-full">
       <div class="flex-grow">
-        <h3 class="text-lg font-semibold">Columns</h3>
-        <p class="text-gray-500">Columns visualize the flow of work across the board.</p>
+        <h3 class="text-surface-900 dark:text-surface-0 font-medium text-xl">Columns</h3>
+        <p class="m-0 p-0 text-surface-600 dark:text-surface-200 leading-normal">
+          Columns visualize the flow of work across the board.
+        </p>
         <Button
           label="Add Column"
           icon="pi pi-plus"

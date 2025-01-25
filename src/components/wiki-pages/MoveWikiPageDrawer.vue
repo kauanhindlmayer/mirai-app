@@ -15,7 +15,7 @@ const emit = defineEmits<{
 
 const selectedKey = ref<TreeSelectionKeys | undefined>(undefined)
 const nodes = computed(() => store.wikiPages.map(toNode))
-const header = computed(() => `Move '${wikiPage.value?.title}'?`)
+const title = computed(() => `Move '${wikiPage.value?.title}'?`)
 const isSaveButtonDisabled = computed(() => !selectedKey.value)
 
 function toNode(page: WikiPageSummary): TreeNode {
@@ -53,19 +53,22 @@ defineExpose({
 <template>
   <Drawer
     v-model:visible="isVisible"
-    :header="header"
     position="right"
     class="!w-full sm:!w-[36rem]"
     :pt="{
       pcCloseButton: { root: 'ml-auto' },
     }"
   >
+    <template #header>
+      <span class="text-surface-900 dark:text-surface-0 text-xl font-bold">{{ title }}</span>
+    </template>
     <Form class="flex flex-col h-full">
       <div class="flex-grow">
         <Tree
           v-model:selection-keys="selectedKey"
           :value="nodes"
           filter
+          filter-placeholder="Search"
           selection-mode="single"
           meta-key-selection
         />
