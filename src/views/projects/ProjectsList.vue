@@ -36,7 +36,7 @@ onBeforeMount(async () => {
 
 <template>
   <header class="flex justify-between items-center">
-    <div class="flex items-center space-x-2">
+    <div class="flex items-center space-x-1">
       <Select
         v-model="selectedOrganization"
         :options="organizations"

@@ -39,6 +39,30 @@ export function getTypeSeverity(type: WorkItemType): string {
   return severityMap[type] || 'info'
 }
 
+export function getTypeColor(type: WorkItemType): string {
+  const colorMap: Record<WorkItemType, string> = {
+    [WorkItemType.Bug]: '#CC293D',
+    [WorkItemType.Defect]: '#CC293D',
+    [WorkItemType.Epic]: '#FF7B00',
+    [WorkItemType.Feature]: '#773B93',
+    [WorkItemType.UserStory]: '#007ACC',
+  }
+
+  return colorMap[type] || '#4A4A4A'
+}
+
+export function getTypeBackgroundColor(type: WorkItemType): string {
+  const backgroundColorMap: Record<WorkItemType, string> = {
+    [WorkItemType.Bug]: '#F9D9DA',
+    [WorkItemType.Defect]: '#F9D9DA',
+    [WorkItemType.Epic]: '#FFE6CC',
+    [WorkItemType.Feature]: '#EDE4F6',
+    [WorkItemType.UserStory]: '#D6ECF8',
+  }
+
+  return backgroundColorMap[type] || '#EAEAEA'
+}
+
 export function getTypeLabel(type: WorkItemType): string {
   const typeMap: Record<WorkItemType, string> = {
     [WorkItemType.UserStory]: 'User Story',
@@ -59,16 +83,4 @@ export function getBacklogLevelLabel(level: BacklogLevel): string {
   }
 
   return levelMap[level] || 'Unknown'
-}
-
-export function getTypeColor(type: WorkItemType): string {
-  const colorMap: Record<WorkItemType, string> = {
-    [WorkItemType.Bug]: '#D32F2F',
-    [WorkItemType.Defect]: '#D32F2F',
-    [WorkItemType.Epic]: '#FF5722',
-    [WorkItemType.Feature]: '#9C27B0',
-    [WorkItemType.UserStory]: '#03A9F4',
-  }
-
-  return colorMap[type] || '#9E9E9E'
 }

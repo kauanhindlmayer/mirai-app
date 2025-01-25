@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppTag from '@/components/tags/AppTag.vue'
+import WorkItemTag from '@/components/work-items/WorkItemTag.vue'
 import { displayError } from '@/composables/displayError'
 import { useAppToast } from '@/composables/useAppToast'
 import { usePageStore } from '@/stores/page'
@@ -9,7 +10,7 @@ import type { PaginationFilter } from '@/types'
 import type { Tag } from '@/types/tag'
 import { type WorkItem } from '@/types/work-item'
 import { formatDate } from '@/utils/date'
-import { getStatusLabel, getStatusSeverity, getTypeLabel, getTypeSeverity } from '@/utils/work-item'
+import { getStatusLabel, getStatusSeverity, getTypeLabel } from '@/utils/work-item'
 import { storeToRefs } from 'pinia'
 import {
   type ContextMenu,
@@ -151,7 +152,7 @@ onMounted(async () => {
           <Column field="code" header="ID" sortable />
           <Column field="type" header="Type" sortable style="width: 10%">
             <template #body="{ data }">
-              <Tag :value="getTypeLabel(data.type)" :severity="getTypeSeverity(data.type)" />
+              <WorkItemTag :type="data.type" />
             </template>
           </Column>
           <Column field="title" header="Title" sortable />

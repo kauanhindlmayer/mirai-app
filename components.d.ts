@@ -87,6 +87,7 @@ declare module 'vue' {
     TreeTable: typeof import('primevue/treetable')['default']
     UpdateProjectDialog: typeof import('./src/components/projects/UpdateProjectDialog.vue')['default']
     WorkItemDialog: typeof import('./src/components/common/WorkItemDialog.vue')['default']
+    WorkItemTag: typeof import('./src/components/work-items/WorkItemTag.vue')['default']
   }
   export interface ComponentCustomProperties {
     StyleClass: typeof import('primevue/styleclass')['default']

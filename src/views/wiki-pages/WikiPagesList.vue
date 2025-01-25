@@ -27,14 +27,14 @@ const router = useRouter()
 const { isEditing } = defineProps<{ isEditing?: boolean }>()
 
 const selectedKey = ref<TreeSelectionKeys | undefined>(undefined)
-const nodes = computed(() => store.wikiPages.map(toNode))
+const nodes = computed(() => store.wikiPages.map((page, index) => toNode(page, index === 0)))
 
-function toNode(page: WikiPageSummary): TreeNode {
+function toNode(page: WikiPageSummary, isRoot: boolean = false): TreeNode {
   return {
     key: page.id,
     label: page.title,
-    icon: 'pi pi-fw pi-book',
-    children: page.subPages.map(toNode),
+    icon: isRoot ? 'pi pi-fw pi-home' : 'pi pi-fw pi-book',
+    children: page.subPages.map((subPage) => toNode(subPage)),
   }
 }
 
@@ -161,7 +161,7 @@ function openInNewTab() {
           meta-key-selection
         >
           <template #default="slotProps">
-            <div class="flex justify-between items-center group">
+            <div class="flex justify-between items-center group ml-1">
               <p class="max-w-48 truncate">
                 {{ slotProps.node.label }}
               </p>
@@ -175,6 +175,7 @@ function openInNewTab() {
                 }"
                 text
                 rounded
+                v-tooltip.bottom="'More Options'"
                 @click="toggleMenuItems"
               />
               <Menu ref="menu" popup :model="menuItems" />

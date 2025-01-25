@@ -7,7 +7,9 @@ import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
 import { useTeamStore } from '@/stores/team'
 import { storeToRefs } from 'pinia'
-import { onBeforeMount, ref } from 'vue'
+import type { Menu } from 'primevue'
+import type { MenuItem } from 'primevue/menuitem'
+import { onBeforeMount, ref, useTemplateRef } from 'vue'
 
 const pageStore = usePageStore()
 const dashboardStore = useDashboardStore()
@@ -38,6 +40,16 @@ async function getDashboardData() {
   }
 }
 
+const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
+const menuItems = ref<MenuItem[]>([
+  { label: 'Dashboard Settings', icon: 'pi pi-cog', disabled: true },
+  { label: 'Copy Dashboard', icon: 'pi pi-copy', disabled: true },
+])
+
+function toggleMenuItems(event: MouseEvent) {
+  menuRef.value?.toggle(event)
+}
+
 onBeforeMount(async () => {
   await teamStore.listTeams()
   selectedTeam.value = teams.value[0]
@@ -48,18 +60,36 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <Fluid class="grid grid-cols-12 gap-8">
+  <div class="grid grid-cols-12 gap-4">
     <div class="col-span-12">
-      <div class="card">
+      <div class="card p-3">
         <div class="flex justify-between items-center">
           <div class="flex items-center space-x-1">
-            <Select v-model="selectedTeam" :options="teams" option-label="name" class="ml-2" />
+            <Select v-model="selectedTeam" :options="teams" option-label="name" />
             <Button
               icon="pi pi-users"
               severity="secondary"
               text
               v-tooltip.bottom="'Show Team Profile'"
             />
+          </div>
+          <div class="flex items-center">
+            <Button label="Edit" icon="pi pi-pencil" severity="secondary" text disabled />
+            <Button
+              icon="pi pi-refresh"
+              severity="secondary"
+              text
+              v-tooltip.bottom="'Refresh Dashboard'"
+              @click="getDashboardData"
+            />
+            <Button
+              icon="pi pi-ellipsis-v"
+              severity="secondary"
+              v-tooltip.bottom="'More Actions'"
+              text
+              @click="toggleMenuItems"
+            />
+            <Menu ref="menu" popup :model="menuItems" />
           </div>
         </div>
       </div>
@@ -70,5 +100,5 @@ onBeforeMount(async () => {
     <div class="col-span-12 xl:col-span-5">
       <BurnupChart :is-loading="isLoading" />
     </div>
-  </Fluid>
+  </div>
 </template>

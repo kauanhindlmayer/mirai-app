@@ -52,7 +52,7 @@ onBeforeMount(() => {
 <template>
   <div class="grid grid-cols-12 gap-4">
     <div class="col-span-12">
-      <div class="card">
+      <div class="card p-4">
         <div class="flex justify-between items-center">
           <div class="flex items-center">
             <Avatar
@@ -61,7 +61,7 @@ onBeforeMount(() => {
               class="mr-4"
               :label="getInitials(project!.name)"
             />
-            <div class="font-semibold text-xl">{{ project!.name }}</div>
+            <div class="font-semibold text-2xl">{{ project!.name }}</div>
           </div>
           <Button label="Invite" icon="pi pi-user-plus" />
         </div>

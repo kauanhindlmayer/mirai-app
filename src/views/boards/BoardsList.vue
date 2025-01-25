@@ -66,7 +66,7 @@ onBeforeMount(async () => {
       <div class="card">
         <div class="flex justify-between items-center mb-4">
           <div class="flex items-center space-x-1">
-            <Select v-model="selectedBoard" :options="boards" option-label="name" class="ml-2" />
+            <Select v-model="selectedBoard" :options="boards" option-label="name" />
             <Button
               icon="pi pi-users"
               severity="secondary"

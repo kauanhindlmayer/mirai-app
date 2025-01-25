@@ -1,18 +1,13 @@
 <script setup lang="ts">
 import AppTag from '@/components/tags/AppTag.vue'
+import WorkItemTag from '@/components/work-items/WorkItemTag.vue'
 import { useLayout } from '@/layout/composables/layout'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
 import { useTeamStore } from '@/stores/team'
 import type { Tag } from '@/types/tag'
 import { BacklogLevel, type BacklogResponse } from '@/types/team'
-import {
-  getBacklogLevelLabel,
-  getStatusLabel,
-  getStatusSeverity,
-  getTypeLabel,
-  getTypeSeverity,
-} from '@/utils/work-item'
+import { getBacklogLevelLabel, getStatusLabel, getStatusSeverity } from '@/utils/work-item'
 import { storeToRefs } from 'pinia'
 import type { TreeNode } from 'primevue/treenode'
 import { computed, onBeforeMount, ref, watch, watchEffect } from 'vue'
@@ -98,7 +93,7 @@ onBeforeMount(async () => {
       <div class="card">
         <div class="flex justify-between items-center mb-4">
           <div class="flex items-center space-x-1">
-            <Select v-model="selectedTeam" :options="teams" option-label="name" class="ml-2" />
+            <Select v-model="selectedTeam" :options="teams" option-label="name" />
             <Button
               icon="pi pi-users"
               severity="secondary"
@@ -154,10 +149,7 @@ onBeforeMount(async () => {
               <TreeTable :value="nodes" tableStyle="min-width: 50rem">
                 <Column field="type" header="Type" style="width: 10rem; text-align: center">
                   <template #body="{ node }">
-                    <Tag
-                      :value="getTypeLabel(node.data.type)"
-                      :severity="getTypeSeverity(node.data.type)"
-                    />
+                    <WorkItemTag :type="node.data.type" />
                   </template>
                 </Column>
                 <Column field="title" expander header="Title" style="width: 30%" />
