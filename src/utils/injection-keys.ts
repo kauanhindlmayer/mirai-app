@@ -2,6 +2,7 @@ import type BoardGateway from '@/gateways/BoardGateway'
 import type DashboardGateway from '@/gateways/DashboardGateway'
 import type OrganizationGateway from '@/gateways/OrganizationGateway'
 import type ProjectGateway from '@/gateways/ProjectGateway'
+import type SprintGateway from '@/gateways/SprintGateway'
 import type TagGateway from '@/gateways/TagGateway'
 import type TeamGateway from '@/gateways/TeamGateway'
 import type UserGateway from '@/gateways/UserGateway'
@@ -18,3 +19,4 @@ export const boardGatewayKey = Symbol() as InjectionKey<BoardGateway>
 export const dashboardGatewayKey = Symbol() as InjectionKey<DashboardGateway>
 export const tagGatewayKey = Symbol() as InjectionKey<TagGateway>
 export const teamGatewayKey = Symbol() as InjectionKey<TeamGateway>
+export const sprintGatewayKey = Symbol() as InjectionKey<SprintGateway>

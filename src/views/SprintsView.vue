@@ -6,46 +6,80 @@ import { useLayout } from '@/layout/composables/layout'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
 import { useTeamStore } from '@/stores/team'
+import type { SprintResponse } from '@/types/sprint'
 import type { Tag } from '@/types/tag'
 import { BacklogLevel, type BacklogResponse } from '@/types/team'
-import { getBacklogLevelLabel, getStatusLabel, getStatusSeverity } from '@/utils/work-item'
+import { addDays, format, isBefore, isWeekend, type DateType } from '@/utils/date'
+import { getStatusLabel, getStatusSeverity } from '@/utils/work-item'
 import { storeToRefs } from 'pinia'
 import type { TreeNode } from 'primevue/treenode'
-import { computed, onBeforeMount, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { computed, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const pageStore = usePageStore()
 const teamStore = useTeamStore()
-const { teams, backlog } = storeToRefs(teamStore)
+const { teams, backlog, sprints } = storeToRefs(teamStore)
 const { project } = storeToRefs(useProjectStore())
 const { onMenuToggle } = useLayout()
 
 const selectedTeam = ref()
-const selectedBacklogLevel = ref(BacklogLevel.Feature)
-const backlogLevels = ref([
-  { label: 'Epics', value: BacklogLevel.Epic },
-  { label: 'Features', value: BacklogLevel.Feature },
-  { label: 'User Stories', value: BacklogLevel.UserStory },
-])
+const selectedSprint = ref<SprintResponse>()
+const selectedBacklogLevel = ref(BacklogLevel.UserStory)
 
 watch(
   () => selectedTeam.value,
   async (newSelectedTeam) => {
     if (!newSelectedTeam) return
-    const backlogLevelName = getBacklogLevelLabel(selectedBacklogLevel.value)
-    pageStore.setTitle(`${selectedTeam.value?.name} ${backlogLevelName} Backlog - Boards`)
     teamStore.setTeamId(newSelectedTeam.id)
-    await teamStore.getBacklog(newSelectedTeam.id, undefined, selectedBacklogLevel.value)
+    await teamStore.listSprints()
+    const [firstSprint] = sprints.value
+    selectedSprint.value = firstSprint
   },
 )
 
 watch(
-  () => selectedBacklogLevel.value,
-  async (newSelectedBacklogLevel) => {
-    if (!selectedTeam.value) return
-    await teamStore.getBacklog(selectedTeam.value.id, undefined, newSelectedBacklogLevel)
+  () => selectedSprint.value,
+  async (newSelectedSprint) => {
+    if (!newSelectedSprint) return
+    pageStore.setTitle(`${selectedTeam.value?.name} ${newSelectedSprint.name} Backlog - Boards`)
+    await teamStore.getBacklog(
+      selectedTeam.value.id,
+      newSelectedSprint.id,
+      selectedBacklogLevel.value,
+    )
   },
 )
+
+const sprintDateRange = computed(() => {
+  if (!selectedSprint.value) return ''
+  const { startDate, endDate } = selectedSprint.value
+  const start = format(startDate, 'MMMM d')
+  const end = format(endDate, 'MMMM d')
+  return `${start} - ${end}`
+})
+
+const remainingWorkingDays = computed(() => {
+  if (!selectedSprint.value) return 0
+  const { endDate } = selectedSprint.value
+  const today = new Date()
+  if (isBefore(new Date(endDate), today)) return 0
+  return calculateWorkingDays(today, endDate)
+})
+
+function calculateWorkingDays(startDate: DateType, endDate: DateType) {
+  let current = new Date(startDate)
+  const end = new Date(endDate)
+  let workingDays = 0
+
+  while (isBefore(current, addDays(end, 1))) {
+    if (!isWeekend(current)) {
+      workingDays++
+    }
+    current = addDays(current, 1)
+  }
+
+  return workingDays
+}
 
 const nodes = computed(() => backlog.value.map(toNode))
 
@@ -59,10 +93,6 @@ function toNode(workItem: BacklogResponse): TreeNode {
 }
 
 const router = useRouter()
-
-function redirectToBoardView() {
-  router.push(`/projects/${project.value?.id}/boards`)
-}
 
 function getMoreTagsTooltip(tags: Tag[]) {
   return tags
@@ -98,13 +128,15 @@ function setBreadcrumbs() {
   pageStore.setBreadcrumbs([
     { label: project.value!.name, route: `/projects/${project.value?.id}/summary` },
     { label: 'Boards', route: `/projects/${project.value?.id}/boards` },
-    { label: 'Backlogs', route: `/projects/${project.value?.id}/backlogs` },
+    { label: 'Sprints', route: `/projects/${project.value?.id}/sprints` },
   ])
 }
 
-onBeforeMount(async () => {
+onMounted(async () => {
   await teamStore.listTeams()
-  selectedTeam.value = teams.value[0]
+  const [firstTeam] = teams.value
+  teamStore.setTeamId(firstTeam.id)
+  selectedTeam.value = firstTeam
   setBreadcrumbs()
 })
 </script>
@@ -123,25 +155,15 @@ onBeforeMount(async () => {
               v-tooltip.bottom="'Show Team Profile'"
             />
           </div>
-          <Button
-            label="View as Board"
-            severity="secondary"
-            icon="pi pi-fw pi-arrow-right"
-            @click="redirectToBoardView"
-          />
+          <Button label="New Work Item" icon="pi pi-plus" />
         </div>
-        <Tabs value="0" class="board-tabs">
+        <Tabs value="1" class="board-tabs">
           <TabList>
-            <Tab value="0">Backlog</Tab>
-            <Tab value="1" disabled>Analytics</Tab>
+            <Tab value="0" disabled>Taskboard</Tab>
+            <Tab value="1">Backlog</Tab>
+            <Tab value="2" disabled>Capacity</Tab>
+            <Tab value="3" disabled>Analytics</Tab>
             <div class="ml-auto flex items-center">
-              <Select
-                v-model="selectedBacklogLevel"
-                :options="backlogLevels"
-                option-label="label"
-                option-value="value"
-                class="ml-2"
-              />
               <Button
                 icon="pi pi-filter"
                 severity="secondary"
@@ -154,7 +176,7 @@ onBeforeMount(async () => {
                 severity="secondary"
                 variant="text"
                 class="ml-2"
-                v-tooltip.bottom="'Configure Board Settings'"
+                v-tooltip.bottom="'Configure Team Settings'"
               />
               <Button
                 icon="pi pi-arrow-up-right-and-arrow-down-left-from-center"
@@ -167,7 +189,28 @@ onBeforeMount(async () => {
             </div>
           </TabList>
           <TabPanels>
-            <TabPanel value="0">
+            <TabPanel value="1">
+              <div class="flex justify-between items-center">
+                <Select v-model="selectedSprint" :options="sprints" option-label="name">
+                  <template #footer>
+                    <div class="p-1">
+                      <Button
+                        label="New Sprint"
+                        fluid
+                        severity="secondary"
+                        text
+                        size="small"
+                        icon="pi pi-plus"
+                      />
+                    </div>
+                  </template>
+                </Select>
+                <div>
+                  <div>{{ sprintDateRange }}</div>
+                  <div>{{ remainingWorkingDays }} work days remaining</div>
+                </div>
+              </div>
+
               <TreeTable :value="nodes" tableStyle="min-width: 50rem">
                 <Column field="type" header="Type" style="width: 10rem; text-align: center">
                   <template #body="{ node }">

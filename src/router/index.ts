@@ -41,7 +41,7 @@ const routes: RouteRecordRaw[] = [
           {
             path: 'sprints',
             name: 'sprints',
-            component: () => import('@/views/EmptyView.vue'),
+            component: () => import('@/views/SprintsView.vue'),
           },
           {
             path: 'retrospectives',

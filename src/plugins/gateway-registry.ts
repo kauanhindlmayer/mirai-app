@@ -3,6 +3,7 @@ import { DashboardGatewayFake } from '@/gateways/DashboardGateway'
 import { AxiosAdapter } from '@/gateways/HttpClient'
 import { OrganizationGatewayHttp } from '@/gateways/OrganizationGateway'
 import { ProjectGatewayHttp } from '@/gateways/ProjectGateway'
+import { SprintGatewayHttp } from '@/gateways/SprintGateway'
 import { TagGatewayHttp } from '@/gateways/TagGateway'
 import { TeamGatewayHttp } from '@/gateways/TeamGateway'
 import { UserGatewayHttp } from '@/gateways/UserGateway'
@@ -13,6 +14,7 @@ import {
   dashboardGatewayKey,
   organizationGatewayKey,
   projectGatewayKey,
+  sprintGatewayKey,
   tagGatewayKey,
   teamGatewayKey,
   userGatewayKey,
@@ -31,6 +33,7 @@ const boardGateway = new BoardGatewayHttp(httpClient)
 const dashboardGateway = new DashboardGatewayFake()
 const tagGateway = new TagGatewayHttp(httpClient)
 const teamGateway = new TeamGatewayHttp(httpClient)
+const sprintGateway = new SprintGatewayHttp(httpClient)
 
 const gatewayRegistry = {
   install(app: App<Element>) {
@@ -43,6 +46,7 @@ const gatewayRegistry = {
     app.provide(dashboardGatewayKey, dashboardGateway)
     app.provide(tagGatewayKey, tagGateway)
     app.provide(teamGatewayKey, teamGateway)
+    app.provide(sprintGatewayKey, sprintGateway)
   },
 }
 

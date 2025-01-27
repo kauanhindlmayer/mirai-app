@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useLayout } from '@/layout/composables/layout'
 import { useDashboardStore } from '@/stores/dashboard'
-import { formatDate } from '@/utils/date'
+import { format } from '@/utils/date'
 import type { ChartData, ChartOptions } from 'chart.js'
 import { storeToRefs } from 'pinia'
 import { computed, ref, watch } from 'vue'
@@ -30,7 +30,7 @@ async function setColorOptions() {
   const primaryColor = documentStyle.getPropertyValue('--p-green-600')
   const secondaryColor = documentStyle.getPropertyValue('--p-zinc-400')
 
-  const labels = burnupData.value.map((point) => formatDate(point.date))
+  const labels = burnupData.value.map((point) => format(point.date))
   const data = burnupData.value.map((point) => point.completedWork)
 
   chartData.value = {

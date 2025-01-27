@@ -4,7 +4,11 @@ import type { BacklogLevel, BacklogResponse, CreateTeamRequest, TeamSummary } fr
 export default interface TeamGateway {
   createTeam(projectId: string, request: CreateTeamRequest): Promise<string>
   listTeams(projectId: string): Promise<TeamSummary[]>
-  getBacklog(teamId: string, backlogLevel?: BacklogLevel): Promise<BacklogResponse[]>
+  getBacklog(
+    teamId: string,
+    sprintId?: string,
+    backlogLevel?: BacklogLevel,
+  ): Promise<BacklogResponse[]>
 }
 
 export class TeamGatewayHttp implements TeamGateway {
@@ -18,8 +22,14 @@ export class TeamGatewayHttp implements TeamGateway {
     return this.http.get(`/projects/${projectId}/teams`)
   }
 
-  getBacklog(teamId: string, backlogLevel?: BacklogLevel): Promise<BacklogResponse[]> {
-    const params = backlogLevel ? { backlogLevel } : undefined
+  getBacklog(
+    teamId: string,
+    sprintId?: string,
+    backlogLevel?: BacklogLevel,
+  ): Promise<BacklogResponse[]> {
+    const params = {} as Record<string, string>
+    if (sprintId) params.sprintId = sprintId
+    if (backlogLevel) params.backlogLevel = backlogLevel
     return this.http.get(`/teams/${teamId}/backlogs`, { params })
   }
 }

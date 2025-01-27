@@ -98,7 +98,7 @@ function toggleMenuItems(event: MouseEvent) {
   menuRef.value?.toggle(event)
 }
 
-const parentWikiPageId = ref('')
+const parentWikiPageId = ref<string | undefined>(undefined)
 
 function addSubPage() {
   parentWikiPageId.value = wikiPage.value!.id

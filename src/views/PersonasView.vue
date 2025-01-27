@@ -16,6 +16,7 @@ const createPersonaDrawerRef = useTemplateRef<CreatePersonaDrawerType>('createPe
           <Button
             icon="pi pi-plus"
             label="New Persona"
+            outlined
             @click="createPersonaDrawerRef?.openDrawer"
           />
         </div>

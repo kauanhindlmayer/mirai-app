@@ -9,7 +9,7 @@ import { useWorkItemStore } from '@/stores/work-item'
 import type { PaginationFilter } from '@/types'
 import type { Tag } from '@/types/tag'
 import { type WorkItem } from '@/types/work-item'
-import { formatDate } from '@/utils/date'
+import { format } from '@/utils/date'
 import { getStatusLabel, getStatusSeverity, getTypeLabel } from '@/utils/work-item'
 import { storeToRefs } from 'pinia'
 import {
@@ -186,7 +186,7 @@ onMounted(async () => {
           </Column>
           <Column header="Activity Date" sortable style="width: 15%">
             <template #body="{ data }">
-              {{ formatDate(data.updatedAt ?? data.createdAt, 'MM/dd/yyyy hh:mm') }}
+              {{ format(data.updatedAt ?? data.createdAt, 'MM/dd/yyyy hh:mm') }}
             </template>
           </Column>
         </DataTable>

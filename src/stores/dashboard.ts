@@ -1,6 +1,6 @@
 import type DashboardGateway from '@/gateways/DashboardGateway'
 import type { DashboardResponse } from '@/types/dashboard'
-import { formatDate } from '@/utils/date'
+import { format } from '@/utils/date'
 import { dashboardGatewayKey } from '@/utils/injection-keys'
 import { defineStore, storeToRefs } from 'pinia'
 import { computed, inject, ref } from 'vue'
@@ -19,8 +19,8 @@ export const useDashboardStore = defineStore('dashboards', () => {
 
   const burnupData = computed(() => dashboardData.value.burnupData)
   const burndownData = computed(() => dashboardData.value.burndownData)
-  const formattedStartDate = computed(() => formatDate(dashboardData.value.startDate))
-  const formattedEndDate = computed(() => formatDate(dashboardData.value.endDate))
+  const formattedStartDate = computed(() => format(dashboardData.value.startDate))
+  const formattedEndDate = computed(() => format(dashboardData.value.endDate))
   const dateRange = computed(() => `${formattedStartDate.value} - ${formattedEndDate.value}`)
 
   async function getDashboardData() {

@@ -62,37 +62,36 @@ onBeforeMount(async () => {
 <template>
   <div class="grid grid-cols-12 gap-4">
     <div class="col-span-12">
-      <div class="card p-3">
-        <div class="flex justify-between items-center">
-          <div class="flex items-center space-x-1">
-            <Select v-model="selectedTeam" :options="teams" option-label="name" />
-            <Button
-              icon="pi pi-users"
-              severity="secondary"
-              text
-              v-tooltip.bottom="'Show Team Profile'"
-            />
-          </div>
-          <div class="flex items-center">
-            <Button label="Edit" icon="pi pi-pencil" severity="secondary" text disabled />
-            <Button
-              icon="pi pi-refresh"
-              severity="secondary"
-              text
-              v-tooltip.bottom="'Refresh Dashboard'"
-              @click="getDashboardData"
-            />
-            <Button
-              icon="pi pi-ellipsis-v"
-              severity="secondary"
-              v-tooltip.bottom="'More Actions'"
-              text
-              @click="toggleMenuItems"
-            />
-            <Menu ref="menu" popup :model="menuItems" />
-          </div>
-        </div>
-      </div>
+      <Toolbar>
+        <template #start>
+          <Select v-model="selectedTeam" :options="teams" option-label="name" class="mr-1" />
+          <Button
+            icon="pi pi-users"
+            severity="secondary"
+            text
+            v-tooltip.bottom="'Show Team Profile'"
+          />
+        </template>
+
+        <template #end>
+          <Button label="Edit" icon="pi pi-pencil" severity="secondary" text disabled />
+          <Button
+            icon="pi pi-refresh"
+            severity="secondary"
+            text
+            v-tooltip.bottom="'Refresh Dashboard'"
+            @click="getDashboardData"
+          />
+          <Button
+            icon="pi pi-ellipsis-v"
+            severity="secondary"
+            v-tooltip.bottom="'More Actions'"
+            text
+            @click="toggleMenuItems"
+          />
+          <Menu ref="menu" popup :model="menuItems" />
+        </template>
+      </Toolbar>
     </div>
     <div class="col-span-12 xl:col-span-5">
       <BurndownChart :is-loading="isLoading" />

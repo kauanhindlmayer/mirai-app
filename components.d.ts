@@ -83,6 +83,7 @@ declare module 'vue' {
     Tag: typeof import('primevue/tag')['default']
     Textarea: typeof import('primevue/textarea')['default']
     Toast: typeof import('primevue/toast')['default']
+    Toolbar: typeof import('primevue/toolbar')['default']
     Tree: typeof import('primevue/tree')['default']
     TreeTable: typeof import('primevue/treetable')['default']
     UpdateProjectDialog: typeof import('./src/components/projects/UpdateProjectDialog.vue')['default']

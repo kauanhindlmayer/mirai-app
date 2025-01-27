@@ -2,7 +2,7 @@
 import CommentsSection from '@/components/common/CommentsSection.vue'
 import { useProjectStore } from '@/stores/project'
 import { useWikiPageStore } from '@/stores/wiki-page'
-import { formatDate, formatRelativeTime } from '@/utils/date'
+import { format, formatDistanceToNow } from '@/utils/date'
 import { storeToRefs } from 'pinia'
 import { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
@@ -60,7 +60,7 @@ async function deleteComment(commentId: string) {
 }
 
 const wikiPageLastUpdated = computed(() =>
-  formatDate(wikiPage.value!.updatedAt, "MMM d, yyyy 'at' h:mm a"),
+  format(wikiPage.value!.updatedAt, "MMM d, yyyy 'at' h:mm a"),
 )
 
 function redirectToEditPage() {
@@ -90,7 +90,7 @@ function redirectToEditPage() {
           >
             <i class="pi pi-clock text-primary mr-2" />
             <span class="text-surface-900 dark:text-surface-0">
-              {{ formatRelativeTime(wikiPage.updatedAt) }}
+              {{ formatDistanceToNow(wikiPage.updatedAt) }}
             </span>
           </span>
           <span

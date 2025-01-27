@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Comment } from '@/types/wiki-page'
-import { formatRelativeTime } from '@/utils/date'
+import { formatDistanceToNow } from '@/utils/date'
 import { useConfirm, type Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import { ref, useTemplateRef } from 'vue'
@@ -94,7 +94,7 @@ function updateComment() {
         {{ comment.author.name }}
       </span>
       <p class="font-semibold text-surface-600 dark:text-surface-200 m-0 text-sm">
-        {{ formatRelativeTime(comment.createdAt) }}
+        {{ formatDistanceToNow(comment.createdAt) }}
         {{ comment.updatedAt ? '(edited)' : '' }}
       </p>
       <div v-if="isEditing">
