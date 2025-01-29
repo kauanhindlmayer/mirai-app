@@ -53,6 +53,7 @@ defineExpose({
 
 <template>
   <Dialog
+    class="work-item-dialog"
     v-if="workItem"
     v-model:visible="isVisible"
     modal
@@ -162,16 +163,16 @@ defineExpose({
 </style>
 
 <style>
-.p-dialog {
+.work-item-dialog > .p-dialog {
   border-radius: 0.5rem !important;
 }
-.p-dialog-header {
+.work-item-dialog > .p-dialog-header {
   position: relative;
   overflow: hidden;
   border-top-left-radius: 0.5rem;
   padding: 0 !important;
 }
-.p-dialog-content {
+.work-item-dialog > .p-dialog-content {
   padding-left: 0 !important;
   padding-right: 0 !important;
   padding-top: 0 !important;

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import WorkItemDialog from '@/components/common/WorkItemDialog.vue'
+import type CreateSprintDialog from '@/components/sprints/CreateSprintDialog.vue'
 import AppTag from '@/components/tags/AppTag.vue'
 import WorkItemTag from '@/components/work-items/WorkItemTag.vue'
 import { useLayout } from '@/layout/composables/layout'
@@ -25,6 +26,9 @@ const { onMenuToggle } = useLayout()
 const selectedTeam = ref()
 const selectedSprint = ref<SprintResponse>()
 const selectedBacklogLevel = ref(BacklogLevel.UserStory)
+
+type CreateSprintDialogType = InstanceType<typeof CreateSprintDialog>
+const createSprintDialogRef = useTemplateRef<CreateSprintDialogType>('createSprintDialog')
 
 watch(
   () => selectedTeam.value,
@@ -121,7 +125,7 @@ onMounted(() => {
 })
 
 function openWorkItemDialog(workItemId: string) {
-  router.push(`/projects/${project.value!.id}/backlogs?workItemId=${workItemId}`)
+  router.push(`/projects/${project.value!.id}/sprints?workItemId=${workItemId}`)
 }
 
 function setBreadcrumbs() {
@@ -201,6 +205,7 @@ onMounted(async () => {
                         text
                         size="small"
                         icon="pi pi-plus"
+                        @click="createSprintDialogRef?.openDialog"
                       />
                     </div>
                   </template>
@@ -259,6 +264,7 @@ onMounted(async () => {
       </div>
     </div>
   </div>
+  <CreateSprintDialog ref="createSprintDialog" />
   <WorkItemDialog ref="workItemDialog" />
 </template>
 

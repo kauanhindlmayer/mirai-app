@@ -16,7 +16,7 @@ function redirectToProjectSummary() {
 </script>
 
 <template>
-  <Card class="hover:cursor-pointer" @click="redirectToProjectSummary">
+  <Card class="!rounded-lg hover:cursor-pointer" @click="redirectToProjectSummary">
     <template #content>
       <div class="flex items-center gap-4">
         <div class="self-start">
