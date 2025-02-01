@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import { useProjectStore } from '@/stores/project'
 import type { Project } from '@/types/project'
 import { getInitials } from '@/utils'
 import { useRouter } from 'vue-router'
 
 const { project } = defineProps<{ project: Project }>()
 
-const projectStore = useProjectStore()
 const router = useRouter()
 
 function redirectToProjectSummary() {
-  projectStore.getProject(project.id)
   router.push(`/projects/${project.id}/summary`)
 }
 </script>

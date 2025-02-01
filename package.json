@@ -18,6 +18,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@pinia/colada": "^0.13.3",
     "@primevue/forms": "^4.2.4",
     "@primevue/themes": "^4.2.4",
     "@vueuse/core": "^12.3.0",

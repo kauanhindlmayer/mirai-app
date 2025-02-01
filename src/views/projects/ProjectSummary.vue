@@ -1,67 +1,74 @@
 <script setup lang="ts">
+import { getProject } from '@/api/projects'
 import LazyImage from '@/components/common/LazyImage.vue'
 import EditProjectDrawer from '@/components/projects/EditProjectDrawer.vue'
+import { useWorkItemsStats } from '@/queries/work-items'
 import { usePageStore } from '@/stores/page'
-import { useProjectStore } from '@/stores/project'
-import { useWorkItemStore } from '@/stores/work-item'
+import type { Project } from '@/types/project'
 import { getInitials } from '@/utils'
-import { storeToRefs } from 'pinia'
+import { useQuery } from '@pinia/colada'
 import { Avatar } from 'primevue'
-import { computed, onBeforeMount, ref, useTemplateRef, watch } from 'vue'
+import { computed, ref, useTemplateRef, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
 const pageStore = usePageStore()
-const workItemStore = useWorkItemStore()
-const { workItemsStats } = storeToRefs(workItemStore)
+pageStore.setTitle('Summary - Overview')
 
-type EditProjectDrawerType = InstanceType<typeof EditProjectDrawer>
-const editProjectDrawerRef = useTemplateRef<EditProjectDrawerType>('editProjectDrawer')
+const editProjectDrawerRef =
+  useTemplateRef<InstanceType<typeof EditProjectDrawer>>('editProjectDrawer')
 
-function setBreadcrumbs() {
+function setBreadcrumbs(project: Project) {
   pageStore.setBreadcrumbs([
-    { label: project.value!.name, route: `/projects/${project.value!.id}/summary` },
-    { label: 'Overview', route: `/projects/${project.value!.id}/summary` },
-    { label: 'Summary', route: `/projects/${project.value!.id}/summary` },
+    { label: project.name, route: `/projects/${project.id}/summary` },
+    { label: 'Overview', route: `/projects/${project.id}/summary` },
+    { label: 'Summary', route: `/projects/${project.id}/summary` },
   ])
 }
 
 const hasProjectDescription = computed(() => project.value?.description)
 
-const selectedPeriod = ref(7)
 const periods = ref([
-  { label: 'Last 1 day', value: 1 },
-  { label: 'Last 7 days', value: 7 },
-  { label: 'Last 30 days', value: 30 },
+  { label: 'Last 1 day', value: '1' },
+  { label: 'Last 7 days', value: '7' },
+  { label: 'Last 30 days', value: '30' },
 ])
 
-watch(
-  () => selectedPeriod.value,
-  async (newSelectedPeriod) => {
-    await workItemStore.getWorkItemsStats(newSelectedPeriod)
-  },
-)
+const { stats, periodInDays } = useWorkItemsStats()
 
-onBeforeMount(() => {
-  pageStore.setTitle('Summary - Overview')
-  setBreadcrumbs()
-  workItemStore.getWorkItemsStats(selectedPeriod.value)
+const route = useRoute()
+const projectId = computed(() => route.params.projectId as string)
+
+const { data: project, isLoading } = useQuery({
+  key: () => ['project', projectId.value],
+  query: () => getProject(projectId.value),
+  placeholderData: {} as Project,
 })
+
+watch(() => project.value, setBreadcrumbs)
 </script>
 
 <template>
   <div class="grid grid-cols-12 gap-4">
     <div class="col-span-12">
-      <div class="card p-4">
+      <div v-if="isLoading" class="card p-4">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center">
+            <Skeleton size="4rem" class="mr-4" />
+            <Skeleton width="10rem" height="1.5rem" />
+          </div>
+          <Skeleton width="6rem" height="2.5rem" />
+        </div>
+      </div>
+      <div v-else class="card p-4">
         <div class="flex justify-between items-center">
           <div class="flex items-center">
             <Avatar
               icon="pi pi-user"
               size="xlarge"
               class="mr-4"
-              :label="getInitials(project!.name)"
+              :label="getInitials(project.name)"
             />
-            <div class="font-semibold text-2xl">{{ project!.name }}</div>
+            <div class="font-semibold text-2xl">{{ project.name }}</div>
           </div>
           <Button label="Invite" icon="pi pi-user-plus" />
         </div>
@@ -77,7 +84,7 @@ onBeforeMount(() => {
             severity="secondary"
             variant="text"
             v-tooltip.bottom="'Edit Project Information'"
-            @click="editProjectDrawerRef?.openDrawer"
+            @click="editProjectDrawerRef?.showDrawer"
           />
         </div>
         <div v-if="hasProjectDescription">
@@ -91,7 +98,7 @@ onBeforeMount(() => {
               label="Add Project Description"
               icon="pi pi-plus"
               class="mt-4"
-              @click="editProjectDrawerRef?.openDrawer"
+              @click="editProjectDrawerRef?.showDrawer"
             />
           </div>
           <LazyImage class="w-48 mr-4" src="/layout/images/onboarding.svg" alt="Onboarding Image" />
@@ -103,7 +110,7 @@ onBeforeMount(() => {
         <div class="flex justify-between items-center mb-4">
           <div class="font-semibold text-xl mr-2">Project Stats</div>
           <Select
-            v-model="selectedPeriod"
+            v-model="periodInDays"
             :options="periods"
             option-label="label"
             option-value="value"
@@ -115,14 +122,14 @@ onBeforeMount(() => {
           <div class="flex items-center">
             <Button icon="pi pi-file-plus" severity="secondary" />
             <div class="flex flex-col items-start ml-2">
-              <div class="text-xl font-semibold">{{ workItemsStats.workItemsCreated }}</div>
+              <div class="text-xl font-semibold">{{ stats.workItemsCreated }}</div>
               <div class="text-sm text-gray-500">Work Items Created</div>
             </div>
           </div>
           <div class="flex items-center">
             <Button icon="pi pi-file-check" severity="secondary" />
             <div class="flex flex-col items-start ml-2">
-              <div class="text-xl font-semibold">{{ workItemsStats.workItemsCompleted }}</div>
+              <div class="text-xl font-semibold">{{ stats.workItemsCompleted }}</div>
               <div class="text-sm text-gray-500">Work Items Completed</div>
             </div>
           </div>

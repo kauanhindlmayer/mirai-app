@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@pinia/colada':
+        specifier: ^0.13.3
+        version: 0.13.3(pinia@2.3.0(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3)))
       '@primevue/forms':
         specifier: ^4.2.4
         version: 4.2.4(vue@3.5.13(typescript@5.6.3))
@@ -875,6 +878,11 @@ packages:
   '@parcel/watcher@2.5.0':
     resolution: {integrity: sha512-i0GV1yJnm2n3Yq1qw6QrUrd/LI9bE8WEBOTtOkpCXHHdyN3TAGgqAK/DAT05z4fq2x04cARXt2pDmjWjL92iTQ==}
     engines: {node: '>= 10.0.0'}
+
+  '@pinia/colada@0.13.3':
+    resolution: {integrity: sha512-3OkzYIsAXGzSqnKUXExdPAMWufBsfl/OmGa4qxS+mE5GXsfbOmYTxqUHonK+61xgeOKmCBI3sJwaQJzShDQsKw==}
+    peerDependencies:
+      pinia: ^2.2.6
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -3883,6 +3891,10 @@ snapshots:
       '@parcel/watcher-win32-ia32': 2.5.0
       '@parcel/watcher-win32-x64': 2.5.0
     optional: true
+
+  '@pinia/colada@0.13.3(pinia@2.3.0(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3)))':
+    dependencies:
+      pinia: 2.3.0(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))
 
   '@pkgjs/parseargs@0.11.0':
     optional: true

@@ -51,7 +51,7 @@ export class AxiosAdapter implements HttpClient {
     const toast = useAppToast()
     const Status401Unauthorized = 401
 
-    if (error.response?.status === Status401Unauthorized) {
+    if (error.response?.status === Status401Unauthorized && error.config?.url !== '/users/login') {
       const userStore = useUserStore()
       toast.showError({ detail: 'Your session has expired. Please log in again.' })
       userStore.logout()
@@ -60,3 +60,5 @@ export class AxiosAdapter implements HttpClient {
     return Promise.reject(error)
   }
 }
+
+export default new AxiosAdapter()

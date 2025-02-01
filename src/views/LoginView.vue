@@ -1,37 +1,48 @@
 <script setup lang="ts">
+import { loginUser as _loginUser, getCurrentUser } from '@/api/users'
+import LazyImage from '@/components/common/LazyImage.vue'
 import { displayError } from '@/composables/displayError'
 import { useUserStore } from '@/stores/user'
-import type { LoginUserRequest } from '@/types/user'
+import type { LoginUserRequest, User } from '@/types/user'
+import { useMutation } from '@pinia/colada'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { object, string } from 'yup'
 
 const store = useUserStore()
+const router = useRouter()
 
 const form = ref<LoginUserRequest>({
   email: '',
   password: '',
 })
-const shouldRememberCredentials = ref(false)
+const shouldRememberUser = ref(false)
 
-const resolver = ref(
-  yupResolver(
-    object({
-      Email: string().email().required(),
-      Password: string().required(),
-    }),
-  ),
-)
+const loginUserSchema = object({
+  email: string().email().required('Email is a required field'),
+  password: string().required('Password is a required field'),
+})
+
+const resolver = ref(yupResolver(loginUserSchema))
+
+const { mutate: loginUser, isLoading } = useMutation({
+  mutation: async (request: LoginUserRequest) => {
+    const response = await _loginUser(request)
+    localStorage.setItem('accessToken', response.accessToken)
+    return await getCurrentUser()
+  },
+  onSuccess: (user: User) => {
+    store.setUser(user)
+    router.push({ name: 'projects-home' })
+  },
+  onError: displayError,
+})
 
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
-  try {
-    await store.loginUser(form.value)
-    await store.getCurrentUser()
-  } catch (error) {
-    displayError(error)
-  }
+  loginUser(form.value)
 }
 </script>
 
@@ -50,13 +61,13 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
             <h5 class="title-h5 text-center lg:text-left">Login</h5>
             <p class="body-small mt-3.5 text-center lg:text-left">Please enter your details</p>
             <Form :resolver @submit="onFormSubmit">
-              <FormField v-slot="$field" name="Email">
+              <FormField v-slot="$field" name="email">
                 <InputText type="text" v-model="form.email" class="w-full" placeholder="Email" />
                 <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
                   {{ $field.error?.message }}
                 </Message>
               </FormField>
-              <FormField v-slot="$field" name="Password">
+              <FormField v-slot="$field" name="password">
                 <InputText
                   type="password"
                   v-model="form.password"
@@ -69,7 +80,7 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
               </FormField>
               <div class="my-8 flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                  <Checkbox inputId="remember" v-model="shouldRememberCredentials" :binary="true" />
+                  <Checkbox inputId="remember" v-model="shouldRememberUser" binary />
                   <label for="remember" class="body-small"> Remember me </label>
                 </div>
                 <RouterLink
@@ -79,7 +90,7 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
                   Forgot password?
                 </RouterLink>
               </div>
-              <Button type="submit" class="body-button w-full">Login</Button>
+              <Button type="submit" class="body-button w-full" :loading="isLoading"> Login </Button>
             </Form>
             <div class="mt-8 body-small text-center lg:text-left">
               Not registered?

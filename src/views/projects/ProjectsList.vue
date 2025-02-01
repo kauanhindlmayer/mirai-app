@@ -1,36 +1,42 @@
 <script setup lang="ts">
+import { listOrganizations } from '@/api/organizations'
+import { listProjects } from '@/api/projects'
 import CreateProjectDrawer from '@/components/projects/CreateProjectDrawer.vue'
 import ProjectCard from '@/components/projects/ProjectCard.vue'
 import { useOrganizationStore } from '@/stores/organization'
 import { usePageStore } from '@/stores/page'
-import { useProjectStore } from '@/stores/project'
 import type { Organization } from '@/types/organization'
-import { storeToRefs } from 'pinia'
-import { onBeforeMount, ref, useTemplateRef, watch } from 'vue'
+import type { Project } from '@/types/project'
+import { useQuery } from '@pinia/colada'
+import { ref, useTemplateRef } from 'vue'
 
 const organizationStore = useOrganizationStore()
-const { organizations } = storeToRefs(organizationStore)
-const projectStore = useProjectStore()
 const pageStore = usePageStore()
+pageStore.setTitle('Projects - Home')
 
-type CreateProjectDrawerType = InstanceType<typeof CreateProjectDrawer>
-const createProjectDrawerRef = useTemplateRef<CreateProjectDrawerType>('createProjectDrawer')
+const createProjectDrawerRef =
+  useTemplateRef<InstanceType<typeof CreateProjectDrawer>>('createProjectDrawer')
 
-const selectedOrganization = ref<Organization>()
+const selectedOrganization = ref<Organization | null>(null)
 
-watch(
-  () => selectedOrganization.value,
-  (newOrganization) => {
-    if (!newOrganization?.id) return
-    projectStore.listProjects(newOrganization.id)
-    organizationStore.setOrganizationId(newOrganization.id)
+const { data: organizations, isLoading } = useQuery({
+  key: () => ['organizations'],
+  query: async () => {
+    const organizations = await listOrganizations()
+    if (organizations.length) {
+      const [firstOrganization] = organizations
+      selectedOrganization.value = firstOrganization
+      organizationStore.setOrganization(firstOrganization)
+    }
+    return organizations
   },
-)
+})
 
-onBeforeMount(async () => {
-  await organizationStore.listOrganizations()
-  selectedOrganization.value = organizationStore.organizations[0]
-  pageStore.setTitle('Projects - Home')
+const { data: projects } = useQuery({
+  key: () => ['projects', organizationStore.organizationId],
+  query: () => listProjects(organizationStore.organizationId),
+  enabled: () => !!organizationStore.organizationId,
+  placeholderData: [] as Project[],
 })
 </script>
 
@@ -40,6 +46,7 @@ onBeforeMount(async () => {
       <Select
         v-model="selectedOrganization"
         :options="organizations"
+        :loading="isLoading"
         class="my-4"
         option-label="name"
       >
@@ -74,14 +81,10 @@ onBeforeMount(async () => {
     </TabList>
     <TabPanels>
       <TabPanel value="0">
-        <div v-if="projectStore.projects.length === 0">No projects found.</div>
+        <div v-if="projects.length === 0">No projects found.</div>
         <div v-else>
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <ProjectCard
-              v-for="project in projectStore.projects"
-              :key="project.id"
-              :project="project"
-            />
+            <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
           </div>
         </div>
       </TabPanel>

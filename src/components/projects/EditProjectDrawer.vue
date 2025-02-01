@@ -1,12 +1,18 @@
 <script setup lang="ts">
+import { updateProject as _updateProject } from '@/api/projects'
 import { displayError } from '@/composables/displayError'
+import { userDrawer } from '@/composables/useDialog'
+import { useOrganizationStore } from '@/stores/organization'
 import { useProjectStore } from '@/stores/project'
+import { useMutation, useQueryCache } from '@pinia/colada'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { object, string } from 'yup'
 
+const organizationStore = useOrganizationStore()
+const { organizationId } = storeToRefs(organizationStore)
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
 
@@ -15,38 +21,35 @@ const form = ref({
   description: project.value?.description || '',
 })
 
-const resolver = ref(
-  yupResolver(
-    object({
-      description: string().max(500, 'Description must not exceed 500 characters'),
-    }),
-  ),
-)
+const updateProjectSchema = object({
+  description: string().max(500, 'Description must not exceed 500 characters'),
+})
+
+const resolver = ref(yupResolver(updateProjectSchema))
+
+const queryCache = useQueryCache()
+
+const { mutate: updateProject, isLoading } = useMutation({
+  mutation: async () => {
+    await _updateProject(organizationId.value, project.value!.id, form.value)
+  },
+  onSuccess: () => {
+    queryCache.invalidateQueries({ key: ['project', project.value!.id] })
+    hideDrawer()
+  },
+  onError: displayError,
+})
 
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
-  try {
-    await projectStore.updateProject(project.value!.id, form.value)
-    await projectStore.getProject(project.value!.id)
-    closeDrawer()
-  } catch (error) {
-    displayError(error)
-  }
+  updateProject()
 }
 
-const isVisible = ref(false)
-
-function openDrawer() {
-  isVisible.value = true
-}
-
-function closeDrawer() {
-  isVisible.value = false
-}
+const { isVisible, showDrawer, hideDrawer } = userDrawer()
 
 defineExpose({
-  openDrawer,
-  closeDrawer,
+  showDrawer,
+  hideDrawer,
 })
 </script>
 
@@ -75,8 +78,8 @@ defineExpose({
         </FormField>
       </div>
       <div class="flex justify-end mt-4 gap-2">
-        <Button type="button" label="Cancel" severity="secondary" @click="closeDrawer" />
-        <Button type="submit" label="Save" />
+        <Button type="button" label="Cancel" severity="secondary" @click="hideDrawer" />
+        <Button type="submit" label="Save" :disabled="isLoading" />
       </div>
     </Form>
   </Drawer>

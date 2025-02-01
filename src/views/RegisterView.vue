@@ -1,11 +1,16 @@
 <script setup lang="ts">
+import { registerUser as _registerUser } from '@/api/users'
 import LazyImage from '@/components/common/LazyImage.vue'
-import { useUserStore } from '@/stores/user'
+import { displayError } from '@/composables/displayError'
 import type { RegisterUserRequest } from '@/types/user'
+import { useMutation } from '@pinia/colada'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { object, string } from 'yup'
+
+const router = useRouter()
 
 const form = ref<RegisterUserRequest>({
   firstName: '',
@@ -15,34 +20,38 @@ const form = ref<RegisterUserRequest>({
 })
 const hasAcceptedTerms = ref(false)
 
-const store = useUserStore()
+const registerUserSchema = object({
+  firstName: string()
+    .required('First Name is a required field')
+    .matches(/^[a-zA-Z]+$/, 'First Name must contain only letters'),
+  lastName: string()
+    .required('Last Name is a required field')
+    .matches(/^[a-zA-Z]+$/, 'Last Name must contain only letters'),
+  email: string().email('Please enter a valid email address').required('Email is a required field'),
+  password: string()
+    .required('Password is a required field')
+    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .matches(/[0-9]/, 'Password must contain at least one number')
+    .min(8, 'Password must be at least 8 characters long'),
+  hasAcceptedTerms: string().required('Please accept the Terms and Conditions'),
+})
 
-const resolver = ref(
-  yupResolver(
-    object({
-      firstName: string()
-        .required('First Name is a required field')
-        .matches(/^[a-zA-Z]+$/, 'First Name must contain only letters'),
-      lastName: string()
-        .required('Last Name is a required field')
-        .matches(/^[a-zA-Z]+$/, 'Last Name must contain only letters'),
-      email: string()
-        .email('Please enter a valid email address')
-        .required('Email is a required field'),
-      password: string()
-        .required('Password is a required field')
-        .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-        .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-        .matches(/[0-9]/, 'Password must contain at least one number')
-        .min(8, 'Password must be at least 8 characters long'),
-      hasAcceptedTerms: string().required('Please accept the Terms and Conditions'),
-    }),
-  ),
-)
+const resolver = ref(yupResolver(registerUserSchema))
+
+function redirectToLogin() {
+  router.push({ name: 'login' })
+}
+
+const { mutate: registerUser, isLoading } = useMutation({
+  mutation: _registerUser,
+  onSuccess: redirectToLogin,
+  onError: displayError,
+})
 
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
-  await store.registerUser(form.value)
+  registerUser(form.value)
 }
 </script>
 
@@ -126,7 +135,9 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
                 </Message>
               </FormField>
 
-              <button type="submit" class="body-button w-full">Register</button>
+              <button type="submit" class="body-button w-full" :loading="isLoading">
+                Register
+              </button>
             </Form>
             <div class="mt-8 body-small text-center lg:text-left">
               Already have an account?

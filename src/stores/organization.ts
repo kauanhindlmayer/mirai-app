@@ -1,32 +1,20 @@
-import type OrganizationGateway from '@/gateways/OrganizationGateway'
-import type { CreateOrganizationRequest, Organization } from '@/types/organization'
-import { organizationGatewayKey } from '@/utils/injection-keys'
+import type { Organization } from '@/types/organization'
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { inject, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 export const useOrganizationStore = defineStore('organizations', () => {
-  const organizationGateway = inject(organizationGatewayKey) as OrganizationGateway
-  const organizations = ref<Organization[]>([])
-  const organizationId = ref<string>('')
+  const organization = ref<Organization | null>(null)
 
-  function setOrganizationId(id: string) {
-    organizationId.value = id
-  }
+  const organizationId = computed(() => organization.value?.id ?? '')
 
-  async function createOrganization(request: CreateOrganizationRequest) {
-    await organizationGateway.createOrganization(request)
-  }
-
-  async function listOrganizations() {
-    organizations.value = await organizationGateway.listOrganizations()
+  function setOrganization(newOrganization: Organization) {
+    organization.value = newOrganization
   }
 
   return {
-    organizations,
+    organization,
     organizationId,
-    setOrganizationId,
-    createOrganization,
-    listOrganizations,
+    setOrganization,
   }
 })
 
