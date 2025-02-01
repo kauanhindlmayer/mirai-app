@@ -1,4 +1,4 @@
-import http from '@/gateways/HttpClient'
+import http from '@/api/http'
 import type {
   LoginUserRequest,
   LoginUserResponse,
@@ -26,5 +26,5 @@ export function updateUserProfile(request: UpdateUserProfileRequest): Promise<vo
 export function updateProfilePicture(file: File): Promise<void> {
   const formData = new FormData()
   formData.append('file', file)
-  return http.post('/users/profile/picture', formData)
+  return http.patch('/users/profile/picture', formData)
 }

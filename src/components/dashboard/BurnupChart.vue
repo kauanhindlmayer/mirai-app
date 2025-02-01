@@ -1,25 +1,24 @@
 <script setup lang="ts">
 import { useLayout } from '@/layout/composables/layout'
-import { useDashboardStore } from '@/stores/dashboard'
+import type { BurnupPoint } from '@/types/dashboard'
 import { format } from '@/utils/date'
 import type { ChartData, ChartOptions } from 'chart.js'
-import { storeToRefs } from 'pinia'
 import { computed, ref, watch } from 'vue'
 import SkeletonChart from './SkeletonChart.vue'
 
 const { layoutConfig, isDarkTheme } = useLayout()
-const dashboardStore = useDashboardStore()
-const { burnupData, dateRange } = storeToRefs(dashboardStore)
-
-defineProps<{
+const { burnupData } = defineProps<{
   isLoading: boolean
+  burnupData: BurnupPoint[]
+  dateRange: string
 }>()
 
 const chartData = ref<ChartData>()
 const chartOptions = ref<ChartOptions>()
 
 const storiesCompleted = computed(() => {
-  return burnupData.value[burnupData.value.length - 1]?.completedWork
+  if (!burnupData.length) return 0
+  return burnupData[burnupData.length - 1].completedWork
 })
 
 async function setColorOptions() {
@@ -30,8 +29,8 @@ async function setColorOptions() {
   const primaryColor = documentStyle.getPropertyValue('--p-green-600')
   const secondaryColor = documentStyle.getPropertyValue('--p-zinc-400')
 
-  const labels = burnupData.value.map((point) => format(point.date))
-  const data = burnupData.value.map((point) => point.completedWork)
+  const labels = burnupData.map((point) => format(point.date))
+  const data = burnupData.map((point) => point.completedWork)
 
   chartData.value = {
     labels,
@@ -92,7 +91,7 @@ async function setColorOptions() {
 }
 
 watch(
-  [() => layoutConfig.primary, () => layoutConfig.surface, () => burnupData.value, isDarkTheme],
+  [() => layoutConfig.primary, () => layoutConfig.surface, () => burnupData, isDarkTheme],
   () => {
     setColorOptions()
   },
@@ -100,7 +99,8 @@ watch(
 </script>
 
 <template>
-  <div v-if="!isLoading" class="card">
+  <SkeletonChart v-if="isLoading" />
+  <div v-else class="card">
     <div class="flex justify-between items-center mb-4">
       <div>
         <div class="font-semibold text-xl -mb-1">Burnup</div>
@@ -116,6 +116,4 @@ watch(
     </div>
     <Chart :data="chartData" :options="chartOptions" :height="260" />
   </div>
-
-  <SkeletonChart v-else />
 </template>

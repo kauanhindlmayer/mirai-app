@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { updateProject as _updateProject } from '@/api/projects'
 import { displayError } from '@/composables/displayError'
-import { userDrawer } from '@/composables/useDialog'
+import { useDrawer } from '@/composables/useDialog'
 import { useOrganizationStore } from '@/stores/organization'
 import { useProjectStore } from '@/stores/project'
 import { useMutation, useQueryCache } from '@pinia/colada'
@@ -45,7 +45,7 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
   updateProject()
 }
 
-const { isVisible, showDrawer, hideDrawer } = userDrawer()
+const { isVisible, showDrawer, hideDrawer } = useDrawer()
 
 defineExpose({
   showDrawer,

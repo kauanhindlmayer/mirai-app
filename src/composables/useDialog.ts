@@ -18,7 +18,7 @@ export function useDialog() {
   }
 }
 
-export function userDrawer() {
+export function useDrawer() {
   const isVisible = ref(false)
 
   function showDrawer() {

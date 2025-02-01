@@ -3,8 +3,8 @@ import LazyImage from '@/components/common/LazyImage.vue'
 import CreatePersonaDrawer from '@/components/personas/CreatePersonaDrawer.vue'
 import { useTemplateRef } from 'vue'
 
-type CreatePersonaDrawerType = InstanceType<typeof CreatePersonaDrawer>
-const createPersonaDrawerRef = useTemplateRef<CreatePersonaDrawerType>('createPersonaDrawer')
+const createPersonaDrawerRef =
+  useTemplateRef<InstanceType<typeof CreatePersonaDrawer>>('createPersonaDrawer')
 </script>
 
 <template>
@@ -17,7 +17,7 @@ const createPersonaDrawerRef = useTemplateRef<CreatePersonaDrawerType>('createPe
             icon="pi pi-plus"
             label="New Persona"
             outlined
-            @click="createPersonaDrawerRef?.openDrawer"
+            @click="createPersonaDrawerRef?.showDrawer"
           />
         </div>
 

@@ -51,6 +51,11 @@ export async function put<T>(url: string, data?: unknown, config?: RequestConfig
   return response.data
 }
 
+export async function patch<T>(url: string, data?: unknown, config?: RequestConfig): Promise<T> {
+  const response = await http.patch<T>(url, data, config)
+  return response.data
+}
+
 export async function remove<T>(url: string, config?: RequestConfig): Promise<T> {
   const response = await http.delete<T>(url, config)
   return response.data
@@ -59,6 +64,7 @@ export async function remove<T>(url: string, config?: RequestConfig): Promise<T>
 export default {
   get,
   post,
+  patch,
   put,
   delete: remove,
 }

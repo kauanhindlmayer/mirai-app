@@ -1,3 +1,4 @@
+import type { Tag } from '@/types/tag'
 import { BacklogLevel } from '@/types/team'
 import { WorkItemStatus, WorkItemType } from '@/types/work-item'
 
@@ -83,4 +84,11 @@ export function getBacklogLevelLabel(level: BacklogLevel): string {
   }
 
   return levelMap[level] || 'Unknown'
+}
+
+export function getMoreTagsTooltip(tags: Tag[]) {
+  return tags
+    .slice(2)
+    .map((tag) => tag.name)
+    .join(', ')
 }

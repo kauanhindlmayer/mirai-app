@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { listTeams } from '@/api/teams'
 import WorkItemDialog from '@/components/common/WorkItemDialog.vue'
 import type CreateSprintDialog from '@/components/sprints/CreateSprintDialog.vue'
 import AppTag from '@/components/tags/AppTag.vue'
@@ -8,10 +9,10 @@ import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
 import { useTeamStore } from '@/stores/team'
 import type { SprintResponse } from '@/types/sprint'
-import type { Tag } from '@/types/tag'
-import { BacklogLevel, type BacklogResponse } from '@/types/team'
+import { BacklogLevel, type BacklogResponse, type Team } from '@/types/team'
 import { addDays, format, isBefore, isWeekend, type DateType } from '@/utils/date'
-import { getStatusLabel, getStatusSeverity } from '@/utils/work-item'
+import { getMoreTagsTooltip, getStatusLabel, getStatusSeverity } from '@/utils/work-item'
+import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import type { TreeNode } from 'primevue/treenode'
 import { computed, onMounted, ref, useTemplateRef, watch } from 'vue'
@@ -19,16 +20,16 @@ import { useRoute, useRouter } from 'vue-router'
 
 const pageStore = usePageStore()
 const teamStore = useTeamStore()
-const { teams, backlog, sprints } = storeToRefs(teamStore)
+const { backlog, sprints } = storeToRefs(teamStore)
 const { project } = storeToRefs(useProjectStore())
 const { onMenuToggle } = useLayout()
 
-const selectedTeam = ref()
+const selectedTeam = ref<Team | null>(null)
 const selectedSprint = ref<SprintResponse>()
 const selectedBacklogLevel = ref(BacklogLevel.UserStory)
 
-type CreateSprintDialogType = InstanceType<typeof CreateSprintDialog>
-const createSprintDialogRef = useTemplateRef<CreateSprintDialogType>('createSprintDialog')
+const createSprintDialogRef =
+  useTemplateRef<InstanceType<typeof CreateSprintDialog>>('createSprintDialog')
 
 watch(
   () => selectedTeam.value,
@@ -47,7 +48,7 @@ watch(
     if (!newSelectedSprint) return
     pageStore.setTitle(`${selectedTeam.value?.name} ${newSelectedSprint.name} Backlog - Boards`)
     await teamStore.getBacklog(
-      selectedTeam.value.id,
+      selectedTeam.value!.id,
       newSelectedSprint.id,
       selectedBacklogLevel.value,
     )
@@ -97,18 +98,9 @@ function toNode(workItem: BacklogResponse): TreeNode {
 }
 
 const router = useRouter()
-
-function getMoreTagsTooltip(tags: Tag[]) {
-  return tags
-    .slice(2)
-    .map((tag) => tag.name)
-    .join(', ')
-}
-
-type WorkItemDialogType = InstanceType<typeof WorkItemDialog>
-const workItemDialogRef = useTemplateRef<WorkItemDialogType>('workItemDialog')
-
 const route = useRoute()
+
+const workItemDialogRef = useTemplateRef<InstanceType<typeof WorkItemDialog>>('workItemDialog')
 
 watch(
   () => route.query.workItemId,
@@ -128,21 +120,29 @@ function openWorkItemDialog(workItemId: string) {
   router.push(`/projects/${project.value!.id}/sprints?workItemId=${workItemId}`)
 }
 
+const { data: teams, isLoading } = useQuery({
+  key: ['teams', project.value!.id],
+  query: async () => {
+    const teams = await listTeams(project.value!.id)
+    const [firstTeam] = teams
+    teamStore.setTeamId(firstTeam.id)
+    selectedTeam.value = firstTeam
+    return teams
+  },
+  placeholderData: [] as Team[],
+})
+
 function setBreadcrumbs() {
+  const projectName = project.value!.name
+  const projectId = project.value!.id
   pageStore.setBreadcrumbs([
-    { label: project.value!.name, route: `/projects/${project.value?.id}/summary` },
-    { label: 'Boards', route: `/projects/${project.value?.id}/boards` },
-    { label: 'Sprints', route: `/projects/${project.value?.id}/sprints` },
+    { label: projectName, route: `/projects/${projectId}/summary` },
+    { label: 'Boards', route: `/projects/${projectId}/boards` },
+    { label: 'Sprints', route: `/projects/${projectId}/sprints` },
   ])
 }
 
-onMounted(async () => {
-  await teamStore.listTeams()
-  const [firstTeam] = teams.value
-  teamStore.setTeamId(firstTeam.id)
-  selectedTeam.value = firstTeam
-  setBreadcrumbs()
-})
+onMounted(setBreadcrumbs)
 </script>
 
 <template>
@@ -151,7 +151,12 @@ onMounted(async () => {
       <div class="card">
         <div class="flex justify-between items-center mb-4">
           <div class="flex items-center space-x-1">
-            <Select v-model="selectedTeam" :options="teams" option-label="name" />
+            <Select
+              v-model="selectedTeam"
+              :options="teams"
+              :loading="isLoading"
+              option-label="name"
+            />
             <Button
               icon="pi pi-users"
               severity="secondary"

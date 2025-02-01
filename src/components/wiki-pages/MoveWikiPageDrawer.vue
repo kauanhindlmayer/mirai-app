@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import { moveWikiPage as _moveWikiPage } from '@/api/wiki-pages'
+import { useDrawer } from '@/composables/useDialog'
+import { useProjectStore } from '@/stores/project'
 import { useWikiPageStore } from '@/stores/wiki-page'
 import type { WikiPageSummary } from '@/types/wiki-page'
+import { useMutation, useQueryCache } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import type { TreeSelectionKeys } from 'primevue'
 import type { TreeNode } from 'primevue/treenode'
@@ -8,10 +12,7 @@ import { computed, ref } from 'vue'
 
 const store = useWikiPageStore()
 const { wikiPage } = storeToRefs(store)
-
-const emit = defineEmits<{
-  (event: 'move-wiki-page'): void
-}>()
+const { project } = storeToRefs(useProjectStore())
 
 const selectedKey = ref<TreeSelectionKeys | undefined>(undefined)
 const nodes = computed(() => store.wikiPages.map(toNode))
@@ -27,26 +28,27 @@ function toNode(page: WikiPageSummary): TreeNode {
   }
 }
 
-async function moveWikiPage() {
-  const [wikiPageId] = Object.keys(selectedKey.value!)
-  await store.moveWikiPage(wikiPage.value!.id, { targetParentId: wikiPageId, targetPosition: 0 })
-  emit('move-wiki-page')
-  closeDrawer()
-}
+const queryCache = useQueryCache()
 
-const isVisible = ref(false)
+const { mutate: moveWikiPage } = useMutation({
+  mutation: async (_: MouseEvent) => {
+    const [wikiPageId] = Object.keys(selectedKey.value!)
+    return _moveWikiPage(project.value!.id, wikiPage.value!.id, {
+      targetParentId: wikiPageId,
+      targetPosition: 0,
+    })
+  },
+  onSuccess() {
+    queryCache.invalidateQueries({ key: ['wiki-pages', project.value!.id] })
+    hideDrawer()
+  },
+})
 
-function openDrawer() {
-  isVisible.value = true
-}
-
-function closeDrawer() {
-  isVisible.value = false
-}
+const { isVisible, showDrawer, hideDrawer } = useDrawer()
 
 defineExpose({
-  openDrawer,
-  closeDrawer,
+  showDrawer,
+  hideDrawer,
 })
 </script>
 
@@ -74,7 +76,7 @@ defineExpose({
         />
       </div>
       <div class="flex justify-end mt-4 gap-2">
-        <Button type="button" label="Cancel" severity="secondary" @click="closeDrawer" />
+        <Button type="button" label="Cancel" severity="secondary" @click="hideDrawer" />
         <Button type="submit" label="Move" :disabled="isSaveButtonDisabled" @click="moveWikiPage" />
       </div>
     </Form>

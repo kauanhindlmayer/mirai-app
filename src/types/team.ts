@@ -3,7 +3,7 @@ export type CreateTeamRequest = {
   description: string
 }
 
-export type TeamSummary = {
+export type Team = {
   id: string
   boardId: string
   name: string

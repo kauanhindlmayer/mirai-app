@@ -38,27 +38,3 @@ export type WorkItemsStats = {
   workItemsCreated: number
   workItemsCompleted: number
 }
-
-export type BurndownChartResponse = {
-  dataPoints: BurndownPoint[]
-  startDate: string
-  endDate: string
-  remainingWorkItems: number
-}
-
-export type BurndownPoint = {
-  date: string
-  remainingWorkItems: number
-}
-
-export type BurnupChartResponse = {
-  dataPoints: BurnupPoint[]
-  startDate: string
-  endDate: string
-  completedWorkItems: number
-}
-
-export type BurnupPoint = {
-  date: string
-  completedWorkItems: number
-}

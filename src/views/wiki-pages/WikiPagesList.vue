@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { listWikiPages } from '@/api/wiki-pages'
 import MoveWikiPageDrawer from '@/components/wiki-pages/MoveWikiPageDrawer.vue'
 import { useAppToast } from '@/composables/useAppToast'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
 import { useWikiPageStore } from '@/stores/wiki-page'
 import type { WikiPageSummary } from '@/types/wiki-page'
+import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import { useConfirm, type Menu, type TreeSelectionKeys } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
@@ -15,6 +17,8 @@ import WikiPageDetail from './WikiPageDetail.vue'
 import WikiPageForm from './WikiPageForm.vue'
 
 const pageStore = usePageStore()
+pageStore.setTitle('Wiki Pages - Overview')
+
 const store = useWikiPageStore()
 const { wikiPage } = storeToRefs(store)
 const { project } = storeToRefs(useProjectStore())
@@ -27,7 +31,7 @@ const router = useRouter()
 const { isEditing } = defineProps<{ isEditing?: boolean }>()
 
 const selectedKey = ref<TreeSelectionKeys | undefined>(undefined)
-const nodes = computed(() => store.wikiPages.map((page, index) => toNode(page, index === 0)))
+const nodes = computed(() => wikiPages.value.map((page, index) => toNode(page, index === 0)))
 
 function toNode(page: WikiPageSummary, isRoot: boolean = false): TreeNode {
   return {
@@ -45,23 +49,29 @@ watch(
     isAdding.value = false
     const [wikiPageId] = Object.keys(selectedKey.value!)
     router.push({ name: 'wiki-pages', params: { wikiPageId } })
-    await Promise.all([store.getWikiPage(wikiPageId), store.getWikiPageStats(wikiPageId)])
   },
 )
 
-onBeforeMount(async () => {
-  await store.listWikiPages()
-  const wikiPageId = route.params.wikiPageId || store.wikiPages[0].id
-  selectedKey.value = { [wikiPageId as string]: true }
-  pageStore.setTitle('Wiki Pages - Overview')
-  setBreadcrumbs()
+const { data: wikiPages, isLoading } = useQuery({
+  key: () => ['wiki-pages', project.value!.id],
+  query: async () => {
+    const wikiPages = await listWikiPages(project.value!.id)
+    const wikiPageId = route.params.wikiPageId || wikiPages[0].id
+    selectedKey.value = { [wikiPageId as string]: true }
+    return wikiPages
+  },
+  placeholderData: [] as WikiPageSummary[],
 })
 
+onBeforeMount(setBreadcrumbs)
+
 function setBreadcrumbs() {
+  const projectName = project.value!.name
+  const projectId = project.value!.id
   pageStore.setBreadcrumbs([
-    { label: project.value!.name, route: `/projects/${project.value!.id}/summary` },
-    { label: 'Overview', route: `/projects/${project.value!.id}/wiki-pages` },
-    { label: 'Wiki', route: `/projects/${project.value!.id}/wiki-pages` },
+    { label: projectName, route: `/projects/${projectId}/summary` },
+    { label: 'Overview', route: `/projects/${projectId}/wiki-pages` },
+    { label: 'Wiki', route: `/projects/${projectId}/wiki-pages` },
   ])
 }
 
@@ -110,11 +120,11 @@ function copyPagePath() {
   toast.showSuccess({ detail: 'Page path copied to clipboard' })
 }
 
-type MoveWikiPageDrawerType = InstanceType<typeof MoveWikiPageDrawer>
-const moveWikiPageDrawerRef = useTemplateRef<MoveWikiPageDrawerType>('moveWikiPageDrawer')
+const moveWikiPageDrawerRef =
+  useTemplateRef<InstanceType<typeof MoveWikiPageDrawer>>('moveWikiPageDrawer')
 
 function openMoveWikiPageDrawer() {
-  moveWikiPageDrawerRef.value?.openDrawer()
+  moveWikiPageDrawerRef.value?.showDrawer()
 }
 
 function redirectToEditPage() {
@@ -156,6 +166,7 @@ function openInNewTab() {
         <Tree
           v-model:selection-keys="selectedKey"
           :value="nodes"
+          :loading="isLoading"
           filter
           selection-mode="single"
           meta-key-selection
@@ -199,7 +210,7 @@ function openInNewTab() {
       />
       <WikiPageDetail @delete-wiki-page="deleteWikiPage" v-else />
     </div>
-    <MoveWikiPageDrawer ref="moveWikiPageDrawer" @move-wiki-page="store.listWikiPages" />
+    <MoveWikiPageDrawer ref="moveWikiPageDrawer" />
     <ConfirmDialog style="width: 450px" />
   </div>
 </template>

@@ -1,20 +1,22 @@
 <script setup lang="ts">
+import { deleteTag as _deleteTag, updateTag as _updateTag, createTag, listTags } from '@/api/tags'
 import AppTag from '@/components/tags/AppTag.vue'
 import ColorSelect from '@/components/tags/ColorSelect.vue'
+import { displayError } from '@/composables/displayError'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
-import { useTagStore } from '@/stores/tag'
 import type { CreateTagRequest, Tag } from '@/types/tag'
 import { getColorName } from '@/utils/tag'
+import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import type { DataTableRowEditSaveEvent } from 'primevue'
 import { computed, onBeforeMount, ref } from 'vue'
 
 const pageStore = usePageStore()
+pageStore.setTitle('Tags - Boards')
+
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
-const tagStore = useTagStore()
-const { tags } = storeToRefs(tagStore)
 
 const selectedTags = ref<Tag[]>([])
 const editingRows = ref([])
@@ -29,45 +31,58 @@ const filteredTags = computed(() => {
   return tags.value.filter((tag) => tag.name.toLowerCase().includes(searchTerm.value.toLowerCase()))
 })
 
-async function addTag() {
-  await tagStore.createTag({
-    name: newTag.value.name,
-    description: newTag.value.description,
-    color: newTag.value.color,
-  })
-  newTag.value = { name: '', description: '', color: '' }
-  await tagStore.listTags()
-}
+const queryCache = useQueryCache()
 
-async function updateTag(event: DataTableRowEditSaveEvent) {
-  const tag = event.newData as Tag
-  await tagStore.updateTag(tag.id, {
-    name: tag.name,
-    description: tag.description,
-    color: tag.color,
-  })
-  await tagStore.listTags()
-}
+const { mutate: addTag } = useMutation({
+  mutation: (_: MouseEvent) => createTag(project.value!.id, newTag.value),
+  onSuccess: async () => {
+    await queryCache.invalidateQueries({ key: ['tags'] })
+    newTag.value = { name: '', description: '', color: '' }
+  },
+  onError: displayError,
+})
 
-async function deleteTag() {
-  await tagStore.deleteTag(selectedTags.value[0].id)
-  selectedTags.value = []
-  await tagStore.listTags()
-}
+const { mutate: updateTag } = useMutation({
+  mutation: (event: DataTableRowEditSaveEvent) => {
+    const tag = event.newData as Tag
+    return _updateTag(project.value!.id, tag.id, {
+      name: tag.name,
+      description: tag.description,
+      color: tag.color,
+    })
+  },
+  onSuccess: async () => {
+    await queryCache.invalidateQueries({ key: ['tags'] })
+  },
+  onError: displayError,
+})
+
+const { mutate: deleteTag } = useMutation({
+  mutation: (_: MouseEvent) => _deleteTag(project.value!.id, selectedTags.value[0].id),
+  onSuccess: async () => {
+    selectedTags.value = []
+    await queryCache.invalidateQueries({ key: ['tags'] })
+  },
+  onError: displayError,
+})
+
+const { data: tags, isLoading } = useQuery({
+  key: () => ['tags'],
+  query: () => listTags(project.value!.id),
+  placeholderData: [] as Tag[],
+})
 
 function setBreadcrumbs() {
+  const projectName = project.value!.name
+  const projectId = project.value!.id
   pageStore.setBreadcrumbs([
-    { label: project.value!.name, route: `/projects/${project.value!.id}/summary` },
-    { label: 'Boards', route: `/projects/${project.value!.id}/boards` },
-    { label: 'Tags', route: `/projects/${project.value!.id}/tags` },
+    { label: projectName, route: `/projects/${projectId}/summary` },
+    { label: 'Boards', route: `/projects/${projectId}/boards` },
+    { label: 'Tags', route: `/projects/${projectId}/tags` },
   ])
 }
 
-onBeforeMount(() => {
-  tagStore.listTags()
-  pageStore.setTitle('Tags - Boards')
-  setBreadcrumbs()
-})
+onBeforeMount(setBreadcrumbs)
 </script>
 
 <template>
@@ -106,6 +121,7 @@ onBeforeMount(() => {
           v-model:editingRows="editingRows"
           v-model:selection="selectedTags"
           :value="filteredTags"
+          :loading="isLoading"
           edit-mode="row"
           data-key="id"
           table-style="min-width: 50rem"

@@ -6,9 +6,13 @@ import { useLayout } from '@/layout/composables/layout'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
 import { useTeamStore } from '@/stores/team'
-import type { Tag } from '@/types/tag'
 import { BacklogLevel, type BacklogResponse } from '@/types/team'
-import { getBacklogLevelLabel, getStatusLabel, getStatusSeverity } from '@/utils/work-item'
+import {
+  getBacklogLevelLabel,
+  getMoreTagsTooltip,
+  getStatusLabel,
+  getStatusSeverity,
+} from '@/utils/work-item'
 import { storeToRefs } from 'pinia'
 import type { TreeNode } from 'primevue/treenode'
 import { computed, onBeforeMount, onMounted, ref, useTemplateRef, watch } from 'vue'
@@ -64,15 +68,7 @@ function redirectToBoardView() {
   router.push(`/projects/${project.value?.id}/boards`)
 }
 
-function getMoreTagsTooltip(tags: Tag[]) {
-  return tags
-    .slice(2)
-    .map((tag) => tag.name)
-    .join(', ')
-}
-
-type WorkItemDialogType = InstanceType<typeof WorkItemDialog>
-const workItemDialogRef = useTemplateRef<WorkItemDialogType>('workItemDialog')
+const workItemDialogRef = useTemplateRef<InstanceType<typeof WorkItemDialog>>('workItemDialog')
 
 const route = useRoute()
 
@@ -95,10 +91,12 @@ function openWorkItemDialog(workItemId: string) {
 }
 
 function setBreadcrumbs() {
+  const projectName = project.value!.name
+  const projectId = project.value!.id
   pageStore.setBreadcrumbs([
-    { label: project.value!.name, route: `/projects/${project.value?.id}/summary` },
-    { label: 'Boards', route: `/projects/${project.value?.id}/boards` },
-    { label: 'Backlogs', route: `/projects/${project.value?.id}/backlogs` },
+    { label: projectName, route: `/projects/${projectId}/summary` },
+    { label: 'Boards', route: `/projects/${projectId}/boards` },
+    { label: 'Backlogs', route: `/projects/${projectId}/backlogs` },
   ])
 }
 

@@ -1,9 +1,9 @@
 import type { HttpClient } from '@/types'
-import type { BacklogLevel, BacklogResponse, CreateTeamRequest, TeamSummary } from '@/types/team'
+import type { BacklogLevel, BacklogResponse, CreateTeamRequest, Team } from '@/types/team'
 
 export default interface TeamGateway {
   createTeam(projectId: string, request: CreateTeamRequest): Promise<string>
-  listTeams(projectId: string): Promise<TeamSummary[]>
+  listTeams(projectId: string): Promise<Team[]>
   getBacklog(
     teamId: string,
     sprintId?: string,
@@ -18,7 +18,7 @@ export class TeamGatewayHttp implements TeamGateway {
     return this.http.post(`/projects/${projectId}/teams`, request)
   }
 
-  listTeams(projectId: string): Promise<TeamSummary[]> {
+  listTeams(projectId: string): Promise<Team[]> {
     return this.http.get(`/projects/${projectId}/teams`)
   }
 

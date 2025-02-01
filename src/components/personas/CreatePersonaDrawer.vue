@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { displayError } from '@/composables/displayError'
+import { useDrawer } from '@/composables/useDialog'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { ref } from 'vue'
@@ -11,39 +11,25 @@ const form = ref({
   description: '',
 })
 
-const resolver = ref(
-  yupResolver(
-    object({
-      name: string().required('Name is a required field'),
-      description: string()
-        .required('Description is a required field')
-        .max(500, 'Description must not exceed 500 characters'),
-    }),
-  ),
-)
+const createSprintSchema = object({
+  name: string().required('Name is a required field'),
+  description: string()
+    .required('Description is a required field')
+    .max(500, 'Description must not exceed 500 characters'),
+})
+
+const resolver = ref(yupResolver(createSprintSchema))
 
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
-  try {
-    closeDrawer()
-  } catch (error) {
-    displayError(error)
-  }
+  hideDrawer()
 }
 
-const isVisible = ref(false)
-
-function openDrawer() {
-  isVisible.value = true
-}
-
-function closeDrawer() {
-  isVisible.value = false
-}
+const { isVisible, showDrawer, hideDrawer } = useDrawer()
 
 defineExpose({
-  openDrawer,
-  closeDrawer,
+  showDrawer,
+  hideDrawer,
 })
 </script>
 
@@ -108,7 +94,7 @@ defineExpose({
       </div>
 
       <div class="flex justify-end mt-4 gap-2">
-        <Button type="button" label="Cancel" severity="secondary" @click="closeDrawer" />
+        <Button type="button" label="Cancel" severity="secondary" @click="hideDrawer" />
         <Button type="submit" label="Create" />
       </div>
     </Form>

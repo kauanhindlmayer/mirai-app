@@ -1,6 +1,5 @@
 import http from '@/gateways/HttpClient'
 import type { CreateProjectRequest, Project, UpdateProjectRequest } from '@/types/project'
-import { delay } from './utils'
 
 export function createProject(
   organizationId: string,
@@ -10,7 +9,6 @@ export function createProject(
 }
 
 export async function getProject(projectId: string): Promise<Project> {
-  await delay(5000)
   return http.get<Project>(`/projects/${projectId}`)
 }
 

@@ -1,7 +1,7 @@
 import type SprintGateway from '@/gateways/SprintGateway'
 import type TeamGateway from '@/gateways/TeamGateway'
 import type { SprintResponse } from '@/types/sprint'
-import type { BacklogLevel, BacklogResponse, CreateTeamRequest, TeamSummary } from '@/types/team'
+import type { BacklogLevel, BacklogResponse, CreateTeamRequest, Team } from '@/types/team'
 import { sprintGatewayKey, teamGatewayKey } from '@/utils/injection-keys'
 import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
 import { inject, ref } from 'vue'
@@ -13,7 +13,7 @@ export const useTeamStore = defineStore('teams', () => {
   const { project } = storeToRefs(useProjectStore())
 
   const teamId = ref<string | null>(null)
-  const teams = ref<TeamSummary[]>([])
+  const teams = ref<Team[]>([])
   const backlog = ref<BacklogResponse[]>([])
   const sprints = ref<SprintResponse[]>([])
 

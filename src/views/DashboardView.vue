@@ -1,62 +1,76 @@
 <script setup lang="ts">
+import { getDashboardData } from '@/api/dashboards'
+import { listTeams } from '@/api/teams'
 import BurndownChart from '@/components/dashboard/BurndownChart.vue'
 import BurnupChart from '@/components/dashboard/BurnupChart.vue'
-import { displayError } from '@/composables/displayError'
-import { useDashboardStore } from '@/stores/dashboard'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
-import { useTeamStore } from '@/stores/team'
+import type { Team } from '@/types/team'
+import { format } from '@/utils/date'
+import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import type { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { onBeforeMount, ref, useTemplateRef } from 'vue'
+import { computed, onBeforeMount, ref, useTemplateRef } from 'vue'
 
 const pageStore = usePageStore()
-const dashboardStore = useDashboardStore()
+pageStore.setTitle('Dashboard - Overview')
+
 const { project } = storeToRefs(useProjectStore())
-const teamStore = useTeamStore()
-const { teams } = storeToRefs(teamStore)
 
-const selectedTeam = ref()
+const selectedTeam = ref<Team | null>()
 
-function setBreadcrumbs() {
-  pageStore.setBreadcrumbs([
-    { label: project.value!.name, route: `/projects/${project.value!.id}/summary` },
-    { label: 'Overview', route: `/projects/${project.value!.id}/dashboards` },
-    { label: 'Dashboard', route: `/projects/${project.value!.id}/dashboards` },
-  ])
-}
+const { data: teams, isLoading: isTeamsLoading } = useQuery({
+  key: () => ['teams'],
+  query: async () => {
+    const teams = await listTeams(project.value!.id)
+    if (teams.length) {
+      selectedTeam.value = teams[0]
+    }
+    return teams
+  },
+})
 
-const isLoading = ref(false)
+const {
+  data: dashboardData,
+  isLoading,
+  refetch: refetchDashboardData,
+} = useQuery({
+  key: () => ['dashboard', project.value!.id],
+  query: () => getDashboardData(project.value!.id),
+  placeholderData: {
+    startDate: '',
+    endDate: '',
+    burndownData: [],
+    burnupData: [],
+  },
+})
 
-async function getDashboardData() {
-  isLoading.value = true
-  try {
-    await dashboardStore.getDashboardData()
-  } catch (error) {
-    displayError(error)
-  } finally {
-    isLoading.value = false
-  }
-}
+const formattedStartDate = computed(() => format(dashboardData.value.startDate))
+const formattedEndDate = computed(() => format(dashboardData.value.endDate))
+const dateRange = computed(() => `${formattedStartDate.value} - ${formattedEndDate.value}`)
 
 const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
-const menuItems = ref<MenuItem[]>([
+const menuItems: MenuItem[] = [
   { label: 'Dashboard Settings', icon: 'pi pi-cog', disabled: true },
   { label: 'Copy Dashboard', icon: 'pi pi-copy', disabled: true },
-])
+]
 
 function toggleMenuItems(event: MouseEvent) {
   menuRef.value?.toggle(event)
 }
 
-onBeforeMount(async () => {
-  await teamStore.listTeams()
-  selectedTeam.value = teams.value[0]
-  pageStore.setTitle('Dashboard - Overview')
-  setBreadcrumbs()
-  await getDashboardData()
-})
+function setBreadcrumbs() {
+  const projectName = project.value!.name
+  const projectId = project.value!.id
+  pageStore.setBreadcrumbs([
+    { label: projectName, route: `/projects/${projectId}/summary` },
+    { label: 'Overview', route: `/projects/${projectId}/dashboards` },
+    { label: 'Dashboard', route: `/projects/${projectId}/dashboards` },
+  ])
+}
+
+onBeforeMount(setBreadcrumbs)
 </script>
 
 <template>
@@ -64,7 +78,13 @@ onBeforeMount(async () => {
     <div class="col-span-12">
       <Toolbar>
         <template #start>
-          <Select v-model="selectedTeam" :options="teams" option-label="name" class="mr-1" />
+          <Select
+            v-model="selectedTeam"
+            :options="teams"
+            :loading="isTeamsLoading"
+            option-label="name"
+            class="mr-1"
+          />
           <Button
             icon="pi pi-users"
             severity="secondary"
@@ -80,7 +100,7 @@ onBeforeMount(async () => {
             severity="secondary"
             text
             v-tooltip.bottom="'Refresh Dashboard'"
-            @click="getDashboardData"
+            @click="() => refetchDashboardData()"
           />
           <Button
             icon="pi pi-ellipsis-v"
@@ -94,10 +114,18 @@ onBeforeMount(async () => {
       </Toolbar>
     </div>
     <div class="col-span-12 xl:col-span-5">
-      <BurndownChart :is-loading="isLoading" />
+      <BurndownChart
+        :is-loading="isLoading"
+        :burndown-data="dashboardData.burndownData"
+        :date-range="dateRange"
+      />
     </div>
     <div class="col-span-12 xl:col-span-5">
-      <BurnupChart :is-loading="isLoading" />
+      <BurnupChart
+        :is-loading="isLoading"
+        :burnup-data="dashboardData.burnupData"
+        :date-range="dateRange"
+      />
     </div>
   </div>
 </template>
