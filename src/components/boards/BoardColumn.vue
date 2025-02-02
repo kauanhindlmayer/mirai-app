@@ -1,32 +1,63 @@
 <script setup lang="ts">
-import { useBoardStore } from '@/stores/board'
-import type { Card, Column, DraggableEvent } from '@/types/board'
+import { moveCard } from '@/api/boards'
+import { displayError } from '@/composables/displayError'
+import { useTeamStore } from '@/stores/team'
+import type { Card, Column, DraggableEvent, MoveCardRequest } from '@/types/board'
+import { useMutation, useQueryCache } from '@pinia/colada'
 import { ref } from 'vue'
 import Draggable from 'vuedraggable/src/vuedraggable'
 import BoardCard from './BoardCard.vue'
 
-const boardStore = useBoardStore()
+const teamStore = useTeamStore()
 
-const { column } = defineProps<{ column: Column }>()
+const { boardId, column } = defineProps<{
+  boardId: string
+  column: Column
+}>()
 
 const cards = ref<Card[]>(column.cards)
+
+type MoveCardMutationPayload = {
+  columnId: string
+  cardId: string
+  request: MoveCardRequest
+}
+
+const queryCache = useQueryCache()
+
+const { mutate: moveCardFn } = useMutation({
+  mutation: (payload: MoveCardMutationPayload) =>
+    moveCard(teamStore.teamId!, boardId, payload.columnId, payload.cardId, payload.request),
+  onSuccess: () => {
+    queryCache.invalidateQueries({ key: ['board', boardId] })
+  },
+  onError: displayError,
+})
 
 async function onChange(event: DraggableEvent<Card>) {
   const { moved, added } = event
 
   if (moved) {
     const card = moved.element
-    await boardStore.moveCard(card.columnId, card.id, {
-      targetColumnId: column.id,
-      targetPosition: moved.newIndex,
+    moveCardFn({
+      columnId: column.id,
+      cardId: card.id,
+      request: {
+        targetColumnId: column.id,
+        targetPosition: moved.newIndex,
+      },
     })
   }
 
   if (added) {
     const card = added.element
-    await boardStore.moveCard(card.columnId, card.id, {
-      targetColumnId: column.id,
-      targetPosition: added.newIndex,
+    moveCardFn({
+      columnId: column.id,
+      cardId: card.id,
+      request: {
+        targetColumnId: column.id,
+        targetPosition: added.newIndex,
+      },
     })
   }
 }

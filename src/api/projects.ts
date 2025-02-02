@@ -1,4 +1,4 @@
-import http from '@/gateways/HttpClient'
+import http from '@/api/http'
 import type { CreateProjectRequest, Project, UpdateProjectRequest } from '@/types/project'
 
 export function createProject(

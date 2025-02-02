@@ -1,3 +1,4 @@
+import { getProject } from '@/api/projects'
 import { useProjectStore } from '@/stores/project'
 import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 
@@ -11,7 +12,8 @@ export async function ensureProjectLoaded(
 
   const store = useProjectStore()
   if (!store.project || store.project.id !== projectId) {
-    await store.getProject(projectId)
+    const project = await getProject(projectId)
+    store.setProject(project)
   }
 
   next()

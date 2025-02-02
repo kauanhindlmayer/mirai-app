@@ -1,4 +1,4 @@
-import http from '@/gateways/HttpClient'
+import http from '@/api/http'
 import type { CreateTagRequest, Tag } from '@/types/tag'
 
 export function listTags(projectId: string, searchTerm?: string): Promise<Tag[]> {

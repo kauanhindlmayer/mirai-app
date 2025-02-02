@@ -1,15 +1,9 @@
 <script setup lang="ts">
-import { displayError } from '@/composables/displayError'
+import { useDialog } from '@/composables/useDialog'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { ref } from 'vue'
 import { date, object, string } from 'yup'
-
-const createSprintSchema = object({
-  name: string().required('Name is a required field'),
-  startDate: date().required('Start date is a required field'),
-  endDate: date().required('End date is a required field'),
-})
 
 const form = ref({
   name: '',
@@ -17,29 +11,23 @@ const form = ref({
   endDate: null,
 })
 
+const createSprintSchema = object({
+  name: string().required('Name is a required field'),
+  startDate: date().required('Start date is a required field'),
+  endDate: date().required('End date is a required field'),
+})
+
 const resolver = ref(yupResolver(createSprintSchema))
 
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
-  try {
-    hideDialog()
-  } catch (error) {
-    displayError(error)
-  }
+  hideDialog()
 }
 
-const isVisible = ref(false)
-
-function openDialog() {
-  isVisible.value = true
-}
-
-function hideDialog() {
-  isVisible.value = false
-}
+const { isVisible, showDialog, hideDialog } = useDialog()
 
 defineExpose({
-  openDialog,
+  showDialog,
   hideDialog,
 })
 </script>

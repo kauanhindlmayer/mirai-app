@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { listWikiPages } from '@/api/wiki-pages'
+import { deleteWikiPage as _deleteWikiPage, listWikiPages } from '@/api/wiki-pages'
 import MoveWikiPageDrawer from '@/components/wiki-pages/MoveWikiPageDrawer.vue'
+import { displayError } from '@/composables/displayError'
 import { useAppToast } from '@/composables/useAppToast'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
 import { useWikiPageStore } from '@/stores/wiki-page'
 import type { WikiPageSummary } from '@/types/wiki-page'
-import { useQuery } from '@pinia/colada'
+import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import { useConfirm, type Menu, type TreeSelectionKeys } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
@@ -19,8 +20,8 @@ import WikiPageForm from './WikiPageForm.vue'
 const pageStore = usePageStore()
 pageStore.setTitle('Wiki Pages - Overview')
 
-const store = useWikiPageStore()
-const { wikiPage } = storeToRefs(store)
+const wikiPageStore = useWikiPageStore()
+const { wikiPage } = storeToRefs(wikiPageStore)
 const { project } = storeToRefs(useProjectStore())
 
 const confirm = useConfirm()
@@ -81,7 +82,7 @@ function openNewPageForm() {
   isAdding.value = true
   selectedKey.value = undefined
   router.push({ name: 'wiki-pages', params: { wikiPageId: '' } })
-  store.resetWikiPage()
+  wikiPageStore.resetWikiPage()
 }
 
 function closeForm() {
@@ -90,7 +91,7 @@ function closeForm() {
   if (isEditing) {
     router.push(`/projects/${project.value!.id}/wiki-pages/${wikiPage.value!.id}`)
   } else {
-    selectedKey.value = { [store.wikiPages[0].id as string]: true }
+    selectedKey.value = { [wikiPages.value[0].id as string]: true }
   }
 }
 
@@ -131,6 +132,17 @@ function redirectToEditPage() {
   router.push(`/projects/${project.value!.id}/wiki-pages/${wikiPage.value!.id}/edit`)
 }
 
+const queryCache = useQueryCache()
+
+const { mutate: deleteWikiPageFn } = useMutation({
+  mutation: () => _deleteWikiPage(project.value!.id, wikiPage.value!.id),
+  onSuccess: async () => {
+    await queryCache.invalidateQueries({ key: ['wiki-pages', project.value!.id] })
+    toast.showSuccess({ detail: 'Wiki page deleted successfully' })
+  },
+  onError: displayError,
+})
+
 function deleteWikiPage() {
   confirm.require({
     header: `Delete '${wikiPage.value?.title}'?`,
@@ -146,11 +158,7 @@ function deleteWikiPage() {
       label: 'Delete',
       severity: 'danger',
     },
-    accept: async () => {
-      await store.deleteWikiPage(wikiPage.value!.id)
-      await store.listWikiPages()
-      selectedKey.value = { [store.wikiPages[0].id as string]: true }
-    },
+    accept: deleteWikiPageFn,
   })
 }
 

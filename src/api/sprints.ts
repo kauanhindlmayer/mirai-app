@@ -1,4 +1,4 @@
-import http from '@/gateways/HttpClient'
+import http from '@/api/http'
 import type { CreateSprintRequest, SprintResponse } from '@/types/sprint'
 
 export function createSprint(teamId: string, request: CreateSprintRequest): Promise<string> {

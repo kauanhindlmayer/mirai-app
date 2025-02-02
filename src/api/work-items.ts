@@ -1,4 +1,4 @@
-import http from '@/gateways/HttpClient'
+import http from '@/api/http'
 import type { PaginatedList, PaginationFilter } from '@/types'
 import type { WorkItem, WorkItemsStats } from '@/types/work-item'
 

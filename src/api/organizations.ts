@@ -1,4 +1,4 @@
-import http from '@/gateways/HttpClient'
+import http from '@/api/http'
 import type { CreateOrganizationRequest, Organization } from '@/types/organization'
 
 export function createOrganization(request: CreateOrganizationRequest) {

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { moveWikiPage as _moveWikiPage } from '@/api/wiki-pages'
+import { moveWikiPage as _moveWikiPage, listWikiPages } from '@/api/wiki-pages'
 import { useDrawer } from '@/composables/useDialog'
 import { useProjectStore } from '@/stores/project'
 import { useWikiPageStore } from '@/stores/wiki-page'
 import type { WikiPageSummary } from '@/types/wiki-page'
-import { useMutation, useQueryCache } from '@pinia/colada'
+import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import type { TreeSelectionKeys } from 'primevue'
 import type { TreeNode } from 'primevue/treenode'
@@ -14,8 +14,16 @@ const store = useWikiPageStore()
 const { wikiPage } = storeToRefs(store)
 const { project } = storeToRefs(useProjectStore())
 
+const { data: wikiPages } = useQuery({
+  key: () => ['wiki-pages', project.value!.id],
+  query: async () => listWikiPages(project.value!.id),
+  placeholderData: [] as WikiPageSummary[],
+})
+
 const selectedKey = ref<TreeSelectionKeys | undefined>(undefined)
-const nodes = computed(() => store.wikiPages.map(toNode))
+const nodes = computed(() => {
+  return wikiPages.value.filter((page) => page.id !== wikiPage.value?.id).map(toNode)
+})
 const title = computed(() => `Move '${wikiPage.value?.title}'?`)
 const isSaveButtonDisabled = computed(() => !selectedKey.value)
 

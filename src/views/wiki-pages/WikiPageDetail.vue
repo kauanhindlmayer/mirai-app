@@ -8,30 +8,43 @@ import {
 import CommentsSection from '@/components/common/CommentsSection.vue'
 import { useAppToast } from '@/composables/useAppToast'
 import { useProjectStore } from '@/stores/project'
+import { useWikiPageStore } from '@/stores/wiki-page'
 import { format, formatDistanceToNow } from '@/utils/date'
 import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { computed, useTemplateRef } from 'vue'
+import { computed, useTemplateRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
 const route = useRoute()
+const wikiPageStore = useWikiPageStore()
 const { project } = storeToRefs(useProjectStore())
 
 const wikiPageId = computed(() => route.params.wikiPageId as string)
 
-const { data: wikiPage } = useQuery({
+watch(
+  () => wikiPageId.value,
+  async () => {
+    await Promise.all([refetchWikiPage(), refetchWikiPageStats()])
+  },
+)
+
+const { data: wikiPage, refetch: refetchWikiPage } = useQuery({
   key: ['wiki-page', wikiPageId.value],
-  query: () => getWikiPage(project.value!.id, wikiPageId.value),
-  enabled: !!wikiPageId.value,
+  query: async () => {
+    const wikiPage = await getWikiPage(project.value!.id, wikiPageId.value)
+    wikiPageStore.setWikiPage(wikiPage)
+    return wikiPage
+  },
+  enabled: () => !!wikiPageId.value,
 })
 
-const { data: wikiPageStats } = useQuery({
+const { data: wikiPageStats, refetch: refetchWikiPageStats } = useQuery({
   key: ['wiki-page-stats', wikiPageId.value],
   query: () => getWikiPageStats(project.value!.id, wikiPageId.value),
-  enabled: !!wikiPageId.value,
+  enabled: () => !!wikiPageId.value,
 })
 
 const emit = defineEmits<{

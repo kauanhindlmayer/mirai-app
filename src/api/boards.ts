@@ -1,27 +1,49 @@
-import http from '@/gateways/HttpClient'
-import type { Board, BoardSummary, CreateBoardColumnRequest, MoveCardRequest } from '@/types/board'
+import http from '@/api/http'
+import type {
+  Board,
+  BoardSummary,
+  CreateBoardColumnRequest,
+  CreateBoardRequest,
+  MoveCardRequest,
+} from '@/types/board'
+
+export function createBoard(teamId: string, request: CreateBoardRequest): Promise<string> {
+  return http.post<string>(`/teams/${teamId}/boards`, request)
+}
+
+export function getBoard(teamId: string, boardId: string): Promise<Board> {
+  return http.get<Board>(`/teams/${teamId}/boards/${boardId}`)
+}
 
 export function listBoards(projectId: string): Promise<BoardSummary[]> {
   return http.get<BoardSummary[]>(`/projects/${projectId}/boards`)
 }
 
-export async function getBoard(boardId: string): Promise<Board> {
-  return http.get<Board>(`/boards/${boardId}`)
-}
-
-export function createColumn(boardId: string, request: CreateBoardColumnRequest): Promise<void> {
-  return http.post<void>(`/boards/${boardId}/columns`, request)
-}
-
-export function deleteColumn(boardId: string, columnId: string): Promise<void> {
-  return http.delete<void>(`/boards/${boardId}/columns/${columnId}`)
+export function deleteBoard(teamId: string, boardId: string): Promise<void> {
+  return http.delete(`/teams/${teamId}/boards/${boardId}`)
 }
 
 export function moveCard(
+  teamId: string,
   boardId: string,
   columnId: string,
   cardId: string,
   request: MoveCardRequest,
 ): Promise<void> {
-  return http.put<void>(`/boards/${boardId}/columns/${columnId}/cards/${cardId}/move`, request)
+  return http.post(
+    `/teams/${teamId}/boards/${boardId}/columns/${columnId}/cards/${cardId}/move`,
+    request,
+  )
+}
+
+export function createColumn(
+  teamId: string,
+  boardId: string,
+  request: CreateBoardColumnRequest,
+): Promise<void> {
+  return http.post(`/teams/${teamId}/boards/${boardId}/columns`, request)
+}
+
+export function deleteColumn(teamId: string, boardId: string, columnId: string): Promise<void> {
+  return http.delete(`/teams/${teamId}/boards/${boardId}/columns/${columnId}`)
 }

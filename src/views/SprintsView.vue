@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { listTeams } from '@/api/teams'
+import { listSprints } from '@/api/sprints'
+import { getBacklog, listTeams } from '@/api/teams'
 import WorkItemDialog from '@/components/common/WorkItemDialog.vue'
-import type CreateSprintDialog from '@/components/sprints/CreateSprintDialog.vue'
+import CreateSprintDialog from '@/components/sprints/CreateSprintDialog.vue'
 import AppTag from '@/components/tags/AppTag.vue'
 import WorkItemTag from '@/components/work-items/WorkItemTag.vue'
 import { useLayout } from '@/layout/composables/layout'
@@ -16,17 +17,16 @@ import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import type { TreeNode } from 'primevue/treenode'
 import { computed, onMounted, ref, useTemplateRef, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 const pageStore = usePageStore()
 const teamStore = useTeamStore()
-const { backlog, sprints } = storeToRefs(teamStore)
 const { project } = storeToRefs(useProjectStore())
 const { onMenuToggle } = useLayout()
 
-const selectedTeam = ref<Team | null>(null)
+const selectedTeam = ref<Team>()
 const selectedSprint = ref<SprintResponse>()
-const selectedBacklogLevel = ref(BacklogLevel.UserStory)
+const selectedBacklogLevel = ref<BacklogLevel>(BacklogLevel.UserStory)
 
 const createSprintDialogRef =
   useTemplateRef<InstanceType<typeof CreateSprintDialog>>('createSprintDialog')
@@ -36,10 +36,23 @@ watch(
   async (newSelectedTeam) => {
     if (!newSelectedTeam) return
     teamStore.setTeamId(newSelectedTeam.id)
-    await teamStore.listSprints()
-    const [firstSprint] = sprints.value
-    selectedSprint.value = firstSprint
   },
+)
+
+const { data: sprints, isLoading: isSprintsLoading } = useQuery({
+  key: ['sprints', selectedTeam.value?.id || ''],
+  query: () => listSprints(selectedTeam.value!.id),
+  enabled: () => !!selectedTeam.value,
+  placeholderData: [] as SprintResponse[],
+})
+
+watch(
+  () => sprints.value,
+  () => {
+    if (!sprints.value.length) return
+    selectedSprint.value = sprints.value[0]
+  },
+  { immediate: true },
 )
 
 watch(
@@ -47,20 +60,26 @@ watch(
   async (newSelectedSprint) => {
     if (!newSelectedSprint) return
     pageStore.setTitle(`${selectedTeam.value?.name} ${newSelectedSprint.name} Backlog - Boards`)
-    await teamStore.getBacklog(
-      selectedTeam.value!.id,
-      newSelectedSprint.id,
-      selectedBacklogLevel.value,
-    )
   },
 )
+
+const { data: backlog, isLoading: isBacklogLoading } = useQuery({
+  key: [
+    'backlog',
+    selectedTeam.value?.id || '',
+    selectedSprint.value?.id || '',
+    selectedBacklogLevel.value,
+  ],
+  query: async () =>
+    getBacklog(selectedTeam.value!.id, selectedSprint.value!.id, selectedBacklogLevel.value),
+  enabled: () => !!selectedTeam.value && !!selectedSprint.value,
+  placeholderData: [] as BacklogResponse[],
+})
 
 const sprintDateRange = computed(() => {
   if (!selectedSprint.value) return ''
   const { startDate, endDate } = selectedSprint.value
-  const start = format(startDate, 'MMMM d')
-  const end = format(endDate, 'MMMM d')
-  return `${start} - ${end}`
+  return `${format(startDate, 'MMMM d')} - ${format(endDate, 'MMMM d')}`
 })
 
 const remainingWorkingDays = computed(() => {
@@ -98,39 +117,25 @@ function toNode(workItem: BacklogResponse): TreeNode {
 }
 
 const router = useRouter()
-const route = useRoute()
-
-const workItemDialogRef = useTemplateRef<InstanceType<typeof WorkItemDialog>>('workItemDialog')
-
-watch(
-  () => route.query.workItemId,
-  (newWorkItemId) => {
-    if (!newWorkItemId) return
-    workItemDialogRef.value?.openDialog(newWorkItemId as string)
-  },
-)
-
-onMounted(() => {
-  const workItemId = route.query.workItemId as string
-  if (!workItemId) return
-  workItemDialogRef.value?.openDialog(workItemId)
-})
 
 function openWorkItemDialog(workItemId: string) {
-  router.push(`/projects/${project.value!.id}/sprints?workItemId=${workItemId}`)
+  router.replace({ query: { workItemId } })
 }
 
 const { data: teams, isLoading } = useQuery({
   key: ['teams', project.value!.id],
-  query: async () => {
-    const teams = await listTeams(project.value!.id)
-    const [firstTeam] = teams
-    teamStore.setTeamId(firstTeam.id)
-    selectedTeam.value = firstTeam
-    return teams
-  },
+  query: () => listTeams(project.value!.id),
   placeholderData: [] as Team[],
 })
+
+watch(
+  () => teams.value,
+  () => {
+    if (!teams.value.length) return
+    selectedTeam.value = teams.value[0]
+  },
+  { immediate: true },
+)
 
 function setBreadcrumbs() {
   const projectName = project.value!.name
@@ -200,7 +205,12 @@ onMounted(setBreadcrumbs)
           <TabPanels>
             <TabPanel value="1">
               <div class="flex justify-between items-center">
-                <Select v-model="selectedSprint" :options="sprints" option-label="name">
+                <Select
+                  v-model="selectedSprint"
+                  :options="sprints"
+                  :loading="isSprintsLoading"
+                  option-label="name"
+                >
                   <template #footer>
                     <div class="p-1">
                       <Button
@@ -210,7 +220,7 @@ onMounted(setBreadcrumbs)
                         text
                         size="small"
                         icon="pi pi-plus"
-                        @click="createSprintDialogRef?.openDialog"
+                        @click="createSprintDialogRef?.showDialog"
                       />
                     </div>
                   </template>
@@ -221,7 +231,7 @@ onMounted(setBreadcrumbs)
                 </div>
               </div>
 
-              <TreeTable :value="nodes" tableStyle="min-width: 50rem">
+              <TreeTable :value="nodes" :loading="isBacklogLoading" table-style="min-width: 50rem">
                 <Column field="type" header="Type" style="width: 10rem; text-align: center">
                   <template #body="{ node }">
                     <WorkItemTag :type="node.data.type" />
@@ -270,7 +280,7 @@ onMounted(setBreadcrumbs)
     </div>
   </div>
   <CreateSprintDialog ref="createSprintDialog" />
-  <WorkItemDialog ref="workItemDialog" />
+  <WorkItemDialog />
 </template>
 
 <style>

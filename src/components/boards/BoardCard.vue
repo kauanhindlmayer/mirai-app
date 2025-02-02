@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { useProjectStore } from '@/stores/project'
 import type { Card } from '@/types/board'
 import { getStatusLabel, getStatusSeverity, getTypeColor } from '@/utils/work-item'
-import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -11,11 +9,10 @@ const assignee = computed(() => card.workItem.assignee)
 
 const storyPoints = ref(card.workItem.storyPoints)
 
-const { project } = storeToRefs(useProjectStore())
 const router = useRouter()
 
 function openWorkItemDialog() {
-  router.push(`/projects/${project.value!.id}/boards?workItemId=${card.workItem.id}`)
+  router.replace({ query: { workItemId: card.workItem.id } })
 }
 </script>
 

@@ -1,25 +1,24 @@
 <script setup lang="ts">
+import { getBoard, listBoards } from '@/api/boards'
 import Board from '@/components/boards/Board.vue'
 import BoardSettingsDrawer from '@/components/boards/BoardSettingsDrawer.vue'
 import { useLayout } from '@/layout/composables/layout'
-import { useBoardStore } from '@/stores/board'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
 import { useTeamStore } from '@/stores/team'
 import { WorkItemType } from '@/types/work-item'
+import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import { onBeforeMount, ref, useTemplateRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 const pageStore = usePageStore()
 const teamStore = useTeamStore()
-const boardStore = useBoardStore()
-const { board, boards } = storeToRefs(boardStore)
 const { project } = storeToRefs(useProjectStore())
 const { onMenuToggle } = useLayout()
 
-type BoardSettingsDrawerType = InstanceType<typeof BoardSettingsDrawer>
-const boardSettingsDrawerRef = useTemplateRef<BoardSettingsDrawerType>('boardSettingsDrawer')
+const boardSettingsDrawerRef =
+  useTemplateRef<InstanceType<typeof BoardSettingsDrawer>>('boardSettingsDrawer')
 
 const selectedBoard = ref()
 const selectedBacklogLevel = ref(WorkItemType.UserStory)
@@ -35,15 +34,31 @@ watch(
     if (!newSelectedBoard) return
     pageStore.setTitle(`${selectedBoard.value?.name} Stories Board - Boards`)
     teamStore.setTeamId(newSelectedBoard.teamId)
-    await boardStore.getBoard(newSelectedBoard.id)
   },
 )
+
+const { data: board, isLoading: isBoardLoading } = useQuery({
+  key: () => ['board', selectedBoard.value?.id],
+  query: async () => getBoard(teamStore.teamId!, selectedBoard.value?.id),
+  enabled: () => !!selectedBoard.value,
+})
 
 const router = useRouter()
 
 function redirectToBacklogView() {
   router.push(`/projects/${project.value?.id}/backlogs`)
 }
+
+const { data: boards, isLoading } = useQuery({
+  key: () => ['boards', project.value!.id],
+  query: async () => {
+    const boards = await listBoards(project.value!.id)
+    if (boards.length) {
+      selectedBoard.value = boards[0]
+    }
+    return boards
+  },
+})
 
 function setBreadcrumbs() {
   pageStore.setBreadcrumbs([
@@ -53,11 +68,7 @@ function setBreadcrumbs() {
   ])
 }
 
-onBeforeMount(async () => {
-  await boardStore.listBoards()
-  selectedBoard.value = boards.value[0]
-  setBreadcrumbs()
-})
+onBeforeMount(setBreadcrumbs)
 </script>
 
 <template>
@@ -66,7 +77,12 @@ onBeforeMount(async () => {
       <div class="card">
         <div class="flex justify-between items-center mb-4">
           <div class="flex items-center space-x-1">
-            <Select v-model="selectedBoard" :options="boards" option-label="name" />
+            <Select
+              v-model="selectedBoard"
+              :options="boards"
+              :loading="isLoading"
+              option-label="name"
+            />
             <Button
               icon="pi pi-users"
               severity="secondary"
@@ -106,7 +122,7 @@ onBeforeMount(async () => {
                 variant="text"
                 class="ml-2"
                 v-tooltip.bottom="'Configure Board Settings'"
-                @click="boardSettingsDrawerRef?.openDrawer"
+                @click="boardSettingsDrawerRef?.showDrawer"
               />
               <Button
                 icon="pi pi-arrow-up-right-and-arrow-down-left-from-center"
@@ -120,7 +136,7 @@ onBeforeMount(async () => {
           </TabList>
           <TabPanels>
             <TabPanel value="0">
-              <Board v-if="board" :board="board" class="mt-4" />
+              <Board v-if="board" :loading="isBoardLoading" :board="board" class="mt-4" />
             </TabPanel>
           </TabPanels>
         </Tabs>

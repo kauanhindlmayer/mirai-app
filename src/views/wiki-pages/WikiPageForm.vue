@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import { createWikiPage, updateWikiPage } from '@/api/wiki-pages'
+import { displayError } from '@/composables/displayError'
+import { useAppToast } from '@/composables/useAppToast'
+import { useProjectStore } from '@/stores/project'
 import { useWikiPageStore } from '@/stores/wiki-page'
+import { useMutation, useQueryCache } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import { useConfirm } from 'primevue'
 import { computed, ref } from 'vue'
@@ -7,7 +12,7 @@ import { computed, ref } from 'vue'
 const confirm = useConfirm()
 const store = useWikiPageStore()
 const { wikiPage } = storeToRefs(store)
-
+const { project } = storeToRefs(useProjectStore())
 const { parentWikiPageId } = defineProps<{ parentWikiPageId?: string }>()
 
 const emit = defineEmits<{
@@ -51,15 +56,44 @@ function close() {
   })
 }
 
-async function save() {
+const toast = useAppToast()
+const queryCache = useQueryCache()
+
+const { mutate: createWikiPageFn } = useMutation({
+  mutation: () =>
+    createWikiPage(project.value!.id, {
+      title: title.value,
+      content: content.value,
+      parentWikiPageId,
+    }),
+  onSuccess: async () => {
+    queryCache.invalidateQueries({ key: ['wiki-pages', project.value!.id] })
+    toast.showSuccess({ detail: 'Wiki page created successfully' })
+    emit('close')
+  },
+  onError: displayError,
+})
+
+const { mutate: updateWikiPageFn } = useMutation({
+  mutation: () =>
+    updateWikiPage(project.value!.id, wikiPage.value!.id, {
+      title: title.value,
+      content: content.value,
+    }),
+  onSuccess: async () => {
+    queryCache.invalidateQueries({ key: ['wiki-pages', project.value!.id] })
+    toast.showSuccess({ detail: 'Wiki page updated successfully' })
+    emit('close')
+  },
+  onError: displayError,
+})
+
+function saveWikiPage() {
   if (isEditing.value) {
-    await store.updateWikiPage(wikiPage.value!.id, { title: title.value, content: content.value })
-    await store.getWikiPage(wikiPage.value!.id)
+    updateWikiPageFn()
   } else {
-    await store.createWikiPage({ title: title.value, content: content.value, parentWikiPageId })
+    createWikiPageFn()
   }
-  await store.listWikiPages()
-  emit('close')
 }
 </script>
 
@@ -74,7 +108,7 @@ async function save() {
             label="Save"
             severity="secondary"
             :disabled="isSaveButtonDisabled"
-            @click="save"
+            @click="saveWikiPage"
           />
         </div>
         <Editor v-model="content" editor-style="height: 320px" />

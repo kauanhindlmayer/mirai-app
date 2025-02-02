@@ -10,8 +10,8 @@ import type {
   WikiPageSummary,
 } from '@/types/wiki-page'
 
-export function createWikiPage(projectId: string, request: CreateWikiPageRequest): Promise<string> {
-  return http.post<string>(`/projects/${projectId}/wiki-pages`, request)
+export function createWikiPage(projectId: string, request: CreateWikiPageRequest): Promise<void> {
+  return http.post<void>(`/projects/${projectId}/wiki-pages`, request)
 }
 
 export function updateWikiPage(

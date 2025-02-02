@@ -17,16 +17,6 @@ pageStore.setTitle('Summary - Overview')
 const editProjectDrawerRef =
   useTemplateRef<InstanceType<typeof EditProjectDrawer>>('editProjectDrawer')
 
-function setBreadcrumbs(project: Project) {
-  pageStore.setBreadcrumbs([
-    { label: project.name, route: `/projects/${project.id}/summary` },
-    { label: 'Overview', route: `/projects/${project.id}/summary` },
-    { label: 'Summary', route: `/projects/${project.id}/summary` },
-  ])
-}
-
-const hasProjectDescription = computed(() => project.value?.description)
-
 const periods = ref([
   { label: 'Last 1 day', value: '1' },
   { label: 'Last 7 days', value: '7' },
@@ -37,12 +27,21 @@ const { stats, periodInDays } = useWorkItemsStats()
 
 const route = useRoute()
 const projectId = computed(() => route.params.projectId as string)
+const hasProjectDescription = computed(() => project.value?.description)
 
 const { data: project, isLoading } = useQuery({
   key: () => ['project', projectId.value],
   query: () => getProject(projectId.value),
   placeholderData: {} as Project,
 })
+
+function setBreadcrumbs(project: Project) {
+  pageStore.setBreadcrumbs([
+    { label: project.name, route: `/projects/${project.id}/summary` },
+    { label: 'Overview', route: `/projects/${project.id}/summary` },
+    { label: 'Summary', route: `/projects/${project.id}/summary` },
+  ])
+}
 
 watch(() => project.value, setBreadcrumbs)
 </script>

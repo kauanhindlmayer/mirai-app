@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import { createColumn, deleteColumn } from '@/api/boards'
 import { displayError } from '@/composables/displayError'
+import { useDrawer } from '@/composables/useDialog'
 import { useBoardStore } from '@/stores/board'
-import type { Column } from '@/types/board'
+import { useTeamStore } from '@/stores/team'
+import type { Column, CreateBoardColumnRequest } from '@/types/board'
+import { useMutation, useQueryCache } from '@pinia/colada'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { storeToRefs } from 'pinia'
@@ -10,6 +14,7 @@ import type { MenuItem } from 'primevue/menuitem'
 import { computed, ref, useTemplateRef, watch } from 'vue'
 import { number, object, string } from 'yup'
 
+const teamStore = useTeamStore()
 const boardStore = useBoardStore()
 const { board } = storeToRefs(boardStore)
 
@@ -45,7 +50,7 @@ const menuItems = computed<MenuItem[]>(() => {
     {
       label: 'Remove',
       icon: 'pi pi-trash',
-      command: removeColumn,
+      command: () => removeColumn(),
       visible: !isFirstColumn && !isLastColumn,
     },
     {
@@ -80,17 +85,16 @@ function toggleMenuItems(event: MouseEvent) {
   menuRef.value?.toggle(event)
 }
 
-async function removeColumn() {
-  const index = columns.value.findIndex((column) => column.id === selectedColumnId.value)
-  if (index === -1) return
-  try {
-    await boardStore.deleteColumn(selectedColumnId.value)
+const { mutate: removeColumn } = useMutation({
+  mutation: () => deleteColumn(teamStore.teamId!, board.value!.id, selectedColumnId.value),
+  onSuccess: () => {
+    const index = columns.value.findIndex((column) => column.id === selectedColumnId.value)
+    if (index === -1) return
     columns.value.splice(index, 1)
-    closeDrawer()
-  } catch (error) {
-    displayError(error)
-  }
-}
+    hideDrawer()
+  },
+  onError: displayError,
+})
 
 function moveColumnLeft() {
   const index = columns.value.findIndex((column) => column.id === selectedColumnId.value)
@@ -130,50 +134,47 @@ function insertColumn(position: number) {
   newColumnId.value++
 }
 
-const resolver = ref(
-  yupResolver(
-    object({
-      name: string().required('Name is required'),
-      wipLimit: number()
-        .optional()
-        .min(0, 'WIP Limit must be greater than or equal to 0')
-        .default(undefined),
-      definitionOfDone: string()
-        .optional()
-        .max(500, 'Definition of Done must not exceed 500 characters')
-        .default(undefined),
-    }),
-  ),
-)
+const createBoardColumnSchema = object({
+  name: string().required('Name is required'),
+  wipLimit: number()
+    .optional()
+    .min(0, 'WIP Limit must be greater than or equal to 0')
+    .default(undefined),
+  definitionOfDone: string()
+    .optional()
+    .max(500, 'Definition of Done must not exceed 500 characters')
+    .default(undefined),
+})
+
+const resolver = ref(yupResolver(createBoardColumnSchema))
+
+const queryCache = useQueryCache()
+
+const { mutate: createColumnFn } = useMutation({
+  mutation: (payload: CreateBoardColumnRequest) =>
+    createColumn(teamStore.teamId!, board.value!.id, payload),
+  onSuccess: () => {
+    queryCache.invalidateQueries({ key: ['board', board.value!.id] })
+    hideDrawer()
+  },
+  onError: displayError,
+})
 
 async function onFormSubmit({ valid, values }: FormSubmitEvent) {
   if (!valid) return
-  try {
-    boardStore.createColumn({
-      name: values.name,
-      wipLimit: values.wipLimit,
-      definitionOfDone: values.definitionOfDone || '',
-      position: 1,
-    })
-    closeDrawer()
-  } catch (error) {
-    displayError(error)
-  }
+  createColumnFn({
+    name: values.name,
+    wipLimit: values.wipLimit,
+    definitionOfDone: values.definitionOfDone || '',
+    position: 1,
+  })
 }
 
-const isVisible = ref(false)
-
-function openDrawer() {
-  isVisible.value = true
-}
-
-function closeDrawer() {
-  isVisible.value = false
-}
+const { isVisible, showDrawer, hideDrawer } = useDrawer()
 
 defineExpose({
-  openDrawer,
-  closeDrawer,
+  showDrawer,
+  hideDrawer,
 })
 </script>
 
@@ -269,7 +270,7 @@ defineExpose({
                   </FormField>
                 </div>
                 <div class="flex justify-end mt-4 gap-2">
-                  <Button type="button" label="Cancel" severity="secondary" @click="closeDrawer" />
+                  <Button type="button" label="Cancel" severity="secondary" @click="hideDrawer" />
                   <Button type="submit" label="Save" />
                 </div>
               </Form>
