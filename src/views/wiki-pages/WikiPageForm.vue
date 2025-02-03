@@ -2,22 +2,23 @@
 import { createWikiPage, updateWikiPage } from '@/api/wiki-pages'
 import { displayError } from '@/composables/displayError'
 import { useAppToast } from '@/composables/useAppToast'
+import { useWikiPage } from '@/queries/wiki-pages'
 import { useProjectStore } from '@/stores/project'
-import { useWikiPageStore } from '@/stores/wiki-page'
 import { useMutation, useQueryCache } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import { useConfirm } from 'primevue'
 import { computed, ref } from 'vue'
 
 const confirm = useConfirm()
-const store = useWikiPageStore()
-const { wikiPage } = storeToRefs(store)
 const { project } = storeToRefs(useProjectStore())
-const { parentWikiPageId } = defineProps<{ parentWikiPageId?: string }>()
 
-const emit = defineEmits<{
-  (event: 'close'): void
+const { parentWikiPageId } = defineProps<{
+  parentWikiPageId?: string
 }>()
+
+const emit = defineEmits<{ (event: 'close', wikiPageId: string): void }>()
+
+const { wikiPage } = useWikiPage()
 
 const title = ref<string>(wikiPage.value?.title || '')
 const content = ref<string>(wikiPage.value?.content || '')
@@ -33,7 +34,7 @@ const isWikiPageUnchanged = computed(() => {
 
 function close() {
   if (isWikiPageUnchanged.value) {
-    emit('close')
+    emit('close', wikiPage.value!.id)
     return
   }
   confirm.require({
@@ -51,7 +52,7 @@ function close() {
       severity: 'primary',
     },
     reject: () => {
-      emit('close')
+      emit('close', wikiPage.value!.id)
     },
   })
 }
@@ -66,10 +67,10 @@ const { mutate: createWikiPageFn } = useMutation({
       content: content.value,
       parentWikiPageId,
     }),
-  onSuccess: async () => {
+  onSuccess: async (wikiPageId: string) => {
     queryCache.invalidateQueries({ key: ['wiki-pages', project.value!.id] })
     toast.showSuccess({ detail: 'Wiki page created successfully' })
-    emit('close')
+    emit('close', wikiPageId)
   },
   onError: displayError,
 })
@@ -83,7 +84,7 @@ const { mutate: updateWikiPageFn } = useMutation({
   onSuccess: async () => {
     queryCache.invalidateQueries({ key: ['wiki-pages', project.value!.id] })
     toast.showSuccess({ detail: 'Wiki page updated successfully' })
-    emit('close')
+    emit('close', wikiPage.value!.id)
   },
   onError: displayError,
 })

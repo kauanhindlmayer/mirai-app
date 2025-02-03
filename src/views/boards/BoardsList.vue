@@ -143,7 +143,7 @@ onBeforeMount(setBreadcrumbs)
       </div>
     </div>
   </div>
-  <BoardSettingsDrawer ref="boardSettingsDrawer" />
+  <BoardSettingsDrawer v-if="board" ref="boardSettingsDrawer" :board="board" />
 </template>
 
 <style>

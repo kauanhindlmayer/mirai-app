@@ -1,29 +1,23 @@
 <script setup lang="ts">
-import { moveWikiPage as _moveWikiPage, listWikiPages } from '@/api/wiki-pages'
+import { moveWikiPage } from '@/api/wiki-pages'
 import { useDrawer } from '@/composables/useDialog'
+import { useWikiPage, useWikiPages } from '@/queries/wiki-pages'
 import { useProjectStore } from '@/stores/project'
-import { useWikiPageStore } from '@/stores/wiki-page'
 import type { WikiPageSummary } from '@/types/wiki-page'
-import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
+import { useMutation, useQueryCache } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import type { TreeSelectionKeys } from 'primevue'
 import type { TreeNode } from 'primevue/treenode'
 import { computed, ref } from 'vue'
 
-const store = useWikiPageStore()
-const { wikiPage } = storeToRefs(store)
-const { project } = storeToRefs(useProjectStore())
+const projectStore = useProjectStore()
+const { project } = storeToRefs(projectStore)
 
-const { data: wikiPages } = useQuery({
-  key: () => ['wiki-pages', project.value!.id],
-  query: async () => listWikiPages(project.value!.id),
-  placeholderData: [] as WikiPageSummary[],
-})
+const { wikiPages } = useWikiPages()
+const { wikiPage } = useWikiPage()
 
 const selectedKey = ref<TreeSelectionKeys | undefined>(undefined)
-const nodes = computed(() => {
-  return wikiPages.value.filter((page) => page.id !== wikiPage.value?.id).map(toNode)
-})
+const nodes = computed(() => wikiPages.value.map(toNode))
 const title = computed(() => `Move '${wikiPage.value?.title}'?`)
 const isSaveButtonDisabled = computed(() => !selectedKey.value)
 
@@ -38,10 +32,10 @@ function toNode(page: WikiPageSummary): TreeNode {
 
 const queryCache = useQueryCache()
 
-const { mutate: moveWikiPage } = useMutation({
+const { mutate: moveWikiPageFn } = useMutation({
   mutation: async (_: MouseEvent) => {
     const [wikiPageId] = Object.keys(selectedKey.value!)
-    return _moveWikiPage(project.value!.id, wikiPage.value!.id, {
+    return moveWikiPage(project.value!.id, wikiPage.value!.id, {
       targetParentId: wikiPageId,
       targetPosition: 0,
     })
@@ -85,7 +79,12 @@ defineExpose({
       </div>
       <div class="flex justify-end mt-4 gap-2">
         <Button type="button" label="Cancel" severity="secondary" @click="hideDrawer" />
-        <Button type="submit" label="Move" :disabled="isSaveButtonDisabled" @click="moveWikiPage" />
+        <Button
+          type="submit"
+          label="Move"
+          :disabled="isSaveButtonDisabled"
+          @click="moveWikiPageFn"
+        />
       </div>
     </Form>
   </Drawer>

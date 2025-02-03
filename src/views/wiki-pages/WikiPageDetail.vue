@@ -1,51 +1,24 @@
 <script setup lang="ts">
-import {
-  addComment as _addComment,
-  deleteComment as _deleteComment,
-  getWikiPage,
-  getWikiPageStats,
-} from '@/api/wiki-pages'
+import { addComment, deleteComment } from '@/api/wiki-pages'
 import CommentsSection from '@/components/common/CommentsSection.vue'
 import { useAppToast } from '@/composables/useAppToast'
+import { useWikiPage, useWikiPageStats } from '@/queries/wiki-pages'
 import { useProjectStore } from '@/stores/project'
-import { useWikiPageStore } from '@/stores/wiki-page'
 import { format, formatDistanceToNow } from '@/utils/date'
-import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
+import { useMutation, useQueryCache } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { computed, useTemplateRef, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { computed, useTemplateRef } from 'vue'
+import { useRouter } from 'vue-router'
+
+const projectStore = useProjectStore()
+const { project } = storeToRefs(projectStore)
+
+const { wikiPage } = useWikiPage()
+const { wikiPageStats } = useWikiPageStats()
 
 const router = useRouter()
-const route = useRoute()
-const wikiPageStore = useWikiPageStore()
-const { project } = storeToRefs(useProjectStore())
-
-const wikiPageId = computed(() => route.params.wikiPageId as string)
-
-watch(
-  () => wikiPageId.value,
-  async () => {
-    await Promise.all([refetchWikiPage(), refetchWikiPageStats()])
-  },
-)
-
-const { data: wikiPage, refetch: refetchWikiPage } = useQuery({
-  key: ['wiki-page', wikiPageId.value],
-  query: async () => {
-    const wikiPage = await getWikiPage(project.value!.id, wikiPageId.value)
-    wikiPageStore.setWikiPage(wikiPage)
-    return wikiPage
-  },
-  enabled: () => !!wikiPageId.value,
-})
-
-const { data: wikiPageStats, refetch: refetchWikiPageStats } = useQuery({
-  key: ['wiki-page-stats', wikiPageId.value],
-  query: () => getWikiPageStats(project.value!.id, wikiPageId.value),
-  enabled: () => !!wikiPageId.value,
-})
 
 const emit = defineEmits<{
   (event: 'delete-wiki-page', wikiPageId: string): void
@@ -79,34 +52,39 @@ function printWikiPage() {
 }
 
 function deleteWikiPage() {
-  emit('delete-wiki-page', wikiPageId.value)
+  emit('delete-wiki-page', wikiPage.value!.id)
 }
 
 const toast = useAppToast()
 const queryCache = useQueryCache()
 
-const { mutate: addComment } = useMutation({
-  mutation: (content: string) => _addComment(project.value!.id, wikiPageId.value, { content }),
+const { mutate: addCommentFn } = useMutation({
+  mutation: (content: string) => addComment(project.value!.id, wikiPage.value!.id, { content }),
   onSuccess() {
-    toast.showSuccess({ detail: 'Comment deleted successfully' })
-    queryCache.invalidateQueries({ key: ['wiki-page', wikiPageId.value] })
+    invalidateWikiPageQuery()
+    toast.showSuccess({ detail: 'Comment added successfully' })
   },
 })
 
-const { mutate: deleteComment } = useMutation({
-  mutation: (commentId: string) => _deleteComment(project.value!.id, wikiPageId.value, commentId),
+const { mutate: deleteCommentFn } = useMutation({
+  mutation: (commentId: string) => deleteComment(project.value!.id, wikiPage.value!.id, commentId),
   onSuccess() {
+    invalidateWikiPageQuery()
     toast.showSuccess({ detail: 'Comment deleted successfully' })
-    queryCache.invalidateQueries({ key: ['wiki-page', wikiPageId.value] })
   },
 })
+
+function invalidateWikiPageQuery() {
+  queryCache.invalidateQueries({ key: ['wiki-page', wikiPage.value!.id] })
+  queryCache.invalidateQueries({ key: ['wiki-page-stats', wikiPage.value!.id] })
+}
 
 const wikiPageLastUpdated = computed(() =>
-  format(wikiPage.value!.updatedAt, "MMM d, yyyy 'at' h:mm a"),
+  format(wikiPage.value!.updatedAt ?? wikiPage.value!.createdAt, "MMM d, yyyy 'at' h:mm a"),
 )
 
 function redirectToEditPage() {
-  router.push(`/projects/${project.value?.id}/wiki-pages/${wikiPageId.value}/edit`)
+  router.push(`/projects/${project.value?.id}/wiki-pages/${wikiPage.value!.id}/edit`)
 }
 </script>
 
@@ -132,7 +110,7 @@ function redirectToEditPage() {
           >
             <i class="pi pi-clock text-primary mr-2" />
             <span class="text-surface-900 dark:text-surface-0">
-              {{ formatDistanceToNow(wikiPage.updatedAt) }}
+              {{ formatDistanceToNow(wikiPage.updatedAt ?? wikiPage.createdAt) }}
             </span>
           </span>
           <span
@@ -170,8 +148,8 @@ function redirectToEditPage() {
     </div>
     <CommentsSection
       :comments="wikiPage.comments"
-      @add-comment="addComment"
-      @delete-comment="deleteComment"
+      @add-comment="addCommentFn"
+      @delete-comment="deleteCommentFn"
     />
   </div>
 </template>

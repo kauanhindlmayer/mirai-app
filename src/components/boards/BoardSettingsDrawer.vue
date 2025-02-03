@@ -2,21 +2,19 @@
 import { createColumn, deleteColumn } from '@/api/boards'
 import { displayError } from '@/composables/displayError'
 import { useDrawer } from '@/composables/useDialog'
-import { useBoardStore } from '@/stores/board'
 import { useTeamStore } from '@/stores/team'
-import type { Column, CreateBoardColumnRequest } from '@/types/board'
+import type { Board, Column, CreateBoardColumnRequest } from '@/types/board'
 import { useMutation, useQueryCache } from '@pinia/colada'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
-import { storeToRefs } from 'pinia'
 import type { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import { computed, ref, useTemplateRef, watch } from 'vue'
 import { number, object, string } from 'yup'
 
 const teamStore = useTeamStore()
-const boardStore = useBoardStore()
-const { board } = storeToRefs(boardStore)
+
+const { board } = defineProps<{ board: Board }>()
 
 const columns = ref<Column[]>([])
 const selectedColumnId = ref<string>('')
@@ -32,10 +30,13 @@ function addColumn() {
   newColumnId.value++
 }
 
-watch(board, () => {
-  columns.value = board.value?.columns ? [...board.value.columns] : []
-  selectedColumnId.value = columns.value[0]?.id || ''
-})
+watch(
+  () => board,
+  () => {
+    columns.value = board.columns ? [...board.columns] : []
+    selectedColumnId.value = columns.value[0]?.id || ''
+  },
+)
 
 const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
 const menuItems = computed<MenuItem[]>(() => {
@@ -86,7 +87,7 @@ function toggleMenuItems(event: MouseEvent) {
 }
 
 const { mutate: removeColumn } = useMutation({
-  mutation: () => deleteColumn(teamStore.teamId!, board.value!.id, selectedColumnId.value),
+  mutation: () => deleteColumn(teamStore.teamId!, board.id, selectedColumnId.value),
   onSuccess: () => {
     const index = columns.value.findIndex((column) => column.id === selectedColumnId.value)
     if (index === -1) return
@@ -152,9 +153,9 @@ const queryCache = useQueryCache()
 
 const { mutate: createColumnFn } = useMutation({
   mutation: (payload: CreateBoardColumnRequest) =>
-    createColumn(teamStore.teamId!, board.value!.id, payload),
+    createColumn(teamStore.teamId!, board.id, payload),
   onSuccess: () => {
-    queryCache.invalidateQueries({ key: ['board', board.value!.id] })
+    queryCache.invalidateQueries({ key: ['board', board.id] })
     hideDrawer()
   },
   onError: displayError,

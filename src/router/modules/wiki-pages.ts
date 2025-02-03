@@ -12,6 +12,12 @@ const wikiPagesRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/wiki-pages/WikiPagesList.vue'),
     props: { isEditing: true },
   },
+  {
+    path: 'wiki-pages/new',
+    name: 'wiki-page-new',
+    component: () => import('@/views/wiki-pages/WikiPagesList.vue'),
+    props: { isAdding: true },
+  },
 ]
 
 export default wikiPagesRoutes

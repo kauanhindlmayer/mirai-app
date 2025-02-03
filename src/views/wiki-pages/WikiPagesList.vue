@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { deleteWikiPage as _deleteWikiPage, listWikiPages } from '@/api/wiki-pages'
+import { deleteWikiPage as _deleteWikiPage } from '@/api/wiki-pages'
 import MoveWikiPageDrawer from '@/components/wiki-pages/MoveWikiPageDrawer.vue'
 import { displayError } from '@/composables/displayError'
 import { useAppToast } from '@/composables/useAppToast'
+import { useWikiPage, useWikiPages } from '@/queries/wiki-pages'
 import { usePageStore } from '@/stores/page'
 import { useProjectStore } from '@/stores/project'
-import { useWikiPageStore } from '@/stores/wiki-page'
 import type { WikiPageSummary } from '@/types/wiki-page'
-import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
+import { useMutation, useQueryCache } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import { useConfirm, type Menu, type TreeSelectionKeys } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import type { TreeNode } from 'primevue/treenode'
-import { computed, onBeforeMount, ref, useTemplateRef, watch } from 'vue'
+import { computed, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import WikiPageDetail from './WikiPageDetail.vue'
 import WikiPageForm from './WikiPageForm.vue'
@@ -20,16 +20,20 @@ import WikiPageForm from './WikiPageForm.vue'
 const pageStore = usePageStore()
 pageStore.setTitle('Wiki Pages - Overview')
 
-const wikiPageStore = useWikiPageStore()
-const { wikiPage } = storeToRefs(wikiPageStore)
-const { project } = storeToRefs(useProjectStore())
+const projectStore = useProjectStore()
+const { project } = storeToRefs(projectStore)
 
 const confirm = useConfirm()
 const toast = useAppToast()
-const route = useRoute()
 const router = useRouter()
 
-const { isEditing } = defineProps<{ isEditing?: boolean }>()
+const { wikiPage } = useWikiPage()
+const { wikiPages, isLoading } = useWikiPages()
+
+const { isEditing, isAdding } = defineProps<{
+  isEditing?: boolean
+  isAdding?: boolean
+}>()
 
 const selectedKey = ref<TreeSelectionKeys | undefined>(undefined)
 const nodes = computed(() => wikiPages.value.map((page, index) => toNode(page, index === 0)))
@@ -47,52 +51,42 @@ watch(
   () => selectedKey.value,
   async () => {
     if (!selectedKey.value) return
-    isAdding.value = false
-    const [wikiPageId] = Object.keys(selectedKey.value!)
+    const [wikiPageId] = Object.keys(selectedKey.value)
     router.push({ name: 'wiki-pages', params: { wikiPageId } })
   },
 )
 
-const { data: wikiPages, isLoading } = useQuery({
-  key: () => ['wiki-pages', project.value!.id],
-  query: async () => {
-    const wikiPages = await listWikiPages(project.value!.id)
-    const wikiPageId = route.params.wikiPageId || wikiPages[0].id
-    selectedKey.value = { [wikiPageId as string]: true }
-    return wikiPages
-  },
-  placeholderData: [] as WikiPageSummary[],
+const route = useRoute()
+
+onMounted(async () => {
+  setBreadcrumbs()
+  selectWikiPage()
 })
 
-onBeforeMount(setBreadcrumbs)
+watch(() => wikiPages.value, selectWikiPage)
+watch(
+  () => route.params.wikiPageId,
+  () => {
+    if (isAdding || isEditing) return
+    selectWikiPage()
+  },
+)
 
-function setBreadcrumbs() {
-  const projectName = project.value!.name
-  const projectId = project.value!.id
-  pageStore.setBreadcrumbs([
-    { label: projectName, route: `/projects/${projectId}/summary` },
-    { label: 'Overview', route: `/projects/${projectId}/wiki-pages` },
-    { label: 'Wiki', route: `/projects/${projectId}/wiki-pages` },
-  ])
+function selectWikiPage() {
+  if (!wikiPages.value.length) return
+  const wikiPageId = route.params.wikiPageId || wikiPages.value[0]?.id
+  selectedKey.value = { [wikiPageId as string]: true }
 }
-
-const isAdding = ref(false)
 
 function openNewPageForm() {
-  isAdding.value = true
   selectedKey.value = undefined
-  router.push({ name: 'wiki-pages', params: { wikiPageId: '' } })
-  wikiPageStore.resetWikiPage()
+  router.push(`/projects/${project.value!.id}/wiki-pages/new`)
 }
 
-function closeForm() {
-  isAdding.value = false
-  parentWikiPageId.value = ''
-  if (isEditing) {
-    router.push(`/projects/${project.value!.id}/wiki-pages/${wikiPage.value!.id}`)
-  } else {
-    selectedKey.value = { [wikiPages.value[0].id as string]: true }
-  }
+function closeForm(wikiPageId: string) {
+  parentWikiPageId.value = undefined
+  router.push(`/projects/${project.value!.id}/wiki-pages/${wikiPageId}`)
+  selectedKey.value = { [wikiPageId]: true }
 }
 
 const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
@@ -139,6 +133,7 @@ const { mutate: deleteWikiPageFn } = useMutation({
   onSuccess: async () => {
     await queryCache.invalidateQueries({ key: ['wiki-pages', project.value!.id] })
     toast.showSuccess({ detail: 'Wiki page deleted successfully' })
+    router.push(`/projects/${project.value!.id}/wiki-pages`)
   },
   onError: displayError,
 })
@@ -164,6 +159,16 @@ function deleteWikiPage() {
 
 function openInNewTab() {
   window.open(`/projects/${project.value?.id}/wiki-pages/${wikiPage.value!.id}`)
+}
+
+function setBreadcrumbs() {
+  const projectName = project.value!.name
+  const projectId = project.value!.id
+  pageStore.setBreadcrumbs([
+    { label: projectName, route: `/projects/${projectId}/summary` },
+    { label: 'Overview', route: `/projects/${projectId}/wiki-pages` },
+    { label: 'Wiki Pages', route: `/projects/${projectId}/wiki-pages` },
+  ])
 }
 </script>
 
