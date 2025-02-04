@@ -80,12 +80,12 @@ function selectWikiPage() {
 
 function openNewPageForm() {
   selectedKey.value = undefined
-  router.push(`/projects/${project.value!.id}/wiki-pages/new`)
+  router.push(`/projects/${project.value.id}/wiki-pages/new`)
 }
 
 function closeForm(wikiPageId: string) {
   parentWikiPageId.value = undefined
-  router.push(`/projects/${project.value!.id}/wiki-pages/${wikiPageId}`)
+  router.push(`/projects/${project.value.id}/wiki-pages/${wikiPageId}`)
   selectedKey.value = { [wikiPageId]: true }
 }
 
@@ -111,7 +111,7 @@ function addSubPage() {
 }
 
 function copyPagePath() {
-  navigator.clipboard.writeText(`/projects/${project.value?.id}/wiki-pages/${wikiPage.value?.id}`)
+  navigator.clipboard.writeText(`/projects/${project.value.id}/wiki-pages/${wikiPage.value?.id}`)
   toast.showSuccess({ detail: 'Page path copied to clipboard' })
 }
 
@@ -123,17 +123,17 @@ function openMoveWikiPageDrawer() {
 }
 
 function redirectToEditPage() {
-  router.push(`/projects/${project.value!.id}/wiki-pages/${wikiPage.value!.id}/edit`)
+  router.push(`/projects/${project.value.id}/wiki-pages/${wikiPage.value!.id}/edit`)
 }
 
 const queryCache = useQueryCache()
 
 const { mutate: deleteWikiPageFn } = useMutation({
-  mutation: () => _deleteWikiPage(project.value!.id, wikiPage.value!.id),
+  mutation: () => _deleteWikiPage(project.value.id, wikiPage.value!.id),
   onSuccess: async () => {
-    await queryCache.invalidateQueries({ key: ['wiki-pages', project.value!.id] })
+    await queryCache.invalidateQueries({ key: ['wiki-pages', project.value.id] })
     toast.showSuccess({ detail: 'Wiki page deleted successfully' })
-    router.push(`/projects/${project.value!.id}/wiki-pages`)
+    router.push(`/projects/${project.value.id}/wiki-pages`)
   },
   onError: displayError,
 })
@@ -158,16 +158,14 @@ function deleteWikiPage() {
 }
 
 function openInNewTab() {
-  window.open(`/projects/${project.value?.id}/wiki-pages/${wikiPage.value!.id}`)
+  window.open(`/projects/${project.value.id}/wiki-pages/${wikiPage.value!.id}`)
 }
 
 function setBreadcrumbs() {
-  const projectName = project.value!.name
-  const projectId = project.value!.id
   pageStore.setBreadcrumbs([
-    { label: projectName, route: `/projects/${projectId}/summary` },
-    { label: 'Overview', route: `/projects/${projectId}/wiki-pages` },
-    { label: 'Wiki Pages', route: `/projects/${projectId}/wiki-pages` },
+    { label: project.value.name, route: `/projects/${project.value.id}/summary` },
+    { label: 'Overview', route: `/projects/${project.value.id}/wiki-pages` },
+    { label: 'Wiki Pages', route: `/projects/${project.value.id}/wiki-pages` },
   ])
 }
 </script>

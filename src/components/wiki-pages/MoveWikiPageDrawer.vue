@@ -35,13 +35,13 @@ const queryCache = useQueryCache()
 const { mutate: moveWikiPageFn } = useMutation({
   mutation: async (_: MouseEvent) => {
     const [wikiPageId] = Object.keys(selectedKey.value!)
-    return moveWikiPage(project.value!.id, wikiPage.value!.id, {
+    return moveWikiPage(project.value.id, wikiPage.value!.id, {
       targetParentId: wikiPageId,
       targetPosition: 0,
     })
   },
   onSuccess() {
-    queryCache.invalidateQueries({ key: ['wiki-pages', project.value!.id] })
+    queryCache.invalidateQueries({ key: ['wiki-pages', project.value.id] })
     hideDrawer()
   },
 })

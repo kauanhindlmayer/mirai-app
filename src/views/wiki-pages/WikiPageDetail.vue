@@ -59,7 +59,7 @@ const toast = useAppToast()
 const queryCache = useQueryCache()
 
 const { mutate: addCommentFn } = useMutation({
-  mutation: (content: string) => addComment(project.value!.id, wikiPage.value!.id, { content }),
+  mutation: (content: string) => addComment(project.value.id, wikiPage.value!.id, { content }),
   onSuccess() {
     invalidateWikiPageQuery()
     toast.showSuccess({ detail: 'Comment added successfully' })
@@ -67,7 +67,7 @@ const { mutate: addCommentFn } = useMutation({
 })
 
 const { mutate: deleteCommentFn } = useMutation({
-  mutation: (commentId: string) => deleteComment(project.value!.id, wikiPage.value!.id, commentId),
+  mutation: (commentId: string) => deleteComment(project.value.id, wikiPage.value!.id, commentId),
   onSuccess() {
     invalidateWikiPageQuery()
     toast.showSuccess({ detail: 'Comment deleted successfully' })
@@ -84,7 +84,7 @@ const wikiPageLastUpdated = computed(() =>
 )
 
 function redirectToEditPage() {
-  router.push(`/projects/${project.value?.id}/wiki-pages/${wikiPage.value!.id}/edit`)
+  router.push(`/projects/${project.value.id}/wiki-pages/${wikiPage.value!.id}/edit`)
 }
 </script>
 

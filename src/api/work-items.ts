@@ -6,24 +6,24 @@ export function listWorkItems(
   projectId: string,
   filters: PaginationFilter,
 ): Promise<PaginatedList<WorkItem>> {
-  return http.get<PaginatedList<WorkItem>>(`/projects/${projectId}/work-items`, {
+  return http.get(`/projects/${projectId}/work-items`, {
     params: filters as unknown as Record<string, string>,
   })
 }
 
 export function deleteWorkItem(projectId: string, workItemId: string): Promise<void> {
-  return http.delete<void>(`/projects/${projectId}/work-items/${workItemId}`)
+  return http.delete(`/projects/${projectId}/work-items/${workItemId}`)
 }
 
 export function getWorkItemsStats(
   projectId: string,
-  periodInDays: string,
+  periodInDays: number,
 ): Promise<WorkItemsStats> {
-  return http.get<WorkItemsStats>(`/projects/${projectId}/work-items/stats`, {
-    params: { periodInDays },
+  return http.get(`/projects/${projectId}/work-items/stats`, {
+    params: { periodInDays: periodInDays.toString() },
   })
 }
 
 export function getWorkItem(projectId: string, workItemId: string): Promise<WorkItem> {
-  return http.get<WorkItem>(`/projects/${projectId}/work-items/${workItemId}`)
+  return http.get(`/projects/${projectId}/work-items/${workItemId}`)
 }

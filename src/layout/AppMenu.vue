@@ -5,7 +5,8 @@ import type { MenuItem } from 'primevue/menuitem'
 import { computed } from 'vue'
 import AppMenuItem from './AppMenuItem.vue'
 
-const { project } = storeToRefs(useProjectStore())
+const projectStore = useProjectStore()
+const { project } = storeToRefs(projectStore)
 
 const menuItems = computed<MenuItem[]>(() => [
   {
@@ -15,17 +16,17 @@ const menuItems = computed<MenuItem[]>(() => [
       {
         label: 'Summary',
         icon: 'pi pi-fw pi-file',
-        to: `/projects/${project.value?.id}/summary`,
+        to: `/projects/${project.value.id}/summary`,
       },
       {
         label: 'Dashboards',
         icon: 'pi pi-fw pi-chart-bar',
-        to: `/projects/${project.value?.id}/dashboards`,
+        to: `/projects/${project.value.id}/dashboards`,
       },
       {
         label: 'Wiki Pages',
         icon: 'pi pi-fw pi-book',
-        to: `/projects/${project.value?.id}/wiki-pages`,
+        to: `/projects/${project.value.id}/wiki-pages`,
       },
     ],
   },
@@ -37,37 +38,37 @@ const menuItems = computed<MenuItem[]>(() => [
       {
         label: 'Work Items',
         icon: 'pi pi-fw pi-list',
-        to: `/projects/${project.value?.id}/work-items`,
+        to: `/projects/${project.value.id}/work-items`,
       },
       {
         label: 'Boards',
         icon: 'pi pi-fw pi-th-large',
-        to: `/projects/${project.value?.id}/boards`,
+        to: `/projects/${project.value.id}/boards`,
       },
       {
         label: 'Backlogs',
         icon: 'pi pi-fw pi-calendar',
-        to: `/projects/${project.value?.id}/backlogs`,
+        to: `/projects/${project.value.id}/backlogs`,
       },
       {
         label: 'Sprints',
         icon: 'pi pi-fw pi-calendar-times',
-        to: `/projects/${project.value?.id}/sprints`,
+        to: `/projects/${project.value.id}/sprints`,
       },
       {
         label: 'Personas',
         icon: 'pi pi-fw pi-users',
-        to: `/projects/${project.value?.id}/personas`,
+        to: `/projects/${project.value.id}/personas`,
       },
       {
         label: 'Retrospectives',
         icon: 'pi pi-fw pi-comments',
-        to: `/projects/${project.value?.id}/retrospectives`,
+        to: `/projects/${project.value.id}/retrospectives`,
       },
       {
         label: 'Tags',
         icon: 'pi pi-fw pi-tags',
-        to: `/projects/${project.value?.id}/tags`,
+        to: `/projects/${project.value.id}/tags`,
       },
     ],
   },

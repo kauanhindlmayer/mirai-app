@@ -10,8 +10,8 @@ export const useWikiPages = defineQuery(() => {
 
   const query = useQuery({
     staleTime: 1000 * 60,
-    key: () => ['wiki-pages', project.value!.id],
-    query: () => listWikiPages(project.value!.id),
+    key: () => ['wiki-pages', project.value.id],
+    query: () => listWikiPages(project.value.id),
     enabled: () => !!project.value,
     placeholderData: [],
   })
@@ -30,7 +30,7 @@ export const useWikiPage = defineQuery(() => {
   const query = useQuery({
     staleTime: 1000 * 60,
     key: () => ['wiki-page', wikiPageId.value],
-    query: () => getWikiPage(project.value!.id, wikiPageId.value),
+    query: () => getWikiPage(project.value.id, wikiPageId.value),
     enabled: () => !!project.value && !!wikiPageId.value,
   })
 
@@ -48,7 +48,7 @@ export const useWikiPageStats = defineQuery(() => {
   const query = useQuery({
     staleTime: 1000 * 60,
     key: () => ['wiki-page-stats', wikiPageId.value],
-    query: () => getWikiPageStats(project.value!.id, wikiPageId.value),
+    query: () => getWikiPageStats(project.value.id, wikiPageId.value),
     enabled: () => !!project.value && !!wikiPageId.value,
   })
 

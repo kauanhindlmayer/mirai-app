@@ -3,7 +3,7 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useProjectStore = defineStore('projects', () => {
-  const project = ref<Project | null>(null)
+  const project = ref<Project>({} as Project)
 
   function setProject(newProject: Project) {
     project.value = newProject

@@ -39,7 +39,7 @@ watch(
   },
 )
 
-const { data: sprints, isLoading: isSprintsLoading } = useQuery({
+const { data: sprints, isLoading: isLoadingSprints } = useQuery({
   key: ['sprints', selectedTeam.value?.id || ''],
   query: () => listSprints(selectedTeam.value!.id),
   enabled: () => !!selectedTeam.value,
@@ -123,8 +123,8 @@ function openWorkItemDialog(workItemId: string) {
 }
 
 const { data: teams, isLoading } = useQuery({
-  key: ['teams', project.value!.id],
-  query: () => listTeams(project.value!.id),
+  key: ['teams', project.value.id],
+  query: () => listTeams(project.value.id),
   placeholderData: [] as Team[],
 })
 
@@ -138,12 +138,10 @@ watch(
 )
 
 function setBreadcrumbs() {
-  const projectName = project.value!.name
-  const projectId = project.value!.id
   pageStore.setBreadcrumbs([
-    { label: projectName, route: `/projects/${projectId}/summary` },
-    { label: 'Boards', route: `/projects/${projectId}/boards` },
-    { label: 'Sprints', route: `/projects/${projectId}/sprints` },
+    { label: project.value.name, route: `/projects/${project.value.id}/summary` },
+    { label: 'Boards', route: `/projects/${project.value.id}/boards` },
+    { label: 'Sprints', route: `/projects/${project.value.id}/sprints` },
   ])
 }
 
@@ -208,7 +206,7 @@ onMounted(setBreadcrumbs)
                 <Select
                   v-model="selectedSprint"
                   :options="sprints"
-                  :loading="isSprintsLoading"
+                  :loading="isLoadingSprints"
                   option-label="name"
                 >
                   <template #footer>

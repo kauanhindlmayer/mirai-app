@@ -1,11 +1,9 @@
 import type { Organization } from '@/types/organization'
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 
 export const useOrganizationStore = defineStore('organizations', () => {
-  const organization = ref<Organization | null>(null)
-
-  const organizationId = computed(() => organization.value?.id ?? '')
+  const organization = ref<Organization>({} as Organization)
 
   function setOrganization(newOrganization: Organization) {
     organization.value = newOrganization
@@ -13,7 +11,6 @@ export const useOrganizationStore = defineStore('organizations', () => {
 
   return {
     organization,
-    organizationId,
     setOrganization,
   }
 })

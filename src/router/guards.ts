@@ -1,5 +1,6 @@
 import { getProject } from '@/api/projects'
 import { useProjectStore } from '@/stores/project'
+import { useQueryCache } from '@pinia/colada'
 import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 
 export async function ensureProjectLoaded(
@@ -14,6 +15,8 @@ export async function ensureProjectLoaded(
   if (!store.project || store.project.id !== projectId) {
     const project = await getProject(projectId)
     store.setProject(project)
+    const queryCache = useQueryCache()
+    queryCache.setQueryData(['project', projectId], project)
   }
 
   next()

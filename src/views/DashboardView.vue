@@ -20,10 +20,10 @@ const { project } = storeToRefs(useProjectStore())
 
 const selectedTeam = ref<Team | null>()
 
-const { data: teams, isLoading: isTeamsLoading } = useQuery({
+const { data: teams, isLoading: isLoadingTeams } = useQuery({
   key: () => ['teams'],
   query: async () => {
-    const teams = await listTeams(project.value!.id)
+    const teams = await listTeams(project.value.id)
     if (teams.length) {
       selectedTeam.value = teams[0]
     }
@@ -36,8 +36,8 @@ const {
   isLoading,
   refetch: refetchDashboardData,
 } = useQuery({
-  key: () => ['dashboard', project.value!.id],
-  query: () => getDashboardData(project.value!.id),
+  key: () => ['dashboard', project.value.id],
+  query: () => getDashboardData(project.value.id),
   placeholderData: {
     startDate: '',
     endDate: '',
@@ -61,12 +61,10 @@ function toggleMenuItems(event: MouseEvent) {
 }
 
 function setBreadcrumbs() {
-  const projectName = project.value!.name
-  const projectId = project.value!.id
   pageStore.setBreadcrumbs([
-    { label: projectName, route: `/projects/${projectId}/summary` },
-    { label: 'Overview', route: `/projects/${projectId}/dashboards` },
-    { label: 'Dashboard', route: `/projects/${projectId}/dashboards` },
+    { label: project.value.name, route: `/projects/${project.value.id}/summary` },
+    { label: 'Overview', route: `/projects/${project.value.id}/dashboards` },
+    { label: 'Dashboard', route: `/projects/${project.value.id}/dashboards` },
   ])
 }
 
@@ -81,7 +79,7 @@ onBeforeMount(setBreadcrumbs)
           <Select
             v-model="selectedTeam"
             :options="teams"
-            :loading="isTeamsLoading"
+            :loading="isLoadingTeams"
             option-label="name"
             class="mr-1"
           />

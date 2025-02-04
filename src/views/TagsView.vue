@@ -34,7 +34,7 @@ const filteredTags = computed(() => {
 const queryCache = useQueryCache()
 
 const { mutate: addTag } = useMutation({
-  mutation: (_: MouseEvent) => createTag(project.value!.id, newTag.value),
+  mutation: (_: MouseEvent) => createTag(project.value.id, newTag.value),
   onSuccess: async () => {
     await queryCache.invalidateQueries({ key: ['tags'] })
     newTag.value = { name: '', description: '', color: '' }
@@ -45,7 +45,7 @@ const { mutate: addTag } = useMutation({
 const { mutate: updateTag } = useMutation({
   mutation: (event: DataTableRowEditSaveEvent) => {
     const tag = event.newData as Tag
-    return _updateTag(project.value!.id, tag.id, {
+    return _updateTag(project.value.id, tag.id, {
       name: tag.name,
       description: tag.description,
       color: tag.color,
@@ -58,7 +58,7 @@ const { mutate: updateTag } = useMutation({
 })
 
 const { mutate: deleteTag } = useMutation({
-  mutation: (_: MouseEvent) => _deleteTag(project.value!.id, selectedTags.value[0].id),
+  mutation: (_: MouseEvent) => _deleteTag(project.value.id, selectedTags.value[0].id),
   onSuccess: async () => {
     selectedTags.value = []
     await queryCache.invalidateQueries({ key: ['tags'] })
@@ -68,17 +68,15 @@ const { mutate: deleteTag } = useMutation({
 
 const { data: tags, isLoading } = useQuery({
   key: () => ['tags'],
-  query: () => listTags(project.value!.id),
+  query: () => listTags(project.value.id),
   placeholderData: [] as Tag[],
 })
 
 function setBreadcrumbs() {
-  const projectName = project.value!.name
-  const projectId = project.value!.id
   pageStore.setBreadcrumbs([
-    { label: projectName, route: `/projects/${projectId}/summary` },
-    { label: 'Boards', route: `/projects/${projectId}/boards` },
-    { label: 'Tags', route: `/projects/${projectId}/tags` },
+    { label: project.value.name, route: `/projects/${project.value.id}/summary` },
+    { label: 'Boards', route: `/projects/${project.value.id}/boards` },
+    { label: 'Tags', route: `/projects/${project.value.id}/tags` },
   ])
 }
 

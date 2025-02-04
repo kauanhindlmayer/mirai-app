@@ -1,10 +1,10 @@
 import http from '@/api/http'
 import type { CreateOrganizationRequest, Organization } from '@/types/organization'
 
-export function createOrganization(request: CreateOrganizationRequest) {
-  return http.post<string>(`/organizations`, request)
+export function createOrganization(request: CreateOrganizationRequest): Promise<string> {
+  return http.post(`/organizations`, request)
 }
 
-export function listOrganizations() {
-  return http.get<Organization[]>(`/organizations`)
+export function listOrganizations(): Promise<Organization[]> {
+  return http.get(`/organizations`)
 }

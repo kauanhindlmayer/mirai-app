@@ -3,15 +3,15 @@ import type { CreateTagRequest, Tag } from '@/types/tag'
 
 export function listTags(projectId: string, searchTerm?: string): Promise<Tag[]> {
   const params = searchTerm ? { searchTerm } : undefined
-  return http.get<Tag[]>(`/projects/${projectId}/tags`, { params })
+  return http.get(`/projects/${projectId}/tags`, { params })
 }
 
 export function createTag(projectId: string, request: CreateTagRequest): Promise<void> {
-  return http.post<void>(`/projects/${projectId}/tags`, request)
+  return http.post(`/projects/${projectId}/tags`, request)
 }
 
 export function deleteTag(projectId: string, tagId: string): Promise<void> {
-  return http.delete<void>(`/projects/${projectId}/tags/${tagId}`)
+  return http.delete(`/projects/${projectId}/tags/${tagId}`)
 }
 
 export function updateTag(
@@ -19,5 +19,5 @@ export function updateTag(
   tagId: string,
   request: CreateTagRequest,
 ): Promise<void> {
-  return http.put<void>(`/projects/${projectId}/tags/${tagId}`, request)
+  return http.put(`/projects/${projectId}/tags/${tagId}`, request)
 }

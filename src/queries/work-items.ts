@@ -6,7 +6,7 @@ import { useRoute } from 'vue-router'
 export const useWorkItemsStats = defineQuery(() => {
   const route = useRoute()
   const projectId = route.params.projectId as string
-  const periodInDays = ref('7')
+  const periodInDays = ref(7)
 
   const query = useQuery({
     staleTime: 1000 * 60,

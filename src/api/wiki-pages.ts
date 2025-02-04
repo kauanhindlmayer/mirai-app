@@ -31,15 +31,15 @@ export function moveWikiPage(
 }
 
 export function getWikiPage(projectId: string, wikiPageId: string): Promise<WikiPage> {
-  return http.get<WikiPage>(`/projects/${projectId}/wiki-pages/${wikiPageId}`)
+  return http.get(`/projects/${projectId}/wiki-pages/${wikiPageId}`)
 }
 
 export function getWikiPageStats(projectId: string, wikiPageId: string): Promise<WikiPageStats> {
-  return http.get<WikiPageStats>(`/projects/${projectId}/wiki-pages/${wikiPageId}/stats`)
+  return http.get(`/projects/${projectId}/wiki-pages/${wikiPageId}/stats`)
 }
 
 export function listWikiPages(projectId: string): Promise<WikiPageSummary[]> {
-  return http.get<WikiPageSummary[]>(`/projects/${projectId}/wiki-pages`)
+  return http.get(`/projects/${projectId}/wiki-pages`)
 }
 
 export function deleteWikiPage(projectId: string, wikiPageId: string): Promise<void> {

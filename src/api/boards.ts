@@ -8,15 +8,15 @@ import type {
 } from '@/types/board'
 
 export function createBoard(teamId: string, request: CreateBoardRequest): Promise<string> {
-  return http.post<string>(`/teams/${teamId}/boards`, request)
+  return http.post(`/teams/${teamId}/boards`, request)
 }
 
 export function getBoard(teamId: string, boardId: string): Promise<Board> {
-  return http.get<Board>(`/teams/${teamId}/boards/${boardId}`)
+  return http.get(`/teams/${teamId}/boards/${boardId}`)
 }
 
 export function listBoards(projectId: string): Promise<BoardSummary[]> {
-  return http.get<BoardSummary[]>(`/projects/${projectId}/boards`)
+  return http.get(`/projects/${projectId}/boards`)
 }
 
 export function deleteBoard(teamId: string, boardId: string): Promise<void> {

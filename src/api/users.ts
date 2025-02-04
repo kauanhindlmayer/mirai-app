@@ -8,15 +8,15 @@ import type {
 } from '@/types/user'
 
 export function registerUser(request: RegisterUserRequest): Promise<string> {
-  return http.post<string>('/users/register', request)
+  return http.post('/users/register', request)
 }
 
 export async function loginUser(request: LoginUserRequest): Promise<LoginUserResponse> {
-  return http.post<LoginUserResponse>('/users/login', request)
+  return http.post('/users/login', request)
 }
 
 export function getCurrentUser(): Promise<User> {
-  return http.get<User>('/users/me')
+  return http.get('/users/me')
 }
 
 export function updateUserProfile(request: UpdateUserProfileRequest): Promise<void> {

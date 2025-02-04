@@ -5,38 +5,34 @@ import CreateProjectDrawer from '@/components/projects/CreateProjectDrawer.vue'
 import ProjectCard from '@/components/projects/ProjectCard.vue'
 import { useOrganizationStore } from '@/stores/organization'
 import { usePageStore } from '@/stores/page'
-import type { Organization } from '@/types/organization'
-import type { Project } from '@/types/project'
 import { useQuery } from '@pinia/colada'
-import { ref, useTemplateRef } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useTemplateRef } from 'vue'
 
 const organizationStore = useOrganizationStore()
+const { organization } = storeToRefs(organizationStore)
+
 const pageStore = usePageStore()
 pageStore.setTitle('Projects - Home')
 
 const createProjectDrawerRef =
   useTemplateRef<InstanceType<typeof CreateProjectDrawer>>('createProjectDrawer')
 
-const selectedOrganization = ref<Organization | null>(null)
-
-const { data: organizations, isLoading } = useQuery({
+const { data: organizations, isLoading: isLoadingOrganizations } = useQuery({
   key: () => ['organizations'],
   query: async () => {
     const organizations = await listOrganizations()
     if (organizations.length) {
-      const [firstOrganization] = organizations
-      selectedOrganization.value = firstOrganization
-      organizationStore.setOrganization(firstOrganization)
+      organization.value = organizations[0]
     }
     return organizations
   },
 })
 
-const { data: projects } = useQuery({
-  key: () => ['projects', organizationStore.organizationId],
-  query: () => listProjects(organizationStore.organizationId),
-  enabled: () => !!organizationStore.organizationId,
-  placeholderData: [] as Project[],
+const { data: projects, isLoading } = useQuery({
+  key: () => ['projects', organization.value.id],
+  query: () => listProjects(organization.value.id),
+  enabled: () => !!organization.value.id,
 })
 </script>
 
@@ -44,9 +40,9 @@ const { data: projects } = useQuery({
   <header class="flex justify-between items-center">
     <div class="flex items-center space-x-1">
       <Select
-        v-model="selectedOrganization"
+        v-model="organization"
         :options="organizations"
-        :loading="isLoading"
+        :loading="isLoadingOrganizations"
         class="my-4"
         option-label="name"
       >
@@ -81,12 +77,13 @@ const { data: projects } = useQuery({
     </TabList>
     <TabPanels>
       <TabPanel value="0">
-        <div v-if="projects.length === 0">No projects found.</div>
-        <div v-else>
+        <div v-if="isLoading">Loading projects...</div>
+        <div v-else-if="projects?.length">
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
           </div>
         </div>
+        <div v-else>No projects found.</div>
       </TabPanel>
     </TabPanels>
   </Tabs>

@@ -66,7 +66,7 @@ const queryCache = useQueryCache()
 
 const { mutate: deleteWorkItem } = useMutation({
   mutation: async () => {
-    const projectId = project.value?.id
+    const projectId = project.value.id
     const workItemId = selectedWorkItem.value?.id
     if (!projectId || !workItemId) return
     return _deleteWorkItem(projectId, workItemId)
@@ -92,7 +92,7 @@ const filters = ref<PaginationFilter>({
 
 const { data: workItems, isLoading } = useQuery({
   key: () => ['work-items', filters.value],
-  query: () => listWorkItems(project.value!.id, filters.value),
+  query: () => listWorkItems(project.value.id, filters.value),
   placeholderData: (previousData) => previousData,
 })
 
@@ -107,12 +107,10 @@ async function onPaginate(event: DataTablePageEvent) {
 }
 
 function setBreadcrumbs() {
-  const projectId = project.value!.id
-  const projectName = project.value!.name
   pageStore.setBreadcrumbs([
-    { label: projectName, route: `/projects/${projectId}/summary` },
-    { label: 'Boards', route: `/projects/${projectId}/work-items` },
-    { label: 'Work Items', route: `/projects/${projectId}/work-items` },
+    { label: project.value.name, route: `/projects/${project.value.id}/summary` },
+    { label: 'Boards', route: `/projects/${project.value.id}/work-items` },
+    { label: 'Work Items', route: `/projects/${project.value.id}/work-items` },
   ])
 }
 

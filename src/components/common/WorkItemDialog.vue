@@ -10,7 +10,9 @@ import { computed, onBeforeMount, ref, useTemplateRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import CommentsSection from './CommentsSection.vue'
 
-const { project } = storeToRefs(useProjectStore())
+const projectStore = useProjectStore()
+const { project } = storeToRefs(projectStore)
+
 const router = useRouter()
 const route = useRoute()
 
@@ -18,7 +20,7 @@ const workItemId = computed(() => route.query.workItemId as string)
 
 const { data: workItem } = useQuery({
   key: () => ['work-item', workItemId.value],
-  query: () => getWorkItem(project.value!.id, workItemId.value),
+  query: () => getWorkItem(project.value.id, workItemId.value),
   enabled: () => !!workItemId.value,
 })
 

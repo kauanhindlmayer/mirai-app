@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { updateProject as _updateProject } from '@/api/projects'
+import { updateProject } from '@/api/projects'
 import { displayError } from '@/composables/displayError'
 import { useDrawer } from '@/composables/useDialog'
 import { useOrganizationStore } from '@/stores/organization'
@@ -12,13 +12,13 @@ import { ref } from 'vue'
 import { object, string } from 'yup'
 
 const organizationStore = useOrganizationStore()
-const { organizationId } = storeToRefs(organizationStore)
+const { organization } = storeToRefs(organizationStore)
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
 
 const form = ref({
-  name: project.value?.name || '',
-  description: project.value?.description || '',
+  name: project.value.name,
+  description: project.value.description,
 })
 
 const updateProjectSchema = object({
@@ -29,12 +29,10 @@ const resolver = ref(yupResolver(updateProjectSchema))
 
 const queryCache = useQueryCache()
 
-const { mutate: updateProject, isLoading } = useMutation({
-  mutation: async () => {
-    await _updateProject(organizationId.value, project.value!.id, form.value)
-  },
+const { mutate: updateProjectFn, isLoading } = useMutation({
+  mutation: () => updateProject(organization.value.id, project.value.id, form.value),
   onSuccess: () => {
-    queryCache.invalidateQueries({ key: ['project', project.value!.id] })
+    queryCache.invalidateQueries({ key: ['project', project.value.id] })
     hideDrawer()
   },
   onError: displayError,
@@ -42,7 +40,7 @@ const { mutate: updateProject, isLoading } = useMutation({
 
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
-  updateProject()
+  updateProjectFn()
 }
 
 const { isVisible, showDrawer, hideDrawer } = useDrawer()

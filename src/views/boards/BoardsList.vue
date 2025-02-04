@@ -37,7 +37,7 @@ watch(
   },
 )
 
-const { data: board, isLoading: isBoardLoading } = useQuery({
+const { data: board, isLoading: isLoadingBoard } = useQuery({
   key: () => ['board', selectedBoard.value?.id],
   query: async () => getBoard(teamStore.teamId!, selectedBoard.value?.id),
   enabled: () => !!selectedBoard.value,
@@ -46,29 +46,37 @@ const { data: board, isLoading: isBoardLoading } = useQuery({
 const router = useRouter()
 
 function redirectToBacklogView() {
-  router.push(`/projects/${project.value?.id}/backlogs`)
+  router.push(`/projects/${project.value.id}/backlogs`)
 }
 
 const { data: boards, isLoading } = useQuery({
-  key: () => ['boards', project.value!.id],
-  query: async () => {
-    const boards = await listBoards(project.value!.id)
-    if (boards.length) {
-      selectedBoard.value = boards[0]
-    }
-    return boards
-  },
+  key: () => ['boards', project.value.id],
+  query: () => listBoards(project.value.id),
 })
+
+watch(
+  () => boards.value,
+  () => {
+    if (boards.value?.length) {
+      selectedBoard.value = boards.value[0]
+    }
+  },
+)
 
 function setBreadcrumbs() {
   pageStore.setBreadcrumbs([
-    { label: project.value!.name, route: `/projects/${project.value?.id}/summary` },
-    { label: 'Boards', route: `/projects/${project.value?.id}/boards` },
-    { label: 'Boards', route: `/projects/${project.value?.id}/boards` },
+    { label: project.value.name, route: `/projects/${project.value.id}/summary` },
+    { label: 'Boards', route: `/projects/${project.value.id}/boards` },
+    { label: 'Boards', route: `/projects/${project.value.id}/boards` },
   ])
 }
 
-onBeforeMount(setBreadcrumbs)
+onBeforeMount(() => {
+  setBreadcrumbs()
+  if (boards.value?.length) {
+    selectedBoard.value = boards.value[0]
+  }
+})
 </script>
 
 <template>
@@ -136,7 +144,7 @@ onBeforeMount(setBreadcrumbs)
           </TabList>
           <TabPanels>
             <TabPanel value="0">
-              <Board v-if="board" :loading="isBoardLoading" :board="board" class="mt-4" />
+              <Board v-if="board" :loading="isLoadingBoard" :board="board" class="mt-4" />
             </TabPanel>
           </TabPanels>
         </Tabs>

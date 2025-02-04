@@ -57,7 +57,7 @@ function toNode(workItem: BacklogResponse): TreeNode {
 const router = useRouter()
 
 function redirectToBoardView() {
-  router.push(`/projects/${project.value?.id}/boards`)
+  router.push(`/projects/${project.value.id}/boards`)
 }
 
 function openWorkItemDialog(workItemId: string) {
@@ -65,8 +65,8 @@ function openWorkItemDialog(workItemId: string) {
 }
 
 const { data: teams, isLoading } = useQuery({
-  key: ['teams', project.value!.id],
-  query: () => listTeams(project.value!.id),
+  key: ['teams', project.value.id],
+  query: () => listTeams(project.value.id),
   placeholderData: [] as Team[],
 })
 
@@ -87,12 +87,10 @@ const { data: backlog, isLoading: isBacklogLoading } = useQuery({
 })
 
 function setBreadcrumbs() {
-  const projectName = project.value!.name
-  const projectId = project.value!.id
   pageStore.setBreadcrumbs([
-    { label: projectName, route: `/projects/${projectId}/summary` },
-    { label: 'Boards', route: `/projects/${projectId}/boards` },
-    { label: 'Backlogs', route: `/projects/${projectId}/backlogs` },
+    { label: project.value.name, route: `/projects/${project.value.id}/summary` },
+    { label: 'Boards', route: `/projects/${project.value.id}/boards` },
+    { label: 'Backlogs', route: `/projects/${project.value.id}/backlogs` },
   ])
 }
 
