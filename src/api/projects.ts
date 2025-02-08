@@ -1,5 +1,5 @@
-import http from '@/api/http'
-import type { CreateProjectRequest, Project, UpdateProjectRequest } from '@/types/project'
+import http from '~/api/http'
+import type { CreateProjectRequest, Project, UpdateProjectRequest } from '~/types/project'
 
 export function createProject(
   organizationId: string,

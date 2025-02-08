@@ -1,7 +1,7 @@
-import { useAppToast } from '@/composables/useAppToast'
-import { useUserStore } from '@/stores/user'
-import type { RequestConfig } from '@/types'
 import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios'
+import { useAppToast } from '~/composables/useAppToast'
+import { useUserStore } from '~/stores/user'
+import type { RequestConfig } from '~/types'
 
 const http = axios.create({
   baseURL: import.meta.env.VITE_API_URL,

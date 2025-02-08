@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useDialog } from '@/composables/useDialog'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { ref } from 'vue'
 import { date, object, string } from 'yup'
+import { useDialog } from '~/composables/useDialog'
 
 const form = ref({
   name: '',

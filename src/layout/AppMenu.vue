@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useProjectStore } from '@/stores/project'
 import { storeToRefs } from 'pinia'
 import type { MenuItem } from 'primevue/menuitem'
 import { computed } from 'vue'
+import { useProjectStore } from '~/stores/project'
 import AppMenuItem from './AppMenuItem.vue'
 
 const projectStore = useProjectStore()

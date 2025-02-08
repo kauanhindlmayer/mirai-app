@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { loginUser as _loginUser, getCurrentUser } from '@/api/users'
-import LazyImage from '@/components/common/LazyImage.vue'
-import { displayError } from '@/composables/displayError'
-import { useUserStore } from '@/stores/user'
-import type { LoginUserRequest, User } from '@/types/user'
 import { useMutation } from '@pinia/colada'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { object, string } from 'yup'
+import { loginUser as _loginUser, getCurrentUser } from '~/api/users'
+import LazyImage from '~/components/common/LazyImage.vue'
+import { displayError } from '~/composables/displayError'
+import { useUserStore } from '~/stores/user'
+import type { LoginUserRequest, User } from '~/types/user'
 
 const store = useUserStore()
 const router = useRouter()

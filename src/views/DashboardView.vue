@@ -1,34 +1,44 @@
 <script setup lang="ts">
-import { getDashboardData } from '@/api/dashboards'
-import { listTeams } from '@/api/teams'
-import BurndownChart from '@/components/dashboard/BurndownChart.vue'
-import BurnupChart from '@/components/dashboard/BurnupChart.vue'
-import { usePageStore } from '@/stores/page'
-import { useProjectStore } from '@/stores/project'
-import type { Team } from '@/types/team'
-import { format } from '@/utils/date'
 import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import type { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { computed, onBeforeMount, ref, useTemplateRef } from 'vue'
+import { computed, onBeforeMount, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { getDashboardData } from '~/api/dashboards'
+import { listTeams } from '~/api/teams'
+import BurndownChart from '~/components/dashboard/BurndownChart.vue'
+import BurnupChart from '~/components/dashboard/BurnupChart.vue'
+import { usePageStore } from '~/stores/page'
+import { useProjectStore } from '~/stores/project'
+import type { Team } from '~/types/team'
+import { format } from '~/utils/date'
 
 const pageStore = usePageStore()
 pageStore.setTitle('Dashboard - Overview')
 
-const { project } = storeToRefs(useProjectStore())
+const projectStore = useProjectStore()
+const { project } = storeToRefs(projectStore)
 
 const selectedTeam = ref<Team | null>()
 
 const { data: teams, isLoading: isLoadingTeams } = useQuery({
   key: () => ['teams'],
-  query: async () => {
-    const teams = await listTeams(project.value.id)
-    if (teams.length) {
-      selectedTeam.value = teams[0]
+  query: () => listTeams(project.value.id),
+})
+
+watch(
+  () => teams.value,
+  () => {
+    if (teams.value?.length) {
+      selectedTeam.value = teams.value[0]
     }
-    return teams
   },
+)
+
+onMounted(() => {
+  if (teams.value?.length) {
+    selectedTeam.value = teams.value[0]
+  }
 })
 
 const {
@@ -46,9 +56,10 @@ const {
   },
 })
 
-const formattedStartDate = computed(() => format(dashboardData.value.startDate))
-const formattedEndDate = computed(() => format(dashboardData.value.endDate))
-const dateRange = computed(() => `${formattedStartDate.value} - ${formattedEndDate.value}`)
+const dateRange = computed(() => {
+  const { startDate, endDate } = dashboardData.value
+  return `${format(startDate)} - ${format(endDate)}`
+})
 
 const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
 const menuItems: MenuItem[] = [

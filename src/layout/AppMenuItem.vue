@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useLayout } from '@/layout/composables/layout'
 import type { MenuItem } from 'primevue/menuitem'
 import { nextTick, onBeforeMount, ref, useTemplateRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { useLayout } from '~/layout/composables/layout'
 
 const route = useRoute()
 

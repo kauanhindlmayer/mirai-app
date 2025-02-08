@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { getWorkItem } from '@/api/work-items'
-import { useProjectStore } from '@/stores/project'
-import { getStatusLabel, getStatusSeverity, getTypeColor, getTypeLabel } from '@/utils/work-item'
 import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import type { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import { computed, onBeforeMount, ref, useTemplateRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { getWorkItem } from '~/api/work-items'
+import { useProjectStore } from '~/stores/project'
+import { getStatusLabel, getStatusSeverity, getTypeColor, getTypeLabel } from '~/utils/work-item'
 import CommentsSection from './CommentsSection.vue'
 
 const projectStore = useProjectStore()

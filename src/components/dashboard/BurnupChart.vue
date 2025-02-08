@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useLayout } from '@/layout/composables/layout'
-import type { BurnupPoint } from '@/types/dashboard'
-import { format } from '@/utils/date'
 import type { ChartData, ChartOptions } from 'chart.js'
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useLayout } from '~/layout/composables/layout'
+import type { BurnupPoint } from '~/types/dashboard'
+import { format } from '~/utils/date'
 import SkeletonChart from './SkeletonChart.vue'
 
 const { layoutConfig, isDarkTheme } = useLayout()
@@ -96,6 +96,10 @@ watch(
     setColorOptions()
   },
 )
+
+onMounted(() => {
+  setColorOptions()
+})
 </script>
 
 <template>
@@ -114,6 +118,6 @@ watch(
         <div class="text-5xl font-light">{{ storiesCompleted }}</div>
       </div>
     </div>
-    <Chart :data="chartData" :options="chartOptions" :height="260" />
+    <Chart type="bar" :data="chartData" :options="chartOptions" :height="260" />
   </div>
 </template>

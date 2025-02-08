@@ -1,4 +1,4 @@
-import type { DashboardResponse } from '@/types/dashboard'
+import type { DashboardResponse } from '~/types/dashboard'
 
 export function getDashboardData(_projectId: string): Promise<DashboardResponse> {
   return new Promise((resolve) => {

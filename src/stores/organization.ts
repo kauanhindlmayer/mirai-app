@@ -1,6 +1,6 @@
-import type { Organization } from '@/types/organization'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref } from 'vue'
+import type { Organization } from '~/types/organization'
 
 export const useOrganizationStore = defineStore('organizations', () => {
   const organization = ref<Organization>({} as Organization)

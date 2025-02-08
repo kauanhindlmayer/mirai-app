@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { Comment } from '@/types/wiki-page'
-import { formatDistanceToNow } from '@/utils/date'
 import { useConfirm, type Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import { ref, useTemplateRef } from 'vue'
+import type { Comment } from '~/types/wiki-page'
+import { formatDistanceToNow } from '~/utils/date'
 
 const { comment } = defineProps<{
   comment: Comment

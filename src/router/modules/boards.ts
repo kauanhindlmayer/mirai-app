@@ -4,7 +4,7 @@ const boardsRoutes: RouteRecordRaw[] = [
   {
     path: 'boards',
     name: 'boards',
-    component: () => import('@/views/boards/BoardsList.vue'),
+    component: () => import('~/views/boards/BoardsList.vue'),
   },
 ]
 

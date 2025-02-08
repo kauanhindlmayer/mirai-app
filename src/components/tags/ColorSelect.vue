@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { colors, getColorName } from '@/utils/tag'
+import { colors, getColorName } from '~/utils/tag'
 import AppTag from './AppTag.vue'
 
 const color = defineModel<string>()

@@ -1,3 +1,4 @@
+import { computed, isRef, reactive, type MaybeRef } from 'vue'
 import {
   CardStyle,
   MenuMode,
@@ -6,8 +7,7 @@ import {
   Primary,
   type LayoutConfig,
   type LayoutState,
-} from '@/types/layout'
-import { computed, isRef, reactive, type MaybeRef } from 'vue'
+} from '~/types/layout'
 
 const layoutConfig = reactive<LayoutConfig>({
   preset: Preset.Aura,

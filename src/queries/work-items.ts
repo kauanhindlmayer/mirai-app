@@ -1,7 +1,7 @@
-import { getWorkItemsStats } from '@/api/work-items'
 import { defineQuery, useQuery } from '@pinia/colada'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { getWorkItemsStats } from '~/api/work-items'
 
 export const useWorkItemsStats = defineQuery(() => {
   const route = useRoute()

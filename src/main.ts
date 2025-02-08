@@ -1,13 +1,13 @@
-import primeVue from '@/plugins/prime-vue'
 import { PiniaColada } from '@pinia/colada'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import { createMetaManager } from 'vue-meta'
+import primeVue from '~/plugins/prime-vue'
 import App from './App.vue'
 import router from './router'
 
-import '@/assets/styles.scss'
-import '@/assets/tailwind.css'
+import '~/assets/styles.scss'
+import '~/assets/tailwind.css'
 
 const app = createApp(App)
 

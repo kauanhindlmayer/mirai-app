@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { updateProject } from '@/api/projects'
-import { displayError } from '@/composables/displayError'
-import { useDrawer } from '@/composables/useDialog'
-import { useOrganizationStore } from '@/stores/organization'
-import { useProjectStore } from '@/stores/project'
 import { useMutation, useQueryCache } from '@pinia/colada'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { object, string } from 'yup'
+import { updateProject } from '~/api/projects'
+import { displayError } from '~/composables/displayError'
+import { useDrawer } from '~/composables/useDialog'
+import { useOrganizationStore } from '~/stores/organization'
+import { useProjectStore } from '~/stores/project'
 
 const organizationStore = useOrganizationStore()
 const { organization } = storeToRefs(organizationStore)

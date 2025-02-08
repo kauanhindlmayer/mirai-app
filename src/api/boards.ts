@@ -1,11 +1,11 @@
-import http from '@/api/http'
+import http from '~/api/http'
 import type {
   Board,
   BoardSummary,
   CreateBoardColumnRequest,
   CreateBoardRequest,
   MoveCardRequest,
-} from '@/types/board'
+} from '~/types/board'
 
 export function createBoard(teamId: string, request: CreateBoardRequest): Promise<string> {
   return http.post(`/teams/${teamId}/boards`, request)

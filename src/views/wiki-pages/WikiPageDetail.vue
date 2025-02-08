@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { addComment, deleteComment } from '@/api/wiki-pages'
-import CommentsSection from '@/components/common/CommentsSection.vue'
-import { useAppToast } from '@/composables/useAppToast'
-import { useWikiPage, useWikiPageStats } from '@/queries/wiki-pages'
-import { useProjectStore } from '@/stores/project'
-import { format, formatDistanceToNow } from '@/utils/date'
 import { useMutation, useQueryCache } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import { computed, useTemplateRef } from 'vue'
 import { useRouter } from 'vue-router'
+import { addComment, deleteComment } from '~/api/wiki-pages'
+import CommentsSection from '~/components/common/CommentsSection.vue'
+import { useAppToast } from '~/composables/useAppToast'
+import { useWikiPage, useWikiPageStats } from '~/queries/wiki-pages'
+import { useProjectStore } from '~/stores/project'
+import { format, formatDistanceToNow } from '~/utils/date'
 
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)

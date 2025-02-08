@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { registerUser as _registerUser } from '@/api/users'
-import LazyImage from '@/components/common/LazyImage.vue'
-import { displayError } from '@/composables/displayError'
-import type { RegisterUserRequest } from '@/types/user'
 import { useMutation } from '@pinia/colada'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { object, string } from 'yup'
+import { registerUser as _registerUser } from '~/api/users'
+import LazyImage from '~/components/common/LazyImage.vue'
+import { displayError } from '~/composables/displayError'
+import type { RegisterUserRequest } from '~/types/user'
 
 const router = useRouter()
 

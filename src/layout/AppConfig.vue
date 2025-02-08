@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ColorType, MenuMode, MenuTheme, Primary, Surface, type Color } from '@/types/layout'
 import { $t, updatePreset, updateSurfacePalette } from '@primevue/themes'
 import Aura from '@primevue/themes/aura'
 import Lara from '@primevue/themes/lara'
 import Nora from '@primevue/themes/nora'
 import type { SelectButtonChangeEvent } from 'primevue'
 import { computed, ref, watch } from 'vue'
+import { ColorType, MenuMode, MenuTheme, Primary, Surface, type Color } from '~/types/layout'
 import { useLayout } from './composables/layout'
 
 const { layoutState, layoutConfig, isDarkTheme } = useLayout()

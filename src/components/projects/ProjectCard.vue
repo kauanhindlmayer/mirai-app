@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Project } from '@/types/project'
-import { getInitials } from '@/utils'
 import { useRouter } from 'vue-router'
+import type { Project } from '~/types/project'
+import { getInitials } from '~/utils'
 
 const { project } = defineProps<{ project: Project }>()
 

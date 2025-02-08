@@ -1,11 +1,11 @@
-import http from '@/api/http'
+import http from '~/api/http'
 import type {
   LoginUserRequest,
   LoginUserResponse,
   RegisterUserRequest,
   UpdateUserProfileRequest,
   User,
-} from '@/types/user'
+} from '~/types/user'
 
 export function registerUser(request: RegisterUserRequest): Promise<string> {
   return http.post('/users/register', request)

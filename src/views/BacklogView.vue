@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { getBacklog, listTeams } from '@/api/teams'
-import WorkItemDialog from '@/components/common/WorkItemDialog.vue'
-import AppTag from '@/components/tags/AppTag.vue'
-import WorkItemTag from '@/components/work-items/WorkItemTag.vue'
-import { useLayout } from '@/layout/composables/layout'
-import { usePageStore } from '@/stores/page'
-import { useProjectStore } from '@/stores/project'
-import { useTeamStore } from '@/stores/team'
-import { BacklogLevel, type BacklogResponse, type Team } from '@/types/team'
-import {
-  getBacklogLevelLabel,
-  getMoreTagsTooltip,
-  getStatusLabel,
-  getStatusSeverity,
-} from '@/utils/work-item'
 import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import type { TreeNode } from 'primevue/treenode'
 import { computed, onBeforeMount, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { getBacklog, listTeams } from '~/api/teams'
+import WorkItemDialog from '~/components/common/WorkItemDialog.vue'
+import AppTag from '~/components/tags/AppTag.vue'
+import WorkItemTag from '~/components/work-items/WorkItemTag.vue'
+import { useLayout } from '~/layout/composables/layout'
+import { usePageStore } from '~/stores/page'
+import { useProjectStore } from '~/stores/project'
+import { useTeamStore } from '~/stores/team'
+import { BacklogLevel, type BacklogResponse, type Team } from '~/types/team'
+import {
+  getBacklogLevelLabel,
+  getMoreTagsTooltip,
+  getStatusLabel,
+  getStatusSeverity,
+} from '~/utils/work-item'
 
 const pageStore = usePageStore()
 const teamStore = useTeamStore()

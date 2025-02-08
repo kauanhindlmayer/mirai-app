@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { listOrganizations } from '@/api/organizations'
-import { listProjects } from '@/api/projects'
-import CreateProjectDrawer from '@/components/projects/CreateProjectDrawer.vue'
-import ProjectCard from '@/components/projects/ProjectCard.vue'
-import { useOrganizationStore } from '@/stores/organization'
-import { usePageStore } from '@/stores/page'
 import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import { useTemplateRef } from 'vue'
+import { listOrganizations } from '~/api/organizations'
+import { listProjects } from '~/api/projects'
+import CreateProjectDrawer from '~/components/projects/CreateProjectDrawer.vue'
+import ProjectCard from '~/components/projects/ProjectCard.vue'
+import { useOrganizationStore } from '~/stores/organization'
+import { usePageStore } from '~/stores/page'
 
 const organizationStore = useOrganizationStore()
 const { organization } = storeToRefs(organizationStore)

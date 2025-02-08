@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useLayout } from '@/layout/composables/layout'
+import { useLayout } from '~/layout/composables/layout'
 import AppMenu from './AppMenu.vue'
 import AppTopbar from './AppTopbar.vue'
 

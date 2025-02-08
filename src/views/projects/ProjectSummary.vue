@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { getProject } from '@/api/projects'
-import LazyImage from '@/components/common/LazyImage.vue'
-import EditProjectDrawer from '@/components/projects/EditProjectDrawer.vue'
-import { useWorkItemsStats } from '@/queries/work-items'
-import { usePageStore } from '@/stores/page'
-import type { Project } from '@/types/project'
-import { getInitials } from '@/utils'
 import { useQuery } from '@pinia/colada'
 import { Avatar } from 'primevue'
 import { computed, ref, useTemplateRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { getProject } from '~/api/projects'
+import LazyImage from '~/components/common/LazyImage.vue'
+import EditProjectDrawer from '~/components/projects/EditProjectDrawer.vue'
+import { useWorkItemsStats } from '~/queries/work-items'
+import { usePageStore } from '~/stores/page'
+import type { Project } from '~/types/project'
+import { getInitials } from '~/utils'
 
 const pageStore = usePageStore()
 pageStore.setTitle('Summary - Overview')

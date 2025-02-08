@@ -1,6 +1,6 @@
-import { getProject } from '@/api/projects'
 import { defineQuery, useQuery } from '@pinia/colada'
 import { useRoute } from 'vue-router'
+import { getProject } from '~/api/projects'
 
 export const useProject = defineQuery(() => {
   const route = useRoute()

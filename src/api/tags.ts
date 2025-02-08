@@ -1,5 +1,5 @@
-import http from '@/api/http'
-import type { CreateTagRequest, Tag } from '@/types/tag'
+import http from '~/api/http'
+import type { CreateTagRequest, Tag } from '~/types/tag'
 
 export function listTags(projectId: string, searchTerm?: string): Promise<Tag[]> {
   const params = searchTerm ? { searchTerm } : undefined

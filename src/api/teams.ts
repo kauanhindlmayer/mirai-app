@@ -1,5 +1,5 @@
-import http from '@/api/http'
-import type { BacklogLevel, BacklogResponse, CreateTeamRequest, Team } from '@/types/team'
+import http from '~/api/http'
+import type { BacklogLevel, BacklogResponse, CreateTeamRequest, Team } from '~/types/team'
 
 export function createTeam(projectId: string, request: CreateTeamRequest): Promise<string> {
   return http.post(`/projects/${projectId}/teams`, request)

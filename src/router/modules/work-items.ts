@@ -4,7 +4,7 @@ const workItemsRoutes: RouteRecordRaw[] = [
   {
     path: 'work-items',
     name: 'work-items',
-    component: () => import('@/views/work-items/WorkItemsList.vue'),
+    component: () => import('~/views/work-items/WorkItemsList.vue'),
   },
 ]
 

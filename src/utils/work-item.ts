@@ -1,6 +1,6 @@
-import type { Tag } from '@/types/tag'
-import { BacklogLevel } from '@/types/team'
-import { WorkItemStatus, WorkItemType } from '@/types/work-item'
+import type { Tag } from '~/types/tag'
+import { BacklogLevel } from '~/types/team'
+import { WorkItemStatus, WorkItemType } from '~/types/work-item'
 
 export function getStatusSeverity(status: WorkItemStatus): string {
   const severityMap: Record<WorkItemStatus, string> = {

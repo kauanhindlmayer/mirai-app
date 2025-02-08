@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { getBoard, listBoards } from '@/api/boards'
-import Board from '@/components/boards/Board.vue'
-import BoardSettingsDrawer from '@/components/boards/BoardSettingsDrawer.vue'
-import { useLayout } from '@/layout/composables/layout'
-import { usePageStore } from '@/stores/page'
-import { useProjectStore } from '@/stores/project'
-import { useTeamStore } from '@/stores/team'
-import { WorkItemType } from '@/types/work-item'
 import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import { onBeforeMount, ref, useTemplateRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { getBoard, listBoards } from '~/api/boards'
+import Board from '~/components/boards/Board.vue'
+import BoardSettingsDrawer from '~/components/boards/BoardSettingsDrawer.vue'
+import { useLayout } from '~/layout/composables/layout'
+import { usePageStore } from '~/stores/page'
+import { useProjectStore } from '~/stores/project'
+import { useTeamStore } from '~/stores/team'
+import { WorkItemType } from '~/types/work-item'
 
 const pageStore = usePageStore()
 const teamStore = useTeamStore()

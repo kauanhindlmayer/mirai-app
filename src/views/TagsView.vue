@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { deleteTag as _deleteTag, updateTag as _updateTag, createTag, listTags } from '@/api/tags'
-import AppTag from '@/components/tags/AppTag.vue'
-import ColorSelect from '@/components/tags/ColorSelect.vue'
-import { displayError } from '@/composables/displayError'
-import { usePageStore } from '@/stores/page'
-import { useProjectStore } from '@/stores/project'
-import type { CreateTagRequest, Tag } from '@/types/tag'
-import { getColorName } from '@/utils/tag'
 import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import type { DataTableRowEditSaveEvent } from 'primevue'
 import { computed, onBeforeMount, ref } from 'vue'
+import { deleteTag as _deleteTag, updateTag as _updateTag, createTag, listTags } from '~/api/tags'
+import AppTag from '~/components/tags/AppTag.vue'
+import ColorSelect from '~/components/tags/ColorSelect.vue'
+import { displayError } from '~/composables/displayError'
+import { usePageStore } from '~/stores/page'
+import { useProjectStore } from '~/stores/project'
+import type { CreateTagRequest, Tag } from '~/types/tag'
+import { getColorName } from '~/utils/tag'
 
 const pageStore = usePageStore()
 pageStore.setTitle('Tags - Boards')

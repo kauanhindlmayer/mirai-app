@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import LazyImage from '@/components/common/LazyImage.vue'
-import CreatePersonaDrawer from '@/components/personas/CreatePersonaDrawer.vue'
 import { useTemplateRef } from 'vue'
+import LazyImage from '~/components/common/LazyImage.vue'
+import CreatePersonaDrawer from '~/components/personas/CreatePersonaDrawer.vue'
 
 const createPersonaDrawerRef =
   useTemplateRef<InstanceType<typeof CreatePersonaDrawer>>('createPersonaDrawer')

@@ -1,4 +1,4 @@
-import http from '@/api/http'
+import http from '~/api/http'
 import type {
   AddCommentRequest,
   CreateWikiPageRequest,
@@ -8,7 +8,7 @@ import type {
   WikiPage,
   WikiPageStats,
   WikiPageSummary,
-} from '@/types/wiki-page'
+} from '~/types/wiki-page'
 
 export function createWikiPage(projectId: string, request: CreateWikiPageRequest): Promise<string> {
   return http.post(`/projects/${projectId}/wiki-pages`, request)

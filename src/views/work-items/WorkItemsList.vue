@@ -1,20 +1,4 @@
 <script setup lang="ts">
-import { deleteWorkItem as _deleteWorkItem, listWorkItems } from '@/api/work-items'
-import AppTag from '@/components/tags/AppTag.vue'
-import WorkItemTag from '@/components/work-items/WorkItemTag.vue'
-import { displayError } from '@/composables/displayError'
-import { useAppToast } from '@/composables/useAppToast'
-import { usePageStore } from '@/stores/page'
-import { useProjectStore } from '@/stores/project'
-import type { PaginationFilter } from '@/types'
-import { type WorkItem } from '@/types/work-item'
-import { format } from '@/utils/date'
-import {
-  getMoreTagsTooltip,
-  getStatusLabel,
-  getStatusSeverity,
-  getTypeLabel,
-} from '@/utils/work-item'
 import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import {
@@ -25,6 +9,22 @@ import {
 } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import { onMounted, ref, useTemplateRef } from 'vue'
+import { deleteWorkItem as _deleteWorkItem, listWorkItems } from '~/api/work-items'
+import AppTag from '~/components/tags/AppTag.vue'
+import WorkItemTag from '~/components/work-items/WorkItemTag.vue'
+import { displayError } from '~/composables/displayError'
+import { useAppToast } from '~/composables/useAppToast'
+import { usePageStore } from '~/stores/page'
+import { useProjectStore } from '~/stores/project'
+import type { PaginationFilter } from '~/types'
+import { type WorkItem } from '~/types/work-item'
+import { format } from '~/utils/date'
+import {
+  getMoreTagsTooltip,
+  getStatusLabel,
+  getStatusSeverity,
+  getTypeLabel,
+} from '~/utils/work-item'
 
 const { project } = storeToRefs(useProjectStore())
 const pageStore = usePageStore()

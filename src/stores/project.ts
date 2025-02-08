@@ -1,6 +1,6 @@
-import type { Project } from '@/types/project'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref } from 'vue'
+import type { Project } from '~/types/project'
 
 export const useProjectStore = defineStore('projects', () => {
   const project = ref<Project>({} as Project)

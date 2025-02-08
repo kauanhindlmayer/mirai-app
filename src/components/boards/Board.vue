@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import type { Board } from '@/types/board'
+import type { Board } from '~/types/board'
 import WorkItemDialog from '../common/WorkItemDialog.vue'
 import BoardColumn from './BoardColumn.vue'
 

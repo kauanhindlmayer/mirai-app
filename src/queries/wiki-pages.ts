@@ -1,9 +1,9 @@
-import { getWikiPage, getWikiPageStats, listWikiPages } from '@/api/wiki-pages'
-import { useProjectStore } from '@/stores/project'
 import { defineQuery, useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { getWikiPage, getWikiPageStats, listWikiPages } from '~/api/wiki-pages'
+import { useProjectStore } from '~/stores/project'
 
 export const useWikiPages = defineQuery(() => {
   const { project } = storeToRefs(useProjectStore())

@@ -1,7 +1,7 @@
-import { getProject } from '@/api/projects'
-import { useProjectStore } from '@/stores/project'
 import { useQueryCache } from '@pinia/colada'
 import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
+import { getProject } from '~/api/projects'
+import { useProjectStore } from '~/stores/project'
 
 export async function ensureProjectLoaded(
   to: RouteLocationNormalized,
