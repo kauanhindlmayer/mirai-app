@@ -1,13 +1,18 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { Avatar } from 'primevue'
 import { onMounted, ref, useTemplateRef } from 'vue'
 import LazyImage from '~/components/common/LazyImage.vue'
 import EditProjectDrawer from '~/components/projects/EditProjectDrawer.vue'
 import { useProject } from '~/queries/projects'
 import { useWorkItemsStats } from '~/queries/work-items'
+import { useOrganizationStore } from '~/stores/organization'
 import { usePageStore } from '~/stores/page'
 import type { Project } from '~/types/project'
 import { getInitials } from '~/utils'
+
+const organizationStore = useOrganizationStore()
+const { organization } = storeToRefs(organizationStore)
 
 const pageStore = usePageStore()
 pageStore.setTitle('Summary - Overview')
@@ -24,8 +29,17 @@ const periods = ref([
 const { stats, periodInDays: selectedPeriod } = useWorkItemsStats()
 const { project, isLoading } = useProject()
 
+const members = [
+  { id: '1', name: 'Alice Johnson', image: 'https://i.pravatar.cc/40?img=1' },
+  { id: '2', name: 'Bob Smith', image: 'https://i.pravatar.cc/40?img=2' },
+  { id: '3', name: 'Charlie Brown', image: 'https://i.pravatar.cc/40?img=3' },
+  { id: '4', name: 'David Wilson', image: 'https://i.pravatar.cc/40?img=4' },
+  { id: '5', name: 'Grace Hall', image: 'https://i.pravatar.cc/40?img=5' },
+]
+
 function setBreadcrumbs(project: Project) {
   pageStore.setBreadcrumbs([
+    { label: organization.value.name, route: '/projects' },
     { label: project.name, route: `/projects/${project.id}/summary` },
     { label: 'Overview', route: `/projects/${project.id}/summary` },
     { label: 'Summary', route: `/projects/${project.id}/summary` },
@@ -132,11 +146,13 @@ onMounted(() => {
           <Badge value="7" severity="secondary" />
         </div>
         <AvatarGroup>
-          <Avatar icon="pi pi-user" shape="circle" />
-          <Avatar icon="pi pi-user" shape="circle" />
-          <Avatar icon="pi pi-user" shape="circle" />
-          <Avatar icon="pi pi-user" shape="circle" />
-          <Avatar icon="pi pi-user" shape="circle" />
+          <Avatar
+            v-for="member in members"
+            :image="member.image"
+            :key="member.id"
+            shape="circle"
+            v-tooltip.bottom="member.name"
+          />
           <Avatar label="+2" shape="circle" />
         </AvatarGroup>
       </div>

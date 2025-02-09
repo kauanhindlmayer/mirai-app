@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
-import { useTemplateRef, watch } from 'vue'
+import { onBeforeMount, useTemplateRef, watch } from 'vue'
 import { listOrganizations } from '~/api/organizations'
 import { listProjects } from '~/api/projects'
 import CreateProjectDrawer from '~/components/projects/CreateProjectDrawer.vue'
 import ProjectCard from '~/components/projects/ProjectCard.vue'
 import { useOrganizationStore } from '~/stores/organization'
 import { usePageStore } from '~/stores/page'
+import type { Organization } from '~/types/organization'
 
 const organizationStore = useOrganizationStore()
 const { organization } = storeToRefs(organizationStore)
@@ -20,21 +21,25 @@ const createProjectDrawerRef =
 
 const { data: organizations, isLoading: isLoadingOrganizations } = useQuery({
   key: () => ['organizations'],
-  query: async () => listOrganizations(),
+  query: () => listOrganizations(),
+  placeholderData: () => [] as Organization[],
 })
-
-function selectFirstOrganization() {
-  if (!organizations.value?.length) return
-  organization.value = organizations.value[0]
-}
-
-watch(() => organizations.value, selectFirstOrganization)
 
 const { data: projects, isLoading } = useQuery({
   key: () => ['projects', organization.value.id],
   query: () => listProjects(organization.value.id),
   enabled: () => !!organization.value.id,
 })
+
+watch(
+  () => organizations.value,
+  () => {
+    if (!organizations.value.length || organization.value) return
+    organization.value = organizations.value[0]
+  },
+)
+
+onBeforeMount(pageStore.resetBreadcrumbs)
 </script>
 
 <template>

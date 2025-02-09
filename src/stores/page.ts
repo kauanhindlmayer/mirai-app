@@ -3,17 +3,20 @@ import { ref } from 'vue'
 import type { Breadcrumb } from '~/types/layout'
 
 export const usePageStore = defineStore('page', () => {
-  const defaultTitle = 'Mirai'
-  const title = ref<string>(defaultTitle)
+  const title = ref<string>('Mirai')
   const breadcrumbs = ref<Breadcrumb[]>([])
 
   function setTitle(newTitle: string) {
     title.value = newTitle
-    document.title = newTitle || defaultTitle
+    document.title = newTitle
   }
 
   function setBreadcrumbs(newBreadcrumbs: Breadcrumb[]) {
     breadcrumbs.value = newBreadcrumbs
+  }
+
+  function resetBreadcrumbs() {
+    breadcrumbs.value = []
   }
 
   return {
@@ -21,6 +24,7 @@ export const usePageStore = defineStore('page', () => {
     breadcrumbs,
     setTitle,
     setBreadcrumbs,
+    resetBreadcrumbs,
   }
 })
 

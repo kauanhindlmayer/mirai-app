@@ -44,29 +44,29 @@ watch(
   () => workItemId.value,
   (newWorkItemId) => {
     if (!newWorkItemId) return
-    openDialog()
+    showDialog()
   },
 )
 
 onBeforeMount(() => {
   if (!workItemId.value) return
-  openDialog()
+  showDialog()
 })
 
 const isVisible = ref(false)
 
-async function openDialog() {
+async function showDialog() {
   isVisible.value = true
 }
 
-function closeDialog() {
+function hideDialog() {
   router.replace({ query: undefined })
   isVisible.value = false
 }
 
 defineExpose({
-  openDialog,
-  closeDialog,
+  showDialog,
+  hideDialog,
 })
 </script>
 
@@ -77,7 +77,7 @@ defineExpose({
     v-model:visible="isVisible"
     modal
     :style="{ width: '64rem' }"
-    @hide="closeDialog"
+    @hide="hideDialog"
   >
     <template #header>
       <div class="side-color" :style="{ backgroundColor: getTypeColor(workItem.type) }" />
@@ -108,7 +108,7 @@ defineExpose({
               severity="secondary"
               icon="pi pi-save"
               disabled
-              @click="closeDialog"
+              @click="hideDialog"
             />
             <Button severity="secondary" icon="pi pi-refresh" text v-tooltip.bottom="'Refresh'" />
             <Button

@@ -5,8 +5,8 @@ import { useLayout } from '~/layout/composables/layout'
 import { useUserStore } from '~/stores/user'
 import AppBreadcrumb from './AppBreadcrumb.vue'
 
-const store = useUserStore()
-const { user } = storeToRefs(store)
+const userStore = useUserStore()
+const { user } = storeToRefs(userStore)
 const { layoutState, isDarkTheme, onMenuToggle, onConfigSidebarToggle } = useLayout()
 
 const tabs = [
@@ -42,7 +42,7 @@ function contactSupport() {
 }
 
 function logout() {
-  store.logout()
+  userStore.logout()
 }
 </script>
 
