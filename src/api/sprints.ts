@@ -1,11 +1,11 @@
 import http from '~/api/http'
-import type { CreateSprintRequest, SprintResponse } from '~/types/sprint'
+import type { CreateSprintRequest, Sprint } from '~/types/sprint'
 
 export function createSprint(teamId: string, request: CreateSprintRequest): Promise<string> {
   return http.post(`/teams/${teamId}/sprints`, request)
 }
 
-export function listSprints(teamId: string): Promise<SprintResponse[]> {
+export function listSprints(teamId: string): Promise<Sprint[]> {
   return http.get(`/teams/${teamId}/sprints`)
 }
 

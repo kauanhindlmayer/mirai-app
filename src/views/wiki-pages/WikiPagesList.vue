@@ -6,7 +6,7 @@ import type { MenuItem } from 'primevue/menuitem'
 import type { TreeNode } from 'primevue/treenode'
 import { computed, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { deleteWikiPage as _deleteWikiPage } from '~/api/wiki-pages'
+import { deleteWikiPage } from '~/api/wiki-pages'
 import MoveWikiPageDrawer from '~/components/wiki-pages/MoveWikiPageDrawer.vue'
 import { displayError } from '~/composables/displayError'
 import { useAppToast } from '~/composables/useAppToast'
@@ -95,7 +95,7 @@ const menuItems = ref<MenuItem[]>([
   { label: 'Copy Page Path', icon: 'pi pi-copy', command: copyPagePath },
   { label: 'Move Page', icon: 'pi pi-arrow-right', command: openMoveWikiPageDrawer },
   { label: 'Edit', icon: 'pi pi-pencil', command: redirectToEditPage },
-  { label: 'Delete', icon: 'pi pi-trash', command: deleteWikiPage },
+  { label: 'Delete', icon: 'pi pi-trash', command: confirmDeleteWikiPage },
   { label: 'Open in New Tab', icon: 'pi pi-external-link', command: openInNewTab },
 ])
 
@@ -129,7 +129,7 @@ function redirectToEditPage() {
 const queryCache = useQueryCache()
 
 const { mutate: deleteWikiPageFn } = useMutation({
-  mutation: () => _deleteWikiPage(project.value.id, wikiPage.value!.id),
+  mutation: () => deleteWikiPage(project.value.id, wikiPage.value!.id),
   onSuccess: async () => {
     await queryCache.invalidateQueries({ key: ['wiki-pages', project.value.id] })
     toast.showSuccess({ detail: 'Wiki page deleted successfully' })
@@ -138,7 +138,7 @@ const { mutate: deleteWikiPageFn } = useMutation({
   onError: displayError,
 })
 
-function deleteWikiPage() {
+function confirmDeleteWikiPage() {
   confirm.require({
     header: `Delete '${wikiPage.value?.title}'?`,
     message:
@@ -219,7 +219,7 @@ function setBreadcrumbs() {
         :parent-wiki-page-id="parentWikiPageId"
         @close="closeForm"
       />
-      <WikiPageDetail @delete-wiki-page="deleteWikiPage" v-else />
+      <WikiPageDetail @delete-wiki-page="confirmDeleteWikiPage" v-else />
     </div>
     <MoveWikiPageDrawer ref="moveWikiPageDrawer" />
     <ConfirmDialog style="width: 450px" />

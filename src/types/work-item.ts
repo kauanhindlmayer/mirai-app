@@ -1,5 +1,4 @@
 export type WorkItem = {
-  id?: string
   code: number
   title: string
   description?: string

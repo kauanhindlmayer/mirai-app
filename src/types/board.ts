@@ -2,7 +2,7 @@ import type { WorkItemStatus, WorkItemType } from './work-item'
 
 export type Board = {
   id: string
-  projectId: string
+  teamId: string
   name: string
   description: string
   columns: Column[]

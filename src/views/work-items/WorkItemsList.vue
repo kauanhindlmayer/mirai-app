@@ -9,7 +9,7 @@ import {
 } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import { onMounted, ref, useTemplateRef } from 'vue'
-import { deleteWorkItem as _deleteWorkItem, listWorkItems } from '~/api/work-items'
+import { deleteWorkItem, listWorkItems } from '~/api/work-items'
 import AppTag from '~/components/tags/AppTag.vue'
 import WorkItemTag from '~/components/work-items/WorkItemTag.vue'
 import { displayError } from '~/composables/displayError'
@@ -26,13 +26,15 @@ import {
   getTypeLabel,
 } from '~/utils/work-item'
 
-const { project } = storeToRefs(useProjectStore())
+const projectStore = useProjectStore()
+const { project } = storeToRefs(projectStore)
+
 const pageStore = usePageStore()
 pageStore.setTitle('Work Items - Boards')
 
 const toast = useAppToast()
 
-const selectedWorkItem = ref<WorkItem | null>(null)
+const selectedWorkItem = ref<(WorkItem & { id: string }) | null>(null)
 
 const menuRef = useTemplateRef<InstanceType<typeof ContextMenu>>('menu')
 const items: MenuItem[] = [
@@ -44,7 +46,7 @@ const items: MenuItem[] = [
   {
     label: 'Delete',
     icon: 'pi pi-fw pi-trash',
-    command: () => deleteWorkItem(),
+    command: () => deleteWorkItemFn(),
   },
 ]
 
@@ -64,13 +66,8 @@ async function copyWorkItemToClipboard() {
 
 const queryCache = useQueryCache()
 
-const { mutate: deleteWorkItem } = useMutation({
-  mutation: async () => {
-    const projectId = project.value.id
-    const workItemId = selectedWorkItem.value?.id
-    if (!projectId || !workItemId) return
-    return _deleteWorkItem(projectId, workItemId)
-  },
+const { mutate: deleteWorkItemFn } = useMutation({
+  mutation: async () => deleteWorkItem(project.value.id, selectedWorkItem.value!.id),
   onSuccess() {
     queryCache.invalidateQueries({ key: ['work-items', filters.value] })
     toast.showSuccess({ detail: 'Work item has been deleted successfully' })

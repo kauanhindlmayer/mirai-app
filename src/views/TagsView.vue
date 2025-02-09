@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
+import { useRouteQuery } from '@vueuse/router'
 import { storeToRefs } from 'pinia'
 import type { DataTableRowEditSaveEvent } from 'primevue'
-import { computed, onBeforeMount, ref } from 'vue'
-import { deleteTag as _deleteTag, updateTag as _updateTag, createTag, listTags } from '~/api/tags'
+import { onBeforeMount, ref } from 'vue'
+import { createTag, deleteTag, listTags, updateTag } from '~/api/tags'
 import AppTag from '~/components/tags/AppTag.vue'
 import ColorSelect from '~/components/tags/ColorSelect.vue'
 import { displayError } from '~/composables/displayError'
@@ -21,14 +22,11 @@ const { project } = storeToRefs(projectStore)
 const selectedTags = ref<Tag[]>([])
 const editingRows = ref([])
 
+const searchTerm = useRouteQuery('search', '', { mode: 'push' })
 const newTag = ref<CreateTagRequest>({
   name: '',
   description: '',
   color: '',
-})
-const searchTerm = ref('')
-const filteredTags = computed(() => {
-  return tags.value.filter((tag) => tag.name.toLowerCase().includes(searchTerm.value.toLowerCase()))
 })
 
 const queryCache = useQueryCache()
@@ -42,10 +40,10 @@ const { mutate: addTag } = useMutation({
   onError: displayError,
 })
 
-const { mutate: updateTag } = useMutation({
+const { mutate: updateTagFn } = useMutation({
   mutation: (event: DataTableRowEditSaveEvent) => {
     const tag = event.newData as Tag
-    return _updateTag(project.value.id, tag.id, {
+    return updateTag(project.value.id, tag.id, {
       name: tag.name,
       description: tag.description,
       color: tag.color,
@@ -57,19 +55,19 @@ const { mutate: updateTag } = useMutation({
   onError: displayError,
 })
 
-const { mutate: deleteTag } = useMutation({
-  mutation: (_: MouseEvent) => _deleteTag(project.value.id, selectedTags.value[0].id),
+const { mutate: deleteTagFn } = useMutation({
+  mutation: (_: MouseEvent) => deleteTag(project.value.id, selectedTags.value[0].id),
   onSuccess: async () => {
-    selectedTags.value = []
     await queryCache.invalidateQueries({ key: ['tags'] })
+    selectedTags.value = []
   },
   onError: displayError,
 })
 
 const { data: tags, isLoading } = useQuery({
-  key: () => ['tags'],
-  query: () => listTags(project.value.id),
-  placeholderData: [] as Tag[],
+  key: () => ['tags', searchTerm.value],
+  query: () => listTags(project.value.id, searchTerm.value),
+  placeholderData: (previousData) => previousData,
 })
 
 function setBreadcrumbs() {
@@ -99,7 +97,7 @@ onBeforeMount(setBreadcrumbs)
               severity="danger"
               icon="pi pi-trash"
               :disabled="selectedTags.length === 0"
-              @click="deleteTag"
+              @click="deleteTagFn"
             />
           </div>
         </div>
@@ -118,12 +116,12 @@ onBeforeMount(setBreadcrumbs)
         <DataTable
           v-model:editingRows="editingRows"
           v-model:selection="selectedTags"
-          :value="filteredTags"
+          :value="tags"
           :loading="isLoading"
           edit-mode="row"
           data-key="id"
           table-style="min-width: 50rem"
-          @row-edit-save="updateTag"
+          @row-edit-save="updateTagFn"
         >
           <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
 

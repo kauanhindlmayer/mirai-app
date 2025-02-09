@@ -7,7 +7,7 @@ import { format } from '~/utils/date'
 import SkeletonChart from './SkeletonChart.vue'
 
 const { layoutConfig, isDarkTheme } = useLayout()
-const { burndownData } = defineProps<{
+const { burndownData = [] } = defineProps<{
   isLoading: boolean
   burndownData: BurndownPoint[]
   dateRange: string

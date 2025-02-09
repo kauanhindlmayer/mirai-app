@@ -22,10 +22,11 @@ import {
 
 const pageStore = usePageStore()
 const teamStore = useTeamStore()
-const { project } = storeToRefs(useProjectStore())
+const projectStore = useProjectStore()
+const { project } = storeToRefs(projectStore)
 const { onMenuToggle } = useLayout()
 
-const selectedTeam = ref()
+const selectedTeam = ref<Team | null>(null)
 const selectedBacklogLevel = ref(BacklogLevel.Feature)
 const backlogLevels = ref([
   { label: 'Epics', value: BacklogLevel.Epic },
@@ -65,25 +66,23 @@ function openWorkItemDialog(workItemId: string) {
 }
 
 const { data: teams, isLoading } = useQuery({
-  key: ['teams', project.value.id],
+  key: () => ['teams', project.value.id],
   query: () => listTeams(project.value.id),
-  placeholderData: [] as Team[],
+  placeholderData: () => [] as Team[],
 })
 
-watch(
-  () => teams.value,
-  () => {
-    if (!teams.value.length) return
-    selectedTeam.value = teams.value[0]
-  },
-  { immediate: true },
-)
+function selectTeam() {
+  if (!teams.value.length) return
+  selectedTeam.value = teams.value[0]
+}
+
+watch(() => teams.value, selectTeam)
 
 const { data: backlog, isLoading: isBacklogLoading } = useQuery({
-  key: ['backlog', selectedTeam.value?.id || '', selectedBacklogLevel.value],
+  key: () => ['backlog', selectedTeam.value?.id || '', selectedBacklogLevel.value],
   query: async () => getBacklog(selectedTeam.value!.id, undefined, selectedBacklogLevel.value),
   enabled: () => !!selectedTeam.value,
-  placeholderData: [] as BacklogResponse[],
+  placeholderData: () => [] as BacklogResponse[],
 })
 
 function setBreadcrumbs() {
@@ -94,7 +93,10 @@ function setBreadcrumbs() {
   ])
 }
 
-onBeforeMount(setBreadcrumbs)
+onBeforeMount(() => {
+  setBreadcrumbs()
+  selectTeam()
+})
 </script>
 
 <template>

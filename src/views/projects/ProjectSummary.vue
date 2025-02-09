@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { useQuery } from '@pinia/colada'
 import { Avatar } from 'primevue'
-import { computed, ref, useTemplateRef, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { getProject } from '~/api/projects'
+import { onMounted, ref, useTemplateRef } from 'vue'
 import LazyImage from '~/components/common/LazyImage.vue'
 import EditProjectDrawer from '~/components/projects/EditProjectDrawer.vue'
+import { useProject } from '~/queries/projects'
 import { useWorkItemsStats } from '~/queries/work-items'
 import { usePageStore } from '~/stores/page'
 import type { Project } from '~/types/project'
@@ -23,17 +21,8 @@ const periods = ref([
   { label: 'Last 30 days', value: 30 },
 ])
 
-const { stats, periodInDays } = useWorkItemsStats()
-
-const route = useRoute()
-const projectId = computed(() => route.params.projectId as string)
-const hasProjectDescription = computed(() => project.value?.description)
-
-const { data: project, isLoading } = useQuery({
-  key: () => ['project', projectId.value],
-  query: () => getProject(projectId.value),
-  placeholderData: {} as Project,
-})
+const { stats, periodInDays: selectedPeriod } = useWorkItemsStats()
+const { project, isLoading } = useProject()
 
 function setBreadcrumbs(project: Project) {
   pageStore.setBreadcrumbs([
@@ -43,7 +32,10 @@ function setBreadcrumbs(project: Project) {
   ])
 }
 
-watch(() => project.value, setBreadcrumbs)
+onMounted(() => {
+  if (!project.value) return
+  setBreadcrumbs(project.value)
+})
 </script>
 
 <template>
@@ -78,7 +70,7 @@ watch(() => project.value, setBreadcrumbs)
         <div class="flex justify-between items-center">
           <div class="font-semibold text-xl">About this Project</div>
           <Button
-            v-if="hasProjectDescription"
+            v-if="project.description"
             icon="pi pi-pencil"
             severity="secondary"
             variant="text"
@@ -86,8 +78,8 @@ watch(() => project.value, setBreadcrumbs)
             @click="editProjectDrawerRef?.showDrawer"
           />
         </div>
-        <div v-if="hasProjectDescription">
-          <div>{{ project!.description }}</div>
+        <div v-if="project.description">
+          <div>{{ project.description }}</div>
         </div>
         <div v-else class="flex justify-between items-center">
           <div>
@@ -109,7 +101,7 @@ watch(() => project.value, setBreadcrumbs)
         <div class="flex justify-between items-center mb-4">
           <div class="font-semibold text-xl mr-2">Project Stats</div>
           <Select
-            v-model="periodInDays"
+            v-model="selectedPeriod"
             :options="periods"
             option-label="label"
             option-value="value"

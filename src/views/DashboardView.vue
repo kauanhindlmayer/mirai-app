@@ -3,13 +3,14 @@ import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import type { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { computed, onBeforeMount, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { computed, onBeforeMount, ref, useTemplateRef, watch } from 'vue'
 import { getDashboardData } from '~/api/dashboards'
 import { listTeams } from '~/api/teams'
 import BurndownChart from '~/components/dashboard/BurndownChart.vue'
 import BurnupChart from '~/components/dashboard/BurnupChart.vue'
 import { usePageStore } from '~/stores/page'
 import { useProjectStore } from '~/stores/project'
+import type { DashboardResponse } from '~/types/dashboard'
 import type { Team } from '~/types/team'
 import { format } from '~/utils/date'
 
@@ -26,20 +27,12 @@ const { data: teams, isLoading: isLoadingTeams } = useQuery({
   query: () => listTeams(project.value.id),
 })
 
-watch(
-  () => teams.value,
-  () => {
-    if (teams.value?.length) {
-      selectedTeam.value = teams.value[0]
-    }
-  },
-)
+function selectTeam() {
+  if (!teams.value?.length) return
+  selectedTeam.value = teams.value[0]
+}
 
-onMounted(() => {
-  if (teams.value?.length) {
-    selectedTeam.value = teams.value[0]
-  }
-})
+watch(() => teams.value, selectTeam)
 
 const {
   data: dashboardData,
@@ -48,12 +41,7 @@ const {
 } = useQuery({
   key: () => ['dashboard', project.value.id],
   query: () => getDashboardData(project.value.id),
-  placeholderData: {
-    startDate: '',
-    endDate: '',
-    burndownData: [],
-    burnupData: [],
-  },
+  placeholderData: () => ({}) as DashboardResponse,
 })
 
 const dateRange = computed(() => {
@@ -79,7 +67,10 @@ function setBreadcrumbs() {
   ])
 }
 
-onBeforeMount(setBreadcrumbs)
+onBeforeMount(() => {
+  setBreadcrumbs()
+  selectTeam()
+})
 </script>
 
 <template>

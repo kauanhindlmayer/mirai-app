@@ -5,13 +5,13 @@ import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { object, string } from 'yup'
-import { loginUser as _loginUser, getCurrentUser } from '~/api/users'
+import { getCurrentUser, loginUser } from '~/api/users'
 import LazyImage from '~/components/common/LazyImage.vue'
 import { displayError } from '~/composables/displayError'
 import { useUserStore } from '~/stores/user'
 import type { LoginUserRequest, User } from '~/types/user'
 
-const store = useUserStore()
+const userStore = useUserStore()
 const router = useRouter()
 
 const form = ref<LoginUserRequest>({
@@ -27,14 +27,14 @@ const loginUserSchema = object({
 
 const resolver = ref(yupResolver(loginUserSchema))
 
-const { mutate: loginUser, isLoading } = useMutation({
+const { mutate: loginUserFn, isLoading } = useMutation({
   mutation: async (request: LoginUserRequest) => {
-    const response = await _loginUser(request)
+    const response = await loginUser(request)
     localStorage.setItem('accessToken', response.accessToken)
     return await getCurrentUser()
   },
   onSuccess: (user: User) => {
-    store.setUser(user)
+    userStore.setUser(user)
     router.push({ name: 'projects-home' })
   },
   onError: displayError,
@@ -42,7 +42,7 @@ const { mutate: loginUser, isLoading } = useMutation({
 
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
-  loginUser(form.value)
+  loginUserFn(form.value)
 }
 </script>
 

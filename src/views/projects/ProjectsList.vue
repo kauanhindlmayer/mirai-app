@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
-import { useTemplateRef } from 'vue'
+import { useTemplateRef, watch } from 'vue'
 import { listOrganizations } from '~/api/organizations'
 import { listProjects } from '~/api/projects'
 import CreateProjectDrawer from '~/components/projects/CreateProjectDrawer.vue'
@@ -20,14 +20,15 @@ const createProjectDrawerRef =
 
 const { data: organizations, isLoading: isLoadingOrganizations } = useQuery({
   key: () => ['organizations'],
-  query: async () => {
-    const organizations = await listOrganizations()
-    if (organizations.length) {
-      organization.value = organizations[0]
-    }
-    return organizations
-  },
+  query: async () => listOrganizations(),
 })
+
+function selectFirstOrganization() {
+  if (!organizations.value?.length) return
+  organization.value = organizations.value[0]
+}
+
+watch(() => organizations.value, selectFirstOrganization)
 
 const { data: projects, isLoading } = useQuery({
   key: () => ['projects', organization.value.id],

@@ -10,6 +10,7 @@ import { useLayout } from '~/layout/composables/layout'
 import { usePageStore } from '~/stores/page'
 import { useProjectStore } from '~/stores/project'
 import { useTeamStore } from '~/stores/team'
+import type { BoardSummary } from '~/types/board'
 import { WorkItemType } from '~/types/work-item'
 
 const pageStore = usePageStore()
@@ -20,7 +21,7 @@ const { onMenuToggle } = useLayout()
 const boardSettingsDrawerRef =
   useTemplateRef<InstanceType<typeof BoardSettingsDrawer>>('boardSettingsDrawer')
 
-const selectedBoard = ref()
+const selectedBoard = ref<BoardSummary | null>(null)
 const selectedBacklogLevel = ref(WorkItemType.UserStory)
 const backlogLevels = ref([
   { label: 'Epics', value: WorkItemType.Epic },
@@ -38,8 +39,8 @@ watch(
 )
 
 const { data: board, isLoading: isLoadingBoard } = useQuery({
-  key: () => ['board', selectedBoard.value?.id],
-  query: async () => getBoard(teamStore.teamId!, selectedBoard.value?.id),
+  key: () => ['board', selectedBoard.value?.id || ''],
+  query: async () => getBoard(teamStore.teamId!, selectedBoard.value?.id || ''),
   enabled: () => !!selectedBoard.value,
 })
 
@@ -54,14 +55,12 @@ const { data: boards, isLoading } = useQuery({
   query: () => listBoards(project.value.id),
 })
 
-watch(
-  () => boards.value,
-  () => {
-    if (boards.value?.length) {
-      selectedBoard.value = boards.value[0]
-    }
-  },
-)
+function selectFirstBoard() {
+  if (!boards.value?.length) return
+  selectedBoard.value = boards.value[0]
+}
+
+watch(() => boards.value, selectFirstBoard)
 
 function setBreadcrumbs() {
   pageStore.setBreadcrumbs([
@@ -73,9 +72,7 @@ function setBreadcrumbs() {
 
 onBeforeMount(() => {
   setBreadcrumbs()
-  if (boards.value?.length) {
-    selectedBoard.value = boards.value[0]
-  }
+  selectFirstBoard()
 })
 </script>
 

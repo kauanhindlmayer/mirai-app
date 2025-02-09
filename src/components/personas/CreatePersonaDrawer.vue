@@ -11,14 +11,14 @@ const form = ref({
   description: '',
 })
 
-const createSprintSchema = object({
+const createPersonaSchema = object({
   name: string().required('Name is a required field'),
   description: string()
     .required('Description is a required field')
     .max(500, 'Description must not exceed 500 characters'),
 })
 
-const resolver = ref(yupResolver(createSprintSchema))
+const resolver = ref(yupResolver(createPersonaSchema))
 
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return

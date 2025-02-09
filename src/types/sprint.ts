@@ -4,7 +4,7 @@ export type CreateSprintRequest = {
   endDate: string
 }
 
-export type SprintResponse = {
+export type Sprint = {
   id: string
   name: string
   startDate: string

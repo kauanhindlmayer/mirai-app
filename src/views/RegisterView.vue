@@ -5,7 +5,7 @@ import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { object, string } from 'yup'
-import { registerUser as _registerUser } from '~/api/users'
+import { registerUser } from '~/api/users'
 import LazyImage from '~/components/common/LazyImage.vue'
 import { displayError } from '~/composables/displayError'
 import type { RegisterUserRequest } from '~/types/user'
@@ -43,15 +43,15 @@ function redirectToLogin() {
   router.push({ name: 'login' })
 }
 
-const { mutate: registerUser, isLoading } = useMutation({
-  mutation: _registerUser,
+const { mutate: registerUserFn, isLoading } = useMutation({
+  mutation: registerUser,
   onSuccess: redirectToLogin,
   onError: displayError,
 })
 
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
-  registerUser(form.value)
+  registerUserFn(form.value)
 }
 </script>
 
