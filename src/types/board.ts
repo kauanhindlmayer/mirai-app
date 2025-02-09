@@ -1,4 +1,4 @@
-import type { WorkItemStatus, WorkItemType } from './work-item'
+import type { WorkItemStatus, WorkItemType } from '~/types/work-item'
 
 export type Board = {
   id: string

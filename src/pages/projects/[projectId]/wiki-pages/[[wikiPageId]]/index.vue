@@ -8,14 +8,14 @@ import { computed, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { deleteWikiPage } from '~/api/wiki-pages'
 import MoveWikiPageDrawer from '~/components/wiki-pages/MoveWikiPageDrawer.vue'
+import WikiPageDetail from '~/components/wiki-pages/WikiPageDetail.vue'
+import WikiPageForm from '~/components/wiki-pages/WikiPageForm.vue'
 import { displayError } from '~/composables/displayError'
 import { useAppToast } from '~/composables/useAppToast'
 import { useWikiPage, useWikiPages } from '~/queries/wiki-pages'
 import { usePageStore } from '~/stores/page'
 import { useProjectStore } from '~/stores/project'
 import type { WikiPageSummary } from '~/types/wiki-page'
-import WikiPageDetail from './WikiPageDetail.vue'
-import WikiPageForm from './WikiPageForm.vue'
 
 const pageStore = usePageStore()
 pageStore.setTitle('Wiki Pages - Overview')
@@ -50,23 +50,24 @@ function toNode(page: WikiPageSummary, isRoot: boolean = false): TreeNode {
 watch(
   () => selectedKey.value,
   async () => {
-    if (!selectedKey.value) return
+    if (!selectedKey.value || isAdding || isEditing) return
     const [wikiPageId] = Object.keys(selectedKey.value)
-    router.push({ name: 'wiki-pages', params: { wikiPageId } })
+    router.push(`/projects/${project.value.id}/wiki-pages/${wikiPageId}`)
   },
 )
-
-const route = useRoute()
 
 onMounted(async () => {
   setBreadcrumbs()
   selectWikiPage()
 })
 
+const route = useRoute('/projects/[projectId]/wiki-pages/[[wikiPageId]]/')
+
 watch(() => wikiPages.value, selectWikiPage)
 watch(
   () => route.params.wikiPageId,
   () => {
+    console.log('route.params.wikiPageId', route.params.wikiPageId)
     if (isAdding || isEditing) return
     selectWikiPage()
   },
@@ -74,8 +75,10 @@ watch(
 
 function selectWikiPage() {
   if (!wikiPages.value.length) return
+  console.log('route.params.wikiPageId', route.params.wikiPageId)
   const wikiPageId = route.params.wikiPageId || wikiPages.value[0]?.id
-  selectedKey.value = { [wikiPageId as string]: true }
+  console.log('wikiPageId', wikiPageId)
+  selectedKey.value = { [wikiPageId]: true }
 }
 
 function openNewPageForm() {

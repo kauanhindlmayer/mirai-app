@@ -1,6 +1,5 @@
 import { defineQuery, useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { getWikiPage, getWikiPageStats, listWikiPages } from '~/api/wiki-pages'
 import { useProjectStore } from '~/stores/project'
@@ -24,14 +23,13 @@ export const useWikiPages = defineQuery(() => {
 
 export const useWikiPage = defineQuery(() => {
   const { project } = storeToRefs(useProjectStore())
-  const route = useRoute()
-  const wikiPageId = computed(() => route.params.wikiPageId as string)
+  const route = useRoute('/projects/[projectId]/wiki-pages/[[wikiPageId]]/')
 
   const query = useQuery({
     staleTime: 1000 * 60,
-    key: () => ['wiki-page', wikiPageId.value],
-    query: () => getWikiPage(project.value.id, wikiPageId.value),
-    enabled: () => !!project.value && !!wikiPageId.value,
+    key: () => ['wiki-page', route.params.wikiPageId!],
+    query: () => getWikiPage(project.value.id, route.params.wikiPageId!),
+    enabled: () => !!project.value && !!route.params.wikiPageId,
   })
 
   return {
@@ -42,14 +40,13 @@ export const useWikiPage = defineQuery(() => {
 
 export const useWikiPageStats = defineQuery(() => {
   const { project } = storeToRefs(useProjectStore())
-  const route = useRoute()
-  const wikiPageId = computed(() => route.params.wikiPageId as string)
+  const route = useRoute('/projects/[projectId]/wiki-pages/[[wikiPageId]]/')
 
   const query = useQuery({
     staleTime: 1000 * 60,
-    key: () => ['wiki-page-stats', wikiPageId.value],
-    query: () => getWikiPageStats(project.value.id, wikiPageId.value),
-    enabled: () => !!project.value && !!wikiPageId.value,
+    key: () => ['wiki-page-stats', route.params.wikiPageId!],
+    query: () => getWikiPageStats(project.value.id, route.params.wikiPageId!),
+    enabled: () => !!project.value && !!route.params.wikiPageId,
   })
 
   return {

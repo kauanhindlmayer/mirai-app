@@ -3,6 +3,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { PrimeVueResolver } from '@primevue/auto-import-resolver'
 import vue from '@vitejs/plugin-vue'
 import Components from 'unplugin-vue-components/vite'
+import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
@@ -13,6 +14,7 @@ export default defineConfig({
     include: ['quill', 'yup'],
   },
   plugins: [
+    VueRouter(),
     vue(),
     vueDevTools(),
     Components({

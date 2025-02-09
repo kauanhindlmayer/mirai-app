@@ -40,7 +40,7 @@ const registerUserSchema = object({
 const resolver = ref(yupResolver(registerUserSchema))
 
 function redirectToLogin() {
-  router.push({ name: 'login' })
+  router.push('/login')
 }
 
 const { mutate: registerUserFn, isLoading } = useMutation({

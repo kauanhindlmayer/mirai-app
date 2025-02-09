@@ -90,6 +90,8 @@ declare module 'vue' {
     Tree: typeof import('primevue/tree')['default']
     TreeTable: typeof import('primevue/treetable')['default']
     UpdateProjectDialog: typeof import('./src/components/projects/UpdateProjectDialog.vue')['default']
+    WikiPageDetail: typeof import('./src/components/wiki-pages/WikiPageDetail.vue')['default']
+    WikiPageForm: typeof import('./src/components/wiki-pages/WikiPageForm.vue')['default']
     WorkItemDialog: typeof import('./src/components/common/WorkItemDialog.vue')['default']
     WorkItemTag: typeof import('./src/components/work-items/WorkItemTag.vue')['default']
   }

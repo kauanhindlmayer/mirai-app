@@ -11,13 +11,16 @@ const { isDarkTheme } = useLayout()
   >
     <LazyImage
       class="w-64 lg:w-96"
-      :src="'/layout/images/' + (isDarkTheme ? '404-dark.png' : '404.png')"
+      :src="'/layout/images/' + (isDarkTheme ? 'oops-dark.png' : 'oops.png')"
       alt="404 Image"
     />
-    <h1 class="title-h5 lg:title-h1 mt-8">Error</h1>
-    <p class="body-small lg:body-large mt-2 lg:mt-4">Something gone wrong!</p>
-    <RouterLink to="/" class="body-button bg-red-600 w-fit mt-8 hover:bg-red-500 px-4">
-      Go to Dashboard
+    <h1 class="title-h5 lg:title-h1 mt-8">Oops!</h1>
+    <p class="body-small lg:body-large mt-2 lg:mt-4">There is nothing here</p>
+    <RouterLink
+      to="/projects"
+      class="body-button bg-orange-600 w-fit mt-8 hover:bg-orange-500 px-4"
+    >
+      Go to Home
     </RouterLink>
   </section>
 </template>
