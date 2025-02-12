@@ -23,13 +23,13 @@ export const useWikiPages = defineQuery(() => {
 
 export const useWikiPage = defineQuery(() => {
   const { project } = storeToRefs(useProjectStore())
-  const route = useRoute('/projects/[projectId]/wiki-pages/[[wikiPageId]]/')
+  const route = useRoute('/projects/[projectId]/wiki-pages/[wikiPageId]/')
 
   const query = useQuery({
     staleTime: 1000 * 60,
-    key: () => ['wiki-page', route.params.wikiPageId!],
-    query: () => getWikiPage(project.value.id, route.params.wikiPageId!),
-    enabled: () => !!project.value && !!route.params.wikiPageId,
+    key: () => ['wiki-page', route.params.wikiPageId],
+    query: () => getWikiPage(project.value.id, route.params.wikiPageId),
+    enabled: () => 'wikiPageId' in route.params,
   })
 
   return {
@@ -40,13 +40,13 @@ export const useWikiPage = defineQuery(() => {
 
 export const useWikiPageStats = defineQuery(() => {
   const { project } = storeToRefs(useProjectStore())
-  const route = useRoute('/projects/[projectId]/wiki-pages/[[wikiPageId]]/')
+  const route = useRoute('/projects/[projectId]/wiki-pages/[wikiPageId]/')
 
   const query = useQuery({
     staleTime: 1000 * 60,
-    key: () => ['wiki-page-stats', route.params.wikiPageId!],
-    query: () => getWikiPageStats(project.value.id, route.params.wikiPageId!),
-    enabled: () => !!project.value && !!route.params.wikiPageId,
+    key: () => ['wiki-page-stats', route.params.wikiPageId],
+    query: () => getWikiPageStats(project.value.id, route.params.wikiPageId),
+    enabled: () => 'wikiPageId' in route.params,
   })
 
   return {

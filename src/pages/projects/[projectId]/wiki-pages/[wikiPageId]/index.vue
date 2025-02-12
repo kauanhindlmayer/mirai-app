@@ -61,7 +61,7 @@ onMounted(async () => {
   selectWikiPage()
 })
 
-const route = useRoute('/projects/[projectId]/wiki-pages/[[wikiPageId]]/')
+const route = useRoute('/projects/[projectId]/wiki-pages/[wikiPageId]/')
 
 watch(() => wikiPages.value, selectWikiPage)
 watch(
@@ -74,7 +74,8 @@ watch(
 
 function selectWikiPage() {
   if (!wikiPages.value.length) return
-  const wikiPageId = route.params.wikiPageId || wikiPages.value[0]?.id
+  const wikiPage = wikiPages.value.find((page) => page.id === route.params.wikiPageId)
+  const wikiPageId = wikiPage?.id || wikiPages.value[0]?.id
   selectedKey.value = { [wikiPageId]: true }
 }
 
