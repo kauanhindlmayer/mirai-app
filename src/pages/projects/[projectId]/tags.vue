@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
-import { useRouteQuery } from '@vueuse/router'
+import { debouncedRef } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import type { DataTableRowEditSaveEvent } from 'primevue'
 import { onBeforeMount, ref } from 'vue'
@@ -22,7 +22,8 @@ const { project } = storeToRefs(projectStore)
 const selectedTags = ref<Tag[]>([])
 const editingRows = ref([])
 
-const searchTerm = useRouteQuery('search', '', { mode: 'push' })
+const searchTerm = ref('')
+const debouncedSearchTerm = debouncedRef(searchTerm, 500)
 const newTag = ref<CreateTagRequest>({
   name: '',
   description: '',
@@ -65,8 +66,8 @@ const { mutate: deleteTagFn } = useMutation({
 })
 
 const { data: tags, isLoading } = useQuery({
-  key: () => ['tags', searchTerm.value],
-  query: () => listTags(project.value.id, searchTerm.value),
+  key: () => ['tags', debouncedSearchTerm.value],
+  query: () => listTags(project.value.id, debouncedSearchTerm.value),
   placeholderData: (previousData) => previousData,
 })
 

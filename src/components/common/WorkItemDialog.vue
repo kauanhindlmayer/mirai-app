@@ -3,9 +3,10 @@ import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import type { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { computed, onBeforeMount, ref, useTemplateRef, watch } from 'vue'
+import { computed, onBeforeMount, useTemplateRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getWorkItem } from '~/api/work-items'
+import { useDialog } from '~/composables/useDialog'
 import { useProjectStore } from '~/stores/project'
 import { getStatusLabel, getStatusSeverity, getTypeColor, getTypeLabel } from '~/utils/work-item'
 import CommentsSection from './CommentsSection.vue'
@@ -53,11 +54,7 @@ onBeforeMount(() => {
   showDialog()
 })
 
-const isVisible = ref(false)
-
-async function showDialog() {
-  isVisible.value = true
-}
+const { isVisible, showDialog } = useDialog()
 
 function hideDialog() {
   router.replace({ query: undefined })

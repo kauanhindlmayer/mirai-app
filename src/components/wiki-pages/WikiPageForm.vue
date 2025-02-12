@@ -16,7 +16,7 @@ const { parentWikiPageId } = defineProps<{
   parentWikiPageId?: string
 }>()
 
-const emit = defineEmits<{ (event: 'close', wikiPageId: string): void }>()
+const emit = defineEmits<{ (event: 'close', wikiPageId?: string): void }>()
 
 const { wikiPage } = useWikiPage()
 
@@ -34,7 +34,7 @@ const isWikiPageUnchanged = computed(() => {
 
 function close() {
   if (isWikiPageUnchanged.value) {
-    emit('close', wikiPage.value!.id)
+    emit('close', wikiPage.value?.id)
     return
   }
   confirm.require({
@@ -52,7 +52,7 @@ function close() {
       severity: 'primary',
     },
     reject: () => {
-      emit('close', wikiPage.value!.id)
+      emit('close', wikiPage.value?.id)
     },
   })
 }

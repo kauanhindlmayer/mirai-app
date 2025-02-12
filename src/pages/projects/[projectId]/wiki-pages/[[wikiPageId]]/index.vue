@@ -67,7 +67,6 @@ watch(() => wikiPages.value, selectWikiPage)
 watch(
   () => route.params.wikiPageId,
   () => {
-    console.log('route.params.wikiPageId', route.params.wikiPageId)
     if (isAdding || isEditing) return
     selectWikiPage()
   },
@@ -75,9 +74,7 @@ watch(
 
 function selectWikiPage() {
   if (!wikiPages.value.length) return
-  console.log('route.params.wikiPageId', route.params.wikiPageId)
   const wikiPageId = route.params.wikiPageId || wikiPages.value[0]?.id
-  console.log('wikiPageId', wikiPageId)
   selectedKey.value = { [wikiPageId]: true }
 }
 
@@ -86,12 +83,15 @@ function openNewPageForm() {
   router.push(`/projects/${project.value.id}/wiki-pages/new`)
 }
 
-function closeForm(wikiPageId: string) {
+function closeForm(wikiPageId?: string) {
   parentWikiPageId.value = undefined
-  router.push(`/projects/${project.value.id}/wiki-pages/${wikiPageId}`)
-  selectedKey.value = { [wikiPageId]: true }
+  if (wikiPageId) {
+    router.push(`/projects/${project.value.id}/wiki-pages/${wikiPageId}`)
+    selectedKey.value = { [wikiPageId]: true }
+  } else {
+    router.push(`/projects/${project.value.id}/wiki-pages`)
+  }
 }
-
 const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
 const menuItems = ref<MenuItem[]>([
   { label: 'Add Sub-Page', icon: 'pi pi-plus', command: addSubPage },

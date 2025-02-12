@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
-import { onBeforeMount, useTemplateRef, watch } from 'vue'
+import { useTemplateRef, watch } from 'vue'
 import { listOrganizations } from '~/api/organizations'
 import { listProjects } from '~/api/projects'
 import CreateProjectDrawer from '~/components/projects/CreateProjectDrawer.vue'
@@ -15,6 +15,7 @@ const { organization } = storeToRefs(organizationStore)
 
 const pageStore = usePageStore()
 pageStore.setTitle('Projects - Home')
+pageStore.resetBreadcrumbs()
 
 const createProjectDrawerRef =
   useTemplateRef<InstanceType<typeof CreateProjectDrawer>>('createProjectDrawer')
@@ -34,12 +35,10 @@ const { data: projects, isLoading } = useQuery({
 watch(
   () => organizations.value,
   () => {
-    if (!organizations.value.length || organization.value) return
+    if (!organizations.value.length || organization.value.id) return
     organization.value = organizations.value[0]
   },
 )
-
-onBeforeMount(pageStore.resetBreadcrumbs)
 </script>
 
 <template>
