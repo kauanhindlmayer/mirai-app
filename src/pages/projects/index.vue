@@ -60,6 +60,7 @@ watch(
               text
               size="small"
               icon="pi pi-plus"
+              disabled
             />
           </div>
         </template>
@@ -68,11 +69,12 @@ watch(
         icon="pi pi-cog"
         severity="secondary"
         text
+        disabled
         v-tooltip.bottom="'Organization Settings'"
-        @click="createProjectDrawerRef?.openDrawer"
+        @click="createProjectDrawerRef?.showDrawer"
       />
     </div>
-    <Button label="New Project" icon="pi pi-plus" @click="createProjectDrawerRef?.openDrawer" />
+    <Button label="New Project" icon="pi pi-plus" @click="createProjectDrawerRef?.showDrawer" />
   </header>
   <Tabs value="0">
     <TabList>

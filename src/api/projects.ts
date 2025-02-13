@@ -1,11 +1,8 @@
 import http from '~/api/http'
-import type { CreateProjectRequest, Project } from '~/types/project'
+import type { Project } from '~/types/project'
 
-export function createProject(
-  organizationId: string,
-  request: CreateProjectRequest,
-): Promise<string> {
-  return http.post<string>(`/organizations/${organizationId}/projects`, request)
+export function createProject(project: Partial<Project>): Promise<string> {
+  return http.post(`/organizations/${project.organizationId}/projects`, project)
 }
 
 export async function getProject(projectId: string): Promise<Project> {
@@ -17,8 +14,5 @@ export function listProjects(organizationId: string): Promise<Project[]> {
 }
 
 export function updateProject(project: Partial<Project> & { id: string }): Promise<string> {
-  return http.put(`/organizations/${project.organizationId}/projects/${project.id}`, {
-    name: project.name,
-    description: project.description,
-  })
+  return http.put(`/organizations/${project.organizationId}/projects/${project.id}`, project)
 }

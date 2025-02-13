@@ -6,8 +6,3 @@ export type Project = {
   createdAt: string
   updatedAt?: string
 }
-
-export type CreateProjectRequest = {
-  name: string
-  description: string
-}

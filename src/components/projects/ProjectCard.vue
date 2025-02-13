@@ -15,7 +15,7 @@ function redirectToProjectSummary() {
 <template>
   <Card class="!rounded-lg hover:cursor-pointer" @click="redirectToProjectSummary">
     <template #content>
-      <div class="flex items-center gap-4">
+      <div class="flex items-start gap-4">
         <div class="self-start">
           <Avatar :label="getInitials(project.name)" size="xlarge" />
         </div>
@@ -23,7 +23,7 @@ function redirectToProjectSummary() {
           <div class="text-lg font-semibold">
             {{ project.name }}
           </div>
-          <p class="text-sm text-gray-600 line-clamp-3">
+          <p class="text-sm text-gray-600 line-clamp-2">
             {{ project.description }}
           </p>
         </div>

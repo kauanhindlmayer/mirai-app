@@ -1,43 +1,61 @@
 <script setup lang="ts">
+import { useMutation, useQueryCache } from '@pinia/colada'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { object, string } from 'yup'
+import { createProject } from '~/api/projects'
+import { displayError } from '~/composables/displayError'
+import { useDrawer } from '~/composables/useDialog'
+import { useOrganizationStore } from '~/stores/organization'
+import type { Project } from '~/types/project'
 
-const form = ref({
+const organizationStore = useOrganizationStore()
+const { organization } = storeToRefs(organizationStore)
+
+const initialFormState = {
   name: '',
   description: '',
+}
+
+const form = ref<Partial<Project>>({ ...initialFormState })
+
+const createProjectSchema = object({
+  name: string()
+    .min(3, 'Name must be at least 3 characters long')
+    .max(255, 'Name must not exceed 255 characters')
+    .required('Name is a required field'),
+  description: string().max(500, 'Description must not exceed 500 characters'),
 })
 
-const resolver = ref(
-  yupResolver(
-    object({
-      name: string()
-        .min(3, 'Name must be at least 3 characters long')
-        .max(255, 'Name must not exceed 255 characters')
-        .required('Name is a required field'),
-      description: string().max(500, 'Description must not exceed 500 characters'),
-    }),
-  ),
-)
+const resolver = ref(yupResolver(createProjectSchema))
+const queryCache = useQueryCache()
+
+const { mutate: createProjectFn, isLoading } = useMutation({
+  mutation: createProject,
+  onSuccess: () => {
+    hideDrawer()
+    queryCache.invalidateQueries({ key: ['projects', organization.value.id] })
+  },
+  onError: displayError,
+})
 
 function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
+  createProjectFn({ ...form.value, organizationId: organization.value.id })
 }
 
-const isVisible = ref(false)
+const { isVisible, showDrawer } = useDrawer()
 
-function openDrawer() {
-  isVisible.value = true
-}
-
-function closeDrawer() {
+function hideDrawer() {
   isVisible.value = false
+  Object.assign(form.value, initialFormState)
 }
 
 defineExpose({
-  openDrawer,
-  closeDrawer,
+  showDrawer,
+  hideDrawer,
 })
 </script>
 
@@ -75,8 +93,8 @@ defineExpose({
         </FormField>
       </div>
       <div class="flex justify-end mt-4 gap-2">
-        <Button type="button" label="Cancel" severity="secondary" @click="closeDrawer" />
-        <Button type="submit" label="Create" />
+        <Button type="button" label="Cancel" severity="secondary" @click="hideDrawer" />
+        <Button type="submit" label="Create" :loading="isLoading" />
       </div>
     </Form>
   </Drawer>
