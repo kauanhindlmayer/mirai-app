@@ -6,19 +6,22 @@ import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { object, string } from 'yup'
 import { updateProject } from '~/api/projects'
-import { displayError } from '~/composables/displayError'
+import { useAppToast } from '~/composables/useAppToast'
 import { useDrawer } from '~/composables/useDialog'
-import { useOrganizationStore } from '~/stores/organization'
 import { useProjectStore } from '~/stores/project'
+import type { Project } from '~/types/project'
 
-const organizationStore = useOrganizationStore()
-const { organization } = storeToRefs(organizationStore)
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
 
-const form = ref({
+const toast = useAppToast()
+const queryCache = useQueryCache()
+
+const form = ref<Partial<Project> & { id: string }>({
+  id: project.value.id,
   name: project.value.name,
   description: project.value.description,
+  organizationId: project.value.organizationId,
 })
 
 const updateProjectSchema = object({
@@ -27,20 +30,34 @@ const updateProjectSchema = object({
 
 const resolver = ref(yupResolver(updateProjectSchema))
 
-const queryCache = useQueryCache()
-
 const { mutate: updateProjectFn, isLoading } = useMutation({
-  mutation: () => updateProject(organization.value.id, project.value.id, form.value),
-  onSuccess: () => {
-    queryCache.invalidateQueries({ key: ['project', project.value.id] })
+  mutation: updateProject,
+  onMutate: (projectInfo) => {
+    const oldProject = queryCache.getQueryData<Project>(['project', projectInfo.id])!
+    const newProject: Project = {
+      ...oldProject,
+      ...projectInfo,
+    }
+    queryCache.setQueryData<Project>(['project', newProject.id], newProject)
+    queryCache.cancelQueries({ key: ['project', newProject.id] })
     hideDrawer()
+    return { oldProject, newProject }
   },
-  onError: displayError,
+  onSettled: (_data, _error, _vars, { newProject }) => {
+    if (!newProject) return
+    queryCache.invalidateQueries({ key: ['project', newProject.id] })
+  },
+  onError(_error, projectInfo, { newProject, oldProject }) {
+    if (newProject === queryCache.getQueryData(['project', projectInfo.id])) {
+      queryCache.setQueryData(['project', projectInfo.id], oldProject)
+    }
+    toast.showError({ detail: "An error occurred while updating the project's description" })
+  },
 })
 
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
-  updateProjectFn()
+  updateProjectFn(form.value)
 }
 
 const { isVisible, showDrawer, hideDrawer } = useDrawer()

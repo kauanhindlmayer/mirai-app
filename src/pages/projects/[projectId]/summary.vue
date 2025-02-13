@@ -27,7 +27,7 @@ const periods = ref([
 ])
 
 const { stats, periodInDays: selectedPeriod } = useWorkItemsStats()
-const { project, isLoading } = useProject()
+const { project } = useProject()
 
 const members = [
   { id: '1', name: 'Alice Johnson', image: 'https://i.pravatar.cc/40?img=1' },
@@ -55,16 +55,7 @@ onMounted(() => {
 <template>
   <div class="grid grid-cols-12 gap-4">
     <div class="col-span-12">
-      <div v-if="isLoading" class="card p-4">
-        <div class="flex justify-between items-center">
-          <div class="flex items-center">
-            <Skeleton size="4rem" class="mr-4" />
-            <Skeleton width="10rem" height="1.5rem" />
-          </div>
-          <Skeleton width="6rem" height="2.5rem" />
-        </div>
-      </div>
-      <div v-else class="card p-4">
+      <div class="card p-4">
         <div class="flex justify-between items-center">
           <div class="flex items-center">
             <Avatar

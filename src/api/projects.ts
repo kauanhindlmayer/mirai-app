@@ -1,5 +1,5 @@
 import http from '~/api/http'
-import type { CreateProjectRequest, Project, UpdateProjectRequest } from '~/types/project'
+import type { CreateProjectRequest, Project } from '~/types/project'
 
 export function createProject(
   organizationId: string,
@@ -16,10 +16,9 @@ export function listProjects(organizationId: string): Promise<Project[]> {
   return http.get(`/organizations/${organizationId}/projects`)
 }
 
-export function updateProject(
-  organizationId: string,
-  projectId: string,
-  request: UpdateProjectRequest,
-): Promise<string> {
-  return http.put(`/organizations/${organizationId}/projects/${projectId}`, request)
+export function updateProject(project: Partial<Project> & { id: string }): Promise<string> {
+  return http.put(`/organizations/${project.organizationId}/projects/${project.id}`, {
+    name: project.name,
+    description: project.description,
+  })
 }

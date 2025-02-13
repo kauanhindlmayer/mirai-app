@@ -40,7 +40,7 @@ async function onChange(event: DraggableEvent<Card>) {
   if (moved) {
     const card = moved.element
     moveCardFn({
-      columnId: column.id,
+      columnId: card.columnId,
       cardId: card.id,
       request: {
         targetColumnId: column.id,
@@ -52,7 +52,7 @@ async function onChange(event: DraggableEvent<Card>) {
   if (added) {
     const card = added.element
     moveCardFn({
-      columnId: column.id,
+      columnId: card.columnId,
       cardId: card.id,
       request: {
         targetColumnId: column.id,

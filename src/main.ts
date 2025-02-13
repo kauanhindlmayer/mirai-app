@@ -1,4 +1,5 @@
 import { PiniaColada } from '@pinia/colada'
+import { PiniaColadaDelay } from '@pinia/colada-plugin-delay'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import { createMetaManager } from 'vue-meta'
@@ -15,6 +16,12 @@ app.use(router)
 app.use(primeVue)
 app.use(createMetaManager())
 app.use(createPinia())
-app.use(PiniaColada)
+app.use(PiniaColada, {
+  plugins: [
+    PiniaColadaDelay({
+      delay: 200,
+    }),
+  ],
+})
 
 app.mount('#app')
