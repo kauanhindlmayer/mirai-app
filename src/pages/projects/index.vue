@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
-import { useTemplateRef, watch } from 'vue'
+import { onBeforeMount, useTemplateRef, watch } from 'vue'
 import { listOrganizations } from '~/api/organizations'
 import { listProjects } from '~/api/projects'
 import CreateProjectDrawer from '~/components/projects/CreateProjectDrawer.vue'
@@ -32,13 +32,14 @@ const { data: projects, isLoading } = useQuery({
   enabled: () => !!organization.value.id,
 })
 
-watch(
-  () => organizations.value,
-  () => {
-    if (!organizations.value.length || organization.value.id) return
-    organization.value = organizations.value[0]
-  },
-)
+function selectFirstOrganization() {
+  if (!organizations.value.length) return
+  organization.value = organizations.value[0]
+}
+
+watch(() => organizations.value, selectFirstOrganization)
+
+onBeforeMount(selectFirstOrganization)
 </script>
 
 <template>

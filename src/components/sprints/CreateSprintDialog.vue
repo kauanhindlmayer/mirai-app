@@ -33,7 +33,7 @@ defineExpose({
 </script>
 
 <template>
-  <Dialog v-model:visible="isVisible" :style="{ width: '450px' }" header="Create Sprint" modal>
+  <Dialog v-model:visible="isVisible" :style="{ width: '450px' }" modal>
     <template #header>
       <span class="text-surface-900 dark:text-surface-0 text-xl font-bold">Create Sprint</span>
     </template>

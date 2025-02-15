@@ -20,3 +20,9 @@ export type PaginationFilter = {
   sortField: string
   sortOrder: 'asc' | 'desc'
 }
+
+export type Shortcut = {
+  key: string
+  ctrlKey: boolean
+  action: () => void
+}

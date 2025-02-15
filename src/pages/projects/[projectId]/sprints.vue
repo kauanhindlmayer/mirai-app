@@ -5,12 +5,13 @@ import type { TreeNode } from 'primevue/treenode'
 import { computed, onBeforeMount, ref, useTemplateRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { listSprints } from '~/api/sprints'
-import { getBacklog, listTeams } from '~/api/teams'
+import { getBacklog } from '~/api/teams'
 import WorkItemDialog from '~/components/common/WorkItemDialog.vue'
 import CreateSprintDialog from '~/components/sprints/CreateSprintDialog.vue'
 import AppTag from '~/components/tags/AppTag.vue'
 import WorkItemTag from '~/components/work-items/WorkItemTag.vue'
 import { useLayout } from '~/layout/composables/layout'
+import { useTeams } from '~/queries/teams'
 import { usePageStore } from '~/stores/page'
 import { useProjectStore } from '~/stores/project'
 import { useTeamStore } from '~/stores/team'
@@ -121,11 +122,7 @@ function openWorkItemDialog(workItemId: string) {
   router.replace({ query: { workItemId } })
 }
 
-const { data: teams, isLoading } = useQuery({
-  key: () => ['teams', project.value.id],
-  query: () => listTeams(project.value.id),
-  placeholderData: () => [] as Team[],
-})
+const { teams, isLoading } = useTeams()
 
 function selectFirstTeam() {
   if (!teams.value.length) return

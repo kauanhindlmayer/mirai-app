@@ -14,12 +14,12 @@ import type { Project } from '~/types/project'
 const organizationStore = useOrganizationStore()
 const { organization } = storeToRefs(organizationStore)
 
-const initialFormState = {
+const initialValues = {
   name: '',
   description: '',
 }
 
-const form = ref<Partial<Project>>({ ...initialFormState })
+const form = ref<Partial<Project>>({ ...initialValues })
 
 const createProjectSchema = object({
   name: string()
@@ -50,7 +50,7 @@ const { isVisible, showDrawer } = useDrawer()
 
 function hideDrawer() {
   isVisible.value = false
-  Object.assign(form.value, initialFormState)
+  Object.assign(form.value, initialValues)
 }
 
 defineExpose({

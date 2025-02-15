@@ -20,9 +20,6 @@ const emit = defineEmits<{ (event: 'close', wikiPageId?: string): void }>()
 
 const { wikiPage } = useWikiPage()
 
-const title = ref<string>(wikiPage.value?.title || '')
-const content = ref<string>(wikiPage.value?.content || '')
-
 const isEditing = computed(() => !!wikiPage.value)
 const isSaveButtonDisabled = computed(() => !title.value || !content.value)
 const isWikiPageUnchanged = computed(() => {
@@ -31,6 +28,9 @@ const isWikiPageUnchanged = computed(() => {
     title.value === wikiPage.value?.title && content.value === wikiPage.value?.content
   return isEmpty || isSameContent
 })
+
+const title = ref<string>(isEditing.value ? wikiPage.value!.title : '')
+const content = ref<string>(isEditing.value ? wikiPage.value!.content : '')
 
 function close() {
   if (isWikiPageUnchanged.value) {

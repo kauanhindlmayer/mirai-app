@@ -1,5 +1,5 @@
 export function getColorName(code: string) {
-  return colors.find((c) => c.code === code)!.name
+  return colors.find((c) => c.code === code)?.name || 'Unknown'
 }
 
 export const colors = [
