@@ -15,3 +15,25 @@ export async function getRetrospective(
 export async function listRetrospectives(teamId: string): Promise<RetrospectiveSummary[]> {
   return http.get(`/teams/${teamId}/retrospectives`)
 }
+
+export function createRetrospectiveItem(
+  teamId: string,
+  retrospectiveId: string,
+  columnId: string,
+  content: string,
+): Promise<string> {
+  return http.post(`/teams/${teamId}/retrospectives/${retrospectiveId}/columns/${columnId}/items`, {
+    content,
+  })
+}
+
+export function deleteRetrospectiveItem(
+  teamId: string,
+  retrospectiveId: string,
+  columnId: string,
+  itemId: string,
+): Promise<void> {
+  return http.delete(
+    `/teams/${teamId}/retrospectives/${retrospectiveId}/columns/${columnId}/items/${itemId}`,
+  )
+}

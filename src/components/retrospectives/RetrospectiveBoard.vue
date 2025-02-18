@@ -12,8 +12,10 @@ defineProps<{
       <RetrospectiveColumn
         v-for="column in retrospective.columns"
         :key="column.id"
+        :retrospective-id="retrospective.id"
         :column="column"
       />
+      <ConfirmDialog style="width: 450px" />
     </div>
   </div>
 </template>

@@ -1,17 +1,29 @@
 <script setup lang="ts">
+import { useMutation, useQueryCache } from '@pinia/colada'
 import { useEventListener } from '@vueuse/core'
+import { storeToRefs } from 'pinia'
 import type { InputText } from 'primevue'
 import { nextTick, ref, useTemplateRef } from 'vue'
+import { object, string, ValidationError } from 'yup'
+import { createRetrospectiveItem } from '~/api/retrospectives'
+import { useTeamStore } from '~/stores/team'
 import type { RetrospectiveColumn, RetrospectiveItem } from '~/types/retrospective'
 import { format } from '~/utils/date'
 import RetrospectiveItemComponent from './RetrospectiveItem.vue'
 
-const props = defineProps<{ column: RetrospectiveColumn }>()
+const teamStore = useTeamStore()
+const { teamId } = storeToRefs(teamStore)
 
-const items = ref<RetrospectiveItem[]>(props.column.items)
+const { retrospectiveId, column } = defineProps<{
+  retrospectiveId: string
+  column: RetrospectiveColumn
+}>()
+
+const items = ref<RetrospectiveItem[]>(column.items)
 
 const isAddingItem = ref(false)
 const newItemContent = ref('')
+const validationError = ref('')
 
 async function showNewItemInput() {
   isAddingItem.value = true
@@ -22,6 +34,41 @@ async function showNewItemInput() {
 function closeNewItemInput() {
   isAddingItem.value = false
   newItemContent.value = ''
+  validationError.value = ''
+}
+
+const queryCache = useQueryCache()
+
+const { mutate: createRetrospectiveItemFn } = useMutation({
+  mutation: () =>
+    createRetrospectiveItem(teamId.value!, retrospectiveId, column.id, newItemContent.value),
+  onSuccess: () => {
+    queryCache.invalidateQueries({ key: ['retrospective', retrospectiveId] })
+    closeNewItemInput()
+  },
+})
+
+const createRetrospectiveItemSchema = object({
+  content: string()
+    .required('Content is required')
+    .min(3, 'Content must be at least 3 characters')
+    .max(255, 'Content must be at most 255 characters'),
+})
+
+async function handleRetrospectiveItemCreation() {
+  try {
+    await createRetrospectiveItemSchema.validate({ content: newItemContent.value })
+    validationError.value = ''
+    createRetrospectiveItemFn()
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      validationError.value = error.errors[0]
+    }
+  }
+}
+
+async function clearValidationError() {
+  validationError.value = ''
 }
 
 type InputTextInstance = InstanceType<typeof InputText> & {
@@ -42,16 +89,31 @@ useEventListener(document, 'keydown', (event: KeyboardEvent) => {
     <Button label="Add New Item" icon="pi pi-plus" class="my-2" text @click="showNewItemInput" />
 
     <div v-if="isAddingItem" @focusout="closeNewItemInput" class="mb-4">
-      <div class="card flex flex-col gap-2">
-        <Textarea ref="newItemInput" v-model="newItemContent" class="mb-4" />
-        <p class="text-surface-600 dark:text-surface-200 leading-normal">
+      <div class="card flex flex-col">
+        <Textarea
+          ref="newItemInput"
+          v-model="newItemContent"
+          auto-resize
+          @keydown="clearValidationError"
+          @keydown.enter.prevent="handleRetrospectiveItemCreation"
+        />
+        <Message v-if="validationError" severity="error" size="small" variant="simple">
+          {{ validationError }}
+        </Message>
+        <p class="text-surface-600 dark:text-surface-200 leading-normal mt-4">
           {{ format(new Date(), "MMMM d, yyyy 'at' HH:mm") }}
         </p>
       </div>
     </div>
 
     <div class="flex flex-col gap-4">
-      <RetrospectiveItemComponent v-for="item in items" :key="item.id" :item="item" />
+      <RetrospectiveItemComponent
+        v-for="item in items"
+        :key="item.id"
+        :retrospective-id="retrospectiveId"
+        :column-id="column.id"
+        :item="item"
+      />
     </div>
   </div>
 </template>

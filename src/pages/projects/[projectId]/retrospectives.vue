@@ -47,6 +47,14 @@ const { data: retrospective } = useQuery({
   enabled: () => !!selectedRetrospective.value,
 })
 
+const componentKey = ref(0)
+
+watch(() => retrospective.value, forceRerender)
+
+function forceRerender() {
+  componentKey.value += 1
+}
+
 watch(() => retrospectives.value, selectFirstRetrospective)
 
 function selectFirstRetrospective() {
@@ -81,11 +89,7 @@ function setBreadcrumbs() {
 
 const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
 const menuItems = ref<MenuItem[]>([
-  {
-    label: 'Create New Retrospective',
-    icon: 'pi pi-plus',
-    command: () => createRetrospectiveDialogRef.value?.showDialog(),
-  },
+  { label: 'Create New Retrospective', icon: 'pi pi-plus', command: openCreateRetrospectiveDialog },
   { label: 'Edit Retrospective', icon: 'pi pi-pencil', disabled: true },
   { label: 'Copy Retrospective Link', icon: 'pi pi-link', disabled: true },
   { label: 'Delete Retrospective', icon: 'pi pi-trash', disabled: true },
@@ -93,6 +97,10 @@ const menuItems = ref<MenuItem[]>([
 
 function toggleMenuItems(event: MouseEvent) {
   menuRef.value?.toggle(event)
+}
+
+function openCreateRetrospectiveDialog() {
+  createRetrospectiveDialogRef.value?.showDialog()
 }
 
 const createRetrospectiveDialogRef = useTemplateRef<InstanceType<typeof CreateRetrospectiveDialog>>(
@@ -151,7 +159,11 @@ onBeforeMount(() => {
           </TabList>
           <TabPanels>
             <TabPanel value="0">
-              <RetrospectiveBoard v-if="retrospective" :retrospective="retrospective" />
+              <RetrospectiveBoard
+                v-if="retrospective"
+                :retrospective="retrospective"
+                :key="componentKey"
+              />
             </TabPanel>
           </TabPanels>
         </Tabs>
