@@ -5,7 +5,6 @@ import { useConfirm, type Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import { ref, useTemplateRef } from 'vue'
 import { deleteRetrospectiveItem } from '~/api/retrospectives'
-import { useAppToast } from '~/composables/useAppToast'
 import { useTeamStore } from '~/stores/team'
 import type { RetrospectiveItem } from '~/types/retrospective'
 import { format } from '~/utils/date'
@@ -18,10 +17,6 @@ const { retrospectiveId, columnId, item } = defineProps<{
   retrospectiveId: string
   columnId: string
 }>()
-
-const queryCache = useQueryCache()
-const toast = useAppToast()
-const confirm = useConfirm()
 
 const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
 const menuItems = ref<MenuItem[]>([
@@ -49,11 +44,13 @@ function confirmDeleteRetrospectiveItem() {
   })
 }
 
+const queryCache = useQueryCache()
+const confirm = useConfirm()
+
 const { mutate: deleteRetrospectiveItemFn } = useMutation({
   mutation: () => deleteRetrospectiveItem(teamId.value!, retrospectiveId, columnId, item.id),
   onSuccess: () => {
     queryCache.invalidateQueries({ key: ['retrospective', retrospectiveId] })
-    toast.showSuccess({ detail: 'Item deleted successfully' })
   },
 })
 </script>

@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-import { useQuery } from '@pinia/colada'
+import { useQuery, useQueryCache } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import type { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { onBeforeMount, ref, useTemplateRef, watch } from 'vue'
+import { computed, onBeforeMount, ref, useTemplateRef, watch } from 'vue'
 import { getRetrospective, listRetrospectives } from '~/api/retrospectives'
 import CreateRetrospectiveDialog from '~/components/retrospectives/CreateRetrospectiveDialog.vue'
 import RetrospectiveBoard from '~/components/retrospectives/RetrospectiveBoard.vue'
+import { useAppToast } from '~/composables/useAppToast'
+import { useSignalR } from '~/composables/useSignalR'
 import { useTeams } from '~/queries/teams'
 import { usePageStore } from '~/stores/page'
 import { useProjectStore } from '~/stores/project'
@@ -25,6 +27,7 @@ pageStore.setTitle('Retrospectives - Boards')
 
 const selectedTeam = ref<Team | null>(null)
 const selectedRetrospective = ref<RetrospectiveSummary | null>(null)
+const retrospectiveId = computed(() => selectedRetrospective.value?.id ?? '')
 
 const { data: retrospectives, isLoading } = useQuery({
   key: () => ['retrospectives', teamId.value!],
@@ -42,8 +45,8 @@ watch(
 )
 
 const { data: retrospective } = useQuery({
-  key: () => ['retrospective', selectedRetrospective.value?.id ?? ''],
-  query: async () => getRetrospective(teamId.value!, selectedRetrospective.value?.id ?? ''),
+  key: () => ['retrospective', retrospectiveId.value],
+  query: async () => getRetrospective(teamId.value!, retrospectiveId.value),
   enabled: () => !!selectedRetrospective.value,
 })
 
@@ -91,7 +94,7 @@ const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
 const menuItems = ref<MenuItem[]>([
   { label: 'Create New Retrospective', icon: 'pi pi-plus', command: openCreateRetrospectiveDialog },
   { label: 'Edit Retrospective', icon: 'pi pi-pencil', disabled: true },
-  { label: 'Copy Retrospective Link', icon: 'pi pi-link', disabled: true },
+  { label: 'Copy Retrospective Link', icon: 'pi pi-link', command: copyRetrospectiveLink },
   { label: 'Delete Retrospective', icon: 'pi pi-trash', disabled: true },
 ])
 
@@ -103,14 +106,35 @@ function openCreateRetrospectiveDialog() {
   createRetrospectiveDialogRef.value?.showDialog()
 }
 
+const toast = useAppToast()
+
+function copyRetrospectiveLink() {
+  navigator.clipboard.writeText(window.location.href)
+  toast.showSuccess({ detail: `The link to the retrospective has been copied to the clipboard` })
+}
+
 const createRetrospectiveDialogRef = useTemplateRef<InstanceType<typeof CreateRetrospectiveDialog>>(
   'createRetrospectiveDialog',
 )
 
-onBeforeMount(() => {
+const retrospectiveHub = useSignalR('/hubs/retrospective')
+const queryCache = useQueryCache()
+
+function invalidateRetrospectiveQuery() {
+  queryCache.invalidateQueries({ key: ['retrospective', retrospectiveId.value] })
+}
+
+function subscribeToRetrospectiveHubEvents() {
+  retrospectiveHub.on('send-retrospective-item', invalidateRetrospectiveQuery)
+  retrospectiveHub.on('delete-retrospective-item', invalidateRetrospectiveQuery)
+}
+
+onBeforeMount(async () => {
   setBreadcrumbs()
   selectFirstTeam()
   selectFirstRetrospective()
+  await retrospectiveHub.startConnection()
+  subscribeToRetrospectiveHubEvents()
 })
 </script>
 
