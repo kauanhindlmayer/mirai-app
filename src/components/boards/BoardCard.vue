@@ -17,7 +17,7 @@ function openWorkItemDialog() {
 </script>
 
 <template>
-  <div class="card flex flex-col gap-2">
+  <div class="board-item card flex flex-col gap-2">
     <div class="side-color" :style="{ backgroundColor: getTypeColor(card.workItem.type) }" />
 
     <div
@@ -68,7 +68,7 @@ function openWorkItemDialog() {
   border: 1px solid var(--p-inputtext-border-color) !important;
   box-shadow: var(--p-inputtext-shadow) !important;
 }
-.card {
+.board-item.card {
   position: relative;
   overflow: hidden;
   border-radius: 0.5rem;

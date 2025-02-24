@@ -56,7 +56,7 @@ const { mutate: deleteRetrospectiveItemFn } = useMutation({
 </script>
 
 <template>
-  <div class="card flex justify-between p-4">
+  <div class="card flex justify-between p-4 !mb-0">
     <div class="flex flex-col gap-2">
       <p class="text-surface-900 dark:text-surface-0 mb-4">{{ item.content }}</p>
       <p class="text-surface-600 dark:text-surface-200 leading-normal">

@@ -12,11 +12,11 @@ importers:
         specifier: ^8.0.7
         version: 8.0.7
       '@pinia/colada':
-        specifier: ^0.13.3
-        version: 0.13.3(pinia@2.3.0(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3)))
+        specifier: ^0.13.6
+        version: 0.13.6(pinia@3.0.1(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3)))
       '@pinia/colada-plugin-delay':
         specifier: ^0.0.3
-        version: 0.0.3(@pinia/colada@0.13.3(pinia@2.3.0(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))))
+        version: 0.0.3(@pinia/colada@0.13.6(pinia@3.0.1(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))))
       '@primevue/forms':
         specifier: ^4.2.4
         version: 4.2.4(vue@3.5.13(typescript@5.6.3))
@@ -42,14 +42,14 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       pinia:
-        specifier: ^2.2.6
-        version: 2.3.0(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))
+        specifier: ^3.0.1
+        version: 3.0.1(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))
       primeicons:
         specifier: ^7.0.0
         version: 7.0.0
       primevue:
-        specifier: ^4.2.4
-        version: 4.2.4(vue@3.5.13(typescript@5.6.3))
+        specifier: ^4.3.0
+        version: 4.3.0(vue@3.5.13(typescript@5.6.3))
       quill:
         specifier: ^2.0.3
         version: 2.0.3
@@ -908,10 +908,10 @@ packages:
     peerDependencies:
       '@pinia/colada': ^0.13.4
 
-  '@pinia/colada@0.13.3':
-    resolution: {integrity: sha512-3OkzYIsAXGzSqnKUXExdPAMWufBsfl/OmGa4qxS+mE5GXsfbOmYTxqUHonK+61xgeOKmCBI3sJwaQJzShDQsKw==}
+  '@pinia/colada@0.13.6':
+    resolution: {integrity: sha512-Mzv3YefLmH7my1yuuhjvG202xxLwn5sAMml8k8NWilFFZMLe5fxtM7onbcUM8Ubhkjrm+s4TKO1Hxo78H6aDNw==}
     peerDependencies:
-      pinia: ^2.2.6
+      pinia: ^2.2.6 || ^3.0.0
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -937,8 +937,19 @@ packages:
     resolution: {integrity: sha512-ColZes0+/WKqH4ob2x8DyNYf1NENpe5ZguOvx5yCLxaP8EIMVhLjWLO/3umJiDnQU4XXMLkn2mMHHw+fhTX/mw==}
     engines: {node: '>=12.11.0'}
 
+  '@primeuix/styled@0.5.0':
+    resolution: {integrity: sha512-k5CTQ+10cXIXxZTep7sktmYe8lJkjmUaFVDAc1OCsWTJR+bhBy/s6zWIatGljVtuf3RmTSxtlrHQeFLjPmdUNQ==}
+    engines: {node: '>=12.11.0'}
+
+  '@primeuix/styles@1.0.0':
+    resolution: {integrity: sha512-j/TlbqihLNMP37zFNjxac5dTRaQEf5Ldrv0P7NwKigCCc/+MI5j4MddxDw1LnxkGhWCJ1Gjbt9uwyQteWtSv7A==}
+
   '@primeuix/utils@0.3.2':
     resolution: {integrity: sha512-B+nphqTQeq+i6JuICLdVWnDMjONome2sNz0xI65qIOyeB4EF12CoKRiCsxuZ5uKAkHi/0d1LqlQ9mIWRSdkavw==}
+    engines: {node: '>=12.11.0'}
+
+  '@primeuix/utils@0.5.1':
+    resolution: {integrity: sha512-/bYirtF3gJOGrRQfQ5tUyQOLEria7wg/UCqvpIydTAxLmj/UWgWwh2kAjYVp49eldm1+2sk4+TDkbAz8XcPpew==}
     engines: {node: '>=12.11.0'}
 
   '@primevue/auto-import-resolver@4.2.4':
@@ -951,12 +962,18 @@ packages:
     peerDependencies:
       vue: ^3.3.0
 
+  '@primevue/core@4.3.0':
+    resolution: {integrity: sha512-6fdGJN2y6Shqz2KKFPEmvUVUkVfn+AxcEh9xGUNBy3zMHO9nIiHiub1xq1YNL9rkmud5lbnbW55coOiwRuyW0g==}
+    engines: {node: '>=12.11.0'}
+    peerDependencies:
+      vue: ^3.5.0
+
   '@primevue/forms@4.2.4':
     resolution: {integrity: sha512-5gGcKlKSo8YtF8QeZtLjJRdrKBWDlTgNNKgsx8m1bd6zSSLHDzNkwYd9Ee6XEODtSa11zOrC8DwGpJvW6KbXWQ==}
     engines: {node: '>=12.11.0'}
 
-  '@primevue/icons@4.2.4':
-    resolution: {integrity: sha512-vteUFM7qvWiDJWxhBbDRgc2VY6kQQyJ91yOukqfWHy4gAgfTz1jiUXMAzc7j269oh4CNFpTNhCe9riS7402HGg==}
+  '@primevue/icons@4.3.0':
+    resolution: {integrity: sha512-Ki+tp5ihuOtcMJExD14gsNCVn2/+Bt2IfVDveyj4mQ0o3pZa8uj4d7DI1vN4ADF37ZYs5lT1yW8vtjHTUFOETA==}
     engines: {node: '>=12.11.0'}
 
   '@primevue/metadata@4.2.4':
@@ -1259,6 +1276,9 @@ packages:
   '@vue/devtools-api@6.6.4':
     resolution: {integrity: sha512-sGhTPMuXqZ1rVOk32RylztWkfXTRhuS7vgAKv0zjqk8gbsHkJ7xfFf+jbySxt7tWObEJwyKaHMikV/WGDiQm8g==}
 
+  '@vue/devtools-api@7.7.2':
+    resolution: {integrity: sha512-1syn558KhyN+chO5SjlZIwJ8bV/bQ1nOVTG66t2RbG66ZGekyiYNmRO7X9BJCXQqPsFHlnksqvPhce2qpzxFnA==}
+
   '@vue/devtools-core@7.6.7':
     resolution: {integrity: sha512-6fW8Q0H1NHDXdEcuV6dylT5U2Yxg3SdMnVCey99Y6S4R2PNgFL2vC+VU9U9rHIiaoEUkeza42S7FfHxV4VI3Jg==}
     peerDependencies:
@@ -1267,8 +1287,14 @@ packages:
   '@vue/devtools-kit@7.6.7':
     resolution: {integrity: sha512-V8/jrXY/swHgnblABG9U4QCbE60c6RuPasmv2d9FvVqc5d94t1vDiESuvRmdNJBdWz4/D3q6ffgyAfRVjwHYEw==}
 
+  '@vue/devtools-kit@7.7.2':
+    resolution: {integrity: sha512-CY0I1JH3Z8PECbn6k3TqM1Bk9ASWxeMtTCvZr7vb+CHi+X/QwQm5F1/fPagraamKMAHVfuuCbdcnNg1A4CYVWQ==}
+
   '@vue/devtools-shared@7.6.7':
     resolution: {integrity: sha512-QggO6SviAsolrePAXZ/sA1dSicSPt4TueZibCvydfhNDieL1lAuyMTgQDGst7TEvMGb4vgYv2I+1sDkO4jWNnw==}
+
+  '@vue/devtools-shared@7.7.2':
+    resolution: {integrity: sha512-uBFxnp8gwW2vD6FrJB8JZLUzVb6PNRG0B0jBnHsOH8uKyva2qINY8PTF5Te4QlTbMDqU5K6qtJDr6cNsKWhbOA==}
 
   '@vue/eslint-config-prettier@10.1.0':
     resolution: {integrity: sha512-J6wV91y2pXc0Phha01k0WOHBTPsoSTf4xlmMjoKaeSxBpAdsgTppGF5RZRdOHM7OA74zAXD+VLANrtYXpiPKkQ==}
@@ -2611,8 +2637,8 @@ packages:
     resolution: {integrity: sha512-udgsAY+fTnvv7kI7aaxbqwWNb0AHiB0qBO89PZKPkoTmGOgdbrHDKD+0B2X4uTfJ/FT1R09r9gTsjUjNJotuog==}
     engines: {node: '>=0.10.0'}
 
-  pinia@2.3.0:
-    resolution: {integrity: sha512-ohZj3jla0LL0OH5PlLTDMzqKiVw2XARmC1XYLdLWIPBMdhDW/123ZWr4zVAhtJm+aoSkFa13pYXskAvAscIkhQ==}
+  pinia@3.0.1:
+    resolution: {integrity: sha512-WXglsDzztOTH6IfcJ99ltYZin2mY8XZCXujkYWVIJlBjqsP6ST7zw+Aarh63E1cDVYeyUcPCxPHzJpEOmzB6Wg==}
     peerDependencies:
       typescript: '>=4.4.4'
       vue: ^2.7.0 || ^3.5.11
@@ -2701,8 +2727,8 @@ packages:
   primeicons@7.0.0:
     resolution: {integrity: sha512-jK3Et9UzwzTsd6tzl2RmwrVY/b8raJ3QZLzoDACj+oTJ0oX7L9Hy+XnVwgo4QVKlKpnP/Ur13SXV/pVh4LzaDw==}
 
-  primevue@4.2.4:
-    resolution: {integrity: sha512-aMQymoO489isReSF/bScypswOnLBU29qkeTulGj3Wntb9plvzTIWjA4+iyDOsyxGmV5GVIvD+DuTw5FNCDWgSw==}
+  primevue@4.3.0:
+    resolution: {integrity: sha512-ovRcqGokoWGGWev0fXoSD/7qz3cTD38UyQHm6waI1dYmoDvNWsqfO4+/uUMLof1jEGZ4ZvV/l7UqsspJ14/RjA==}
     engines: {node: '>=12.11.0'}
 
   property-expr@2.0.6:
@@ -3253,17 +3279,6 @@ packages:
 
   vue-component-type-helpers@2.1.10:
     resolution: {integrity: sha512-lfgdSLQKrUmADiSV6PbBvYgQ33KF3Ztv6gP85MfGaGaSGMTXORVaHT1EHfsqCgzRNBstPKYDmvAV9Do5CmJ07A==}
-
-  vue-demi@0.14.10:
-    resolution: {integrity: sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==}
-    engines: {node: '>=12'}
-    hasBin: true
-    peerDependencies:
-      '@vue/composition-api': ^1.0.0-rc.1
-      vue: ^3.0.0-0 || ^2.6.0
-    peerDependenciesMeta:
-      '@vue/composition-api':
-        optional: true
 
   vue-eslint-parser@9.4.3:
     resolution: {integrity: sha512-2rYRLWlIpaiN8xbPiDyXZXRgLGOtWxERV7ND5fFAv5qo1D2N9Fu9MNajBNc6o13lZ+24DAWCkQCvj4klgmcITg==}
@@ -4088,13 +4103,14 @@ snapshots:
       '@parcel/watcher-win32-x64': 2.5.0
     optional: true
 
-  '@pinia/colada-plugin-delay@0.0.3(@pinia/colada@0.13.3(pinia@2.3.0(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))))':
+  '@pinia/colada-plugin-delay@0.0.3(@pinia/colada@0.13.6(pinia@3.0.1(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))))':
     dependencies:
-      '@pinia/colada': 0.13.3(pinia@2.3.0(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3)))
+      '@pinia/colada': 0.13.6(pinia@3.0.1(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3)))
 
-  '@pinia/colada@0.13.3(pinia@2.3.0(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3)))':
+  '@pinia/colada@0.13.6(pinia@3.0.1(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3)))':
     dependencies:
-      pinia: 2.3.0(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))
+      '@vue/devtools-api': 7.7.2
+      pinia: 3.0.1(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
@@ -4115,7 +4131,17 @@ snapshots:
     dependencies:
       '@primeuix/utils': 0.3.2
 
+  '@primeuix/styled@0.5.0':
+    dependencies:
+      '@primeuix/utils': 0.5.1
+
+  '@primeuix/styles@1.0.0':
+    dependencies:
+      '@primeuix/styled': 0.5.0
+
   '@primeuix/utils@0.3.2': {}
+
+  '@primeuix/utils@0.5.1': {}
 
   '@primevue/auto-import-resolver@4.2.4':
     dependencies:
@@ -4127,6 +4153,12 @@ snapshots:
       '@primeuix/utils': 0.3.2
       vue: 3.5.13(typescript@5.6.3)
 
+  '@primevue/core@4.3.0(vue@3.5.13(typescript@5.6.3))':
+    dependencies:
+      '@primeuix/styled': 0.5.0
+      '@primeuix/utils': 0.5.1
+      vue: 3.5.13(typescript@5.6.3)
+
   '@primevue/forms@4.2.4(vue@3.5.13(typescript@5.6.3))':
     dependencies:
       '@primeuix/forms': 0.0.2
@@ -4135,10 +4167,10 @@ snapshots:
     transitivePeerDependencies:
       - vue
 
-  '@primevue/icons@4.2.4(vue@3.5.13(typescript@5.6.3))':
+  '@primevue/icons@4.3.0(vue@3.5.13(typescript@5.6.3))':
     dependencies:
-      '@primeuix/utils': 0.3.2
-      '@primevue/core': 4.2.4(vue@3.5.13(typescript@5.6.3))
+      '@primeuix/utils': 0.5.1
+      '@primevue/core': 4.3.0(vue@3.5.13(typescript@5.6.3))
     transitivePeerDependencies:
       - vue
 
@@ -4469,6 +4501,10 @@ snapshots:
 
   '@vue/devtools-api@6.6.4': {}
 
+  '@vue/devtools-api@7.7.2':
+    dependencies:
+      '@vue/devtools-kit': 7.7.2
+
   '@vue/devtools-core@7.6.7(vite@6.0.3(@types/node@22.10.1)(jiti@1.21.6)(sass@1.82.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.6.3))':
     dependencies:
       '@vue/devtools-kit': 7.6.7
@@ -4491,7 +4527,21 @@ snapshots:
       speakingurl: 14.0.1
       superjson: 2.2.2
 
+  '@vue/devtools-kit@7.7.2':
+    dependencies:
+      '@vue/devtools-shared': 7.7.2
+      birpc: 0.2.19
+      hookable: 5.5.3
+      mitt: 3.0.1
+      perfect-debounce: 1.0.0
+      speakingurl: 14.0.1
+      superjson: 2.2.2
+
   '@vue/devtools-shared@7.6.7':
+    dependencies:
+      rfdc: 1.4.1
+
+  '@vue/devtools-shared@7.7.2':
     dependencies:
       rfdc: 1.4.1
 
@@ -5836,15 +5886,12 @@ snapshots:
 
   pify@2.3.0: {}
 
-  pinia@2.3.0(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3)):
+  pinia@3.0.1(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3)):
     dependencies:
-      '@vue/devtools-api': 6.6.4
+      '@vue/devtools-api': 7.7.2
       vue: 3.5.13(typescript@5.6.3)
-      vue-demi: 0.14.10(vue@3.5.13(typescript@5.6.3))
     optionalDependencies:
       typescript: 5.6.3
-    transitivePeerDependencies:
-      - '@vue/composition-api'
 
   pirates@4.0.6: {}
 
@@ -5919,12 +5966,13 @@ snapshots:
 
   primeicons@7.0.0: {}
 
-  primevue@4.2.4(vue@3.5.13(typescript@5.6.3)):
+  primevue@4.3.0(vue@3.5.13(typescript@5.6.3)):
     dependencies:
-      '@primeuix/styled': 0.3.2
-      '@primeuix/utils': 0.3.2
-      '@primevue/core': 4.2.4(vue@3.5.13(typescript@5.6.3))
-      '@primevue/icons': 4.2.4(vue@3.5.13(typescript@5.6.3))
+      '@primeuix/styled': 0.5.0
+      '@primeuix/styles': 1.0.0
+      '@primeuix/utils': 0.5.1
+      '@primevue/core': 4.3.0(vue@3.5.13(typescript@5.6.3))
+      '@primevue/icons': 4.3.0(vue@3.5.13(typescript@5.6.3))
     transitivePeerDependencies:
       - vue
 
@@ -6479,10 +6527,6 @@ snapshots:
   vscode-uri@3.0.8: {}
 
   vue-component-type-helpers@2.1.10: {}
-
-  vue-demi@0.14.10(vue@3.5.13(typescript@5.6.3)):
-    dependencies:
-      vue: 3.5.13(typescript@5.6.3)
 
   vue-eslint-parser@9.4.3(eslint@9.16.0(jiti@1.21.6)):
     dependencies:

@@ -124,7 +124,8 @@ function invalidateRetrospectiveQuery() {
   queryCache.invalidateQueries({ key: ['retrospective', retrospectiveId.value] })
 }
 
-function subscribeToRetrospectiveHubEvents() {
+async function initializeRetrospectiveHub() {
+  await retrospectiveHub.startConnection()
   retrospectiveHub.on('send-retrospective-item', invalidateRetrospectiveQuery)
   retrospectiveHub.on('delete-retrospective-item', invalidateRetrospectiveQuery)
 }
@@ -133,8 +134,7 @@ onBeforeMount(async () => {
   setBreadcrumbs()
   selectFirstTeam()
   selectFirstRetrospective()
-  await retrospectiveHub.startConnection()
-  subscribeToRetrospectiveHubEvents()
+  await initializeRetrospectiveHub()
 })
 </script>
 
