@@ -64,7 +64,7 @@ async function onChange(event: DraggableEvent<Card>) {
 </script>
 
 <template>
-  <div class="card flex-1 p-4 mr-4 rounded w-72 max-w-96">
+  <div class="card flex-1 p-4 mr-4 rounded-sm w-72 max-w-96">
     <div class="flex items-center justify-between mb-2">
       <h2 class="text-lg">{{ column.name }}</h2>
       <div v-if="column.wipLimit">

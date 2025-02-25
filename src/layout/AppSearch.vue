@@ -28,8 +28,8 @@ function focusOnInput() {
     @show="focusOnInput"
     :pt="{
       root: 'w-1/2',
-      header: '!hidden',
-      content: '!p-0',
+      header: 'hidden!',
+      content: 'p-0!',
     }"
   >
     <div class="search-container">

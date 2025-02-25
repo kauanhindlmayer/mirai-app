@@ -58,7 +58,7 @@ defineExpose({
   <Drawer
     v-model:visible="isVisible"
     position="right"
-    class="!w-full sm:!w-[36rem]"
+    class="w-full! sm:w-[36rem]!"
     :pt="{
       pcCloseButton: { root: 'ml-auto' },
     }"
@@ -67,7 +67,7 @@ defineExpose({
       <span class="text-surface-900 dark:text-surface-0 text-xl font-bold">{{ title }}</span>
     </template>
     <Form class="flex flex-col h-full">
-      <div class="flex-grow">
+      <div class="grow">
         <Tree
           v-model:selection-keys="selectedKey"
           :value="nodes"

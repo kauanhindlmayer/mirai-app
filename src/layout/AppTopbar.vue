@@ -133,7 +133,7 @@ function logout() {
             <i class="pi pi-question-circle" />
           </a>
           <div
-            class="list-none p-2 m-0 rounded-lg border border-surface overflow-hidden absolute bg-surface-0 dark:bg-surface-900 hidden origin-top w-52 mt-2 right-0 z-[999] top-auto shadow-[0px_56px_16px_0px_rgba(0,0,0,0.00),0px_36px_14px_0px_rgba(0,0,0,0.01),0px_20px_12px_0px_rgba(0,0,0,0.02),0px_9px_9px_0px_rgba(0,0,0,0.03),0px_2px_5px_0px_rgba(0,0,0,0.04)]"
+            class="list-none p-2 m-0 rounded-lg border border-surface overflow-hidden absolute bg-surface-0 dark:bg-surface-900 hidden origin-top w-52 mt-2 right-0 z-999 top-auto shadow-[0px_56px_16px_0px_rgba(0,0,0,0.00),0px_36px_14px_0px_rgba(0,0,0,0.01),0px_20px_12px_0px_rgba(0,0,0,0.02),0px_9px_9px_0px_rgba(0,0,0,0.03),0px_2px_5px_0px_rgba(0,0,0,0.04)]"
           >
             <ul class="flex flex-col gap-1">
               <li>
@@ -189,7 +189,7 @@ function logout() {
             <i class="pi pi-cog" />
           </a>
           <div
-            class="list-none p-2 m-0 rounded-lg border border-surface overflow-hidden absolute bg-surface-0 dark:bg-surface-900 hidden origin-top w-52 mt-2 right-0 z-[999] top-auto shadow-[0px_56px_16px_0px_rgba(0,0,0,0.00),0px_36px_14px_0px_rgba(0,0,0,0.01),0px_20px_12px_0px_rgba(0,0,0,0.02),0px_9px_9px_0px_rgba(0,0,0,0.03),0px_2px_5px_0px_rgba(0,0,0,0.04)]"
+            class="list-none p-2 m-0 rounded-lg border border-surface overflow-hidden absolute bg-surface-0 dark:bg-surface-900 hidden origin-top w-52 mt-2 right-0 z-999 top-auto shadow-[0px_56px_16px_0px_rgba(0,0,0,0.00),0px_36px_14px_0px_rgba(0,0,0,0.01),0px_20px_12px_0px_rgba(0,0,0,0.02),0px_9px_9px_0px_rgba(0,0,0,0.03),0px_2px_5px_0px_rgba(0,0,0,0.04)]"
           >
             <ul class="flex flex-col gap-1">
               <li>
@@ -223,7 +223,7 @@ function logout() {
 
         <li class="profile-item static sm:relative">
           <a
-            class="!bg-none !border-none !outline-none"
+            class="bg-none! border-none! outline-hidden!"
             v-styleclass="{
               selector: '@next',
               enterFromClass: 'hidden',
@@ -236,19 +236,19 @@ function logout() {
             <Avatar
               :image="user?.imageUrl || undefined"
               :icon="user?.imageUrl ? undefined : 'pi pi-user'"
-              pt:image:class="!rounded-lg"
-              class="!w-10 !h-10"
+              pt:image:class="rounded-lg!"
+              class="w-10! h-10!"
             />
           </a>
           <div
-            class="list-none p-2 m-0 rounded-lg border border-surface overflow-hidden absolute bg-surface-0 dark:bg-surface-900 hidden origin-top mt-2 right-0 z-[999] top-auto shadow-[0px_56px_16px_0px_rgba(0,0,0,0.00),0px_36px_14px_0px_rgba(0,0,0,0.01),0px_20px_12px_0px_rgba(0,0,0,0.02),0px_9px_9px_0px_rgba(0,0,0,0.03),0px_2px_5px_0px_rgba(0,0,0,0.04)]"
+            class="list-none p-2 m-0 rounded-lg border border-surface overflow-hidden absolute bg-surface-0 dark:bg-surface-900 hidden origin-top mt-2 right-0 z-999 top-auto shadow-[0px_56px_16px_0px_rgba(0,0,0,0.00),0px_36px_14px_0px_rgba(0,0,0,0.01),0px_20px_12px_0px_rgba(0,0,0,0.02),0px_9px_9px_0px_rgba(0,0,0,0.03),0px_2px_5px_0px_rgba(0,0,0,0.04)]"
           >
             <div class="flex items-center gap-3 p-4">
               <Avatar
                 :image="user?.imageUrl || undefined"
                 :icon="user?.imageUrl ? undefined : 'pi pi-user'"
                 size="xlarge"
-                pt:image:class="!rounded-lg"
+                pt:image:class="rounded-lg!"
               />
               <div class="flex flex-col">
                 <span class="text-lg font-semibold text-surface-900 dark:text-surface-0">

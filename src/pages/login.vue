@@ -56,7 +56,7 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
           <!-- <AppLogo /> -->
           <span class="app-name title-h7">MIRAI</span>
         </RouterLink>
-        <div class="flex flex-col justify-center flex-grow">
+        <div class="flex flex-col justify-center grow">
           <div class="max-w-md mx-auto w-full">
             <h5 class="title-h5 text-center lg:text-left">Login</h5>
             <p class="body-small mt-3.5 text-center lg:text-left">Please enter your details</p>

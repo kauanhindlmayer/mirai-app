@@ -58,13 +58,13 @@ async function deleteComment(commentId: string) {
     <li
       v-for="comment in comments"
       :key="comment.id"
-      class="flex justify-between p-4 mb-4 border border-surface-200 dark:border-surface-700 rounded"
+      class="flex justify-between p-4 mb-4 border border-surface-200 dark:border-surface-700 rounded-sm"
     >
       <AppComment :comment="comment" @delete-comment="deleteComment" />
     </li>
     <li class="flex flex-col p-4 mb-4">
       <div class="flex mb-4">
-        <Avatar size="large" shape="circle" icon="pi pi-user" class="mr-4 flex-shrink-0" />
+        <Avatar size="large" shape="circle" icon="pi pi-user" class="mr-4 shrink-0" />
         <Textarea
           v-model="content"
           placeholder="Add a comment..."

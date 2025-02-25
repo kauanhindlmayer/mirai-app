@@ -72,7 +72,7 @@ defineExpose({
   <Drawer
     v-model:visible="isVisible"
     position="right"
-    class="!w-full sm:!w-[36rem]"
+    class="w-full! sm:w-[36rem]!"
     :pt="{
       pcCloseButton: { root: 'ml-auto' },
     }"
@@ -81,7 +81,7 @@ defineExpose({
       <span class="text-surface-900 dark:text-surface-0 text-xl font-bold">About this Project</span>
     </template>
     <Form :resolver @submit="onFormSubmit" class="flex flex-col h-full">
-      <div class="flex-grow">
+      <div class="grow">
         <FormField v-slot="$field" name="description">
           <label for="description" class="font-medium text-surface-900 dark:text-surface-0">
             Description

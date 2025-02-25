@@ -99,13 +99,13 @@ function redirectToEditPage() {
         </div>
         <div class="flex flex-wrap justify-center md:justify-start gap-4">
           <span
-            class="inline-flex items-center py-2 px-4 font-medium border border-surface-200 dark:border-surface-700 rounded"
+            class="inline-flex items-center py-2 px-4 font-medium border border-surface-200 dark:border-surface-700 rounded-sm"
           >
             <i class="pi pi-user text-primary mr-2" />
             <span class="text-surface-900 dark:text-surface-0">{{ wikiPage.author.name }}</span>
           </span>
           <span
-            class="inline-flex items-center py-2 px-4 font-medium border border-surface-200 dark:border-surface-700 rounded"
+            class="inline-flex items-center py-2 px-4 font-medium border border-surface-200 dark:border-surface-700 rounded-sm"
             v-tooltip.bottom="wikiPageLastUpdated"
           >
             <i class="pi pi-clock text-primary mr-2" />
@@ -114,7 +114,7 @@ function redirectToEditPage() {
             </span>
           </span>
           <span
-            class="inline-flex items-center py-2 px-4 font-medium border border-surface-200 dark:border-surface-700 rounded"
+            class="inline-flex items-center py-2 px-4 font-medium border border-surface-200 dark:border-surface-700 rounded-sm"
           >
             <i class="pi pi-eye text-primary mr-2" />
             <span class="text-surface-900 dark:text-surface-0">
@@ -142,7 +142,7 @@ function redirectToEditPage() {
     <div class="flex items-center mb-6 font-bold">
       <span class="text-xl text-surface-900 dark:text-surface-0 mr-6">Comments</span>
       <span
-        class="inline-flex items-center justify-center w-8 h-8 border border-surface-200 dark:border-surface-700 rounded"
+        class="inline-flex items-center justify-center w-8 h-8 border border-surface-200 dark:border-surface-700 rounded-sm"
       >
         {{ wikiPage?.comments.length }}
       </span>

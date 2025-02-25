@@ -632,7 +632,7 @@ watch(isDarkTheme, (newValue) => {
             :key="primaryColor.name"
             type="button"
             @click="updateColors(ColorType.Primary, primaryColor)"
-            class="w-6 h-6 cursor-pointer hover:shadow-lg rounded duration-150 flex items-center justify-center"
+            class="w-6 h-6 cursor-pointer hover:shadow-lg rounded-sm duration-150 flex items-center justify-center"
             :style="{
               backgroundColor: `${primaryColor.name === 'noir' ? 'var(--text-color)' : primaryColor.palette['500']}`,
             }"
@@ -650,7 +650,7 @@ watch(isDarkTheme, (newValue) => {
             :key="surface.name"
             type="button"
             @click="updateColors(ColorType.Surface, surface)"
-            class="w-6 h-6 cursor-pointer hover:shadow-lg rounded duration-150 flex items-center justify-center"
+            class="w-6 h-6 cursor-pointer hover:shadow-lg rounded-sm duration-150 flex items-center justify-center"
             :style="{
               backgroundColor: `${surface.palette['500']}`,
             }"

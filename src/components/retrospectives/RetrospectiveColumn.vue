@@ -83,13 +83,13 @@ useEventListener(document, 'keydown', (event: KeyboardEvent) => {
 </script>
 
 <template>
-  <div class="card flex-1 p-4 mr-4 rounded w-72 max-w-96">
+  <div class="card flex-1 p-4 mr-4 rounded-sm w-72 max-w-96">
     <header class="text-lg">{{ column.title }}</header>
 
     <Button label="Add New Item" icon="pi pi-plus" class="my-2" text @click="showNewItemInput" />
 
     <div v-if="isAddingItem" @focusout="closeNewItemInput" class="mb-4">
-      <div class="card flex flex-col !mb-0">
+      <div class="card flex flex-col mb-0!">
         <Textarea
           ref="newItemInput"
           v-model="newItemContent"

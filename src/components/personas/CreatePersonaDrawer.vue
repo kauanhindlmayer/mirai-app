@@ -37,7 +37,7 @@ defineExpose({
   <Drawer
     v-model:visible="isVisible"
     position="right"
-    class="!w-full sm:!w-[36rem]"
+    class="w-full! sm:w-[36rem]!"
     :pt="{
       pcCloseButton: { root: 'ml-auto' },
     }"
@@ -46,7 +46,7 @@ defineExpose({
       <span class="text-surface-900 dark:text-surface-0 text-xl font-bold">Create Persona</span>
     </template>
     <Form :resolver @submit="onFormSubmit" class="flex flex-col h-full">
-      <div class="flex-grow">
+      <div class="grow">
         <FormField v-slot="$field" name="name">
           <label for="name" class="font-medium text-surface-900 dark:text-surface-0">
             Name <small class="text-red-400">*</small>
@@ -68,7 +68,7 @@ defineExpose({
             accept="image/*"
             :maxFileSize="1000000"
             chooseLabel="Upload Image"
-            class="w-unset !text-surface-600 dark:!text-surface-200 hover:!text-primary !bg-surface-200/20 hover:!bg-surface-200/30 dark:!bg-surface-700/20 hover:!dark-bg-surface-700/30 border !border-surface-300 dark:!border-surface-500 !p-2"
+            class="w-unset text-surface-600! dark:text-surface-200! hover:text-primary! bg-surface-200/20! hover:bg-surface-200/30! dark:bg-surface-700/20! hover:!dark-bg-surface-700/30 border border-surface-300! dark:border-surface-500! p-2!"
           />
         </div>
 
