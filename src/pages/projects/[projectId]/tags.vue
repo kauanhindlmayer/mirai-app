@@ -102,17 +102,11 @@ onBeforeMount(setBreadcrumbs)
             />
           </div>
         </div>
-        <div class="flex items-center mb-4">
-          <InputText v-model="newTag.name" placeholder="Name" class="mr-4" />
-          <InputText v-model="newTag.description" placeholder="Description" class="mr-4" />
+        <div class="flex items-center gap-4 mb-4">
+          <InputText v-model="newTag.name" placeholder="Name" />
+          <InputText v-model="newTag.description" placeholder="Description" />
           <ColorSelect v-model="newTag.color" />
-          <Button
-            label="Add Tag"
-            icon="pi pi-plus"
-            class="mr-4"
-            :disabled="!newTag.name"
-            @click="addTag"
-          />
+          <Button label="Add Tag" icon="pi pi-plus" :disabled="!newTag.name" @click="addTag" />
         </div>
         <DataTable
           v-model:editingRows="editingRows"

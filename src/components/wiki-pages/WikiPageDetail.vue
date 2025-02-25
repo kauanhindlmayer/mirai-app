@@ -136,7 +136,6 @@ function redirectToEditPage() {
       </div>
     </div>
 
-    <p class="leading-normal text-lg my-6">{{ wikiPage.content }}</p>
     <p class="leading-normal text-lg my-6" v-html="wikiPage.content" />
 
     <div class="flex items-center mb-6 font-bold">

@@ -12,8 +12,7 @@ const color = defineModel<string>()
     option-label="name"
     option-value="code"
     placeholder="Select a color"
-    class="w-48 mr-4"
-    fluid
+    class="w-48"
   >
     <template #value="slotProps">
       <div v-if="slotProps.value" class="flex items-center">

@@ -2,8 +2,6 @@
 export default {
   darkMode: ['selector', '[class*="app-dark"]'],
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  plugins: [require('tailwindcss-primeui')],
   theme: {
     extend: {
       display: ['group-hover'],
