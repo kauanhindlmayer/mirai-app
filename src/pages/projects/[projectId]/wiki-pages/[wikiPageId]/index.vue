@@ -35,6 +35,7 @@ const { isEditing, isAdding } = defineProps<{
   isAdding?: boolean
 }>()
 
+const expandedKeys = ref<{ [key: string]: boolean }>({})
 const selectedKey = ref<TreeSelectionKeys | undefined>(undefined)
 const nodes = computed(() => wikiPages.value.map((page, index) => toNode(page, index === 0)))
 
@@ -50,7 +51,7 @@ function toNode(page: WikiPageSummary, isRoot: boolean = false): TreeNode {
 watch(
   () => selectedKey.value,
   async () => {
-    if (!selectedKey.value || isAdding || isEditing) return
+    if (!selectedKey.value || isEditing) return
     const [wikiPageId] = Object.keys(selectedKey.value)
     router.push(`/projects/${project.value.id}/wiki-pages/${wikiPageId}`)
   },
@@ -63,24 +64,23 @@ onMounted(async () => {
 
 const route = useRoute('/projects/[projectId]/wiki-pages/[wikiPageId]/')
 
-watch(() => wikiPages.value, selectWikiPage)
-watch(
-  () => route.params.wikiPageId,
-  () => {
-    if (isAdding || isEditing) return
-    selectWikiPage()
-  },
-)
+watch([() => wikiPages.value, () => route.params.wikiPageId], selectWikiPage)
 
 function selectWikiPage() {
-  if (!wikiPages.value.length) return
-  const wikiPage = wikiPages.value.find((page) => page.id === route.params.wikiPageId)
-  const wikiPageId = wikiPage?.id || wikiPages.value[0]?.id
-  selectedKey.value = { [wikiPageId]: true }
+  if (!wikiPages.value.length || isAdding) return
+  const { wikiPageId } = route.params
+  const parentWikiPage = wikiPages.value.find(
+    (page) => page.id === wikiPageId || page.subPages.some((subPage) => subPage.id === wikiPageId),
+  )
+  const wikiPage = parentWikiPage?.subPages.find((subPage) => subPage.id === wikiPageId)
+  const selectedWikiPageId = wikiPage?.id || parentWikiPage?.id || wikiPages.value[0].id
+  expandedKeys.value = parentWikiPage ? { [parentWikiPage.id]: true } : {}
+  selectedKey.value = { [selectedWikiPageId]: true }
 }
 
 function openNewPageForm() {
   selectedKey.value = undefined
+  expandedKeys.value = {}
   router.push(`/projects/${project.value.id}/wiki-pages/new`)
 }
 
@@ -180,6 +180,7 @@ function setBreadcrumbs() {
       <div class="card p-2">
         <Tree
           v-model:selection-keys="selectedKey"
+          v-model:expanded-keys="expandedKeys"
           :value="nodes"
           :loading="isLoading"
           filter

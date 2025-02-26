@@ -83,6 +83,7 @@ const { mutate: updateWikiPageFn } = useMutation({
     }),
   onSuccess: async () => {
     queryCache.invalidateQueries({ key: ['wiki-pages', project.value.id] })
+    queryCache.invalidateQueries({ key: ['wiki-page', wikiPage.value!.id] })
     toast.showSuccess({ detail: 'Wiki page updated successfully' })
     emit('close', wikiPage.value!.id)
   },

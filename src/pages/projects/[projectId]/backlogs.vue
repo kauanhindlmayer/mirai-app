@@ -55,6 +55,27 @@ function toNode(workItem: BacklogResponse): TreeNode {
   }
 }
 
+const expandedKeys = ref<{ [key: string]: boolean }>({})
+
+function expandAll() {
+  for (const node of nodes.value) {
+    expandNode(node)
+  }
+  expandedKeys.value = { ...expandedKeys.value }
+}
+
+function collapseAll() {
+  expandedKeys.value = {}
+}
+
+function expandNode(node: TreeNode) {
+  if (!node.children || !node.children.length) return
+  expandedKeys.value[node.key] = true
+  for (const child of node.children) {
+    expandNode(child)
+  }
+}
+
 const router = useRouter()
 
 function redirectToBoardView() {
@@ -163,8 +184,37 @@ onBeforeMount(() => {
           </TabList>
           <TabPanels>
             <TabPanel value="0">
-              <TreeTable :value="nodes" :loading="isBacklogLoading" table-style="min-width: 50rem">
-                <Column field="type" header="Type" style="width: 10rem; text-align: center">
+              <TreeTable
+                v-model:expanded-keys="expandedKeys"
+                :value="nodes"
+                :loading="isBacklogLoading"
+                table-style="min-width: 60rem; width: 100%;"
+              >
+                <Column style="width: 5%">
+                  <template #header>
+                    <div class="flex gap-1">
+                      <Button
+                        type="button"
+                        size="small"
+                        variant="outlined"
+                        severity="secondary"
+                        icon="pi pi-plus"
+                        v-tooltip.bottom="'Expand All'"
+                        @click="expandAll"
+                      />
+                      <Button
+                        type="button"
+                        size="small"
+                        variant="outlined"
+                        severity="secondary"
+                        icon="pi pi-minus"
+                        v-tooltip.bottom="'Collapse All'"
+                        @click="collapseAll"
+                      />
+                    </div>
+                  </template>
+                </Column>
+                <Column field="type" header="Type" style="width: 10%">
                   <template #body="{ node }">
                     <WorkItemTag :type="node.data.type" />
                   </template>
@@ -172,14 +222,14 @@ onBeforeMount(() => {
                 <Column field="title" expander header="Title" style="width: 30%">
                   <template #body="{ node }">
                     <div
-                      class="hover:underline cursor-pointer"
+                      class="hover:underline cursor-pointer line-clamp-1"
                       @click="openWorkItemDialog(node.data.id)"
                     >
                       {{ node.data.title }}
                     </div>
                   </template>
                 </Column>
-                <Column field="status" header="State" style="width: 15%">
+                <Column field="status" header="State" style="width: 5%">
                   <template #body="{ node }">
                     <div class="flex items-center gap-2">
                       <Badge :severity="getStatusSeverity(node.data.status)" />
@@ -187,8 +237,8 @@ onBeforeMount(() => {
                     </div>
                   </template>
                 </Column>
-                <Column field="storyPoints" header="Story Points" style="width: 10%" />
-                <Column field="valueArea" header="Value Area" style="width: 20%" />
+                <Column field="storyPoints" header="Effort" style="width: 5%" />
+                <Column field="valueArea" header="Value Area" style="width: 10%" />
                 <Column field="tags" header="Tags" style="width: 15%">
                   <template #body="{ node }">
                     <div class="flex items-center gap-2">
