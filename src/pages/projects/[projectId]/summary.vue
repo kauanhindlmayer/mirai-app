@@ -55,7 +55,7 @@ onMounted(() => {
 <template>
   <div class="grid grid-cols-12 gap-4">
     <div class="col-span-12">
-      <div class="card p-4">
+      <div class="card !p-4">
         <div class="flex justify-between items-center">
           <div class="flex items-center">
             <Avatar
@@ -102,8 +102,8 @@ onMounted(() => {
       </div>
     </div>
     <div class="col-span-12 md:col-span-4">
-      <div class="card mb-4">
-        <div class="flex justify-between items-center mb-4">
+      <div class="card !mb-3">
+        <div class="flex justify-between items-center">
           <div class="font-semibold text-xl mr-2">Project Stats</div>
           <Select
             v-model="selectedPeriod"

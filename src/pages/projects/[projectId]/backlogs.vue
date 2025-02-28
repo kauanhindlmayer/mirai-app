@@ -123,7 +123,7 @@ onBeforeMount(() => {
 <template>
   <div class="grid grid-cols-12 gap-4">
     <div class="col-span-12">
-      <div class="card">
+      <div class="board-container card">
         <div class="flex justify-between items-center mb-4">
           <div class="flex items-center space-x-1">
             <Select
@@ -143,6 +143,7 @@ onBeforeMount(() => {
             label="View as Board"
             severity="secondary"
             icon="pi pi-fw pi-arrow-right"
+            class="mr-4"
             @click="redirectToBoardView"
           />
         </div>
@@ -150,7 +151,7 @@ onBeforeMount(() => {
           <TabList>
             <Tab value="0">Backlog</Tab>
             <Tab value="1" disabled>Analytics</Tab>
-            <div class="ml-auto flex items-center">
+            <div class="ml-auto flex items-center mr-4">
               <Select
                 v-model="selectedBacklogLevel"
                 :options="backlogLevels"
@@ -182,12 +183,14 @@ onBeforeMount(() => {
               />
             </div>
           </TabList>
-          <TabPanels>
+          <TabPanels class="!pb-6">
             <TabPanel value="0">
               <TreeTable
                 v-model:expanded-keys="expandedKeys"
                 :value="nodes"
                 :loading="isBacklogLoading"
+                scrollable
+                scroll-height="calc(100vh - 260px)"
                 table-style="min-width: 60rem; width: 100%;"
               >
                 <Column style="width: 5%">
@@ -219,7 +222,7 @@ onBeforeMount(() => {
                     <WorkItemTag :type="node.data.type" />
                   </template>
                 </Column>
-                <Column field="title" expander header="Title" style="width: 30%">
+                <Column expander header="Title" style="width: 30%">
                   <template #body="{ node }">
                     <div
                       class="hover:underline cursor-pointer line-clamp-1"
@@ -263,12 +266,3 @@ onBeforeMount(() => {
   </div>
   <WorkItemDialog />
 </template>
-
-<style>
-.board-tabs .p-tablist-tab-list {
-  border: none !important;
-}
-.board-tabs .p-tab.p-disabled {
-  border: none !important;
-}
-</style>

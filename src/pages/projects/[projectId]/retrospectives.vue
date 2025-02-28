@@ -141,7 +141,7 @@ onBeforeMount(async () => {
 <template>
   <div class="grid grid-cols-12 gap-4">
     <div class="col-span-12">
-      <div class="card">
+      <div class="board-container card">
         <div class="flex justify-between items-center mb-4">
           <div class="flex items-center space-x-1">
             <Select
@@ -163,7 +163,7 @@ onBeforeMount(async () => {
           <TabList>
             <Tab value="0">Board</Tab>
             <Tab value="1" disabled>History</Tab>
-            <div class="ml-auto flex items-center">
+            <div class="ml-auto flex items-center mr-4">
               <Select
                 v-model="selectedRetrospective"
                 :options="retrospectives"
@@ -196,12 +196,3 @@ onBeforeMount(async () => {
   </div>
   <CreateRetrospectiveDialog ref="createRetrospectiveDialog" />
 </template>
-
-<style>
-.board-tabs .p-tablist-tab-list {
-  border: none !important;
-}
-.board-tabs .p-tab.p-disabled {
-  border: none !important;
-}
-</style>

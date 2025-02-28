@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import RetrospectiveColumn from '~/components/retrospectives/RetrospectiveColumn.vue'
 import type { Retrospective } from '~/types/retrospective'
 
 defineProps<{
@@ -7,15 +8,13 @@ defineProps<{
 </script>
 
 <template>
-  <div class="p-4 h-full overflow-auto">
-    <div class="flex flex-row items-start">
-      <RetrospectiveColumn
-        v-for="column in retrospective.columns"
-        :key="column.id"
-        :retrospective-id="retrospective.id"
-        :column="column"
-      />
-      <ConfirmDialog style="width: 450px" />
-    </div>
+  <div class="flex gap-4 p-4 pb-0 overflow-auto items-start max-h-[calc(100vh-235px)]">
+    <RetrospectiveColumn
+      v-for="column in retrospective.columns"
+      :key="column.id"
+      :retrospective-id="retrospective.id"
+      :column="column"
+    />
+    <ConfirmDialog style="width: 450px" />
   </div>
 </template>

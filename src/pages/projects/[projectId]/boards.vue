@@ -79,8 +79,8 @@ onBeforeMount(() => {
 <template>
   <div class="grid grid-cols-12 gap-4">
     <div class="col-span-12">
-      <div class="card">
-        <div class="flex justify-between items-center mb-4">
+      <div class="board-container card">
+        <div class="flex justify-between items-center mb-4 mr-6">
           <div class="flex items-center space-x-1">
             <Select
               v-model="selectedBoard"
@@ -106,7 +106,7 @@ onBeforeMount(() => {
           <TabList>
             <Tab value="0">Board</Tab>
             <Tab value="1" disabled>Analytics</Tab>
-            <div class="ml-auto flex items-center">
+            <div class="ml-auto flex items-center mr-6">
               <Select
                 v-model="selectedBacklogLevel"
                 :options="backlogLevels"
@@ -150,12 +150,3 @@ onBeforeMount(() => {
   </div>
   <BoardSettingsDrawer v-if="board" ref="boardSettingsDrawer" :board="board" />
 </template>
-
-<style>
-.board-tabs .p-tablist-tab-list {
-  border: none !important;
-}
-.board-tabs .p-tab.p-disabled {
-  border: none !important;
-}
-</style>

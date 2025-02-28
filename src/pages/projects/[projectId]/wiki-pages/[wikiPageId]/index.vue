@@ -177,7 +177,7 @@ function setBreadcrumbs() {
 <template>
   <div class="flex gap-4">
     <div class="w-16rem">
-      <div class="card p-2">
+      <div class="card !p-2">
         <Tree
           v-model:selection-keys="selectedKey"
           v-model:expanded-keys="expandedKeys"

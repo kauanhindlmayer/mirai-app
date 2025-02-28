@@ -83,7 +83,7 @@ useEventListener(document, 'keydown', (event: KeyboardEvent) => {
 </script>
 
 <template>
-  <div class="card flex-1 p-4 mr-4 rounded-sm w-72 max-w-96">
+  <div class="card !mb-4 !p-4 rounded-sm min-w-[250px]">
     <header class="text-lg">{{ column.title }}</header>
 
     <Button label="Add New Item" icon="pi pi-plus" class="my-2" text @click="showNewItemInput" />

@@ -58,13 +58,15 @@ const { mutate: deleteRetrospectiveItemFn } = useMutation({
 <template>
   <div class="card flex justify-between p-4 mb-0!">
     <div class="flex flex-col gap-2">
-      <p class="text-surface-900 dark:text-surface-0 mb-4">{{ item.content }}</p>
+      <p class="text-surface-900 dark:text-surface-0 mb-4 text-wrap w-[200px]">
+        {{ item.content }}
+      </p>
       <p class="text-surface-600 dark:text-surface-200 leading-normal">
         {{ format(item.createdAt, "MMMM d, yyyy 'at' HH:mm") }}
       </p>
     </div>
 
-    <div class="-mr-2 -mt-2">
+    <div class="-mr-4">
       <Button
         icon="pi pi-ellipsis-v"
         severity="secondary"

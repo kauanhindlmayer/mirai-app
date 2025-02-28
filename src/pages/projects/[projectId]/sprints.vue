@@ -149,7 +149,7 @@ onBeforeMount(() => {
 <template>
   <div class="grid grid-cols-12 gap-4">
     <div class="col-span-12">
-      <div class="card">
+      <div class="board-container card">
         <div class="flex justify-between items-center mb-4">
           <div class="flex items-center space-x-1">
             <Select
@@ -165,7 +165,7 @@ onBeforeMount(() => {
               v-tooltip.bottom="'Show Team Profile'"
             />
           </div>
-          <Button label="New Work Item" icon="pi pi-plus" />
+          <Button label="New Work Item" icon="pi pi-plus" class="mr-4" />
         </div>
         <Tabs value="1" class="board-tabs">
           <TabList>
@@ -192,7 +192,7 @@ onBeforeMount(() => {
                 icon="pi pi-arrow-up-right-and-arrow-down-left-from-center"
                 severity="secondary"
                 variant="text"
-                class="ml-2"
+                class="ml-2 mr-4"
                 v-tooltip.bottom="'Enter Full Screen'"
                 @click="onMenuToggle"
               />
@@ -200,7 +200,7 @@ onBeforeMount(() => {
           </TabList>
           <TabPanels>
             <TabPanel value="1">
-              <div class="flex justify-between items-center">
+              <div class="flex justify-between items-center my-3">
                 <Select
                   v-model="selectedSprint"
                   :options="sprints"
@@ -221,13 +221,19 @@ onBeforeMount(() => {
                     </div>
                   </template>
                 </Select>
-                <div>
+                <div class="mr-4">
                   <div>{{ sprintDateRange }}</div>
                   <div>{{ remainingWorkingDays }} work days remaining</div>
                 </div>
               </div>
 
-              <TreeTable :value="nodes" :loading="isLoadingBacklog" table-style="min-width: 50rem">
+              <TreeTable
+                :value="nodes"
+                :loading="isLoadingBacklog"
+                scrollable
+                scroll-height="calc(100vh - 300px)"
+                table-style="min-width: 50rem"
+              >
                 <Column field="type" header="Type" style="width: 10rem; text-align: center">
                   <template #body="{ node }">
                     <WorkItemTag :type="node.data.type" />
@@ -236,7 +242,7 @@ onBeforeMount(() => {
                 <Column field="title" expander header="Title" style="width: 30%">
                   <template #body="{ node }">
                     <div
-                      class="hover:underline cursor-pointer"
+                      class="hover:underline cursor-pointer line-clamp-1"
                       @click="openWorkItemDialog(node.data.id)"
                     >
                       {{ node.data.title }}
@@ -278,12 +284,3 @@ onBeforeMount(() => {
   <CreateSprintDialog ref="createSprintDialog" />
   <WorkItemDialog />
 </template>
-
-<style>
-.board-tabs .p-tablist-tab-list {
-  border: none !important;
-}
-.board-tabs .p-tab.p-disabled {
-  border: none !important;
-}
-</style>

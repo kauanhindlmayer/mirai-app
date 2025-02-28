@@ -1,3 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'primeicons/primeicons.css';
 @import '~/assets/layout/layout.scss';
+
+.board-tabs .p-tablist-tab-list,
+.board-tabs .p-tab.p-disabled {
+  border: none !important;
+}
+
+.p-tabpanels {
+  padding: 0 !important;
+}
+
+.board-container.card {
+  padding: 1.5rem 0 0 1.5rem !important;
+}

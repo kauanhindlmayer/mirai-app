@@ -142,7 +142,13 @@ onMounted(setBreadcrumbs)
               <WorkItemTag :type="data.type" />
             </template>
           </Column>
-          <Column field="title" header="Title" sortable />
+          <Column field="title" header="Title" sortable>
+            <template #body="{ data }">
+              <div class="hover:underline cursor-pointer line-clamp-1">
+                {{ data.title }}
+              </div>
+            </template>
+          </Column>
           <Column field="assignedTo" header="Assigned To">
             <template #body="{ data }">
               <div class="flex items-center gap-2">
