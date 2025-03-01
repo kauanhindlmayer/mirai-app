@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { ChartData, ChartOptions } from 'chart.js'
-import { computed, onMounted, ref, watch } from 'vue'
+import SkeletonChart from '~/components/dashboard/SkeletonChart.vue'
 import { useLayout } from '~/layout/composables/layout'
 import type { BurnupPoint } from '~/types/dashboard'
 import { format } from '~/utils/date'
-import SkeletonChart from './SkeletonChart.vue'
 
 const { layoutConfig, isDarkTheme } = useLayout()
 const { burnupData = [] } = defineProps<{

@@ -2,8 +2,6 @@
 import { useMutation } from '@pinia/colada'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { object, string } from 'yup'
 import { getCurrentUser, loginUser } from '~/api/users'
 import LazyImage from '~/components/common/LazyImage.vue'

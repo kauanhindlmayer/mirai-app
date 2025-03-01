@@ -4,7 +4,6 @@ import {
   HubConnectionBuilder,
   LogLevel,
 } from '@microsoft/signalr'
-import { onUnmounted, ref } from 'vue'
 
 export function useSignalR(hub: string) {
   const connection = ref<HubConnection | null>(null)

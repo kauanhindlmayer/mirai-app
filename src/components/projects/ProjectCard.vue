@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import type { Project } from '~/types/project'
 import { getInitials } from '~/utils'
 

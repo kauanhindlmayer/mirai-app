@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { useMutation, useQueryCache } from '@pinia/colada'
-import { ref } from 'vue'
 import Draggable from 'vuedraggable/src/vuedraggable'
 import { moveCard } from '~/api/boards'
+import BoardCard from '~/components/boards/BoardCard.vue'
 import { displayError } from '~/composables/displayError'
 import { useTeamStore } from '~/stores/team'
 import type { Card, Column, DraggableEvent, MoveCardRequest } from '~/types/board'
-import BoardCard from './BoardCard.vue'
 
 const teamStore = useTeamStore()
 

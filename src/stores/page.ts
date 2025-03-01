@@ -1,5 +1,4 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { ref } from 'vue'
 import type { Breadcrumb } from '~/types/layout'
 
 export const usePageStore = defineStore('page', () => {

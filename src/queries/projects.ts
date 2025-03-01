@@ -1,5 +1,4 @@
 import { defineQuery, useQuery } from '@pinia/colada'
-import { useRoute } from 'vue-router'
 import { getProject } from '~/api/projects'
 import type { Project } from '~/types/project'
 

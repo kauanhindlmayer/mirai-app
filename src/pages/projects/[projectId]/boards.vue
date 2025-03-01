@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
-import { onBeforeMount, ref, useTemplateRef, watch } from 'vue'
-import { useRouter } from 'vue-router'
 import { getBoard, listBoards } from '~/api/boards'
 import Board from '~/components/boards/Board.vue'
 import BoardSettingsDrawer from '~/components/boards/BoardSettingsDrawer.vue'

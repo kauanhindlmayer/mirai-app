@@ -1,5 +1,4 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { ref } from 'vue'
 
 export const useTeamStore = defineStore('teams', () => {
   const teamId = ref<string | null>(null)

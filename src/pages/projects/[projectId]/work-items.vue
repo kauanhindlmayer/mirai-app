@@ -8,7 +8,6 @@ import {
   type DataTableSortEvent,
 } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { onMounted, ref, useTemplateRef } from 'vue'
 import { deleteWorkItem, listWorkItems } from '~/api/work-items'
 import AppTag from '~/components/tags/AppTag.vue'
 import WorkItemTag from '~/components/work-items/WorkItemTag.vue'

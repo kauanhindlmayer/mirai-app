@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
-import { ref } from 'vue'
 import { date, object, string } from 'yup'
 import { useDialog } from '~/composables/useDialog'
+import type { CreateSprintRequest } from '~/types/sprint'
 
-const form = ref({
+const form = ref<CreateSprintRequest>({
   name: '',
   startDate: null,
   endDate: null,
@@ -37,7 +37,7 @@ defineExpose({
     <template #header>
       <span class="text-surface-900 dark:text-surface-0 text-xl font-bold">Create Sprint</span>
     </template>
-    <Form :resolver @submit="onFormSubmit" class="flex flex-col h-full">
+    <Form :resolver class="flex flex-col h-full" @submit="onFormSubmit">
       <FormField v-slot="$field" name="name">
         <label for="name" class="font-medium text-surface-900 dark:text-surface-0">
           Name <small class="text-red-400">*</small>

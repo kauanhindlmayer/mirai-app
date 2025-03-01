@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
 import { useLayout } from '~/layout/composables/layout'
 import { useUserStore } from '~/stores/user'
 import AppBreadcrumb from './AppBreadcrumb.vue'

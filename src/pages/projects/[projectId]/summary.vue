@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { Avatar } from 'primevue'
-import { onMounted, ref, useTemplateRef } from 'vue'
 import LazyImage from '~/components/common/LazyImage.vue'
 import EditProjectDrawer from '~/components/projects/EditProjectDrawer.vue'
 import { useProject } from '~/queries/projects'

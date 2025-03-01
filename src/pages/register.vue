@@ -2,9 +2,7 @@
 import { useMutation } from '@pinia/colada'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { object, string } from 'yup'
+import { boolean, object, string } from 'yup'
 import { registerUser } from '~/api/users'
 import LazyImage from '~/components/common/LazyImage.vue'
 import { displayError } from '~/composables/displayError'
@@ -34,7 +32,7 @@ const registerUserSchema = object({
     .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
     .matches(/[0-9]/, 'Password must contain at least one number')
     .min(8, 'Password must be at least 8 characters long'),
-  hasAcceptedTerms: string().required('Please accept the Terms and Conditions'),
+  hasAcceptedTerms: boolean().oneOf([true], 'Please accept the Terms and Conditions'),
 })
 
 const resolver = ref(yupResolver(registerUserSchema))

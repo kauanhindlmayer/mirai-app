@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import type { MenuItem } from 'primevue/menuitem'
-import { nextTick, onBeforeMount, ref, useTemplateRef, watch } from 'vue'
-import { useRoute } from 'vue-router'
 import { useLayout } from '~/layout/composables/layout'
 
 const route = useRoute()
@@ -36,7 +34,6 @@ const props = withDefaults(defineProps<Props>(), {
 const isActiveMenu = ref(false)
 const itemKey = ref<string | null>(null)
 const subMenuRef = useTemplateRef<HTMLUListElement>('subMenu')
-const menuItemRef = useTemplateRef<HTMLLIElement>('menuItem')
 
 onBeforeMount(() => {
   itemKey.value = props.parentItemKey

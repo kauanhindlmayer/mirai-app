@@ -1,5 +1,3 @@
-import { ref } from 'vue'
-
 export function useDialog() {
   const isVisible = ref(false)
 

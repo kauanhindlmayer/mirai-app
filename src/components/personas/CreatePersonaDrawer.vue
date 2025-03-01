@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
-import { ref } from 'vue'
 import { object, string } from 'yup'
 import { useDrawer } from '~/composables/useDialog'
 

@@ -4,7 +4,6 @@ import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { format } from 'date-fns'
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
 import { number, object, string } from 'yup'
 import { createRetrospective } from '~/api/retrospectives'
 import { useDialog } from '~/composables/useDialog'
@@ -70,8 +69,8 @@ defineExpose({
     <Form
       :initial-values="initialValues"
       :resolver
-      @submit="onFormSubmit"
       class="flex flex-col h-full"
+      @submit="onFormSubmit"
     >
       <FormField v-slot="$field" name="title">
         <label for="title" class="font-medium text-surface-900 dark:text-surface-0">

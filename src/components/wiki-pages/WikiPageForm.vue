@@ -2,7 +2,6 @@
 import { useMutation, useQueryCache } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import { useConfirm } from 'primevue'
-import { computed, ref } from 'vue'
 import { createWikiPage, updateWikiPage } from '~/api/wiki-pages'
 import { displayError } from '~/composables/displayError'
 import { useAppToast } from '~/composables/useAppToast'

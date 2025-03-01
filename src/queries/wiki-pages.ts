@@ -1,6 +1,5 @@
 import { defineQuery, useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
 import { getWikiPage, getWikiPageStats, listWikiPages } from '~/api/wiki-pages'
 import { useProjectStore } from '~/stores/project'
 

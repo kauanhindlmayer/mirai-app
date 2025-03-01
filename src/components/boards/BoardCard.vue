@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import type { Card } from '~/types/board'
 import { getStatusLabel, getStatusSeverity, getTypeColor } from '~/utils/work-item'
 

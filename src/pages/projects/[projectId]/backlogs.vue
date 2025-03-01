@@ -2,8 +2,6 @@
 import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import type { TreeNode } from 'primevue/treenode'
-import { computed, onBeforeMount, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
 import { getBacklog, listTeams } from '~/api/teams'
 import WorkItemDialog from '~/components/common/WorkItemDialog.vue'
 import AppTag from '~/components/tags/AppTag.vue'

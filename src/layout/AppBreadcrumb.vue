@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useRouter } from 'vue-router'
 import { usePageStore } from '~/stores/page'
 
 const router = useRouter()

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import AppBreadcrumb from './AppBreadcrumb.vue'
 import AppConfig from './AppConfig.vue'
 import AppSearch from './AppSearch.vue'

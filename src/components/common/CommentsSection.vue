@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useConfirm } from 'primevue'
-import { ref } from 'vue'
 import AppComment from '~/components/common/AppComment.vue'
 import type { Comment } from '~/types/wiki-page'
 

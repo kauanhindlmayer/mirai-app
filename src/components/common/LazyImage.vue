@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { onMounted, ref, useTemplateRef } from 'vue'
-
 type Props = {
   src: string
   alt?: string
