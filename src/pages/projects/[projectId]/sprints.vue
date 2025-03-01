@@ -165,7 +165,7 @@ onBeforeMount(() => {
               v-tooltip.bottom="'Show Team Profile'"
             />
           </div>
-          <Button label="New Work Item" icon="pi pi-plus" class="mr-4" />
+          <Button label="New Work Item" icon="pi pi-plus" class="mr-6" />
         </div>
         <Tabs value="1" class="board-tabs">
           <TabList>
@@ -173,7 +173,7 @@ onBeforeMount(() => {
             <Tab value="1">Backlog</Tab>
             <Tab value="2" disabled>Capacity</Tab>
             <Tab value="3" disabled>Analytics</Tab>
-            <div class="ml-auto flex items-center">
+            <div class="ml-auto flex items-center mr-6">
               <Button
                 icon="pi pi-filter"
                 severity="secondary"
@@ -192,7 +192,7 @@ onBeforeMount(() => {
                 icon="pi pi-arrow-up-right-and-arrow-down-left-from-center"
                 severity="secondary"
                 variant="text"
-                class="ml-2 mr-4"
+                class="ml-2"
                 v-tooltip.bottom="'Enter Full Screen'"
                 @click="onMenuToggle"
               />
@@ -221,7 +221,7 @@ onBeforeMount(() => {
                     </div>
                   </template>
                 </Select>
-                <div class="mr-4">
+                <div class="mr-6">
                   <div>{{ sprintDateRange }}</div>
                   <div>{{ remainingWorkingDays }} work days remaining</div>
                 </div>

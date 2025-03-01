@@ -24,7 +24,7 @@ const createPersonaDrawerRef =
         <div class="flex flex-col items-center gap-4">
           <LazyImage class="w-48 mr-4" src="/layout/images/people.svg" alt="People Image" />
           <div class="flex flex-col items-center">
-            <div class="font-medium">Focus on the people you are building for!</div>
+            <div class="font-medium text-lg">Focus on the people you are building for!</div>
             <div>Create Personas to help your team build the right things.</div>
           </div>
         </div>

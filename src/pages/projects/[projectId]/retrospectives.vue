@@ -163,7 +163,7 @@ onBeforeMount(async () => {
           <TabList>
             <Tab value="0">Board</Tab>
             <Tab value="1" disabled>History</Tab>
-            <div class="ml-auto flex items-center mr-4">
+            <div class="ml-auto flex items-center mr-6">
               <Select
                 v-model="selectedRetrospective"
                 :options="retrospectives"

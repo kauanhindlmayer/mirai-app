@@ -143,7 +143,7 @@ onBeforeMount(() => {
             label="View as Board"
             severity="secondary"
             icon="pi pi-fw pi-arrow-right"
-            class="mr-4"
+            class="mr-6"
             @click="redirectToBoardView"
           />
         </div>
@@ -151,7 +151,7 @@ onBeforeMount(() => {
           <TabList>
             <Tab value="0">Backlog</Tab>
             <Tab value="1" disabled>Analytics</Tab>
-            <div class="ml-auto flex items-center mr-4">
+            <div class="ml-auto flex items-center mr-6">
               <Select
                 v-model="selectedBacklogLevel"
                 :options="backlogLevels"
@@ -190,8 +190,9 @@ onBeforeMount(() => {
                 :value="nodes"
                 :loading="isBacklogLoading"
                 scrollable
-                scroll-height="calc(100vh - 260px)"
+                scroll-height="calc(100vh - 275px)"
                 table-style="min-width: 60rem; width: 100%;"
+                class="mt-4"
               >
                 <Column style="width: 5%">
                   <template #header>

@@ -102,7 +102,7 @@ onMounted(() => {
       </div>
     </div>
     <div class="col-span-12 md:col-span-4">
-      <div class="card !mb-3">
+      <div class="card !mb-4">
         <div class="flex justify-between items-center">
           <div class="font-semibold text-xl mr-2">Project Stats</div>
           <Select

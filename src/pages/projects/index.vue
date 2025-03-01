@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
-import { onBeforeMount, useTemplateRef, watch } from 'vue'
+import { onMounted, useTemplateRef, watch } from 'vue'
 import { listOrganizations } from '~/api/organizations'
 import { listProjects } from '~/api/projects'
 import CreateProjectDrawer from '~/components/projects/CreateProjectDrawer.vue'
@@ -39,7 +39,7 @@ function selectFirstOrganization() {
 
 watch(() => organizations.value, selectFirstOrganization)
 
-onBeforeMount(selectFirstOrganization)
+onMounted(selectFirstOrganization)
 </script>
 
 <template>
@@ -87,7 +87,7 @@ onBeforeMount(selectFirstOrganization)
       <TabPanel value="0">
         <div v-if="isLoading">Loading projects...</div>
         <div v-else-if="projects?.length">
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
             <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
           </div>
         </div>
