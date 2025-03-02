@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import BoardColumn from '~/components/boards/BoardColumn.vue'
-import WorkItemDialog from '~/components/common/WorkItemDialog.vue'
 import type { Board } from '~/types/board'
 
 defineProps<{

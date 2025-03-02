@@ -2,7 +2,6 @@
 import { useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import { getBoard, listBoards } from '~/api/boards'
-import Board from '~/components/boards/Board.vue'
 import BoardSettingsDrawer from '~/components/boards/BoardSettingsDrawer.vue'
 import { useLayout } from '~/layout/composables/layout'
 import { usePageStore } from '~/stores/page'

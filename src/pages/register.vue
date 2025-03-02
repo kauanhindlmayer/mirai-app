@@ -4,7 +4,6 @@ import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { boolean, object, string } from 'yup'
 import { registerUser } from '~/api/users'
-import LazyImage from '~/components/common/LazyImage.vue'
 import { displayError } from '~/composables/displayError'
 import type { RegisterUserRequest } from '~/types/user'
 

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { ChartData, ChartOptions } from 'chart.js'
-import SkeletonChart from '~/components/dashboard/SkeletonChart.vue'
 import { useLayout } from '~/layout/composables/layout'
 import type { BurnupPoint } from '~/types/dashboard'
 import { format } from '~/utils/date'

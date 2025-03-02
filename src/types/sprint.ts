@@ -1,7 +1,7 @@
 export type CreateSprintRequest = {
   name: string
-  startDate: string | null
-  endDate: string | null
+  startDate: Date | null
+  endDate: Date | null
 }
 
 export type Sprint = {

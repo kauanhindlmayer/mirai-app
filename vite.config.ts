@@ -19,14 +19,14 @@ export default defineConfig({
   plugins: [
     vue(),
     VueRouter(),
+    Components({
+      resolvers: [PrimeVueResolver()],
+    }),
     AutoImport({
       include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/, /\.vue\.[tj]sx?\?vue/, /\.md$/],
       imports: ['vue', VueRouterAutoImports],
       dts: true,
       viteOptimizeDeps: true,
-    }),
-    Components({
-      resolvers: [PrimeVueResolver()],
     }),
     tailwindcss(),
     vueDevTools(),

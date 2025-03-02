@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import LazyImage from '~/components/common/LazyImage.vue'
 import CreatePersonaDrawer from '~/components/personas/CreatePersonaDrawer.vue'
 
 const createPersonaDrawerRef =

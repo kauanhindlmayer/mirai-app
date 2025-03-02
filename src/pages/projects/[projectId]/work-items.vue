@@ -9,8 +9,6 @@ import {
 } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import { deleteWorkItem, listWorkItems } from '~/api/work-items'
-import AppTag from '~/components/tags/AppTag.vue'
-import WorkItemTag from '~/components/work-items/WorkItemTag.vue'
 import { displayError } from '~/composables/displayError'
 import { useAppToast } from '~/composables/useAppToast'
 import { usePageStore } from '~/stores/page'

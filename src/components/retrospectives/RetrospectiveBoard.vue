@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import RetrospectiveColumn from '~/components/retrospectives/RetrospectiveColumn.vue'
 import type { Retrospective } from '~/types/retrospective'
 
 defineProps<{

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import LazyImage from '~/components/common/LazyImage.vue'
 import { useLayout } from '~/layout/composables/layout'
 
 const { isDarkTheme } = useLayout()
