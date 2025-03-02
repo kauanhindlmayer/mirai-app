@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { Project } from '~/types/project'
 
-const { project } = defineProps<{ project: Project }>()
+const { project } = defineProps<{
+  project: Project
+}>()
 
 const router = useRouter()
 
