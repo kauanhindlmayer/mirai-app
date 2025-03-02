@@ -13,10 +13,15 @@ export async function ensureProjectLoaded(
 
   const projectStore = useProjectStore()
   if (!projectStore.project || projectStore.project.id !== projectId) {
-    const project = await getProject(projectId)
-    projectStore.setProject(project)
-    const queryCache = useQueryCache()
-    queryCache.setQueryData(['project', projectId], project)
+    try {
+      const project = await getProject(projectId)
+      projectStore.setProject(project)
+
+      const queryCache = useQueryCache()
+      queryCache.setQueryData(['project', projectId], project)
+    } catch {
+      return next('/not-found')
+    }
   }
 
   next()

@@ -148,6 +148,7 @@ declare global {
   const useId: (typeof import('vue'))['useId']
   const useLayout: (typeof import('./src/composables/layout'))['useLayout']
   const useLink: (typeof import('vue-router'))['useLink']
+  const useMeta: (typeof import('vue-meta'))['useMeta']
   const useModel: (typeof import('vue'))['useModel']
   const useMutation: (typeof import('@pinia/colada'))['useMutation']
   const useOrganizationStore: (typeof import('./src/stores/organization'))['useOrganizationStore']
@@ -474,6 +475,7 @@ declare module 'vue' {
     readonly useDrawer: UnwrapRef<(typeof import('./src/composables/useDialog'))['useDrawer']>
     readonly useId: UnwrapRef<(typeof import('vue'))['useId']>
     readonly useLayout: UnwrapRef<(typeof import('./src/composables/layout'))['useLayout']>
+    readonly useMeta: UnwrapRef<(typeof import('vue-meta'))['useMeta']>
     readonly useModel: UnwrapRef<(typeof import('vue'))['useModel']>
     readonly useMutation: UnwrapRef<(typeof import('@pinia/colada'))['useMutation']>
     readonly useOrganizationStore: UnwrapRef<

@@ -30,7 +30,12 @@ export default defineConfig({
         VueRouterAutoImports,
         {
           pinia: ['defineStore', 'storeToRefs', 'acceptHMRUpdate'],
+        },
+        {
           '@pinia/colada': ['useQuery', 'useQueryCache', 'useMutation'],
+        },
+        {
+          'vue-meta': ['useMeta'],
         },
       ],
       dts: true,

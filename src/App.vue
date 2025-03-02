@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import { useEventListener } from '@vueuse/core'
-import { useMeta } from 'vue-meta'
-import type { Shortcut } from '~/types'
-import { useLayout } from './composables/layout'
 
 useMeta({
   title: 'Mirai',
