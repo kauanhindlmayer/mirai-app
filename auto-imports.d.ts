@@ -6,22 +6,95 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const BacklogLevel: (typeof import('./src/types/team'))['BacklogLevel']
+  const CardStyle: (typeof import('./src/types/layout'))['CardStyle']
+  const ColorType: (typeof import('./src/types/layout'))['ColorType']
   const EffectScope: (typeof import('vue'))['EffectScope']
+  const MenuMode: (typeof import('./src/types/layout'))['MenuMode']
+  const MenuTheme: (typeof import('./src/types/layout'))['MenuTheme']
+  const Preset: (typeof import('./src/types/layout'))['Preset']
+  const Primary: (typeof import('./src/types/layout'))['Primary']
+  const ProcessTemplate: (typeof import('./src/types/retrospective'))['ProcessTemplate']
+  const Surface: (typeof import('./src/types/layout'))['Surface']
+  const WorkItemStatus: (typeof import('./src/types/work-item'))['WorkItemStatus']
+  const WorkItemType: (typeof import('./src/types/work-item'))['WorkItemType']
+  const acceptHMRUpdate: (typeof import('pinia'))['acceptHMRUpdate']
+  const addComment: (typeof import('./src/api/wiki-pages'))['addComment']
+  const addDays: (typeof import('./src/utils/date'))['addDays']
+  const addWorkItemToSprint: (typeof import('./src/api/sprints'))['addWorkItemToSprint']
+  const colors: (typeof import('./src/utils/tag'))['colors']
   const computed: (typeof import('vue'))['computed']
   const createApp: (typeof import('vue'))['createApp']
+  const createBoard: (typeof import('./src/api/boards'))['createBoard']
+  const createColumn: (typeof import('./src/api/boards'))['createColumn']
+  const createOrganization: (typeof import('./src/api/organizations'))['createOrganization']
+  const createProject: (typeof import('./src/api/projects'))['createProject']
+  const createRetrospective: (typeof import('./src/api/retrospectives'))['createRetrospective']
+  const createRetrospectiveItem: (typeof import('./src/api/retrospectives'))['createRetrospectiveItem']
+  const createSprint: (typeof import('./src/api/sprints'))['createSprint']
+  const createTag: (typeof import('./src/api/tags'))['createTag']
+  const createTeam: (typeof import('./src/api/teams'))['createTeam']
+  const createWikiPage: (typeof import('./src/api/wiki-pages'))['createWikiPage']
   const customRef: (typeof import('vue'))['customRef']
   const defineAsyncComponent: (typeof import('vue'))['defineAsyncComponent']
   const defineComponent: (typeof import('vue'))['defineComponent']
+  const defineStore: (typeof import('pinia'))['defineStore']
+  const deleteBoard: (typeof import('./src/api/boards'))['deleteBoard']
+  const deleteColumn: (typeof import('./src/api/boards'))['deleteColumn']
+  const deleteComment: (typeof import('./src/api/wiki-pages'))['deleteComment']
+  const deleteRetrospectiveItem: (typeof import('./src/api/retrospectives'))['deleteRetrospectiveItem']
+  const deleteTag: (typeof import('./src/api/tags'))['deleteTag']
+  const deleteWikiPage: (typeof import('./src/api/wiki-pages'))['deleteWikiPage']
+  const deleteWorkItem: (typeof import('./src/api/work-items'))['deleteWorkItem']
+  const displayError: (typeof import('./src/composables/displayError'))['displayError']
   const effectScope: (typeof import('vue'))['effectScope']
+  const format: (typeof import('./src/utils/date'))['format']
+  const formatDistanceToNow: (typeof import('./src/utils/date'))['formatDistanceToNow']
+  const get: (typeof import('./src/api/http'))['get']
+  const getBacklog: (typeof import('./src/api/teams'))['getBacklog']
+  const getBacklogLevelLabel: (typeof import('./src/utils/work-item'))['getBacklogLevelLabel']
+  const getBoard: (typeof import('./src/api/boards'))['getBoard']
+  const getColorName: (typeof import('./src/utils/tag'))['getColorName']
   const getCurrentInstance: (typeof import('vue'))['getCurrentInstance']
   const getCurrentScope: (typeof import('vue'))['getCurrentScope']
+  const getCurrentUser: (typeof import('./src/api/users'))['getCurrentUser']
+  const getDashboardData: (typeof import('./src/api/dashboards'))['getDashboardData']
+  const getInitials: (typeof import('./src/utils/index'))['getInitials']
+  const getMoreTagsTooltip: (typeof import('./src/utils/work-item'))['getMoreTagsTooltip']
+  const getProject: (typeof import('./src/api/projects'))['getProject']
+  const getRetrospective: (typeof import('./src/api/retrospectives'))['getRetrospective']
+  const getStatusLabel: (typeof import('./src/utils/work-item'))['getStatusLabel']
+  const getStatusSeverity: (typeof import('./src/utils/work-item'))['getStatusSeverity']
+  const getTypeBackgroundColor: (typeof import('./src/utils/work-item'))['getTypeBackgroundColor']
+  const getTypeColor: (typeof import('./src/utils/work-item'))['getTypeColor']
+  const getTypeLabel: (typeof import('./src/utils/work-item'))['getTypeLabel']
+  const getTypeSeverity: (typeof import('./src/utils/work-item'))['getTypeSeverity']
+  const getWikiPage: (typeof import('./src/api/wiki-pages'))['getWikiPage']
+  const getWikiPageStats: (typeof import('./src/api/wiki-pages'))['getWikiPageStats']
+  const getWorkItem: (typeof import('./src/api/work-items'))['getWorkItem']
+  const getWorkItemsStats: (typeof import('./src/api/work-items'))['getWorkItemsStats']
   const h: (typeof import('vue'))['h']
+  const http: (typeof import('./src/api/http'))['default']
   const inject: (typeof import('vue'))['inject']
+  const isBefore: (typeof import('./src/utils/date'))['isBefore']
   const isProxy: (typeof import('vue'))['isProxy']
   const isReactive: (typeof import('vue'))['isReactive']
   const isReadonly: (typeof import('vue'))['isReadonly']
   const isRef: (typeof import('vue'))['isRef']
+  const isWeekend: (typeof import('./src/utils/date'))['isWeekend']
+  const listBoards: (typeof import('./src/api/boards'))['listBoards']
+  const listOrganizations: (typeof import('./src/api/organizations'))['listOrganizations']
+  const listProjects: (typeof import('./src/api/projects'))['listProjects']
+  const listRetrospectives: (typeof import('./src/api/retrospectives'))['listRetrospectives']
+  const listSprints: (typeof import('./src/api/sprints'))['listSprints']
+  const listTags: (typeof import('./src/api/tags'))['listTags']
+  const listTeams: (typeof import('./src/api/teams'))['listTeams']
+  const listWikiPages: (typeof import('./src/api/wiki-pages'))['listWikiPages']
+  const listWorkItems: (typeof import('./src/api/work-items'))['listWorkItems']
+  const loginUser: (typeof import('./src/api/users'))['loginUser']
   const markRaw: (typeof import('vue'))['markRaw']
+  const moveCard: (typeof import('./src/api/boards'))['moveCard']
+  const moveWikiPage: (typeof import('./src/api/wiki-pages'))['moveWikiPage']
   const nextTick: (typeof import('vue'))['nextTick']
   const onActivated: (typeof import('vue'))['onActivated']
   const onBeforeMount: (typeof import('vue'))['onBeforeMount']
@@ -39,30 +112,62 @@ declare global {
   const onUnmounted: (typeof import('vue'))['onUnmounted']
   const onUpdated: (typeof import('vue'))['onUpdated']
   const onWatcherCleanup: (typeof import('vue'))['onWatcherCleanup']
+  const patch: (typeof import('./src/api/http'))['patch']
+  const post: (typeof import('./src/api/http'))['post']
   const provide: (typeof import('vue'))['provide']
+  const put: (typeof import('./src/api/http'))['put']
   const reactive: (typeof import('vue'))['reactive']
   const readonly: (typeof import('vue'))['readonly']
   const ref: (typeof import('vue'))['ref']
+  const registerUser: (typeof import('./src/api/users'))['registerUser']
+  const remove: (typeof import('./src/api/http'))['remove']
   const resolveComponent: (typeof import('vue'))['resolveComponent']
   const shallowReactive: (typeof import('vue'))['shallowReactive']
   const shallowReadonly: (typeof import('vue'))['shallowReadonly']
   const shallowRef: (typeof import('vue'))['shallowRef']
+  const storeToRefs: (typeof import('pinia'))['storeToRefs']
   const toRaw: (typeof import('vue'))['toRaw']
   const toRef: (typeof import('vue'))['toRef']
   const toRefs: (typeof import('vue'))['toRefs']
   const toValue: (typeof import('vue'))['toValue']
   const triggerRef: (typeof import('vue'))['triggerRef']
   const unref: (typeof import('vue'))['unref']
+  const updateComment: (typeof import('./src/api/wiki-pages'))['updateComment']
+  const updateProfilePicture: (typeof import('./src/api/users'))['updateProfilePicture']
+  const updateProject: (typeof import('./src/api/projects'))['updateProject']
+  const updateTag: (typeof import('./src/api/tags'))['updateTag']
+  const updateUserProfile: (typeof import('./src/api/users'))['updateUserProfile']
+  const updateWikiPage: (typeof import('./src/api/wiki-pages'))['updateWikiPage']
+  const useAppToast: (typeof import('./src/composables/useAppToast'))['useAppToast']
   const useAttrs: (typeof import('vue'))['useAttrs']
+  const useCache: (typeof import('piniaColada'))['useCache']
   const useCssModule: (typeof import('vue'))['useCssModule']
   const useCssVars: (typeof import('vue'))['useCssVars']
+  const useDialog: (typeof import('./src/composables/useDialog'))['useDialog']
+  const useDrawer: (typeof import('./src/composables/useDialog'))['useDrawer']
   const useId: (typeof import('vue'))['useId']
+  const useLayout: (typeof import('./src/composables/layout'))['useLayout']
   const useLink: (typeof import('vue-router'))['useLink']
   const useModel: (typeof import('vue'))['useModel']
+  const useMutation: (typeof import('@pinia/colada'))['useMutation']
+  const useOrganizationStore: (typeof import('./src/stores/organization'))['useOrganizationStore']
+  const usePageStore: (typeof import('./src/stores/page'))['usePageStore']
+  const useProject: (typeof import('./src/queries/projects'))['useProject']
+  const useProjectStore: (typeof import('./src/stores/project'))['useProjectStore']
+  const useQuery: (typeof import('@pinia/colada'))['useQuery']
+  const useQueryCache: (typeof import('@pinia/colada'))['useQueryCache']
   const useRoute: (typeof import('vue-router'))['useRoute']
   const useRouter: (typeof import('vue-router'))['useRouter']
+  const useSignalR: (typeof import('./src/composables/useSignalR'))['useSignalR']
   const useSlots: (typeof import('vue'))['useSlots']
+  const useTeamStore: (typeof import('./src/stores/team'))['useTeamStore']
+  const useTeams: (typeof import('./src/queries/teams'))['useTeams']
   const useTemplateRef: (typeof import('vue'))['useTemplateRef']
+  const useUserStore: (typeof import('./src/stores/user'))['useUserStore']
+  const useWikiPage: (typeof import('./src/queries/wiki-pages'))['useWikiPage']
+  const useWikiPageStats: (typeof import('./src/queries/wiki-pages'))['useWikiPageStats']
+  const useWikiPages: (typeof import('./src/queries/wiki-pages'))['useWikiPages']
+  const useWorkItemsStats: (typeof import('./src/queries/work-items'))['useWorkItemsStats']
   const watch: (typeof import('vue'))['watch']
   const watchEffect: (typeof import('vue'))['watchEffect']
   const watchPostEffect: (typeof import('vue'))['watchPostEffect']
@@ -88,4 +193,316 @@ declare global {
     WritableComputedRef,
   } from 'vue'
   import('vue')
+  // @ts-ignore
+  export type { ApiErrorResponse } from './src/composables/displayError'
+  import('./src/composables/displayError')
+  // @ts-ignore
+  export type {
+    Board,
+    BoardSummary,
+    Column,
+    Card,
+    Assignee,
+    CreateBoardRequest,
+    MoveCardRequest,
+    DraggableEvent,
+    CreateBoardColumnRequest,
+  } from './src/types/board'
+  import('./src/types/board')
+  // @ts-ignore
+  export type { DashboardResponse, BurnupPoint, BurndownPoint } from './src/types/dashboard'
+  import('./src/types/dashboard')
+  // @ts-ignore
+  export type { RequestConfig, PaginatedList, PaginationFilter, Shortcut } from './src/types/index'
+  import('./src/types/index')
+  // @ts-ignore
+  export type {
+    Preset,
+    Primary,
+    Surface,
+    MenuMode,
+    MenuTheme,
+    CardStyle,
+    ColorType,
+    LayoutConfig,
+    LayoutState,
+    Color,
+    Breadcrumb,
+  } from './src/types/layout'
+  import('./src/types/layout')
+  // @ts-ignore
+  export type { Organization, CreateOrganizationRequest } from './src/types/organization'
+  import('./src/types/organization')
+  // @ts-ignore
+  export type { Project } from './src/types/project'
+  import('./src/types/project')
+  // @ts-ignore
+  export type {
+    ProcessTemplate,
+    Retrospective,
+    RetrospectiveSummary,
+    RetrospectiveColumn,
+    RetrospectiveItem,
+  } from './src/types/retrospective'
+  import('./src/types/retrospective')
+  // @ts-ignore
+  export type { CreateSprintRequest, Sprint } from './src/types/sprint'
+  import('./src/types/sprint')
+  // @ts-ignore
+  export type { Tag, CreateTagRequest, UpdateTagRequest } from './src/types/tag'
+  import('./src/types/tag')
+  // @ts-ignore
+  export type { BacklogLevel, CreateTeamRequest, Team, BacklogResponse } from './src/types/team'
+  import('./src/types/team')
+  // @ts-ignore
+  export type {
+    User,
+    RegisterUserRequest,
+    LoginUserRequest,
+    LoginUserResponse,
+    UpdateUserProfileRequest,
+  } from './src/types/user'
+  import('./src/types/user')
+  // @ts-ignore
+  export type {
+    WikiPage,
+    WikiPageSummary,
+    WikiPageStats,
+    Comment,
+    Author,
+    CreateWikiPageRequest,
+    UpdateWikiPageRequest,
+    MoveWikiPageRequest,
+    AddCommentRequest,
+    UpdateCommentRequest,
+  } from './src/types/wiki-page'
+  import('./src/types/wiki-page')
+  // @ts-ignore
+  export type {
+    WorkItemStatus,
+    WorkItemType,
+    WorkItem,
+    TagBriefResponse,
+    WorkItemsStats,
+  } from './src/types/work-item'
+  import('./src/types/work-item')
+  // @ts-ignore
+  export type { DateType } from './src/utils/date'
+  import('./src/utils/date')
+}
+
+// for vue template auto import
+import { UnwrapRef } from 'vue'
+declare module 'vue' {
+  interface GlobalComponents {}
+  interface ComponentCustomProperties {
+    readonly BacklogLevel: UnwrapRef<(typeof import('./src/types/team'))['BacklogLevel']>
+    readonly CardStyle: UnwrapRef<(typeof import('./src/types/layout'))['CardStyle']>
+    readonly ColorType: UnwrapRef<(typeof import('./src/types/layout'))['ColorType']>
+    readonly EffectScope: UnwrapRef<(typeof import('vue'))['EffectScope']>
+    readonly MenuMode: UnwrapRef<(typeof import('./src/types/layout'))['MenuMode']>
+    readonly MenuTheme: UnwrapRef<(typeof import('./src/types/layout'))['MenuTheme']>
+    readonly Preset: UnwrapRef<(typeof import('./src/types/layout'))['Preset']>
+    readonly Primary: UnwrapRef<(typeof import('./src/types/layout'))['Primary']>
+    readonly ProcessTemplate: UnwrapRef<
+      (typeof import('./src/types/retrospective'))['ProcessTemplate']
+    >
+    readonly Surface: UnwrapRef<(typeof import('./src/types/layout'))['Surface']>
+    readonly WorkItemStatus: UnwrapRef<(typeof import('./src/types/work-item'))['WorkItemStatus']>
+    readonly WorkItemType: UnwrapRef<(typeof import('./src/types/work-item'))['WorkItemType']>
+    readonly acceptHMRUpdate: UnwrapRef<(typeof import('pinia'))['acceptHMRUpdate']>
+    readonly addComment: UnwrapRef<(typeof import('./src/api/wiki-pages'))['addComment']>
+    readonly addDays: UnwrapRef<(typeof import('./src/utils/date'))['addDays']>
+    readonly addWorkItemToSprint: UnwrapRef<
+      (typeof import('./src/api/sprints'))['addWorkItemToSprint']
+    >
+    readonly colors: UnwrapRef<(typeof import('./src/utils/tag'))['colors']>
+    readonly computed: UnwrapRef<(typeof import('vue'))['computed']>
+    readonly createApp: UnwrapRef<(typeof import('vue'))['createApp']>
+    readonly createBoard: UnwrapRef<(typeof import('./src/api/boards'))['createBoard']>
+    readonly createColumn: UnwrapRef<(typeof import('./src/api/boards'))['createColumn']>
+    readonly createOrganization: UnwrapRef<
+      (typeof import('./src/api/organizations'))['createOrganization']
+    >
+    readonly createProject: UnwrapRef<(typeof import('./src/api/projects'))['createProject']>
+    readonly createRetrospective: UnwrapRef<
+      (typeof import('./src/api/retrospectives'))['createRetrospective']
+    >
+    readonly createRetrospectiveItem: UnwrapRef<
+      (typeof import('./src/api/retrospectives'))['createRetrospectiveItem']
+    >
+    readonly createSprint: UnwrapRef<(typeof import('./src/api/sprints'))['createSprint']>
+    readonly createTag: UnwrapRef<(typeof import('./src/api/tags'))['createTag']>
+    readonly createTeam: UnwrapRef<(typeof import('./src/api/teams'))['createTeam']>
+    readonly createWikiPage: UnwrapRef<(typeof import('./src/api/wiki-pages'))['createWikiPage']>
+    readonly customRef: UnwrapRef<(typeof import('vue'))['customRef']>
+    readonly defineAsyncComponent: UnwrapRef<(typeof import('vue'))['defineAsyncComponent']>
+    readonly defineComponent: UnwrapRef<(typeof import('vue'))['defineComponent']>
+    readonly defineStore: UnwrapRef<(typeof import('pinia'))['defineStore']>
+    readonly deleteBoard: UnwrapRef<(typeof import('./src/api/boards'))['deleteBoard']>
+    readonly deleteColumn: UnwrapRef<(typeof import('./src/api/boards'))['deleteColumn']>
+    readonly deleteComment: UnwrapRef<(typeof import('./src/api/wiki-pages'))['deleteComment']>
+    readonly deleteRetrospectiveItem: UnwrapRef<
+      (typeof import('./src/api/retrospectives'))['deleteRetrospectiveItem']
+    >
+    readonly deleteTag: UnwrapRef<(typeof import('./src/api/tags'))['deleteTag']>
+    readonly deleteWikiPage: UnwrapRef<(typeof import('./src/api/wiki-pages'))['deleteWikiPage']>
+    readonly deleteWorkItem: UnwrapRef<(typeof import('./src/api/work-items'))['deleteWorkItem']>
+    readonly displayError: UnwrapRef<
+      (typeof import('./src/composables/displayError'))['displayError']
+    >
+    readonly effectScope: UnwrapRef<(typeof import('vue'))['effectScope']>
+    readonly format: UnwrapRef<(typeof import('./src/utils/date'))['format']>
+    readonly formatDistanceToNow: UnwrapRef<
+      (typeof import('./src/utils/date'))['formatDistanceToNow']
+    >
+    readonly get: UnwrapRef<(typeof import('./src/api/http'))['get']>
+    readonly getBacklog: UnwrapRef<(typeof import('./src/api/teams'))['getBacklog']>
+    readonly getBacklogLevelLabel: UnwrapRef<
+      (typeof import('./src/utils/work-item'))['getBacklogLevelLabel']
+    >
+    readonly getBoard: UnwrapRef<(typeof import('./src/api/boards'))['getBoard']>
+    readonly getColorName: UnwrapRef<(typeof import('./src/utils/tag'))['getColorName']>
+    readonly getCurrentInstance: UnwrapRef<(typeof import('vue'))['getCurrentInstance']>
+    readonly getCurrentScope: UnwrapRef<(typeof import('vue'))['getCurrentScope']>
+    readonly getCurrentUser: UnwrapRef<(typeof import('./src/api/users'))['getCurrentUser']>
+    readonly getDashboardData: UnwrapRef<
+      (typeof import('./src/api/dashboards'))['getDashboardData']
+    >
+    readonly getInitials: UnwrapRef<(typeof import('./src/utils/index'))['getInitials']>
+    readonly getMoreTagsTooltip: UnwrapRef<
+      (typeof import('./src/utils/work-item'))['getMoreTagsTooltip']
+    >
+    readonly getProject: UnwrapRef<(typeof import('./src/api/projects'))['getProject']>
+    readonly getRetrospective: UnwrapRef<
+      (typeof import('./src/api/retrospectives'))['getRetrospective']
+    >
+    readonly getStatusLabel: UnwrapRef<(typeof import('./src/utils/work-item'))['getStatusLabel']>
+    readonly getStatusSeverity: UnwrapRef<
+      (typeof import('./src/utils/work-item'))['getStatusSeverity']
+    >
+    readonly getTypeBackgroundColor: UnwrapRef<
+      (typeof import('./src/utils/work-item'))['getTypeBackgroundColor']
+    >
+    readonly getTypeColor: UnwrapRef<(typeof import('./src/utils/work-item'))['getTypeColor']>
+    readonly getTypeLabel: UnwrapRef<(typeof import('./src/utils/work-item'))['getTypeLabel']>
+    readonly getTypeSeverity: UnwrapRef<(typeof import('./src/utils/work-item'))['getTypeSeverity']>
+    readonly getWikiPage: UnwrapRef<(typeof import('./src/api/wiki-pages'))['getWikiPage']>
+    readonly getWikiPageStats: UnwrapRef<
+      (typeof import('./src/api/wiki-pages'))['getWikiPageStats']
+    >
+    readonly getWorkItem: UnwrapRef<(typeof import('./src/api/work-items'))['getWorkItem']>
+    readonly getWorkItemsStats: UnwrapRef<
+      (typeof import('./src/api/work-items'))['getWorkItemsStats']
+    >
+    readonly h: UnwrapRef<(typeof import('vue'))['h']>
+    readonly http: UnwrapRef<(typeof import('./src/api/http'))['default']>
+    readonly inject: UnwrapRef<(typeof import('vue'))['inject']>
+    readonly isBefore: UnwrapRef<(typeof import('./src/utils/date'))['isBefore']>
+    readonly isProxy: UnwrapRef<(typeof import('vue'))['isProxy']>
+    readonly isReactive: UnwrapRef<(typeof import('vue'))['isReactive']>
+    readonly isReadonly: UnwrapRef<(typeof import('vue'))['isReadonly']>
+    readonly isRef: UnwrapRef<(typeof import('vue'))['isRef']>
+    readonly isWeekend: UnwrapRef<(typeof import('./src/utils/date'))['isWeekend']>
+    readonly listBoards: UnwrapRef<(typeof import('./src/api/boards'))['listBoards']>
+    readonly listOrganizations: UnwrapRef<
+      (typeof import('./src/api/organizations'))['listOrganizations']
+    >
+    readonly listProjects: UnwrapRef<(typeof import('./src/api/projects'))['listProjects']>
+    readonly listRetrospectives: UnwrapRef<
+      (typeof import('./src/api/retrospectives'))['listRetrospectives']
+    >
+    readonly listSprints: UnwrapRef<(typeof import('./src/api/sprints'))['listSprints']>
+    readonly listTags: UnwrapRef<(typeof import('./src/api/tags'))['listTags']>
+    readonly listTeams: UnwrapRef<(typeof import('./src/api/teams'))['listTeams']>
+    readonly listWikiPages: UnwrapRef<(typeof import('./src/api/wiki-pages'))['listWikiPages']>
+    readonly listWorkItems: UnwrapRef<(typeof import('./src/api/work-items'))['listWorkItems']>
+    readonly loginUser: UnwrapRef<(typeof import('./src/api/users'))['loginUser']>
+    readonly markRaw: UnwrapRef<(typeof import('vue'))['markRaw']>
+    readonly moveCard: UnwrapRef<(typeof import('./src/api/boards'))['moveCard']>
+    readonly moveWikiPage: UnwrapRef<(typeof import('./src/api/wiki-pages'))['moveWikiPage']>
+    readonly nextTick: UnwrapRef<(typeof import('vue'))['nextTick']>
+    readonly onActivated: UnwrapRef<(typeof import('vue'))['onActivated']>
+    readonly onBeforeMount: UnwrapRef<(typeof import('vue'))['onBeforeMount']>
+    readonly onBeforeRouteLeave: UnwrapRef<(typeof import('vue-router'))['onBeforeRouteLeave']>
+    readonly onBeforeRouteUpdate: UnwrapRef<(typeof import('vue-router'))['onBeforeRouteUpdate']>
+    readonly onBeforeUnmount: UnwrapRef<(typeof import('vue'))['onBeforeUnmount']>
+    readonly onBeforeUpdate: UnwrapRef<(typeof import('vue'))['onBeforeUpdate']>
+    readonly onDeactivated: UnwrapRef<(typeof import('vue'))['onDeactivated']>
+    readonly onErrorCaptured: UnwrapRef<(typeof import('vue'))['onErrorCaptured']>
+    readonly onMounted: UnwrapRef<(typeof import('vue'))['onMounted']>
+    readonly onRenderTracked: UnwrapRef<(typeof import('vue'))['onRenderTracked']>
+    readonly onRenderTriggered: UnwrapRef<(typeof import('vue'))['onRenderTriggered']>
+    readonly onScopeDispose: UnwrapRef<(typeof import('vue'))['onScopeDispose']>
+    readonly onServerPrefetch: UnwrapRef<(typeof import('vue'))['onServerPrefetch']>
+    readonly onUnmounted: UnwrapRef<(typeof import('vue'))['onUnmounted']>
+    readonly onUpdated: UnwrapRef<(typeof import('vue'))['onUpdated']>
+    readonly onWatcherCleanup: UnwrapRef<(typeof import('vue'))['onWatcherCleanup']>
+    readonly patch: UnwrapRef<(typeof import('./src/api/http'))['patch']>
+    readonly post: UnwrapRef<(typeof import('./src/api/http'))['post']>
+    readonly provide: UnwrapRef<(typeof import('vue'))['provide']>
+    readonly put: UnwrapRef<(typeof import('./src/api/http'))['put']>
+    readonly reactive: UnwrapRef<(typeof import('vue'))['reactive']>
+    readonly readonly: UnwrapRef<(typeof import('vue'))['readonly']>
+    readonly ref: UnwrapRef<(typeof import('vue'))['ref']>
+    readonly registerUser: UnwrapRef<(typeof import('./src/api/users'))['registerUser']>
+    readonly remove: UnwrapRef<(typeof import('./src/api/http'))['remove']>
+    readonly resolveComponent: UnwrapRef<(typeof import('vue'))['resolveComponent']>
+    readonly shallowReactive: UnwrapRef<(typeof import('vue'))['shallowReactive']>
+    readonly shallowReadonly: UnwrapRef<(typeof import('vue'))['shallowReadonly']>
+    readonly shallowRef: UnwrapRef<(typeof import('vue'))['shallowRef']>
+    readonly storeToRefs: UnwrapRef<(typeof import('pinia'))['storeToRefs']>
+    readonly toRaw: UnwrapRef<(typeof import('vue'))['toRaw']>
+    readonly toRef: UnwrapRef<(typeof import('vue'))['toRef']>
+    readonly toRefs: UnwrapRef<(typeof import('vue'))['toRefs']>
+    readonly toValue: UnwrapRef<(typeof import('vue'))['toValue']>
+    readonly triggerRef: UnwrapRef<(typeof import('vue'))['triggerRef']>
+    readonly unref: UnwrapRef<(typeof import('vue'))['unref']>
+    readonly updateComment: UnwrapRef<(typeof import('./src/api/wiki-pages'))['updateComment']>
+    readonly updateProfilePicture: UnwrapRef<
+      (typeof import('./src/api/users'))['updateProfilePicture']
+    >
+    readonly updateProject: UnwrapRef<(typeof import('./src/api/projects'))['updateProject']>
+    readonly updateTag: UnwrapRef<(typeof import('./src/api/tags'))['updateTag']>
+    readonly updateUserProfile: UnwrapRef<(typeof import('./src/api/users'))['updateUserProfile']>
+    readonly updateWikiPage: UnwrapRef<(typeof import('./src/api/wiki-pages'))['updateWikiPage']>
+    readonly useAppToast: UnwrapRef<(typeof import('./src/composables/useAppToast'))['useAppToast']>
+    readonly useAttrs: UnwrapRef<(typeof import('vue'))['useAttrs']>
+    readonly useCssModule: UnwrapRef<(typeof import('vue'))['useCssModule']>
+    readonly useCssVars: UnwrapRef<(typeof import('vue'))['useCssVars']>
+    readonly useDialog: UnwrapRef<(typeof import('./src/composables/useDialog'))['useDialog']>
+    readonly useDrawer: UnwrapRef<(typeof import('./src/composables/useDialog'))['useDrawer']>
+    readonly useId: UnwrapRef<(typeof import('vue'))['useId']>
+    readonly useLayout: UnwrapRef<(typeof import('./src/composables/layout'))['useLayout']>
+    readonly useModel: UnwrapRef<(typeof import('vue'))['useModel']>
+    readonly useMutation: UnwrapRef<(typeof import('@pinia/colada'))['useMutation']>
+    readonly useOrganizationStore: UnwrapRef<
+      (typeof import('./src/stores/organization'))['useOrganizationStore']
+    >
+    readonly usePageStore: UnwrapRef<(typeof import('./src/stores/page'))['usePageStore']>
+    readonly useProject: UnwrapRef<(typeof import('./src/queries/projects'))['useProject']>
+    readonly useProjectStore: UnwrapRef<(typeof import('./src/stores/project'))['useProjectStore']>
+    readonly useQuery: UnwrapRef<(typeof import('@pinia/colada'))['useQuery']>
+    readonly useQueryCache: UnwrapRef<(typeof import('@pinia/colada'))['useQueryCache']>
+    readonly useRoute: UnwrapRef<(typeof import('vue-router'))['useRoute']>
+    readonly useRouter: UnwrapRef<(typeof import('vue-router'))['useRouter']>
+    readonly useSignalR: UnwrapRef<(typeof import('./src/composables/useSignalR'))['useSignalR']>
+    readonly useSlots: UnwrapRef<(typeof import('vue'))['useSlots']>
+    readonly useTeamStore: UnwrapRef<(typeof import('./src/stores/team'))['useTeamStore']>
+    readonly useTeams: UnwrapRef<(typeof import('./src/queries/teams'))['useTeams']>
+    readonly useTemplateRef: UnwrapRef<(typeof import('vue'))['useTemplateRef']>
+    readonly useUserStore: UnwrapRef<(typeof import('./src/stores/user'))['useUserStore']>
+    readonly useWikiPage: UnwrapRef<(typeof import('./src/queries/wiki-pages'))['useWikiPage']>
+    readonly useWikiPageStats: UnwrapRef<
+      (typeof import('./src/queries/wiki-pages'))['useWikiPageStats']
+    >
+    readonly useWikiPages: UnwrapRef<(typeof import('./src/queries/wiki-pages'))['useWikiPages']>
+    readonly useWorkItemsStats: UnwrapRef<
+      (typeof import('./src/queries/work-items'))['useWorkItemsStats']
+    >
+    readonly watch: UnwrapRef<(typeof import('vue'))['watch']>
+    readonly watchEffect: UnwrapRef<(typeof import('vue'))['watchEffect']>
+    readonly watchPostEffect: UnwrapRef<(typeof import('vue'))['watchPostEffect']>
+    readonly watchSyncEffect: UnwrapRef<(typeof import('vue'))['watchSyncEffect']>
+  }
 }

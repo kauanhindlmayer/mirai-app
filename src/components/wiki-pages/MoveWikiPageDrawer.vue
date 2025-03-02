@@ -1,12 +1,6 @@
 <script setup lang="ts">
-import { useMutation, useQueryCache } from '@pinia/colada'
-import { storeToRefs } from 'pinia'
 import type { TreeSelectionKeys } from 'primevue'
 import type { TreeNode } from 'primevue/treenode'
-import { moveWikiPage } from '~/api/wiki-pages'
-import { useDrawer } from '~/composables/useDialog'
-import { useWikiPage, useWikiPages } from '~/queries/wiki-pages'
-import { useProjectStore } from '~/stores/project'
 import type { WikiPageSummary } from '~/types/wiki-page'
 
 const projectStore = useProjectStore()

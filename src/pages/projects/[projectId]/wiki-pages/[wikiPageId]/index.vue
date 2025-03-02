@@ -1,17 +1,8 @@
 <script setup lang="ts">
-import { useMutation, useQueryCache } from '@pinia/colada'
-import { storeToRefs } from 'pinia'
 import { useConfirm, type Menu, type TreeSelectionKeys } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import type { TreeNode } from 'primevue/treenode'
-import { deleteWikiPage } from '~/api/wiki-pages'
 import MoveWikiPageDrawer from '~/components/wiki-pages/MoveWikiPageDrawer.vue'
-import { displayError } from '~/composables/displayError'
-import { useAppToast } from '~/composables/useAppToast'
-import { useWikiPage, useWikiPages } from '~/queries/wiki-pages'
-import { usePageStore } from '~/stores/page'
-import { useProjectStore } from '~/stores/project'
-import type { WikiPageSummary } from '~/types/wiki-page'
 
 const pageStore = usePageStore()
 pageStore.setTitle('Wiki Pages - Overview')

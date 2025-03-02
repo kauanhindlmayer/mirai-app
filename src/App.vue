@@ -2,7 +2,7 @@
 import { useEventListener } from '@vueuse/core'
 import { useMeta } from 'vue-meta'
 import type { Shortcut } from '~/types'
-import { useLayout } from './layout/composables/layout'
+import { useLayout } from './composables/layout'
 
 useMeta({
   title: 'Mirai',

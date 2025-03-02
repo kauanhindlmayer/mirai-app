@@ -2,7 +2,6 @@
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { date, object, string } from 'yup'
-import { useDialog } from '~/composables/useDialog'
 import type { CreateSprintRequest } from '~/types/sprint'
 
 const form = ref<CreateSprintRequest>({

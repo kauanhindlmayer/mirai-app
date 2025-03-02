@@ -1,5 +1,3 @@
-import { acceptHMRUpdate, defineStore } from 'pinia'
-
 export const useTeamStore = defineStore('teams', () => {
   const teamId = ref<string | null>(null)
 

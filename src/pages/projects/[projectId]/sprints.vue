@@ -1,19 +1,6 @@
 <script setup lang="ts">
-import { useQuery } from '@pinia/colada'
-import { storeToRefs } from 'pinia'
 import type { TreeNode } from 'primevue/treenode'
-import { listSprints } from '~/api/sprints'
-import { getBacklog } from '~/api/teams'
 import CreateSprintDialog from '~/components/sprints/CreateSprintDialog.vue'
-import { useLayout } from '~/layout/composables/layout'
-import { useTeams } from '~/queries/teams'
-import { usePageStore } from '~/stores/page'
-import { useProjectStore } from '~/stores/project'
-import { useTeamStore } from '~/stores/team'
-import type { Sprint } from '~/types/sprint'
-import { BacklogLevel, type BacklogResponse, type Team } from '~/types/team'
-import { addDays, format, isBefore, isWeekend, type DateType } from '~/utils/date'
-import { getMoreTagsTooltip, getStatusLabel, getStatusSeverity } from '~/utils/work-item'
 
 const pageStore = usePageStore()
 const teamStore = useTeamStore()

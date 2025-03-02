@@ -2,7 +2,6 @@
 import { useConfirm, type Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import type { Comment } from '~/types/wiki-page'
-import { formatDistanceToNow } from '~/utils/date'
 
 const { comment } = defineProps<{
   comment: Comment

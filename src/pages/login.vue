@@ -1,12 +1,7 @@
 <script setup lang="ts">
-import { useMutation } from '@pinia/colada'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { object, string } from 'yup'
-import { getCurrentUser, loginUser } from '~/api/users'
-import { displayError } from '~/composables/displayError'
-import { useUserStore } from '~/stores/user'
-import type { LoginUserRequest, User } from '~/types/user'
 
 const userStore = useUserStore()
 const router = useRouter()

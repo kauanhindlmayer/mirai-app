@@ -1,12 +1,7 @@
 <script setup lang="ts">
-import { useMutation, useQueryCache } from '@pinia/colada'
-import { storeToRefs } from 'pinia'
 import { useConfirm, type Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { deleteRetrospectiveItem } from '~/api/retrospectives'
-import { useTeamStore } from '~/stores/team'
 import type { RetrospectiveItem } from '~/types/retrospective'
-import { format } from '~/utils/date'
 
 const teamStore = useTeamStore()
 const { teamId } = storeToRefs(teamStore)

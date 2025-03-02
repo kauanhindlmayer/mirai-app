@@ -1,13 +1,6 @@
 <script setup lang="ts">
-import { useQuery } from '@pinia/colada'
-import { storeToRefs } from 'pinia'
 import type { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { getWorkItem } from '~/api/work-items'
-import { useDialog } from '~/composables/useDialog'
-import { useProjectStore } from '~/stores/project'
-import { getStatusLabel, getStatusSeverity, getTypeColor, getTypeLabel } from '~/utils/work-item'
-import CommentsSection from './CommentsSection.vue'
 
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
@@ -67,8 +60,8 @@ defineExpose({
 
 <template>
   <Dialog
-    class="work-item-dialog"
     v-if="workItem"
+    class="work-item-dialog"
     v-model:visible="isVisible"
     modal
     :style="{ width: '64rem' }"

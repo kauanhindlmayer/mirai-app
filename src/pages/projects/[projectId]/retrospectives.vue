@@ -1,18 +1,7 @@
 <script lang="ts" setup>
-import { useQuery, useQueryCache } from '@pinia/colada'
-import { storeToRefs } from 'pinia'
 import type { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { getRetrospective, listRetrospectives } from '~/api/retrospectives'
 import CreateRetrospectiveDialog from '~/components/retrospectives/CreateRetrospectiveDialog.vue'
-import { useAppToast } from '~/composables/useAppToast'
-import { useSignalR } from '~/composables/useSignalR'
-import { useTeams } from '~/queries/teams'
-import { usePageStore } from '~/stores/page'
-import { useProjectStore } from '~/stores/project'
-import { useTeamStore } from '~/stores/team'
-import type { RetrospectiveSummary } from '~/types/retrospective'
-import type { Team } from '~/types/team'
 
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)

@@ -1,14 +1,9 @@
 <script setup lang="ts">
-import { useMutation, useQueryCache } from '@pinia/colada'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import type { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import { number, object, string } from 'yup'
-import { createColumn, deleteColumn } from '~/api/boards'
-import { displayError } from '~/composables/displayError'
-import { useDrawer } from '~/composables/useDialog'
-import { useTeamStore } from '~/stores/team'
 import type { Board, Column, CreateBoardColumnRequest } from '~/types/board'
 
 const teamStore = useTeamStore()

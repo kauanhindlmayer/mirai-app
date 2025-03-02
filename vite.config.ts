@@ -21,12 +21,22 @@ export default defineConfig({
     VueRouter(),
     Components({
       resolvers: [PrimeVueResolver()],
+      dirs: ['src/components', 'src/layout'],
     }),
     AutoImport({
       include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/, /\.vue\.[tj]sx?\?vue/, /\.md$/],
-      imports: ['vue', VueRouterAutoImports],
+      imports: [
+        'vue',
+        VueRouterAutoImports,
+        {
+          pinia: ['defineStore', 'storeToRefs', 'acceptHMRUpdate'],
+          '@pinia/colada': ['useQuery', 'useQueryCache', 'useMutation'],
+        },
+      ],
       dts: true,
       viteOptimizeDeps: true,
+      dirs: ['src/api', 'src/composables', 'src/queries', 'src/stores', 'src/types', 'src/utils'],
+      vueTemplate: true,
     }),
     tailwindcss(),
     vueDevTools(),

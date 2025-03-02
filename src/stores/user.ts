@@ -1,6 +1,4 @@
 import { StorageSerializers, useStorage } from '@vueuse/core'
-import { acceptHMRUpdate, defineStore } from 'pinia'
-import type { User } from '~/types/user'
 
 export const useUserStore = defineStore('users', () => {
   const router = useRouter()

@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { usePageStore } from '~/stores/page'
-
-const router = useRouter()
 const pageStore = usePageStore()
 const { breadcrumbs } = storeToRefs(pageStore)
+
+const router = useRouter()
 
 function redirectTo(route: string) {
   router.push({ path: route })

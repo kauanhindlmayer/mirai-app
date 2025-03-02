@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import { useQuery } from '@pinia/colada'
-import { storeToRefs } from 'pinia'
-import { listOrganizations } from '~/api/organizations'
-import { listProjects } from '~/api/projects'
 import CreateProjectDrawer from '~/components/projects/CreateProjectDrawer.vue'
-import { useOrganizationStore } from '~/stores/organization'
-import { usePageStore } from '~/stores/page'
-import type { Organization } from '~/types/organization'
 
 const organizationStore = useOrganizationStore()
 const { organization } = storeToRefs(organizationStore)

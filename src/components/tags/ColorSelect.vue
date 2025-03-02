@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { colors, getColorName } from '~/utils/tag'
-
 const color = defineModel<string>()
 </script>
 

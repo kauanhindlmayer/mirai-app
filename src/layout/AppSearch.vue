@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { InputText } from 'primevue'
-import { useLayout } from './composables/layout'
 
 const { layoutState } = useLayout()
 

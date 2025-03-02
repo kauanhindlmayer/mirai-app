@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { WorkItemType } from '~/types/work-item'
-import { getTypeBackgroundColor, getTypeColor, getTypeLabel } from '~/utils/work-item'
 
 defineProps<{
   type: WorkItemType

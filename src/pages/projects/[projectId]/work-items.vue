@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
-import { storeToRefs } from 'pinia'
 import {
   type ContextMenu,
   type DataTablePageEvent,
@@ -8,20 +6,6 @@ import {
   type DataTableSortEvent,
 } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { deleteWorkItem, listWorkItems } from '~/api/work-items'
-import { displayError } from '~/composables/displayError'
-import { useAppToast } from '~/composables/useAppToast'
-import { usePageStore } from '~/stores/page'
-import { useProjectStore } from '~/stores/project'
-import type { PaginationFilter } from '~/types'
-import { type WorkItem } from '~/types/work-item'
-import { format } from '~/utils/date'
-import {
-  getMoreTagsTooltip,
-  getStatusLabel,
-  getStatusSeverity,
-  getTypeLabel,
-} from '~/utils/work-item'
 
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)

@@ -1,6 +1,3 @@
-import { acceptHMRUpdate, defineStore } from 'pinia'
-import type { Project } from '~/types/project'
-
 export const useProjectStore = defineStore('projects', () => {
   const project = ref<Project>({} as Project)
 

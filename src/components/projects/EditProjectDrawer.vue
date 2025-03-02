@@ -2,12 +2,7 @@
 import { useMutation, useQueryCache } from '@pinia/colada'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
-import { storeToRefs } from 'pinia'
 import { object, string } from 'yup'
-import { updateProject } from '~/api/projects'
-import { useAppToast } from '~/composables/useAppToast'
-import { useDrawer } from '~/composables/useDialog'
-import { useProjectStore } from '~/stores/project'
 import type { Project } from '~/types/project'
 
 const projectStore = useProjectStore()

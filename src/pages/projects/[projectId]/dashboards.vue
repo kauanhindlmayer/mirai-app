@@ -1,15 +1,6 @@
 <script setup lang="ts">
-import { useQuery } from '@pinia/colada'
-import { storeToRefs } from 'pinia'
 import type { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { getDashboardData } from '~/api/dashboards'
-import { listTeams } from '~/api/teams'
-import { usePageStore } from '~/stores/page'
-import { useProjectStore } from '~/stores/project'
-import type { DashboardResponse } from '~/types/dashboard'
-import type { Team } from '~/types/team'
-import { format } from '~/utils/date'
 
 const pageStore = usePageStore()
 pageStore.setTitle('Dashboard - Overview')

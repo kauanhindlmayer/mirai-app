@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { Card } from '~/types/board'
-import { getStatusLabel, getStatusSeverity, getTypeColor } from '~/utils/work-item'
 
 const { card } = defineProps<{ card: Card }>()
-const assignee = computed(() => card.workItem.assignee)
 
+const assignee = computed(() => card.workItem.assignee)
 const storyPoints = ref(card.workItem.storyPoints)
 
 const router = useRouter()

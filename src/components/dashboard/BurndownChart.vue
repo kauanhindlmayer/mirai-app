@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { ChartData, ChartOptions } from 'chart.js'
-import { useLayout } from '~/layout/composables/layout'
 import type { BurndownPoint } from '~/types/dashboard'
-import { format } from '~/utils/date'
 
 const { layoutConfig, isDarkTheme } = useLayout()
 const { burndownData = [] } = defineProps<{

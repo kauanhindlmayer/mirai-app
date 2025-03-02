@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { useLayout } from '~/layout/composables/layout'
-import { useUserStore } from '~/stores/user'
-import AppBreadcrumb from './AppBreadcrumb.vue'
-
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 const { layoutState, isDarkTheme, onMenuToggle, onConfigSidebarToggle } = useLayout()

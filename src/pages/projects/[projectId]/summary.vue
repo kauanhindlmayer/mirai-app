@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { Avatar } from 'primevue'
 import EditProjectDrawer from '~/components/projects/EditProjectDrawer.vue'
-import { useProject } from '~/queries/projects'
-import { useWorkItemsStats } from '~/queries/work-items'
-import { useOrganizationStore } from '~/stores/organization'
-import { usePageStore } from '~/stores/page'
-import type { Project } from '~/types/project'
-import { getInitials } from '~/utils'
 
 const organizationStore = useOrganizationStore()
 const { organization } = storeToRefs(organizationStore)

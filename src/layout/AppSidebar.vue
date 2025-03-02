@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import { useLayout } from '~/layout/composables/layout'
-import AppMenu from './AppMenu.vue'
-import AppTopbar from './AppTopbar.vue'
-
-const { layoutState, isMenuDarkTheme, isHorizontal } = useLayout()
+const { layoutState, isHorizontal } = useLayout()
 
 let timeoutId: null | ReturnType<typeof setTimeout> = null
 

@@ -1,6 +1,3 @@
-import { acceptHMRUpdate, defineStore } from 'pinia'
-import type { Breadcrumb } from '~/types/layout'
-
 export const usePageStore = defineStore('page', () => {
   const title = ref<string>('Mirai')
   const breadcrumbs = ref<Breadcrumb[]>([])

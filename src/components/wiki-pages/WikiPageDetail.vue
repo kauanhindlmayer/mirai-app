@@ -1,13 +1,6 @@
 <script setup lang="ts">
-import { useMutation, useQueryCache } from '@pinia/colada'
-import { storeToRefs } from 'pinia'
 import { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { addComment, deleteComment } from '~/api/wiki-pages'
-import { useAppToast } from '~/composables/useAppToast'
-import { useWikiPage, useWikiPageStats } from '~/queries/wiki-pages'
-import { useProjectStore } from '~/stores/project'
-import { format, formatDistanceToNow } from '~/utils/date'
 
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)

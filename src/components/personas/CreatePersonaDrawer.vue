@@ -2,7 +2,6 @@
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { object, string } from 'yup'
-import { useDrawer } from '~/composables/useDialog'
 
 const form = ref({
   name: '',

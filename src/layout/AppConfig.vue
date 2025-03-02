@@ -4,8 +4,6 @@ import Aura from '@primevue/themes/aura'
 import Lara from '@primevue/themes/lara'
 import Nora from '@primevue/themes/nora'
 import type { SelectButtonChangeEvent } from 'primevue'
-import { ColorType, MenuMode, MenuTheme, Primary, Surface, type Color } from '~/types/layout'
-import { useLayout } from './composables/layout'
 
 const { layoutState, layoutConfig, isDarkTheme } = useLayout()
 

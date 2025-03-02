@@ -1,14 +1,9 @@
 <script setup lang="ts">
-import { useMutation, useQueryCache } from '@pinia/colada'
 import { useEventListener } from '@vueuse/core'
-import { storeToRefs } from 'pinia'
 import type { InputText } from 'primevue'
 import { object, string, ValidationError } from 'yup'
-import { createRetrospectiveItem } from '~/api/retrospectives'
-import { useTeamStore } from '~/stores/team'
+import RetrospectiveItemComponent from '~/components/retrospectives/RetrospectiveItem.vue'
 import type { RetrospectiveColumn, RetrospectiveItem } from '~/types/retrospective'
-import { format } from '~/utils/date'
-import RetrospectiveItemComponent from './RetrospectiveItem.vue'
 
 const teamStore = useTeamStore()
 const { teamId } = storeToRefs(teamStore)

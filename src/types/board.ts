@@ -32,7 +32,7 @@ export type Card = {
   createdAt: string
 }
 
-export type WorkItem = {
+type WorkItem = {
   id: string
   code: string
   title: string

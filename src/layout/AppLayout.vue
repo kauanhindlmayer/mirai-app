@@ -1,11 +1,4 @@
 <script setup lang="ts">
-import AppBreadcrumb from './AppBreadcrumb.vue'
-import AppConfig from './AppConfig.vue'
-import AppSearch from './AppSearch.vue'
-import AppSidebar from './AppSidebar.vue'
-import AppTopbar from './AppTopbar.vue'
-import { useLayout } from './composables/layout'
-
 const { layoutConfig, layoutState, isSidebarActive } = useLayout()
 const outsideClickListener = ref<((event: MouseEvent) => void) | null>(null)
 
