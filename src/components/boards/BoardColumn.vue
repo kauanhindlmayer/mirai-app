@@ -60,7 +60,14 @@ async function onChange(event: DraggableEvent<Card>) {
 <template>
   <div class="card !p-4 rounded-sm min-w-[250px] max-w-[300px]">
     <div class="flex items-center justify-between mb-2">
-      <h2 class="text-lg">{{ column.name }}</h2>
+      <div class="flex items-center gap-2">
+        <h2 class="text-lg">{{ column.name }}</h2>
+        <i
+          v-if="column.definitionOfDone"
+          class="pi pi-info-circle"
+          v-tooltip.bottom="column.definitionOfDone"
+        />
+      </div>
       <div v-if="column.wipLimit">
         <span
           :class="[
@@ -73,9 +80,11 @@ async function onChange(event: DraggableEvent<Card>) {
         / {{ column.wipLimit }}
       </div>
     </div>
-    <Draggable v-model="cards" group="board" item-key="id" @change="onChange">
-      <template #item="{ element: card }">
-        <BoardCard :card="card" />
+    <Draggable v-model="cards" group="cards" :animation="150" item-key="id" @change="onChange">
+      <template #item="{ element: card }: { element: Card }">
+        <div>
+          <BoardCard :card="card" />
+        </div>
       </template>
     </Draggable>
   </div>

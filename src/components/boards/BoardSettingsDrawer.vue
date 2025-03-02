@@ -131,14 +131,10 @@ function insertColumn(position: number) {
 
 const createBoardColumnSchema = object({
   name: string().required('Name is required'),
-  wipLimit: number()
-    .optional()
-    .min(0, 'WIP Limit must be greater than or equal to 0')
-    .default(undefined),
+  wipLimit: number().nullable().min(0, 'WIP Limit must be greater than or equal to 0'),
   definitionOfDone: string()
-    .optional()
-    .max(500, 'Definition of Done must not exceed 500 characters')
-    .default(undefined),
+    .nullable()
+    .max(500, 'Definition of Done must not exceed 500 characters'),
 })
 
 const resolver = ref(yupResolver(createBoardColumnSchema))
@@ -229,11 +225,13 @@ defineExpose({
                 :initial-values="{ ...column }"
                 :resolver
                 @submit="onFormSubmit"
-                class="flex flex-col h-full"
+                class="flex flex-col h-full mt-4"
               >
                 <div class="grow">
                   <FormField v-slot="$field" name="name">
-                    <label for="name">Name</label>
+                    <label for="name" class="font-medium text-surface-900 dark:text-surface-0">
+                      Name <small class="text-red-400">*</small>
+                    </label>
                     <InputText inputId="name" v-model="columns[index].name" class="w-full" />
                     <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
                       {{ $field.error?.message }}
@@ -241,7 +239,9 @@ defineExpose({
                   </FormField>
 
                   <FormField v-slot="$field" name="wipLimit" class="mt-2">
-                    <label for="wipLimit">WIP Limit</label>
+                    <label for="wipLimit" class="font-medium text-surface-900 dark:text-surface-0">
+                      WIP Limit
+                    </label>
                     <InputNumber
                       inputId="wipLimit"
                       v-model="columns[index].wipLimit"
@@ -253,7 +253,12 @@ defineExpose({
                   </FormField>
 
                   <FormField v-slot="$field" name="definitionOfDone" class="mt-2">
-                    <label for="definitionOfDone">Definition of Done</label>
+                    <label
+                      for="definitionOfDone"
+                      class="font-medium text-surface-900 dark:text-surface-0"
+                    >
+                      Definition of Done
+                    </label>
                     <Textarea
                       inputId="definitionOfDone"
                       v-model="columns[index].definitionOfDone"

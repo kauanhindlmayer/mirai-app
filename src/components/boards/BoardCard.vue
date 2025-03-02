@@ -78,4 +78,23 @@ function openWorkItemDialog() {
   bottom: 0;
   width: 3px;
 }
+.sortable-drag .board-item {
+  transform: rotate(5deg);
+}
+.sortable-ghost .board-item {
+  position: relative;
+}
+.sortable-ghost .board-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--surface-card);
+  border-radius: 0.5rem;
+}
+.sortable-ghost .side-color {
+  display: none;
+}
 </style>
