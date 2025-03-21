@@ -44,14 +44,20 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
   >
     <div class="flex w-full h-full justify-center gap-12">
       <div class="flex flex-col py-20 lg:min-w-[30rem]">
-        <RouterLink to="/" class="flex items-center justify-center lg:justify-start mb-8">
-          <!-- <AppLogo /> -->
-          <span class="app-name title-h7">MIRAI</span>
+        <RouterLink to="/" class="flex items-center justify-center lg:justify-start mb-8 ml-2">
+          <AppLogo />
         </RouterLink>
         <div class="flex flex-col justify-center grow">
           <div class="max-w-md mx-auto w-full">
             <h5 class="title-h5 text-center lg:text-left">Login</h5>
             <p class="body-small mt-3.5 text-center lg:text-left">Please enter your details</p>
+            <button class="button-button mt-8"><Google /> Sign in with Google</button>
+            <button class="button-button mt-4"><GitHub /> Sign in with GitHub</button>
+            <div class="flex items-center gap-3.5 my-7">
+              <span class="flex-1 h-[1px] bg-surface-200 dark:bg-surface-800" />
+              <span class="body-small text-surface-400 dark:text-surface-600">or</span>
+              <span class="flex-1 h-[1px] bg-surface-200 dark:bg-surface-800" />
+            </div>
             <Form :resolver @submit="onFormSubmit">
               <FormField v-slot="$field" name="email">
                 <InputText type="text" v-model="form.email" class="w-full" placeholder="Email" />

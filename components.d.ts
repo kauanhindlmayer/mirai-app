@@ -53,6 +53,8 @@ declare module 'vue' {
     FileUpload: typeof import('primevue/fileupload')['default']
     Form: typeof import('@primevue/forms/form')['default']
     FormField: typeof import('@primevue/forms/formfield')['default']
+    GitHub: typeof import('./src/components/common/GitHub.vue')['default']
+    Google: typeof import('./src/components/common/Google.vue')['default']
     IconField: typeof import('primevue/iconfield')['default']
     InputGroup: typeof import('primevue/inputgroup')['default']
     InputGroupAddon: typeof import('primevue/inputgroupaddon')['default']

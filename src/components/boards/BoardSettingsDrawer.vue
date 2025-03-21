@@ -8,7 +8,9 @@ import type { Board, Column, CreateBoardColumnRequest } from '~/types/board'
 
 const teamStore = useTeamStore()
 
-const { board } = defineProps<{ board: Board }>()
+const { board } = defineProps<{
+  board: Board
+}>()
 
 const columns = ref<Column[]>([])
 const selectedColumnId = ref<string>('')
@@ -24,13 +26,14 @@ function addColumn() {
   newColumnId.value++
 }
 
-watch(
-  () => board,
-  () => {
-    columns.value = board.columns ? [...board.columns] : []
-    selectedColumnId.value = columns.value[0]?.id || ''
-  },
-)
+function initializeBoardSettings() {
+  columns.value = board.columns ? [...board.columns] : []
+  selectedColumnId.value = columns.value[0]?.id || ''
+}
+
+initializeBoardSettings()
+
+watch(() => board, initializeBoardSettings)
 
 const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
 const menuItems = computed<MenuItem[]>(() => {
@@ -191,7 +194,7 @@ defineExpose({
           label="Add Column"
           icon="pi pi-plus"
           severity="secondary"
-          class="mt-4"
+          class="my-4"
           @click="addColumn"
         />
         <Tabs v-model:value="selectedColumnId" scrollable>

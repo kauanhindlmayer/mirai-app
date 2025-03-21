@@ -87,6 +87,7 @@ onBeforeMount(() => {
             icon="pi pi-refresh"
             severity="secondary"
             text
+            :disabled="isLoading"
             v-tooltip.bottom="'Refresh Dashboard'"
             @click="() => refetchDashboardData()"
           />

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { layoutState, isHorizontal } = useLayout()
+const { layoutState, isHorizontal, isMenuDarkTheme } = useLayout()
 
 let timeoutId: null | ReturnType<typeof setTimeout> = null
 
@@ -30,12 +30,12 @@ function onAnchorToggle() {
   <div class="layout-sidebar" @mouseenter="onMouseEnter" @mouseleave="onMouseLeave">
     <div class="sidebar-header">
       <RouterLink to="/" class="logo">
-        <!-- <img
+        <img
           class="logo-image"
           :src="`/layout/images/logo-${isMenuDarkTheme ? 'white' : 'dark'}.svg`"
           alt="mirai-layout"
-        /> -->
-        <span class="app-name title-h7">MIRAI</span>
+        />
+        <span class="app-name title-h7 mt-0.5">MIRAI</span>
       </RouterLink>
       <button class="layout-sidebar-anchor" type="button" @click="onAnchorToggle" />
     </div>
