@@ -61,6 +61,10 @@ export function useLayout() {
     layoutState.configSidebarVisible = !layoutState.configSidebarVisible
   }
 
+  function onSearchBarToggle() {
+    layoutState.searchBarActive = !layoutState.searchBarActive
+  }
+
   const isDarkTheme = computed(() => layoutConfig.isDarkTheme)
   const isMenuDarkTheme = computed(() => layoutConfig.menuTheme === MenuTheme.Dark)
   const isSidebarActive = computed(() => {
@@ -87,6 +91,7 @@ export function useLayout() {
     setActiveMenuItem,
     onConfigSidebarToggle,
     onMenuToggle,
+    onSearchBarToggle,
     isSidebarActive,
     isSlim,
     isHorizontal,

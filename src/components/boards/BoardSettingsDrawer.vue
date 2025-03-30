@@ -235,7 +235,7 @@ defineExpose({
                     <label for="name" class="font-medium text-surface-900 dark:text-surface-0">
                       Name <small class="text-red-400">*</small>
                     </label>
-                    <InputText inputId="name" v-model="columns[index].name" class="w-full" />
+                    <InputText input-id="name" v-model="columns[index].name" class="w-full" />
                     <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
                       {{ $field.error?.message }}
                     </Message>
@@ -246,7 +246,7 @@ defineExpose({
                       WIP Limit
                     </label>
                     <InputNumber
-                      inputId="wipLimit"
+                      input-id="wipLimit"
                       v-model="columns[index].wipLimit"
                       class="w-full"
                     />
@@ -263,7 +263,7 @@ defineExpose({
                       Definition of Done
                     </label>
                     <Textarea
-                      inputId="definitionOfDone"
+                      input-id="definitionOfDone"
                       v-model="columns[index].definitionOfDone"
                       class="w-full"
                     />

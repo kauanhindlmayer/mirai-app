@@ -80,7 +80,7 @@ defineExpose({
           <label for="description" class="font-medium text-surface-900 dark:text-surface-0">
             Description
           </label>
-          <Textarea inputId="description" v-model="form.description" rows="5" class="w-full" />
+          <Textarea input-id="description" v-model="form.description" rows="5" class="w-full" />
           <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
             {{ $field.error?.message }}
           </Message>

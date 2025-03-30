@@ -727,9 +727,9 @@ watch(isDarkTheme, (newValue) => {
                   value="static"
                   v-model="menuMode"
                   @update:modelValue="handleSetMenuMode"
-                  inputId="mode1"
+                  input-id="static"
                 />
-                <label for="mode1">Static</label>
+                <label for="static">Static</label>
               </div>
 
               <div class="flex items-center gap-2 w-6/12">
@@ -738,9 +738,9 @@ watch(isDarkTheme, (newValue) => {
                   value="overlay"
                   v-model="menuMode"
                   @update:modelValue="handleSetMenuMode"
-                  inputId="mode2"
+                  input-id="overlay"
                 />
-                <label for="mode2">Overlay</label>
+                <label for="overlay">Overlay</label>
               </div>
             </div>
             <div class="flex">
@@ -750,9 +750,9 @@ watch(isDarkTheme, (newValue) => {
                   value="slim"
                   v-model="menuMode"
                   @update:modelValue="handleSetMenuMode"
-                  inputId="mode3"
+                  input-id="slim"
                 />
-                <label for="mode2">Slim</label>
+                <label for="slim">Slim</label>
               </div>
               <div class="flex items-center gap-2 w-6/12">
                 <RadioButton
@@ -760,9 +760,9 @@ watch(isDarkTheme, (newValue) => {
                   value="compact"
                   v-model="menuMode"
                   @update:modelValue="handleSetMenuMode"
-                  inputId="mode4"
+                  input-id="compact"
                 />
-                <label for="mode3">Compact</label>
+                <label for="compact">Compact</label>
               </div>
             </div>
             <div class="flex">
@@ -772,9 +772,9 @@ watch(isDarkTheme, (newValue) => {
                   value="reveal"
                   v-model="menuMode"
                   @update:modelValue="handleSetMenuMode"
-                  inputId="mode5"
+                  input-id="reveal"
                 />
-                <label for="mode4">Reveal</label>
+                <label for="reveal">Reveal</label>
               </div>
               <div class="flex items-center gap-2 w-6/12">
                 <RadioButton
@@ -782,9 +782,9 @@ watch(isDarkTheme, (newValue) => {
                   value="drawer"
                   v-model="menuMode"
                   @update:modelValue="handleSetMenuMode"
-                  inputId="mode6"
+                  input-id="drawer"
                 />
-                <label for="mode5">Drawer</label>
+                <label for="drawer">Drawer</label>
               </div>
             </div>
             <div class="flex">
@@ -794,9 +794,9 @@ watch(isDarkTheme, (newValue) => {
                   value="horizontal"
                   v-model="menuMode"
                   @update:modelValue="handleSetMenuMode"
-                  inputId="mode2"
+                  input-id="horizontal"
                 />
-                <label for="mode2">Horizontal</label>
+                <label for="horizontal">Horizontal</label>
               </div>
             </div>
           </div>

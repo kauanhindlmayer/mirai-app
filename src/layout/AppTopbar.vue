@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
-const { layoutState, isDarkTheme, onMenuToggle, onConfigSidebarToggle } = useLayout()
+const { isDarkTheme, onMenuToggle, onConfigSidebarToggle, onSearchBarToggle } = useLayout()
 
 const tabs = [
   {
@@ -22,10 +22,6 @@ const tabs = [
 ]
 
 const selectedTab = ref(tabs[0].id)
-
-function toggleSearchBar() {
-  layoutState.searchBarActive = !layoutState.searchBarActive
-}
 
 function redirectToDocs() {
   window.open('https://miraihq.com/en', '_blank')
@@ -59,7 +55,7 @@ function logout() {
     <div class="topbar-right">
       <ul class="topbar-menu">
         <li class="right-sidebar-item">
-          <a class="right-sidebar-button" @click="toggleSearchBar">
+          <a class="right-sidebar-button" @click="onSearchBarToggle">
             <i class="pi pi-search" />
           </a>
         </li>

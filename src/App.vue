@@ -10,7 +10,7 @@ useMeta({
   },
 })
 
-const { onMenuToggle, onConfigSidebarToggle } = useLayout()
+const { onMenuToggle, onConfigSidebarToggle, onSearchBarToggle } = useLayout()
 
 const shortcuts: Shortcut[] = [
   {
@@ -22,6 +22,11 @@ const shortcuts: Shortcut[] = [
     key: ',',
     ctrlKey: true,
     action: onConfigSidebarToggle,
+  },
+  {
+    key: 'k',
+    ctrlKey: true,
+    action: onSearchBarToggle,
   },
 ]
 

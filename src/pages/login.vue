@@ -78,7 +78,7 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
               </FormField>
               <div class="my-8 flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                  <Checkbox inputId="remember" v-model="shouldRememberUser" binary />
+                  <Checkbox input-id="remember" v-model="shouldRememberUser" binary />
                   <label for="remember" class="body-small"> Remember me </label>
                 </div>
                 <RouterLink

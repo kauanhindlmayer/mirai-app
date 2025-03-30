@@ -117,7 +117,7 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-2">
                     <Checkbox
-                      inputId="hasAcceptedTerms"
+                      input-id="hasAcceptedTerms"
                       v-model="hasAcceptedTerms"
                       :binary="true"
                     />

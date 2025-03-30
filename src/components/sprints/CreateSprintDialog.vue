@@ -41,7 +41,7 @@ defineExpose({
         <label for="name" class="font-medium text-surface-900 dark:text-surface-0">
           Name <small class="text-red-400">*</small>
         </label>
-        <InputText inputId="name" v-model="form.name" class="w-full" />
+        <InputText input-id="name" v-model="form.name" class="w-full" />
         <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
           {{ $field.error?.message }}
         </Message>
@@ -52,7 +52,7 @@ defineExpose({
           <label for="startDate" class="font-medium text-surface-900 dark:text-surface-0">
             Start <small class="text-red-400">*</small>
           </label>
-          <DatePicker inputId="startDate" v-model="form.startDate" class="w-full" />
+          <DatePicker input-id="startDate" v-model="form.startDate" class="w-full" />
           <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
             {{ $field.error?.message }}
           </Message>
@@ -62,7 +62,7 @@ defineExpose({
           <label for="endDate" class="font-medium text-surface-900 dark:text-surface-0">
             End <small class="text-red-400">*</small>
           </label>
-          <DatePicker inputId="endDate" v-model="form.endDate" class="w-full" />
+          <DatePicker input-id="endDate" v-model="form.endDate" class="w-full" />
           <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
             {{ $field.error?.message }}
           </Message>
