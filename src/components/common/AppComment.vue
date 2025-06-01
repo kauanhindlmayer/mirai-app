@@ -92,8 +92,8 @@ function updateComment() {
         {{ comment.author.name }}
       </span>
       <p class="font-semibold text-surface-600 dark:text-surface-200 m-0 text-sm">
-        {{ formatDistanceToNow(comment.createdAt) }}
-        {{ comment.updatedAt ? '(edited)' : '' }}
+        {{ formatDistanceToNow(comment.createdAtUtc) }}
+        {{ comment.updatedAtUtc ? '(edited)' : '' }}
       </p>
       <div v-if="isEditing">
         <Textarea v-model="newContent" class="w-full my-4" />

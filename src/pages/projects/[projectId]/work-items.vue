@@ -64,7 +64,7 @@ function clearSelectedWorkItem() {
 const filters = ref<PaginationFilter>({
   pageNumber: 1,
   pageSize: 10,
-  sortField: 'updatedAt',
+  sortField: 'updatedAtUtc',
   sortOrder: 'desc',
 })
 
@@ -160,7 +160,7 @@ onMounted(setBreadcrumbs)
           </Column>
           <Column header="Activity Date" sortable style="width: 15%">
             <template #body="{ data }">
-              {{ format(data.updatedAt ?? data.createdAt, 'MM/dd/yyyy hh:mm') }}
+              {{ format(data.updatedAtUtc ?? data.createdAtUtc, 'MM/dd/yyyy hh:mm') }}
             </template>
           </Column>
         </DataTable>

@@ -6,8 +6,8 @@ export type WorkItem = {
   status: WorkItemStatus
   tags: TagBriefResponse[]
   assignedTo: string
-  createdAt?: string
-  updatedAt: string
+  createdAtUtc?: string
+  updatedAtUtc: string
 }
 
 export type TagBriefResponse = {

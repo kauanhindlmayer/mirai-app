@@ -56,7 +56,7 @@ const { mutate: deleteRetrospectiveItemFn } = useMutation({
         {{ item.content }}
       </p>
       <p class="text-surface-600 dark:text-surface-200 leading-normal">
-        {{ format(item.createdAt, "MMMM d, yyyy 'at' HH:mm") }}
+        {{ format(item.createdAtUtc, "MMMM d, yyyy 'at' HH:mm") }}
       </p>
     </div>
 

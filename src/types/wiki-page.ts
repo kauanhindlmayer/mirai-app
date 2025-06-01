@@ -5,8 +5,8 @@ export type WikiPage = {
   title: string
   content: string
   comments: Comment[]
-  createdAt: string
-  updatedAt: string
+  createdAtUtc: string
+  updatedAtUtc: string
   parentWikiPageId?: string
 }
 
@@ -25,8 +25,8 @@ export type Comment = {
   id: string
   author: Author
   content: string
-  createdAt: string
-  updatedAt: string
+  createdAtUtc: string
+  updatedAtUtc: string
 }
 
 export type Author = {

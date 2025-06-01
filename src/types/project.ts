@@ -3,6 +3,6 @@ export type Project = {
   name: string
   description: string
   organizationId: string
-  createdAt: string
-  updatedAt?: string
+  createdAtUtc: string
+  updatedAtUtc?: string
 }

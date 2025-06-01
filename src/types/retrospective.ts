@@ -5,8 +5,8 @@ export type Retrospective = {
   template: ProcessTemplate
   teamId: string
   columns: RetrospectiveColumn[]
-  createdAt: string
-  updatedAt?: string
+  createdAtUtc: string
+  updatedAtUtc?: string
 }
 
 export enum ProcessTemplate {
@@ -35,6 +35,6 @@ export type RetrospectiveItem = {
   position: number
   authorId: string
   votes: number
-  createdAt: string
-  updatedAt?: string
+  createdAtUtc: string
+  updatedAtUtc?: string
 }

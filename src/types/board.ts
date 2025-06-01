@@ -28,8 +28,8 @@ export type Card = {
   columnId: string
   position: number
   workItem: WorkItem
-  updatedAt: string
-  createdAt: string
+  updatedAtUtc: string
+  createdAtUtc: string
 }
 
 type WorkItem = {

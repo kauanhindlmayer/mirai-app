@@ -70,7 +70,7 @@ function invalidateWikiPageQuery() {
 }
 
 const wikiPageLastUpdated = computed(() =>
-  format(wikiPage.value!.updatedAt ?? wikiPage.value!.createdAt, "MMM d, yyyy 'at' h:mm a"),
+  format(wikiPage.value!.updatedAtUtc ?? wikiPage.value!.createdAtUtc, "MMM d, yyyy 'at' h:mm a"),
 )
 
 function redirectToEditPage() {
@@ -100,7 +100,7 @@ function redirectToEditPage() {
           >
             <i class="pi pi-clock text-primary mr-2" />
             <span class="text-surface-900 dark:text-surface-0">
-              {{ formatDistanceToNow(wikiPage.updatedAt ?? wikiPage.createdAt) }}
+              {{ formatDistanceToNow(wikiPage.updatedAtUtc ?? wikiPage.createdAtUtc) }}
             </span>
           </span>
           <span
