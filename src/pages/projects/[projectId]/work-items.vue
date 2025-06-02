@@ -62,27 +62,27 @@ function clearSelectedWorkItem() {
 }
 
 const filters = ref<PaginationFilter>({
-  pageNumber: 1,
+  page: 1,
   pageSize: 10,
-  sortField: 'updatedAtUtc',
-  sortOrder: 'desc',
+  sort: '',
+  searchTerm: '',
 })
+
+async function onSort(event: DataTableSortEvent) {
+  const sortOrder = event.sortOrder === 1 ? 'asc' : 'desc'
+  filters.value.sort = `${event.sortField} ${sortOrder}`
+}
+
+async function onPaginate(event: DataTablePageEvent) {
+  filters.value.page = event.page + 1
+  filters.value.pageSize = event.rows
+}
 
 const { data: workItems, isLoading } = useQuery({
   key: () => ['work-items', filters.value],
   query: () => listWorkItems(project.value.id, filters.value),
   placeholderData: (previousData) => previousData,
 })
-
-async function onSort(event: DataTableSortEvent) {
-  filters.value.sortField = event.sortField as string
-  filters.value.sortOrder = event.sortOrder === 1 ? 'asc' : 'desc'
-}
-
-async function onPaginate(event: DataTablePageEvent) {
-  filters.value.pageNumber = event.page + 1
-  filters.value.pageSize = event.rows
-}
 
 function setBreadcrumbs() {
   pageStore.setBreadcrumbs([

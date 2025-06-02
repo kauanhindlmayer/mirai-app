@@ -8,17 +8,17 @@ export type PaginatedList<T> = {
   items: T[]
   totalCount: number
   pageSize: number
-  pageNumber: number
+  page: number
   hasNextPage: boolean
   hasPreviousPage: boolean
   totalPages: number
 }
 
 export type PaginationFilter = {
-  pageNumber: number
+  page: number
   pageSize: number
-  sortField: string
-  sortOrder: 'asc' | 'desc'
+  sort: string
+  searchTerm: string
 }
 
 export type Shortcut = {

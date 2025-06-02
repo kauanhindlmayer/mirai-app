@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { debouncedRef } from '@vueuse/core'
-import type { DataTableRowEditSaveEvent } from 'primevue'
+import { useDebounceFn } from '@vueuse/core'
+import type { DataTablePageEvent, DataTableRowEditSaveEvent, DataTableSortEvent } from 'primevue'
 
 const pageStore = usePageStore()
 pageStore.setTitle('Tags - Boards')
@@ -11,8 +11,6 @@ const { project } = storeToRefs(projectStore)
 const selectedTags = ref<Tag[]>([])
 const editingRows = ref([])
 
-const searchTerm = ref('')
-const debouncedSearchTerm = debouncedRef(searchTerm, 500)
 const newTag = ref<CreateTagRequest>({
   name: '',
   description: '',
@@ -54,9 +52,30 @@ const { mutate: deleteTagFn } = useMutation({
   onError: displayError,
 })
 
+const filters = ref<PaginationFilter>({
+  page: 1,
+  pageSize: 10,
+  sort: '',
+  searchTerm: '',
+})
+
+async function onSort(event: DataTableSortEvent) {
+  const sortOrder = event.sortOrder === 1 ? 'asc' : 'desc'
+  filters.value.sort = `${event.sortField} ${sortOrder}`
+}
+
+async function onPaginate(event: DataTablePageEvent) {
+  filters.value.page = event.page + 1
+  filters.value.pageSize = event.rows
+}
+
+const onSearch = useDebounceFn((newSearchTerm) => {
+  filters.value.searchTerm = newSearchTerm.trim()
+}, 300)
+
 const { data: tags, isLoading } = useQuery({
-  key: () => ['tags', debouncedSearchTerm.value],
-  query: () => listTags(project.value.id, debouncedSearchTerm.value),
+  key: () => ['tags', filters.value],
+  query: () => listTags(project.value.id, filters.value),
   placeholderData: (previousData) => previousData,
 })
 
@@ -80,7 +99,7 @@ onBeforeMount(setBreadcrumbs)
           <div class="flex items-center gap-2">
             <IconField>
               <InputIcon class="pi pi-search" />
-              <InputText v-model.trim="searchTerm" placeholder="Search" />
+              <InputText @update:model-value="onSearch" placeholder="Keyword Search" />
             </IconField>
             <Button
               label="Delete"
@@ -100,14 +119,22 @@ onBeforeMount(setBreadcrumbs)
         <DataTable
           v-model:editingRows="editingRows"
           v-model:selection="selectedTags"
-          :value="tags"
+          :value="tags?.items"
+          :rows="filters.pageSize"
+          :total-records="tags?.totalCount"
+          :rows-per-page-options="[5, 10, 20, 50]"
           :loading="isLoading"
+          :page-count="tags?.totalPages"
+          lazy
+          paginator
+          table-style="min-width: 50rem"
           edit-mode="row"
           data-key="id"
-          table-style="min-width: 50rem"
           @row-edit-save="updateTagFn"
+          @sort="onSort"
+          @page="onPaginate"
         >
-          <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+          <Column selectionMode="multiple" headerStyle="width: 3rem" />
 
           <Column header="Name" field="name" sortable>
             <template #editor="{ data, field }">

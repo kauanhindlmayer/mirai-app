@@ -1,8 +1,17 @@
 import http from '~/api/http'
+import type { PaginatedList, PaginationFilter } from '~/types'
 import type { CreateTagRequest, Tag } from '~/types/tag'
 
-export function listTags(projectId: string, searchTerm?: string): Promise<Tag[]> {
-  const params = searchTerm ? { searchTerm } : undefined
+export function listTags(
+  projectId: string,
+  filters: PaginationFilter,
+): Promise<PaginatedList<Tag>> {
+  const params: Record<string, string> = {
+    page: filters.page.toString(),
+    pageSize: filters.pageSize.toString(),
+  }
+  if (filters.sort) params.sort = filters.sort
+  if (filters.searchTerm) params.q = filters.searchTerm
   return http.get(`/projects/${projectId}/tags`, { params })
 }
 
