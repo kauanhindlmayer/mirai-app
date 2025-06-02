@@ -23,6 +23,14 @@ export type PaginationFilter = {
 
 export type Shortcut = {
   key: string
-  ctrlKey: boolean
+  ctrlKey?: boolean
+  shiftKey?: boolean
+  altKey?: boolean
+  category: ShortcutCategory
+  description: string
   action: () => void
+}
+
+export enum ShortcutCategory {
+  Panels = 'Panels',
 }

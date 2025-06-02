@@ -22,7 +22,8 @@ const layoutState = reactive<LayoutState>({
   staticMenuDesktopInactive: false,
   overlayMenuActive: false,
   rightMenuVisible: false,
-  configSidebarVisible: false,
+  isConfigSidebarVisible: false,
+  isKeyboardShortcutsSidebarVisible: false,
   staticMenuMobileActive: false,
   menuHoverActive: false,
   searchBarActive: false,
@@ -49,18 +50,28 @@ export function useLayout() {
     }
   }
 
-  function onConfigSidebarToggle() {
-    if (isSidebarActive.value) {
-      layoutState.overlayMenuActive = false
-      layoutState.overlaySubmenuActive = false
-      layoutState.staticMenuMobileActive = false
-      layoutState.menuHoverActive = false
-      layoutState.configSidebarVisible = false
-    }
-
-    layoutState.configSidebarVisible = !layoutState.configSidebarVisible
+  function clearAllSidebars() {
+    layoutState.overlayMenuActive = false
+    layoutState.overlaySubmenuActive = false
+    layoutState.staticMenuMobileActive = false
+    layoutState.menuHoverActive = false
+    layoutState.isConfigSidebarVisible = false
+    layoutState.isKeyboardShortcutsSidebarVisible = false
   }
 
+  function onConfigSidebarToggle() {
+    if (isSidebarActive.value) {
+      clearAllSidebars()
+    }
+    layoutState.isConfigSidebarVisible = !layoutState.isConfigSidebarVisible
+  }
+
+  function onKeyboardShortcutsSidebarToggle() {
+    if (isSidebarActive.value) {
+      clearAllSidebars()
+    }
+    layoutState.isKeyboardShortcutsSidebarVisible = !layoutState.isKeyboardShortcutsSidebarVisible
+  }
   function onSearchBarToggle() {
     layoutState.searchBarActive = !layoutState.searchBarActive
   }
@@ -90,6 +101,7 @@ export function useLayout() {
     isMenuDarkTheme,
     setActiveMenuItem,
     onConfigSidebarToggle,
+    onKeyboardShortcutsSidebarToggle,
     onMenuToggle,
     onSearchBarToggle,
     isSidebarActive,

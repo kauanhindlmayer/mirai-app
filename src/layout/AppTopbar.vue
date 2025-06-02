@@ -1,7 +1,13 @@
 <script setup lang="ts">
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
-const { isDarkTheme, onMenuToggle, onConfigSidebarToggle, onSearchBarToggle } = useLayout()
+const {
+  isDarkTheme,
+  onMenuToggle,
+  onConfigSidebarToggle,
+  onKeyboardShortcutsSidebarToggle,
+  onSearchBarToggle,
+} = useLayout()
 
 const tabs = [
   {
@@ -137,10 +143,11 @@ function logout() {
               </li>
               <li>
                 <a
-                  class="label-small dark:text-surface-400 flex gap-2 py-2 px-2.5 rounded-lg items-center opacity-50 pointer-events-none cursor-not-allowed"
+                  class="label-small dark:text-surface-400 flex gap-2 py-2 px-2.5 rounded-lg items-center hover:bg-emphasis transition-colors duration-150 cursor-pointer"
+                  @click="onKeyboardShortcutsSidebarToggle"
                 >
                   <i class="pi pi-info-circle" />
-                  <span>Service Status</span>
+                  <span>Keyboard Shortcuts</span>
                 </a>
               </li>
               <li>

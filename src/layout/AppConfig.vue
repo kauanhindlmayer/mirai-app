@@ -612,7 +612,7 @@ watch(isDarkTheme, (newValue) => {
 
 <template>
   <Drawer
-    v-model:visible="layoutState.configSidebarVisible"
+    v-model:visible="layoutState.isConfigSidebarVisible"
     position="right"
     header="Settings"
     class="layout-config-sidebar w-80"
@@ -683,11 +683,11 @@ watch(isDarkTheme, (newValue) => {
           <span class="text-lg text-muted-color font-semibold"> Color Scheme </span>
           <SelectButton
             v-model="darkTheme"
-            @change="handleToggleDarkMode"
             :options="themeOptions"
+            :allowEmpty="false"
             optionLabel="name"
             optionValue="value"
-            :allowEmpty="false"
+            @change="handleToggleDarkMode"
           />
         </div>
       </div>

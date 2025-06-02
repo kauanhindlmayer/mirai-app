@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useEventListener } from '@vueuse/core'
+import { useShortcuts } from '~/composables/useShortcuts'
 
 useMeta({
   title: 'Mirai',
@@ -10,34 +10,7 @@ useMeta({
   },
 })
 
-const { onMenuToggle, onConfigSidebarToggle, onSearchBarToggle } = useLayout()
-
-const shortcuts: Shortcut[] = [
-  {
-    key: 'b',
-    ctrlKey: true,
-    action: onMenuToggle,
-  },
-  {
-    key: ',',
-    ctrlKey: true,
-    action: onConfigSidebarToggle,
-  },
-  {
-    key: 'k',
-    ctrlKey: true,
-    action: onSearchBarToggle,
-  },
-]
-
-function handleKeyboardShortcuts(event: KeyboardEvent) {
-  const shortcut = shortcuts.find((s) => s.key === event.key && s.ctrlKey === event.ctrlKey)
-  if (!shortcut) return
-  event.preventDefault()
-  shortcut.action()
-}
-
-useEventListener(document, 'keydown', handleKeyboardShortcuts)
+useShortcuts()
 </script>
 
 <template>

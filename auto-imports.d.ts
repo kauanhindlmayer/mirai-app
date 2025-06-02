@@ -15,6 +15,7 @@ declare global {
   const Preset: (typeof import('./src/types/layout'))['Preset']
   const Primary: (typeof import('./src/types/layout'))['Primary']
   const ProcessTemplate: (typeof import('./src/types/retrospective'))['ProcessTemplate']
+  const ShortcutCategory: (typeof import('./src/types/index'))['ShortcutCategory']
   const Surface: (typeof import('./src/types/layout'))['Surface']
   const WorkItemStatus: (typeof import('./src/types/work-item'))['WorkItemStatus']
   const WorkItemType: (typeof import('./src/types/work-item'))['WorkItemType']
@@ -125,6 +126,7 @@ declare global {
   const shallowReactive: (typeof import('vue'))['shallowReactive']
   const shallowReadonly: (typeof import('vue'))['shallowReadonly']
   const shallowRef: (typeof import('vue'))['shallowRef']
+  const shortcuts: (typeof import('./src/composables/useShortcuts'))['shortcuts']
   const storeToRefs: (typeof import('pinia'))['storeToRefs']
   const toRaw: (typeof import('vue'))['toRaw']
   const toRef: (typeof import('vue'))['toRef']
@@ -159,6 +161,7 @@ declare global {
   const useQueryCache: (typeof import('@pinia/colada'))['useQueryCache']
   const useRoute: (typeof import('vue-router'))['useRoute']
   const useRouter: (typeof import('vue-router'))['useRouter']
+  const useShortcuts: (typeof import('./src/composables/useShortcuts'))['useShortcuts']
   const useSignalR: (typeof import('./src/composables/useSignalR'))['useSignalR']
   const useSlots: (typeof import('vue'))['useSlots']
   const useTeamStore: (typeof import('./src/stores/team'))['useTeamStore']
@@ -214,7 +217,13 @@ declare global {
   export type { DashboardResponse, BurnupPoint, BurndownPoint } from './src/types/dashboard'
   import('./src/types/dashboard')
   // @ts-ignore
-  export type { RequestConfig, PaginatedList, PaginationFilter, Shortcut } from './src/types/index'
+  export type {
+    ShortcutCategory,
+    RequestConfig,
+    PaginatedList,
+    PaginationFilter,
+    Shortcut,
+  } from './src/types/index'
   import('./src/types/index')
   // @ts-ignore
   export type {
@@ -308,6 +317,7 @@ declare module 'vue' {
     readonly ProcessTemplate: UnwrapRef<
       (typeof import('./src/types/retrospective'))['ProcessTemplate']
     >
+    readonly ShortcutCategory: UnwrapRef<(typeof import('./src/types/index'))['ShortcutCategory']>
     readonly Surface: UnwrapRef<(typeof import('./src/types/layout'))['Surface']>
     readonly WorkItemStatus: UnwrapRef<(typeof import('./src/types/work-item'))['WorkItemStatus']>
     readonly WorkItemType: UnwrapRef<(typeof import('./src/types/work-item'))['WorkItemType']>
@@ -452,6 +462,7 @@ declare module 'vue' {
     readonly shallowReactive: UnwrapRef<(typeof import('vue'))['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<(typeof import('vue'))['shallowReadonly']>
     readonly shallowRef: UnwrapRef<(typeof import('vue'))['shallowRef']>
+    readonly shortcuts: UnwrapRef<(typeof import('./src/composables/useShortcuts'))['shortcuts']>
     readonly storeToRefs: UnwrapRef<(typeof import('pinia'))['storeToRefs']>
     readonly toRaw: UnwrapRef<(typeof import('vue'))['toRaw']>
     readonly toRef: UnwrapRef<(typeof import('vue'))['toRef']>
@@ -488,6 +499,9 @@ declare module 'vue' {
     readonly useQueryCache: UnwrapRef<(typeof import('@pinia/colada'))['useQueryCache']>
     readonly useRoute: UnwrapRef<(typeof import('vue-router'))['useRoute']>
     readonly useRouter: UnwrapRef<(typeof import('vue-router'))['useRouter']>
+    readonly useShortcuts: UnwrapRef<
+      (typeof import('./src/composables/useShortcuts'))['useShortcuts']
+    >
     readonly useSignalR: UnwrapRef<(typeof import('./src/composables/useSignalR'))['useSignalR']>
     readonly useSlots: UnwrapRef<(typeof import('vue'))['useSlots']>
     readonly useTeamStore: UnwrapRef<(typeof import('./src/stores/team'))['useTeamStore']>

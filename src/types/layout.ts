@@ -68,7 +68,8 @@ export type LayoutState = {
   staticMenuDesktopInactive: boolean
   overlayMenuActive: boolean
   rightMenuVisible: boolean
-  configSidebarVisible: boolean
+  isConfigSidebarVisible: boolean
+  isKeyboardShortcutsSidebarVisible: boolean
   staticMenuMobileActive: boolean
   menuHoverActive: boolean
   searchBarActive: boolean
