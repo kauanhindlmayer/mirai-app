@@ -67,6 +67,7 @@ declare module 'vue' {
     Menu: typeof import('primevue/menu')['default']
     Message: typeof import('primevue/message')['default']
     MoveWikiPageDrawer: typeof import('./src/components/wiki-pages/MoveWikiPageDrawer.vue')['default']
+    ProgressBar: typeof import('primevue/progressbar')['default']
     ProjectCard: typeof import('./src/components/projects/ProjectCard.vue')['default']
     RadioButton: typeof import('primevue/radiobutton')['default']
     RetrospectiveBoard: typeof import('./src/components/retrospectives/RetrospectiveBoard.vue')['default']

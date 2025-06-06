@@ -14,6 +14,16 @@ export type PaginatedList<T> = {
   totalPages: number
 }
 
+export type HateoasResponse = {
+  _links: Link[]
+}
+
+export type Link = {
+  href: string
+  rel: string
+  method: string
+}
+
 export type PaginationFilter = {
   page: number
   pageSize: number

@@ -1,3 +1,5 @@
+import { TagImportJobStatus } from '~/types/tag'
+
 export function getColorName(code: string) {
   return colors.find((c) => c.code === code)?.name || 'Unknown'
 }
@@ -20,3 +22,14 @@ export const colors = [
   { name: 'Pink', code: '#f7c3d6' },
   { name: 'Rose', code: '#f7b9c1' },
 ]
+
+export function getJobStatusSeverity(status: string) {
+  const severityMap: Record<string, string> = {
+    [TagImportJobStatus.Completed]: 'success',
+    [TagImportJobStatus.Failed]: 'danger',
+    [TagImportJobStatus.Pending]: 'info',
+    [TagImportJobStatus.Processing]: 'warning',
+  }
+
+  return severityMap[status] || 'info'
+}

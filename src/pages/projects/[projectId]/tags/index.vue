@@ -87,6 +87,12 @@ function setBreadcrumbs() {
   ])
 }
 
+const router = useRouter()
+
+function redirectToTagImports() {
+  router.push(`/projects/${project.value.id}/tags/import`)
+}
+
 onBeforeMount(setBreadcrumbs)
 </script>
 
@@ -115,6 +121,12 @@ onBeforeMount(setBreadcrumbs)
           <InputText v-model="newTag.description" placeholder="Description" />
           <ColorSelect v-model="newTag.color" />
           <Button label="Add Tag" icon="pi pi-plus" :disabled="!newTag.name" @click="addTag" />
+          <Button
+            label="Import Tags"
+            icon="pi pi-upload"
+            severity="secondary"
+            @click="redirectToTagImports"
+          />
         </div>
         <DataTable
           v-model:editingRows="editingRows"
