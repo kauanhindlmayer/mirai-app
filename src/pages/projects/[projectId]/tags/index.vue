@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { useDebounceFn } from '@vueuse/core'
-import type { DataTablePageEvent, DataTableRowEditSaveEvent, DataTableSortEvent } from 'primevue'
+import {
+  useConfirm,
+  type DataTablePageEvent,
+  type DataTableRowEditSaveEvent,
+  type DataTableSortEvent,
+} from 'primevue'
+import { deleteTags } from '~/api/tags'
 
 const pageStore = usePageStore()
 pageStore.setTitle('Tags - Boards')
@@ -43,8 +49,31 @@ const { mutate: updateTagFn } = useMutation({
   onError: displayError,
 })
 
+const confirm = useConfirm()
+
+function confirmDeleteTags() {
+  confirm.require({
+    header: 'Are you sure you want to delete the selected tags?',
+    message: 'All associations of the selected tags will be removed. This action cannot be undone.',
+    rejectProps: {
+      label: 'Cancel',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Delete',
+      severity: 'danger',
+    },
+    accept: deleteTagFn,
+  })
+}
+
 const { mutate: deleteTagFn } = useMutation({
-  mutation: (_: MouseEvent) => deleteTag(project.value.id, selectedTags.value[0].id),
+  mutation: () =>
+    deleteTags(
+      project.value.id,
+      selectedTags.value.map((tag) => tag.id),
+    ),
   onSuccess: async () => {
     await queryCache.invalidateQueries({ key: ['tags'] })
     selectedTags.value = []
@@ -112,7 +141,7 @@ onBeforeMount(setBreadcrumbs)
               severity="danger"
               icon="pi pi-trash"
               :disabled="selectedTags.length === 0"
-              @click="deleteTagFn"
+              @click="confirmDeleteTags"
             />
           </div>
         </div>
@@ -171,5 +200,6 @@ onBeforeMount(setBreadcrumbs)
         </DataTable>
       </div>
     </div>
+    <ConfirmDialog style="width: 450px" />
   </div>
 </template>

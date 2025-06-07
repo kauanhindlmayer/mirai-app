@@ -23,6 +23,10 @@ export function deleteTag(projectId: string, tagId: string): Promise<void> {
   return http.delete(`/projects/${projectId}/tags/${tagId}`)
 }
 
+export function deleteTags(projectId: string, tagIds: string[]): Promise<void> {
+  return http.delete(`/projects/${projectId}/tags/bulk`, { data: { tagIds } })
+}
+
 export function updateTag(
   projectId: string,
   tagId: string,

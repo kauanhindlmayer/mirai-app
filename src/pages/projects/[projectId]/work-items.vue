@@ -125,7 +125,7 @@ onMounted(setBreadcrumbs)
           </Column>
           <Column field="title" header="Title" sortable>
             <template #body="{ data }">
-              <div class="hover:underline cursor-pointer line-clamp-1">
+              <div class="line-clamp-1">
                 {{ data.title }}
               </div>
             </template>
