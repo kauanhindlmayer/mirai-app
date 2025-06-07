@@ -88,7 +88,7 @@ onBeforeMount(setBreadcrumbs)
               <FileUpload
                 name="file"
                 accept=".csv,text/csv"
-                :maxFileSize="maxFileSizeInBytes"
+                :max-file-size="maxFileSizeInBytes"
                 @select="createTagImportJobFn"
               >
                 <template #content="{ files, removeFileCallback }">

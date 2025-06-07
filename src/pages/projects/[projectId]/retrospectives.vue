@@ -3,14 +3,14 @@ import type { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import CreateRetrospectiveDialog from '~/components/retrospectives/CreateRetrospectiveDialog.vue'
 
+const pageStore = usePageStore()
+pageStore.setTitle('Retrospectives - Boards')
+
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
 
 const teamStore = useTeamStore()
 const { teamId } = storeToRefs(teamStore)
-
-const pageStore = usePageStore()
-pageStore.setTitle('Retrospectives - Boards')
 
 const selectedTeam = ref<Team | null>(null)
 const selectedRetrospective = ref<RetrospectiveSummary | null>(null)

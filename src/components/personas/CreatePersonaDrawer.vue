@@ -1,13 +1,21 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
+import type { FileUploadSelectEvent } from 'primevue'
 import { object, string } from 'yup'
+import type { CreatePersonaRequest } from '~/types/persona'
 
-const form = ref({
+const projectStore = useProjectStore()
+const { project } = storeToRefs(projectStore)
+
+const initialValues: CreatePersonaRequest = {
   name: '',
   category: '',
   description: '',
-})
+  file: undefined,
+}
+
+const form = ref<CreatePersonaRequest>({ ...initialValues })
 
 const createPersonaSchema = object({
   name: string().required('Name is a required field'),
@@ -18,12 +26,32 @@ const createPersonaSchema = object({
 
 const resolver = ref(yupResolver(createPersonaSchema))
 
+const queryCache = useQueryCache()
+
+const { mutate: createPersonaFn, isLoading } = useMutation({
+  mutation: (request: CreatePersonaRequest) => createPersona(project.value.id, request),
+  onSuccess: () => {
+    hideDrawer()
+    queryCache.invalidateQueries({ key: ['personas', project.value.id] })
+  },
+  onError: displayError,
+})
+
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
-  hideDrawer()
+  createPersonaFn(form.value)
 }
 
-const { isVisible, showDrawer, hideDrawer } = useDrawer()
+function onFileSelect(event: FileUploadSelectEvent) {
+  form.value.file = event.files[0]
+}
+
+const { isVisible, showDrawer } = useDrawer()
+
+function hideDrawer() {
+  isVisible.value = false
+  Object.assign(form.value, initialValues)
+}
 
 defineExpose({
   showDrawer,
@@ -62,11 +90,12 @@ defineExpose({
           <FileUpload
             mode="basic"
             name="avatar"
-            customUpload
+            custom-upload
             accept="image/*"
-            :maxFileSize="1000000"
+            :max-file-size="1000000"
             chooseLabel="Upload Image"
             class="w-unset text-surface-600! dark:text-surface-200! hover:text-primary! bg-surface-200/20! hover:bg-surface-200/30! dark:bg-surface-700/20! hover:!dark-bg-surface-700/30 border border-surface-300! dark:border-surface-500! p-2!"
+            @select="onFileSelect"
           />
         </div>
 
@@ -93,7 +122,7 @@ defineExpose({
 
       <div class="flex justify-end mt-4 gap-2">
         <Button type="button" label="Cancel" severity="secondary" @click="hideDrawer" />
-        <Button type="submit" label="Create" />
+        <Button type="submit" label="Create" :loading="isLoading" />
       </div>
     </Form>
   </Drawer>

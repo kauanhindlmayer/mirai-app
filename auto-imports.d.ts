@@ -30,6 +30,7 @@ declare global {
   const createBoard: (typeof import('./src/api/boards'))['createBoard']
   const createColumn: (typeof import('./src/api/boards'))['createColumn']
   const createOrganization: (typeof import('./src/api/organizations'))['createOrganization']
+  const createPersona: (typeof import('./src/api/personas'))['createPersona']
   const createProject: (typeof import('./src/api/projects'))['createProject']
   const createRetrospective: (typeof import('./src/api/retrospectives'))['createRetrospective']
   const createRetrospectiveItem: (typeof import('./src/api/retrospectives'))['createRetrospectiveItem']
@@ -45,6 +46,7 @@ declare global {
   const deleteBoard: (typeof import('./src/api/boards'))['deleteBoard']
   const deleteColumn: (typeof import('./src/api/boards'))['deleteColumn']
   const deleteComment: (typeof import('./src/api/wiki-pages'))['deleteComment']
+  const deletePersona: (typeof import('./src/api/personas'))['deletePersona']
   const deleteRetrospectiveItem: (typeof import('./src/api/retrospectives'))['deleteRetrospectiveItem']
   const deleteTag: (typeof import('./src/api/tags'))['deleteTag']
   const deleteTags: (typeof import('./src/api/tags'))['deleteTags']
@@ -66,6 +68,7 @@ declare global {
   const getInitials: (typeof import('./src/utils/index'))['getInitials']
   const getJobStatusSeverity: (typeof import('./src/utils/tag'))['getJobStatusSeverity']
   const getMoreTagsTooltip: (typeof import('./src/utils/work-item'))['getMoreTagsTooltip']
+  const getPersona: (typeof import('./src/api/personas'))['getPersona']
   const getProject: (typeof import('./src/api/projects'))['getProject']
   const getRetrospective: (typeof import('./src/api/retrospectives'))['getRetrospective']
   const getStatusLabel: (typeof import('./src/utils/work-item'))['getStatusLabel']
@@ -90,6 +93,7 @@ declare global {
   const isWeekend: (typeof import('./src/utils/date'))['isWeekend']
   const listBoards: (typeof import('./src/api/boards'))['listBoards']
   const listOrganizations: (typeof import('./src/api/organizations'))['listOrganizations']
+  const listPersonas: (typeof import('./src/api/personas'))['listPersonas']
   const listProjects: (typeof import('./src/api/projects'))['listProjects']
   const listRetrospectives: (typeof import('./src/api/retrospectives'))['listRetrospectives']
   const listSprints: (typeof import('./src/api/sprints'))['listSprints']
@@ -141,6 +145,7 @@ declare global {
   const triggerRef: (typeof import('vue'))['triggerRef']
   const unref: (typeof import('vue'))['unref']
   const updateComment: (typeof import('./src/api/wiki-pages'))['updateComment']
+  const updatePersona: (typeof import('./src/api/personas'))['updatePersona']
   const updateProfilePicture: (typeof import('./src/api/users'))['updateProfilePicture']
   const updateProject: (typeof import('./src/api/projects'))['updateProject']
   const updateTag: (typeof import('./src/api/tags'))['updateTag']
@@ -252,6 +257,14 @@ declare global {
   export type { Organization, CreateOrganizationRequest } from './src/types/organization'
   import('./src/types/organization')
   // @ts-ignore
+  export type {
+    Persona,
+    PersonaBriefResponse,
+    CreatePersonaRequest,
+    UpdatePersonaRequest,
+  } from './src/types/persona'
+  import('./src/types/persona')
+  // @ts-ignore
   export type { Project } from './src/types/project'
   import('./src/types/project')
   // @ts-ignore
@@ -350,6 +363,7 @@ declare module 'vue' {
     readonly createOrganization: UnwrapRef<
       (typeof import('./src/api/organizations'))['createOrganization']
     >
+    readonly createPersona: UnwrapRef<(typeof import('./src/api/personas'))['createPersona']>
     readonly createProject: UnwrapRef<(typeof import('./src/api/projects'))['createProject']>
     readonly createRetrospective: UnwrapRef<
       (typeof import('./src/api/retrospectives'))['createRetrospective']
@@ -371,6 +385,7 @@ declare module 'vue' {
     readonly deleteBoard: UnwrapRef<(typeof import('./src/api/boards'))['deleteBoard']>
     readonly deleteColumn: UnwrapRef<(typeof import('./src/api/boards'))['deleteColumn']>
     readonly deleteComment: UnwrapRef<(typeof import('./src/api/wiki-pages'))['deleteComment']>
+    readonly deletePersona: UnwrapRef<(typeof import('./src/api/personas'))['deletePersona']>
     readonly deleteRetrospectiveItem: UnwrapRef<
       (typeof import('./src/api/retrospectives'))['deleteRetrospectiveItem']
     >
@@ -406,6 +421,7 @@ declare module 'vue' {
     readonly getMoreTagsTooltip: UnwrapRef<
       (typeof import('./src/utils/work-item'))['getMoreTagsTooltip']
     >
+    readonly getPersona: UnwrapRef<(typeof import('./src/api/personas'))['getPersona']>
     readonly getProject: UnwrapRef<(typeof import('./src/api/projects'))['getProject']>
     readonly getRetrospective: UnwrapRef<
       (typeof import('./src/api/retrospectives'))['getRetrospective']
@@ -441,6 +457,7 @@ declare module 'vue' {
     readonly listOrganizations: UnwrapRef<
       (typeof import('./src/api/organizations'))['listOrganizations']
     >
+    readonly listPersonas: UnwrapRef<(typeof import('./src/api/personas'))['listPersonas']>
     readonly listProjects: UnwrapRef<(typeof import('./src/api/projects'))['listProjects']>
     readonly listRetrospectives: UnwrapRef<
       (typeof import('./src/api/retrospectives'))['listRetrospectives']
@@ -496,6 +513,7 @@ declare module 'vue' {
     readonly triggerRef: UnwrapRef<(typeof import('vue'))['triggerRef']>
     readonly unref: UnwrapRef<(typeof import('vue'))['unref']>
     readonly updateComment: UnwrapRef<(typeof import('./src/api/wiki-pages'))['updateComment']>
+    readonly updatePersona: UnwrapRef<(typeof import('./src/api/personas'))['updatePersona']>
     readonly updateProfilePicture: UnwrapRef<
       (typeof import('./src/api/users'))['updateProfilePicture']
     >
