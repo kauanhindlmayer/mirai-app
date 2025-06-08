@@ -11,6 +11,7 @@ import { defineConfig, devices } from '@playwright/test'
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
+  globalSetup: './e2e/setup.ts',
   testDir: './e2e',
   /* Maximum time one test can run for. */
   timeout: 30 * 1000,
@@ -60,7 +61,7 @@ export default defineConfig({
     {
       name: 'webkit',
       use: {
-        ...devices['Desktop Safari'],
+        viewport: { width: 1280, height: 720 },
       },
     },
 

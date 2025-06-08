@@ -60,7 +60,13 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
             </div>
             <Form :resolver @submit="onFormSubmit">
               <FormField v-slot="$field" name="email">
-                <InputText type="text" v-model="form.email" class="w-full" placeholder="Email" />
+                <InputText
+                  type="text"
+                  v-model="form.email"
+                  class="w-full"
+                  placeholder="Email"
+                  data-testid="email-input"
+                />
                 <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
                   {{ $field.error?.message }}
                 </Message>
@@ -71,6 +77,7 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
                   v-model="form.password"
                   class="w-full mt-4"
                   placeholder="Password"
+                  data-testid="password-input"
                 />
                 <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
                   {{ $field.error?.message }}
@@ -88,7 +95,14 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
                   Forgot password?
                 </RouterLink>
               </div>
-              <Button type="submit" class="body-button w-full" :loading="isLoading"> Login </Button>
+              <Button
+                type="submit"
+                class="body-button w-full"
+                :loading="isLoading"
+                data-testid="login-button"
+              >
+                Login
+              </Button>
             </Form>
             <div class="mt-8 body-small text-center lg:text-left">
               Not registered?
