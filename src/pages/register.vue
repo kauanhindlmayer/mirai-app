@@ -10,8 +10,8 @@ const form = ref<RegisterUserRequest>({
   lastName: '',
   email: '',
   password: '',
+  hasAcceptedTerms: false,
 })
-const hasAcceptedTerms = ref(false)
 
 const registerUserSchema = object({
   firstName: string()
@@ -27,7 +27,9 @@ const registerUserSchema = object({
     .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
     .matches(/[0-9]/, 'Password must contain at least one number')
     .min(8, 'Password must be at least 8 characters long'),
-  hasAcceptedTerms: boolean().oneOf([true], 'Please accept the Terms and Conditions'),
+  hasAcceptedTerms: boolean()
+    .required('Please accept the terms and conditions')
+    .oneOf([true], 'Please accept the terms and conditions'),
 })
 
 const resolver = ref(yupResolver(registerUserSchema))
@@ -75,6 +77,7 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
                   v-model="form.firstName"
                   class="w-full"
                   placeholder="First Name"
+                  data-testid="first-name-input"
                 />
                 <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
                   {{ $field.error?.message }}
@@ -86,6 +89,7 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
                   v-model="form.lastName"
                   class="w-full mt-4"
                   placeholder="Last Name"
+                  data-testid="last-name-input"
                 />
                 <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
                   {{ $field.error?.message }}
@@ -97,6 +101,7 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
                   v-model="form.email"
                   class="w-full mt-4"
                   placeholder="Email"
+                  data-testid="email-input"
                 />
                 <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
                   {{ $field.error?.message }}
@@ -108,6 +113,7 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
                   v-model="form.password"
                   class="w-full mt-4"
                   placeholder="Password"
+                  data-testid="password-input"
                 />
                 <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
                   {{ $field.error?.message }}
@@ -117,11 +123,12 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-2">
                     <Checkbox
-                      input-id="hasAcceptedTerms"
-                      v-model="hasAcceptedTerms"
+                      input-id="accept-terms"
+                      v-model="form.hasAcceptedTerms"
+                      data-testid="accept-terms-checkbox"
                       :binary="true"
                     />
-                    <label for="hasAcceptedTerms" class="body-small">
+                    <label for="accept-terms" class="body-small">
                       <span class="label-small text-surface-950 dark:text-surface-0">
                         I have read the
                       </span>
@@ -134,7 +141,12 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
                 </Message>
               </FormField>
 
-              <button type="submit" class="body-button w-full" :loading="isLoading">
+              <button
+                type="submit"
+                class="body-button w-full"
+                :loading="isLoading"
+                data-testid="register-button"
+              >
                 Register
               </button>
             </Form>
