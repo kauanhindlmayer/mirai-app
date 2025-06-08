@@ -150,7 +150,7 @@ onBeforeMount(async () => {
           <TabList>
             <Tab value="0">Board</Tab>
             <Tab value="1" disabled>History</Tab>
-            <div class="ml-auto flex items-center mr-6">
+            <div v-if="retrospectives.length" class="ml-auto flex items-center mr-6">
               <Select
                 v-model="selectedRetrospective"
                 :options="retrospectives"
@@ -169,12 +169,23 @@ onBeforeMount(async () => {
             </div>
           </TabList>
           <TabPanels>
-            <TabPanel value="0">
+            <TabPanel value="0" class="min-h-[calc(100vh-234px)]">
               <RetrospectiveBoard
                 v-if="retrospective"
                 :retrospective="retrospective"
                 :key="componentKey"
               />
+              <div v-else class="flex flex-col items-center mt-16">
+                <h2 class="text-xl font-semibold">Get started with your first Retrospective</h2>
+                <p>Create a new board to start collecting feedback and insights.</p>
+                <Button
+                  icon="pi pi-plus"
+                  label="Create Board"
+                  severity="primary"
+                  class="mt-4"
+                  @click="openCreateRetrospectiveDialog"
+                />
+              </div>
             </TabPanel>
           </TabPanels>
         </Tabs>

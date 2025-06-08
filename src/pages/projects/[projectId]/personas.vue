@@ -21,7 +21,7 @@ const { data: personas } = useQuery({
 <template>
   <div class="grid grid-cols-12 gap-4">
     <div class="col-span-12">
-      <div class="card">
+      <div class="card min-h-[calc(100vh-112px)]">
         <div class="flex justify-between items-center">
           <div class="font-semibold text-xl mb-4">Personas</div>
           <Button
@@ -32,12 +32,10 @@ const { data: personas } = useQuery({
           />
         </div>
 
-        <div v-if="!personas?.length" class="flex flex-col items-center gap-4">
-          <LazyImage class="w-48 mr-4" src="/layout/images/people.svg" alt="People Image" />
-          <div class="flex flex-col items-center">
-            <div class="font-medium text-lg">Focus on the people you are building for!</div>
-            <div>Create Personas to help your team build the right things.</div>
-          </div>
+        <div v-if="!personas?.length" class="flex flex-col items-center mt-16">
+          <LazyImage class="w-48 mr-4 mt-4" src="/layout/images/people.svg" alt="People Image" />
+          <h2 class="text-xl font-semibold mt-4">Focus on the people you are building for!</h2>
+          <div>Create Personas to help your team build the right things.</div>
         </div>
         <div
           v-else

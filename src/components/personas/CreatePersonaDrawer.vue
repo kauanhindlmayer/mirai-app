@@ -19,6 +19,8 @@ const form = ref<CreatePersonaRequest>({ ...initialValues })
 
 const createPersonaSchema = object({
   name: string().required('Name is a required field'),
+  category: string().optional().max(100, 'Category must not exceed 100 characters'),
+  file: string().optional(),
   description: string()
     .required('Description is a required field')
     .max(500, 'Description must not exceed 500 characters'),
