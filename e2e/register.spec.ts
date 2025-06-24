@@ -1,5 +1,6 @@
-import { test, expect } from '@playwright/test'
-import { RegisterPage } from './page-objects/RegisterPage.js'
+import { faker } from '@faker-js/faker'
+import { expect, test } from '@playwright/test'
+import { RegisterPage } from './page-objects/register-page.js'
 
 test.describe('Register Page', () => {
   let registerPage: RegisterPage
@@ -19,26 +20,29 @@ test.describe('Register Page', () => {
   })
 
   test('registers a new user and redirects to /login', async ({ page }) => {
-    await registerPage.register('John', 'Doe', `john.doe.${Date.now()}@example.com`, 'Password123!')
+    await registerPage.register(
+      faker.person.firstName(),
+      faker.person.lastName(),
+      faker.internet.email(),
+      faker.internet.password(),
+    )
     await expect(page).toHaveURL('/login')
   })
 
   test('should show required field validation messages', async () => {
     await registerPage.registerButton.click()
-    await expect(await registerPage.getErrorMessage('First Name is a required field')).toBeVisible()
-    await expect(await registerPage.getErrorMessage('Last Name is a required field')).toBeVisible()
-    await expect(await registerPage.getErrorMessage('Email is a required field')).toBeVisible()
-    await expect(await registerPage.getErrorMessage('Password is a required field')).toBeVisible()
+    await expect(registerPage.getErrorMessage('First Name is a required field')).toBeVisible()
+    await expect(registerPage.getErrorMessage('Last Name is a required field')).toBeVisible()
+    await expect(registerPage.getErrorMessage('Email is a required field')).toBeVisible()
+    await expect(registerPage.getErrorMessage('Password is a required field')).toBeVisible()
     await expect(
-      await registerPage.getErrorMessage('Please accept the Terms and Conditions'),
+      registerPage.getErrorMessage('Please accept the Terms and Conditions'),
     ).toBeVisible()
   })
 
   test('should show email format validation message', async () => {
     await registerPage.emailInput.fill('invalid-email')
     await registerPage.registerButton.click()
-    await expect(
-      await registerPage.getErrorMessage('Please enter a valid email address'),
-    ).toBeVisible()
+    await expect(registerPage.getErrorMessage('Email must be a valid email')).toBeVisible()
   })
 })

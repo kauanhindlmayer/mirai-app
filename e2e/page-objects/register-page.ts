@@ -1,7 +1,7 @@
-import { Page, Locator } from '@playwright/test'
+import { Locator, Page } from '@playwright/test'
+import { BasePage } from './base-page.js'
 
-export class RegisterPage {
-  readonly page: Page
+export class RegisterPage extends BasePage {
   readonly firstNameInput: Locator
   readonly lastNameInput: Locator
   readonly emailInput: Locator
@@ -10,7 +10,7 @@ export class RegisterPage {
   readonly registerButton: Locator
 
   constructor(page: Page) {
-    this.page = page
+    super(page)
     this.firstNameInput = page.getByTestId('first-name-input')
     this.lastNameInput = page.getByTestId('last-name-input')
     this.emailInput = page.getByTestId('email-input')
@@ -30,9 +30,5 @@ export class RegisterPage {
     await this.passwordInput.fill(password)
     await this.acceptTermsCheckbox.click()
     await this.registerButton.click()
-  }
-
-  async getErrorMessage(message: string) {
-    return this.page.getByText(message)
   }
 }

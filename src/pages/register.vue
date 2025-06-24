@@ -20,7 +20,7 @@ const registerUserSchema = object({
   lastName: string()
     .required('Last Name is a required field')
     .matches(/^[a-zA-Z]+$/, 'Last Name must contain only letters'),
-  email: string().email('Please enter a valid email address').required('Email is a required field'),
+  email: string().email('Email must be a valid email').required('Email is a required field'),
   password: string()
     .required('Password is a required field')
     .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')

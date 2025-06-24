@@ -1,13 +1,13 @@
-import { Page, Locator } from '@playwright/test'
+import { Locator, Page } from '@playwright/test'
+import { BasePage } from './base-page.js'
 
-export class LoginPage {
-  readonly page: Page
+export class LoginPage extends BasePage {
   readonly emailInput: Locator
   readonly passwordInput: Locator
   readonly loginButton: Locator
 
   constructor(page: Page) {
-    this.page = page
+    super(page)
     this.emailInput = page.getByTestId('email-input')
     this.passwordInput = page.getByTestId('password-input')
     this.loginButton = page.getByTestId('login-button')
@@ -23,7 +23,7 @@ export class LoginPage {
     await this.loginButton.click()
   }
 
-  async getErrorMessage(message: string) {
-    return this.page.getByText(message)
+  getInvalidCredentialsError(): Locator {
+    return this.getErrorMessage('Authentication with the provided credentials failed.')
   }
 }

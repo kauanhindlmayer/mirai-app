@@ -18,6 +18,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.8.0",
     "@microsoft/signalr": "^8.0.7",
     "@pinia/colada": "^0.13.6",
     "@pinia/colada-plugin-delay": "^0.0.3",

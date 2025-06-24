@@ -13,7 +13,7 @@ const form = ref<LoginUserRequest>({
 const shouldRememberUser = ref(false)
 
 const loginUserSchema = object({
-  email: string().email().required('Email is a required field'),
+  email: string().email('Email must be a valid email').required('Email is a required field'),
   password: string().required('Password is a required field'),
 })
 
