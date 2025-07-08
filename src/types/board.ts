@@ -18,6 +18,7 @@ export type Column = {
   id: string
   name: string
   position: number
+  isDefault: boolean
   wipLimit?: number
   definitionOfDone?: string
   cards: Card[]

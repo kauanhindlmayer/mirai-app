@@ -20,7 +20,8 @@ function addColumn() {
   columns.value.splice(1, 0, {
     id: newColumnId.value.toString(),
     name: `New Column ${newColumnId.value}`,
-    position: 0,
+    position: 1,
+    isDefault: false,
     cards: [],
   })
   newColumnId.value++
@@ -126,7 +127,8 @@ function insertColumn(position: number) {
   columns.value.splice(position, 0, {
     id: newColumnId.value.toString(),
     name: `New Column ${newColumnId.value}`,
-    position: 0,
+    position: 1,
+    isDefault: false,
     cards: [],
   })
   newColumnId.value++

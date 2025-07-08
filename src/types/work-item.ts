@@ -10,6 +10,12 @@ export type WorkItem = {
   updatedAtUtc: string
 }
 
+export type CreateWorkItemRequest = {
+  title: string
+  type: WorkItemType
+  assignedTeamId: string
+}
+
 export type TagBriefResponse = {
   id: string
   name: string

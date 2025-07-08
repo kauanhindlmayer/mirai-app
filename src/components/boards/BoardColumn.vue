@@ -1,15 +1,29 @@
 <script setup lang="ts">
+import type { FormSubmitEvent } from '@primevue/forms'
+import { yupResolver } from '@primevue/forms/resolvers/yup'
+import type { Popover } from 'primevue'
 import Draggable from 'vuedraggable/src/vuedraggable'
+import { mixed, object, string } from 'yup'
+import { createWorkItem } from '~/api/work-items'
 import type { Card, Column, DraggableEvent, MoveCardRequest } from '~/types/board'
-
-const teamStore = useTeamStore()
+import { WorkItemType, type CreateWorkItemRequest } from '~/types/work-item'
 
 const { boardId, column } = defineProps<{
   boardId: string
   column: Column
 }>()
 
-const cards = ref<Card[]>(column.cards)
+const cards = ref<Card[]>([...column.cards])
+
+watch(
+  () => column.cards,
+  (newCards) => {
+    cards.value = [...newCards]
+  },
+)
+
+const teamStore = useTeamStore()
+const { teamId } = storeToRefs(teamStore)
 
 type MoveCardMutationPayload = {
   columnId: string
@@ -21,7 +35,7 @@ const queryCache = useQueryCache()
 
 const { mutate: moveCardFn } = useMutation({
   mutation: (payload: MoveCardMutationPayload) =>
-    moveCard(teamStore.teamId!, boardId, payload.columnId, payload.cardId, payload.request),
+    moveCard(teamId.value!, boardId, payload.columnId, payload.cardId, payload.request),
   onSuccess: () => {
     queryCache.invalidateQueries({ key: ['board', boardId] })
   },
@@ -55,6 +69,51 @@ async function onChange(event: DraggableEvent<Card>) {
     })
   }
 }
+
+const initialValues: CreateWorkItemRequest = {
+  title: '',
+  type: WorkItemType.UserStory,
+  assignedTeamId: teamId.value!,
+}
+
+const form = ref<CreateWorkItemRequest>({ ...initialValues })
+
+const createWorkItemSchema = object({
+  title: string().required('Title is a required field'),
+  type: mixed<WorkItemType>().oneOf(Object.values(WorkItemType), 'Type is a required field'),
+})
+
+const resolver = ref(yupResolver(createWorkItemSchema))
+
+const popover = useTemplateRef<InstanceType<typeof Popover>>('popover')
+
+function togglePopover(event: Event) {
+  popover.value?.toggle(event)
+}
+
+function hidePopover() {
+  popover.value?.hide()
+  Object.assign(form.value, initialValues)
+}
+
+const workItemTypes = Object.keys(WorkItemType)
+
+const projectStore = useProjectStore()
+const { project } = storeToRefs(projectStore)
+
+const { mutate: createWorkItemFn, isLoading } = useMutation({
+  mutation: () => createWorkItem(project.value.id, form.value),
+  onSuccess: () => {
+    queryCache.invalidateQueries({ key: ['work-items', project.value.id] })
+    queryCache.invalidateQueries({ key: ['board', boardId] })
+    hidePopover()
+  },
+})
+
+async function onFormSubmit({ valid }: FormSubmitEvent) {
+  if (!valid) return
+  createWorkItemFn()
+}
 </script>
 
 <template>
@@ -80,6 +139,54 @@ async function onChange(event: DraggableEvent<Card>) {
         / {{ column.wipLimit }}
       </div>
     </div>
+
+    <div v-if="column.isDefault" class="mb-3">
+      <Button
+        icon="pi pi-plus"
+        label="New item"
+        outlined
+        size="small"
+        class="w-full"
+        @click="togglePopover"
+      />
+      <Popover ref="popover">
+        <Form
+          class="flex items-center gap-2 mt-2"
+          :initial-values="form"
+          :resolver
+          @submit="onFormSubmit"
+        >
+          <FormField v-slot="$field" name="template" class="flex flex-col">
+            <label for="template" class="font-medium text-surface-900 dark:text-surface-0">
+              Template
+              <small class="text-red-400">*</small>
+            </label>
+            <Select
+              v-model="form.type"
+              class="w-36"
+              :options="workItemTypes"
+              placeholder="Select a template"
+            />
+            <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
+              {{ $field.error?.message }}
+            </Message>
+          </FormField>
+
+          <FormField v-slot="$field" name="title">
+            <label for="title" class="font-medium text-surface-900 dark:text-surface-0">
+              Title <small class="text-red-400">*</small>
+            </label>
+            <InputText input-id="title" v-model="form.title" class="w-full" />
+            <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
+              {{ $field.error?.message }}
+            </Message>
+          </FormField>
+
+          <Button type="submit" label="Add to Top" class="mt-6" :disabled="isLoading" />
+        </Form>
+      </Popover>
+    </div>
+
     <Draggable v-model="cards" group="cards" :animation="150" item-key="id" @change="onChange">
       <template #item="{ element: card }: { element: Card }">
         <div>
