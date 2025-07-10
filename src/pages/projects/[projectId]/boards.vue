@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import BoardSettingsDrawer from '~/components/boards/BoardSettingsDrawer.vue'
+import { BacklogLevel } from '~/types/team'
+import { formatEnumOptions } from '~/utils'
 
 const pageStore = usePageStore()
 const teamStore = useTeamStore()
@@ -11,11 +13,7 @@ const boardSettingsDrawerRef =
 
 const selectedBoard = ref<BoardSummary | null>(null)
 const selectedBacklogLevel = ref(WorkItemType.UserStory)
-const backlogLevels = ref([
-  { label: 'Epics', value: WorkItemType.Epic },
-  { label: 'Features', value: WorkItemType.Feature },
-  { label: 'User Stories', value: WorkItemType.UserStory },
-])
+const backlogLevels = formatEnumOptions(BacklogLevel)
 
 watch(
   () => selectedBoard.value,
@@ -80,6 +78,7 @@ onBeforeMount(() => {
               icon="pi pi-users"
               severity="secondary"
               text
+              disabled
               v-tooltip.bottom="'Show Team Profile'"
             />
           </div>
@@ -101,12 +100,14 @@ onBeforeMount(() => {
                 option-label="label"
                 option-value="value"
                 class="ml-2"
+                disabled
               />
               <Button
                 icon="pi pi-filter"
                 severity="secondary"
                 variant="text"
                 class="ml-2"
+                disabled
                 v-tooltip.bottom="'Toggle Filters'"
               />
               <Button
@@ -114,6 +115,7 @@ onBeforeMount(() => {
                 severity="secondary"
                 variant="text"
                 class="ml-2"
+                disabled
                 v-tooltip.bottom="'Configure Board Settings'"
                 @click="boardSettingsDrawerRef?.showDrawer"
               />

@@ -8,3 +8,12 @@ export function getInitials(name?: string): string {
   const lastNameInitial = parts[parts.length - 1][0]
   return (firstNameInitial + lastNameInitial).toUpperCase()
 }
+
+export function formatEnumOptions<T extends object>(
+  enumObject: T,
+): { label: string; value: string }[] {
+  return Object.keys(enumObject).map((key) => ({
+    label: key.replace(/([a-z])([A-Z])/g, '$1 $2'),
+    value: key,
+  }))
+}

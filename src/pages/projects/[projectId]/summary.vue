@@ -56,7 +56,7 @@ onMounted(() => {
             />
             <div class="font-semibold text-2xl">{{ project.name }}</div>
           </div>
-          <Button label="Invite" icon="pi pi-user-plus" />
+          <Button label="Invite" icon="pi pi-user-plus" disabled />
         </div>
       </div>
     </div>

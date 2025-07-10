@@ -141,6 +141,7 @@ onBeforeMount(async () => {
               icon="pi pi-users"
               severity="secondary"
               text
+              disabled
               v-tooltip.bottom="'Show Team Profile'"
             />
           </div>

@@ -3,6 +3,7 @@ import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { number, object, string } from 'yup'
 import { ProcessTemplate, type Retrospective } from '~/types/retrospective'
+import { formatEnumOptions } from '~/utils'
 
 const teamStore = useTeamStore()
 const { teamId } = storeToRefs(teamStore)
@@ -15,7 +16,7 @@ const initialValues = {
 
 const form = ref<Partial<Retrospective>>({ ...initialValues })
 
-const templates = Object.keys(ProcessTemplate)
+const templates = formatEnumOptions(ProcessTemplate)
 const titlePlaceholder = `Example: Retrospective ${format(new Date(), 'MMM d, yyyy')}`
 
 const createRetrospectiveSchema = object({
@@ -108,6 +109,8 @@ defineExpose({
           v-model="form.template"
           class="w-full"
           :options="templates"
+          option-label="label"
+          option-value="value"
           placeholder="Select a template"
         />
         <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">

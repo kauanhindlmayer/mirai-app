@@ -144,10 +144,11 @@ onBeforeMount(() => {
               icon="pi pi-users"
               severity="secondary"
               text
+              disabled
               v-tooltip.bottom="'Show Team Profile'"
             />
           </div>
-          <Button label="New Work Item" icon="pi pi-plus" class="mr-6" />
+          <Button label="New Work Item" icon="pi pi-plus" class="mr-6" disabled />
         </div>
         <Tabs value="1" class="board-tabs">
           <TabList>
@@ -161,6 +162,7 @@ onBeforeMount(() => {
                 severity="secondary"
                 variant="text"
                 class="ml-2"
+                disabled
                 v-tooltip.bottom="'Toggle Filters'"
               />
               <Button
@@ -168,6 +170,7 @@ onBeforeMount(() => {
                 severity="secondary"
                 variant="text"
                 class="ml-2"
+                disabled
                 v-tooltip.bottom="'Configure Team Settings'"
               />
               <Button

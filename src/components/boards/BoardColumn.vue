@@ -7,6 +7,7 @@ import { mixed, object, string } from 'yup'
 import { createWorkItem } from '~/api/work-items'
 import type { Card, Column, DraggableEvent, MoveCardRequest } from '~/types/board'
 import { WorkItemType, type CreateWorkItemRequest } from '~/types/work-item'
+import { formatEnumOptions } from '~/utils'
 
 const { boardId, column } = defineProps<{
   boardId: string
@@ -96,7 +97,7 @@ function hidePopover() {
   Object.assign(form.value, initialValues)
 }
 
-const workItemTypes = Object.keys(WorkItemType)
+const workItemTypes = formatEnumOptions(WorkItemType)
 
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
@@ -165,6 +166,8 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
               v-model="form.type"
               class="w-36"
               :options="workItemTypes"
+              option-label="label"
+              option-value="value"
               placeholder="Select a template"
             />
             <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">

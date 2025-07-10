@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { TreeNode } from 'primevue/treenode'
+import { formatEnumOptions } from '~/utils'
 
 const pageStore = usePageStore()
 const teamStore = useTeamStore()
@@ -9,11 +10,7 @@ const { onMenuToggle } = useLayout()
 
 const selectedTeam = ref<Team | null>(null)
 const selectedBacklogLevel = ref(BacklogLevel.Feature)
-const backlogLevels = ref([
-  { label: 'Epics', value: BacklogLevel.Epic },
-  { label: 'Features', value: BacklogLevel.Feature },
-  { label: 'User Stories', value: BacklogLevel.UserStory },
-])
+const backlogLevels = formatEnumOptions(BacklogLevel)
 
 watch(
   () => selectedTeam.value,
@@ -117,6 +114,7 @@ onBeforeMount(() => {
               icon="pi pi-users"
               severity="secondary"
               text
+              disabled
               v-tooltip.bottom="'Show Team Profile'"
             />
           </div>
@@ -145,6 +143,7 @@ onBeforeMount(() => {
                 severity="secondary"
                 variant="text"
                 class="ml-2"
+                disabled
                 v-tooltip.bottom="'Toggle Filters'"
               />
               <Button
@@ -152,6 +151,7 @@ onBeforeMount(() => {
                 severity="secondary"
                 variant="text"
                 class="ml-2"
+                disabled
                 v-tooltip.bottom="'Configure Board Settings'"
               />
               <Button
