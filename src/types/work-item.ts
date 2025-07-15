@@ -1,3 +1,5 @@
+import type { Comment } from '~/types'
+
 export type WorkItem = {
   code: number
   title: string
@@ -5,6 +7,7 @@ export type WorkItem = {
   type: WorkItemType
   status: WorkItemStatus
   tags: TagBriefResponse[]
+  comments: Comment[]
   assignedTo: string
   createdAtUtc?: string
   updatedAtUtc: string

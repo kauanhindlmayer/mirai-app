@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useConfirm, type Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import type { Comment } from '~/types/wiki-page'
+import type { Comment } from '~/types'
 
 const { comment } = defineProps<{
   comment: Comment

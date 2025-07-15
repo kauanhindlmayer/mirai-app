@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useConfirm } from 'primevue'
-import type { Comment } from '~/types/wiki-page'
+import type { Comment } from '~/types'
 
 defineProps<{ comments: Comment[] }>()
 

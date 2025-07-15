@@ -24,7 +24,7 @@ const { data: projects, isLoading } = useQuery({
 })
 
 function selectFirstOrganization() {
-  if (!organizations.value.length) return
+  if (!organizations.value || organizations.value.length === 0) return
   organization.value = organizations.value[0]
 }
 

@@ -23,6 +23,8 @@ declare global {
   const acceptHMRUpdate: (typeof import('pinia'))['acceptHMRUpdate']
   const addComment: (typeof import('./src/api/wiki-pages'))['addComment']
   const addDays: (typeof import('./src/utils/date'))['addDays']
+  const addWikiPageComment: (typeof import('./src/api/wiki-pages'))['addWikiPageComment']
+  const addWorkItemComment: (typeof import('./src/api/work-items'))['addWorkItemComment']
   const addWorkItemToSprint: (typeof import('./src/api/sprints'))['addWorkItemToSprint']
   const colors: (typeof import('./src/utils/tag'))['colors']
   const computed: (typeof import('vue'))['computed']
@@ -52,11 +54,14 @@ declare global {
   const deleteTag: (typeof import('./src/api/tags'))['deleteTag']
   const deleteTags: (typeof import('./src/api/tags'))['deleteTags']
   const deleteWikiPage: (typeof import('./src/api/wiki-pages'))['deleteWikiPage']
+  const deleteWikiPageComment: (typeof import('./src/api/wiki-pages'))['deleteWikiPageComment']
   const deleteWorkItem: (typeof import('./src/api/work-items'))['deleteWorkItem']
+  const deleteWorkItemComment: (typeof import('./src/api/work-items'))['deleteWorkItemComment']
   const displayError: (typeof import('./src/composables/displayError'))['displayError']
   const effectScope: (typeof import('vue'))['effectScope']
   const format: (typeof import('./src/utils/date'))['format']
   const formatDistanceToNow: (typeof import('./src/utils/date'))['formatDistanceToNow']
+  const formatEnumOptions: (typeof import('./src/utils/index'))['formatEnumOptions']
   const get: (typeof import('./src/api/http'))['get']
   const getBacklog: (typeof import('./src/api/teams'))['getBacklog']
   const getBacklogLevelLabel: (typeof import('./src/utils/work-item'))['getBacklogLevelLabel']
@@ -152,6 +157,8 @@ declare global {
   const updateTag: (typeof import('./src/api/tags'))['updateTag']
   const updateUserProfile: (typeof import('./src/api/users'))['updateUserProfile']
   const updateWikiPage: (typeof import('./src/api/wiki-pages'))['updateWikiPage']
+  const updateWikiPageComment: (typeof import('./src/api/wiki-pages'))['updateWikiPageComment']
+  const updateWorkItemComment: (typeof import('./src/api/work-items'))['updateWorkItemComment']
   const useAppToast: (typeof import('./src/composables/useAppToast'))['useAppToast']
   const useAttrs: (typeof import('vue'))['useAttrs']
   const useCache: (typeof import('piniaColada'))['useCache']
@@ -237,6 +244,10 @@ declare global {
     Link,
     PaginationFilter,
     Shortcut,
+    AddCommentRequest,
+    UpdateCommentRequest,
+    Comment,
+    Author,
   } from './src/types/index'
   import('./src/types/index')
   // @ts-ignore
@@ -306,13 +317,9 @@ declare global {
     WikiPage,
     WikiPageSummary,
     WikiPageStats,
-    Comment,
-    Author,
     CreateWikiPageRequest,
     UpdateWikiPageRequest,
     MoveWikiPageRequest,
-    AddCommentRequest,
-    UpdateCommentRequest,
   } from './src/types/wiki-page'
   import('./src/types/wiki-page')
   // @ts-ignore
@@ -352,8 +359,13 @@ declare module 'vue' {
     readonly WorkItemStatus: UnwrapRef<(typeof import('./src/types/work-item'))['WorkItemStatus']>
     readonly WorkItemType: UnwrapRef<(typeof import('./src/types/work-item'))['WorkItemType']>
     readonly acceptHMRUpdate: UnwrapRef<(typeof import('pinia'))['acceptHMRUpdate']>
-    readonly addComment: UnwrapRef<(typeof import('./src/api/wiki-pages'))['addComment']>
     readonly addDays: UnwrapRef<(typeof import('./src/utils/date'))['addDays']>
+    readonly addWikiPageComment: UnwrapRef<
+      (typeof import('./src/api/wiki-pages'))['addWikiPageComment']
+    >
+    readonly addWorkItemComment: UnwrapRef<
+      (typeof import('./src/api/work-items'))['addWorkItemComment']
+    >
     readonly addWorkItemToSprint: UnwrapRef<
       (typeof import('./src/api/sprints'))['addWorkItemToSprint']
     >
@@ -387,7 +399,6 @@ declare module 'vue' {
     readonly defineStore: UnwrapRef<(typeof import('pinia'))['defineStore']>
     readonly deleteBoard: UnwrapRef<(typeof import('./src/api/boards'))['deleteBoard']>
     readonly deleteColumn: UnwrapRef<(typeof import('./src/api/boards'))['deleteColumn']>
-    readonly deleteComment: UnwrapRef<(typeof import('./src/api/wiki-pages'))['deleteComment']>
     readonly deletePersona: UnwrapRef<(typeof import('./src/api/personas'))['deletePersona']>
     readonly deleteRetrospectiveItem: UnwrapRef<
       (typeof import('./src/api/retrospectives'))['deleteRetrospectiveItem']
@@ -395,7 +406,13 @@ declare module 'vue' {
     readonly deleteTag: UnwrapRef<(typeof import('./src/api/tags'))['deleteTag']>
     readonly deleteTags: UnwrapRef<(typeof import('./src/api/tags'))['deleteTags']>
     readonly deleteWikiPage: UnwrapRef<(typeof import('./src/api/wiki-pages'))['deleteWikiPage']>
+    readonly deleteWikiPageComment: UnwrapRef<
+      (typeof import('./src/api/wiki-pages'))['deleteWikiPageComment']
+    >
     readonly deleteWorkItem: UnwrapRef<(typeof import('./src/api/work-items'))['deleteWorkItem']>
+    readonly deleteWorkItemComment: UnwrapRef<
+      (typeof import('./src/api/work-items'))['deleteWorkItemComment']
+    >
     readonly displayError: UnwrapRef<
       (typeof import('./src/composables/displayError'))['displayError']
     >
@@ -404,6 +421,7 @@ declare module 'vue' {
     readonly formatDistanceToNow: UnwrapRef<
       (typeof import('./src/utils/date'))['formatDistanceToNow']
     >
+    readonly formatEnumOptions: UnwrapRef<(typeof import('./src/utils/index'))['formatEnumOptions']>
     readonly get: UnwrapRef<(typeof import('./src/api/http'))['get']>
     readonly getBacklog: UnwrapRef<(typeof import('./src/api/teams'))['getBacklog']>
     readonly getBacklogLevelLabel: UnwrapRef<
@@ -515,7 +533,6 @@ declare module 'vue' {
     readonly toValue: UnwrapRef<(typeof import('vue'))['toValue']>
     readonly triggerRef: UnwrapRef<(typeof import('vue'))['triggerRef']>
     readonly unref: UnwrapRef<(typeof import('vue'))['unref']>
-    readonly updateComment: UnwrapRef<(typeof import('./src/api/wiki-pages'))['updateComment']>
     readonly updatePersona: UnwrapRef<(typeof import('./src/api/personas'))['updatePersona']>
     readonly updateProfilePicture: UnwrapRef<
       (typeof import('./src/api/users'))['updateProfilePicture']
@@ -524,6 +541,12 @@ declare module 'vue' {
     readonly updateTag: UnwrapRef<(typeof import('./src/api/tags'))['updateTag']>
     readonly updateUserProfile: UnwrapRef<(typeof import('./src/api/users'))['updateUserProfile']>
     readonly updateWikiPage: UnwrapRef<(typeof import('./src/api/wiki-pages'))['updateWikiPage']>
+    readonly updateWikiPageComment: UnwrapRef<
+      (typeof import('./src/api/wiki-pages'))['updateWikiPageComment']
+    >
+    readonly updateWorkItemComment: UnwrapRef<
+      (typeof import('./src/api/work-items'))['updateWorkItemComment']
+    >
     readonly useAppToast: UnwrapRef<(typeof import('./src/composables/useAppToast'))['useAppToast']>
     readonly useAttrs: UnwrapRef<(typeof import('vue'))['useAttrs']>
     readonly useCssModule: UnwrapRef<(typeof import('vue'))['useCssModule']>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
+import { addWikiPageComment, deleteWikiPageComment } from '~/api/wiki-pages'
 
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
@@ -49,7 +50,8 @@ const toast = useAppToast()
 const queryCache = useQueryCache()
 
 const { mutate: addCommentFn } = useMutation({
-  mutation: (content: string) => addComment(project.value.id, wikiPage.value!.id, { content }),
+  mutation: (content: string) =>
+    addWikiPageComment(project.value.id, wikiPage.value!.id, { content }),
   onSuccess() {
     invalidateWikiPageQuery()
     toast.showSuccess({ detail: 'Comment added successfully' })
@@ -57,7 +59,8 @@ const { mutate: addCommentFn } = useMutation({
 })
 
 const { mutate: deleteCommentFn } = useMutation({
-  mutation: (commentId: string) => deleteComment(project.value.id, wikiPage.value!.id, commentId),
+  mutation: (commentId: string) =>
+    deleteWikiPageComment(project.value.id, wikiPage.value!.id, commentId),
   onSuccess() {
     invalidateWikiPageQuery()
     toast.showSuccess({ detail: 'Comment deleted successfully' })

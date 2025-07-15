@@ -1,5 +1,10 @@
 import http from '~/api/http'
-import type { PaginatedList, PaginationFilter } from '~/types'
+import type {
+  AddCommentRequest,
+  PaginatedList,
+  PaginationFilter,
+  UpdateCommentRequest,
+} from '~/types'
 import type { CreateWorkItemRequest, WorkItem, WorkItemsStats } from '~/types/work-item'
 
 export function createWorkItem(
@@ -33,4 +38,29 @@ export function getWorkItemsStats(
 
 export function getWorkItem(projectId: string, workItemId: string): Promise<WorkItem> {
   return http.get(`/projects/${projectId}/work-items/${workItemId}`)
+}
+
+export function addWorkItemComment(
+  projectId: string,
+  workItemId: string,
+  request: AddCommentRequest,
+): Promise<void> {
+  return http.post(`/projects/${projectId}/work-items/${workItemId}/comments`, request)
+}
+
+export function updateWorkItemComment(
+  projectId: string,
+  workItemId: string,
+  commentId: string,
+  request: UpdateCommentRequest,
+): Promise<void> {
+  return http.put(`/projects/${projectId}/work-items/${workItemId}/comments/${commentId}`, request)
+}
+
+export function deleteWorkItemComment(
+  projectId: string,
+  workItemId: string,
+  commentId: string,
+): Promise<void> {
+  return http.delete(`/projects/${projectId}/work-items/${workItemId}/comments/${commentId}`)
 }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
+import { addWorkItemComment, deleteWorkItemComment } from '~/api/work-items'
 
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
@@ -30,6 +31,32 @@ function toggleMenuItems(event: MouseEvent) {
 
 function copyToClipboard() {
   navigator.clipboard.writeText(workItem.value!.title)
+}
+
+const toast = useAppToast()
+const queryCache = useQueryCache()
+
+const { mutate: addCommentFn } = useMutation({
+  mutation: (content: string) =>
+    addWorkItemComment(project.value.id, workItemId.value!, { content }),
+  onSuccess() {
+    invalidateWorkItemQuery()
+    toast.showSuccess({ detail: 'Comment added successfully' })
+  },
+})
+
+const { mutate: deleteCommentFn } = useMutation({
+  mutation: (commentId: string) =>
+    deleteWorkItemComment(project.value.id, workItemId.value!, commentId),
+  onSuccess() {
+    invalidateWorkItemQuery()
+    toast.showSuccess({ detail: 'Comment deleted successfully' })
+  },
+})
+
+function invalidateWorkItemQuery() {
+  queryCache.invalidateQueries({ key: ['work-item', workItemId.value!] })
+  queryCache.invalidateQueries({ key: ['work-items', workItemId.value!] })
 }
 
 watch(
@@ -64,7 +91,10 @@ defineExpose({
     class="work-item-dialog"
     v-model:visible="isVisible"
     modal
-    :style="{ width: '64rem' }"
+    maximizable
+    :style="{ width: '90vw', maxWidth: '1200px', height: '85vh' }"
+    :content-style="{ height: '100%', margin: '0', padding: '0' }"
+    :draggable="false"
     @hide="hideDialog"
   >
     <template #header>
@@ -79,7 +109,12 @@ defineExpose({
           <InputGroup>
             <InputText v-model="workItem.title" />
             <InputGroupAddon>
-              <Button severity="secondary" icon="pi pi-clipboard" @click="copyToClipboard" />
+              <Button
+                variant="text"
+                severity="secondary"
+                icon="pi pi-clipboard"
+                @click="copyToClipboard"
+              />
             </InputGroupAddon>
           </InputGroup>
         </div>
@@ -150,7 +185,11 @@ defineExpose({
               <span class="text-lg">Discussion</span>
             </AccordionHeader>
             <AccordionContent>
-              <CommentsSection :comments="[]" />
+              <CommentsSection
+                :comments="workItem.comments"
+                @add-comment="addCommentFn"
+                @delete-comment="deleteCommentFn"
+              />
             </AccordionContent>
           </AccordionPanel>
         </Accordion>

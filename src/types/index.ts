@@ -44,3 +44,24 @@ export type Shortcut = {
 export enum ShortcutCategory {
   Panels = 'Panels',
 }
+
+export type AddCommentRequest = {
+  content: string
+}
+
+export type UpdateCommentRequest = {
+  content: string
+}
+
+export type Comment = {
+  id: string
+  author: Author
+  content: string
+  createdAtUtc: string
+  updatedAtUtc: string
+}
+
+export type Author = {
+  name: string
+  imageUrl: string
+}

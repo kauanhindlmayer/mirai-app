@@ -36,6 +36,7 @@ declare module 'vue' {
     Card: typeof import('primevue/card')['default']
     Chart: typeof import('primevue/chart')['default']
     Checkbox: typeof import('primevue/checkbox')['default']
+    Chips: typeof import('primevue/chips')['default']
     ColorSelect: typeof import('./src/components/tags/ColorSelect.vue')['default']
     Column: typeof import('primevue/column')['default']
     CommentsSection: typeof import('./src/components/common/CommentsSection.vue')['default']

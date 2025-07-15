@@ -1,9 +1,8 @@
 import http from '~/api/http'
+import type { AddCommentRequest, UpdateCommentRequest } from '~/types'
 import type {
-  AddCommentRequest,
   CreateWikiPageRequest,
   MoveWikiPageRequest,
-  UpdateCommentRequest,
   UpdateWikiPageRequest,
   WikiPage,
   WikiPageStats,
@@ -46,7 +45,7 @@ export function deleteWikiPage(projectId: string, wikiPageId: string): Promise<v
   return http.delete(`/projects/${projectId}/wiki-pages/${wikiPageId}`)
 }
 
-export function addComment(
+export function addWikiPageComment(
   projectId: string,
   wikiPageId: string,
   request: AddCommentRequest,
@@ -54,7 +53,7 @@ export function addComment(
   return http.post(`/projects/${projectId}/wiki-pages/${wikiPageId}/comments`, request)
 }
 
-export function updateComment(
+export function updateWikiPageComment(
   projectId: string,
   wikiPageId: string,
   commentId: string,
@@ -63,7 +62,7 @@ export function updateComment(
   return http.put(`/projects/${projectId}/wiki-pages/${wikiPageId}/comments/${commentId}`, request)
 }
 
-export function deleteComment(
+export function deleteWikiPageComment(
   projectId: string,
   wikiPageId: string,
   commentId: string,
