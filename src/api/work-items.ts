@@ -64,3 +64,27 @@ export function deleteWorkItemComment(
 ): Promise<void> {
   return http.delete(`/projects/${projectId}/work-items/${workItemId}/comments/${commentId}`)
 }
+
+export function updateWorkItem(
+  projectId: string,
+  workItemId: string,
+  request: Partial<WorkItem>,
+): Promise<void> {
+  return http.put(`/projects/${projectId}/work-items/${workItemId}`, request)
+}
+
+export function addTagToWorkItem(
+  projectId: string,
+  workItemId: string,
+  name: string,
+): Promise<void> {
+  return http.post(`/projects/${projectId}/work-items/${workItemId}/tags`, { name })
+}
+
+export function removeTagFromWorkItem(
+  projectId: string,
+  workItemId: string,
+  tagName: string,
+): Promise<void> {
+  return http.delete(`/projects/${projectId}/work-items/${workItemId}/tags/${tagName}`)
+}

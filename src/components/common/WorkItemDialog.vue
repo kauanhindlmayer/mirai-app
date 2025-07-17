@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import type { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { addWorkItemComment, deleteWorkItemComment } from '~/api/work-items'
+import {
+  addWorkItemComment,
+  deleteWorkItemComment,
+  removeTagFromWorkItem,
+  updateWorkItem,
+} from '~/api/work-items'
+import { ValueArea, WorkItemStatus, type TagBriefResponse } from '~/types/work-item'
 
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
@@ -11,8 +17,15 @@ const route = useRoute()
 
 const workItemId = computed(() => route.query.workItemId as string)
 
+const workItemStatuses = formatEnumOptions(WorkItemStatus)
+const valueAreas = formatEnumOptions(ValueArea)
+
+const workItemLastUpdated = computed(() =>
+  format(workItem.value!.updatedAtUtc ?? workItem.value!.createdAtUtc, 'MMM d'),
+)
+
 const { data: workItem } = useQuery({
-  key: () => ['work-item', workItemId.value],
+  key: () => ['work-items', workItemId.value],
   query: () => getWorkItem(project.value.id, workItemId.value),
   enabled: () => !!workItemId.value,
 })
@@ -33,14 +46,32 @@ function copyToClipboard() {
   navigator.clipboard.writeText(workItem.value!.title)
 }
 
+const { mutate: removeTagFromWorkItemFn } = useMutation({
+  mutation: (tag: TagBriefResponse) =>
+    removeTagFromWorkItem(project.value.id, workItemId.value!, tag.name),
+  onSuccess() {
+    queryCache.invalidateQueries({ key: ['work-items'] })
+    toast.showSuccess({ detail: 'Tag removed successfully' })
+  },
+})
 const toast = useAppToast()
 const queryCache = useQueryCache()
+
+const { mutate: updateWorkItemFn } = useMutation({
+  mutation: (_: Event) => updateWorkItem(project.value.id, workItemId.value!, workItem.value!),
+  onSuccess() {
+    queryCache.invalidateQueries({ key: ['board'] })
+    queryCache.invalidateQueries({ key: ['work-items'] })
+    toast.showSuccess({ detail: 'Work Item updated successfully' })
+    hideDialog()
+  },
+})
 
 const { mutate: addCommentFn } = useMutation({
   mutation: (content: string) =>
     addWorkItemComment(project.value.id, workItemId.value!, { content }),
   onSuccess() {
-    invalidateWorkItemQuery()
+    queryCache.invalidateQueries({ key: ['work-items'] })
     toast.showSuccess({ detail: 'Comment added successfully' })
   },
 })
@@ -49,15 +80,10 @@ const { mutate: deleteCommentFn } = useMutation({
   mutation: (commentId: string) =>
     deleteWorkItemComment(project.value.id, workItemId.value!, commentId),
   onSuccess() {
-    invalidateWorkItemQuery()
+    queryCache.invalidateQueries({ key: ['work-items'] })
     toast.showSuccess({ detail: 'Comment deleted successfully' })
   },
 })
-
-function invalidateWorkItemQuery() {
-  queryCache.invalidateQueries({ key: ['work-item', workItemId.value!] })
-  queryCache.invalidateQueries({ key: ['work-items', workItemId.value!] })
-}
 
 watch(
   () => workItemId.value,
@@ -99,7 +125,9 @@ defineExpose({
   >
     <template #header>
       <div class="side-color" :style="{ backgroundColor: getTypeColor(workItem.type) }" />
-      <span class="font-semibold whitespace-nowrap ml-5">{{ getTypeLabel(workItem.type) }}</span>
+      <span class="font-semibold whitespace-nowrap ml-5">
+        {{ getTypeLabel(workItem.type) }} {{ workItem?.code }}
+      </span>
     </template>
     <div class="flex flex-col">
       <div class="relative -pl-5">
@@ -119,19 +147,30 @@ defineExpose({
           </InputGroup>
         </div>
         <div class="flex justify-between items-center ml-5 mb-2 py-2">
-          <div>
-            <Avatar shape="circle" icon="pi pi-user" class="mr-2" />
-            <span class="text-surface-900 dark:text-surface-0">
-              {{ workItem.assignedTo || 'Unassigned' }}
-            </span>
+          <div class="flex items-center gap-2">
+            <div>
+              <Avatar shape="circle" icon="pi pi-user" class="mr-2" />
+              <span class="text-surface-900 dark:text-surface-0">
+                {{ workItem.assignedTo || 'Unassigned' }}
+              </span>
+            </div>
+            <div class="flex items-center gap-2 ml-6">
+              <Chip
+                v-for="tag in workItem.tags"
+                :key="tag.name"
+                :label="tag.name"
+                removable
+                @remove="removeTagFromWorkItemFn(tag)"
+              />
+            </div>
           </div>
+
           <div class="flex items-center gap-2">
             <Button
               label="Save and Close"
               severity="secondary"
               icon="pi pi-save"
-              disabled
-              @click="hideDialog"
+              @click="updateWorkItemFn"
             />
             <Button severity="secondary" icon="pi pi-refresh" text v-tooltip.bottom="'Refresh'" />
             <Button
@@ -148,12 +187,29 @@ defineExpose({
         </div>
       </div>
       <div class="flex items-center gap-2 py-2 pl-5 bg-gray-100">
-        <span class="mr-4">State</span>
-        <Badge :severity="getStatusSeverity(workItem.status)" />
-        {{ getStatusLabel(workItem.status) }}
+        <span class="mr-4">State:</span>
+        <Select
+          v-model="workItem.status"
+          :options="workItemStatuses"
+          option-label="label"
+          option-value="value"
+          class="ml-2"
+        >
+          <template #value="slotProps">
+            <div v-if="slotProps.value" class="flex items-center gap-2">
+              <Badge :severity="getStatusSeverity(slotProps.value)" />
+              {{ getStatusLabel(slotProps.value) }}
+            </div>
+            <span v-else>
+              {{ slotProps.placeholder }}
+            </span>
+          </template>
+        </Select>
+
+        <span class="ml-auto mr-5">Last Updated: {{ workItemLastUpdated }}</span>
       </div>
-      <div>
-        <Accordion :value="['0', '1', '2']" multiple>
+      <div class="flex w-full gap-4">
+        <Accordion :value="['0', '1', '2']" multiple class="w-[70%]">
           <AccordionPanel value="0">
             <AccordionHeader>
               <span class="text-lg">Description</span>
@@ -173,7 +229,7 @@ defineExpose({
             </AccordionHeader>
             <AccordionContent>
               <Textarea
-                v-model="workItem.description"
+                v-model="workItem.acceptanceCriteria"
                 rows="2"
                 placeholder="Click to add Acceptance Criteria"
                 fluid
@@ -193,6 +249,56 @@ defineExpose({
             </AccordionContent>
           </AccordionPanel>
         </Accordion>
+
+        <Accordion :value="['0', '1']" multiple class="w-[30%]">
+          <AccordionPanel value="0">
+            <AccordionHeader>
+              <span class="text-lg">Planning</span>
+            </AccordionHeader>
+            <AccordionContent>
+              <div class="flex flex-col gap-2">
+                <div class="flex flex-col">
+                  <label for="storyPoints" class="font-medium text-surface-600 dark:text-surface-0">
+                    Story Points
+                  </label>
+                  <InputNumber v-model="workItem.planning.storyPoints" input-id="storyPoints" />
+                </div>
+                <div class="flex flex-col">
+                  <label for="priority" class="font-medium text-surface-600 dark:text-surface-0">
+                    Priority
+                  </label>
+                  <InputNumber v-model="workItem.planning.priority" input-id="priority" />
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionPanel>
+          <AccordionPanel value="1">
+            <AccordionHeader>
+              <span class="text-lg">Classification</span>
+            </AccordionHeader>
+            <AccordionContent>
+              <div class="flex flex-col gap-2">
+                <div class="flex flex-col">
+                  <label for="valueArea" class="font-medium text-surface-600 dark:text-surface-0">
+                    Value Area
+                  </label>
+                  <Select
+                    v-model="workItem.classification.valueArea"
+                    :options="valueAreas"
+                    option-label="label"
+                    option-value="value"
+                  />
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionPanel>
+          <AccordionPanel value="2">
+            <AccordionHeader>
+              <span class="text-lg">Related Work Items</span>
+            </AccordionHeader>
+            <AccordionContent> Related Work Items content goes here </AccordionContent>
+          </AccordionPanel>
+        </Accordion>
       </div>
     </div>
   </Dialog>
@@ -205,6 +311,18 @@ defineExpose({
   top: 0;
   bottom: 0;
   width: 6px !important;
+}
+:deep(.p-chip) {
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  height: auto;
+}
+:deep(.p-chip .p-chip-text) {
+  line-height: 1rem;
+}
+:deep(.p-chip .p-chip-remove-icon) {
+  font-size: 0.75rem;
 }
 </style>
 

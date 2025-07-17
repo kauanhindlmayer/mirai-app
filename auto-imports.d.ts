@@ -18,6 +18,7 @@ declare global {
   const ShortcutCategory: (typeof import('./src/types/index'))['ShortcutCategory']
   const Surface: (typeof import('./src/types/layout'))['Surface']
   const TagImportJobStatus: (typeof import('./src/types/tag'))['TagImportJobStatus']
+  const ValueArea: (typeof import('./src/types/work-item'))['ValueArea']
   const WorkItemStatus: (typeof import('./src/types/work-item'))['WorkItemStatus']
   const WorkItemType: (typeof import('./src/types/work-item'))['WorkItemType']
   const acceptHMRUpdate: (typeof import('pinia'))['acceptHMRUpdate']
@@ -158,6 +159,7 @@ declare global {
   const updateUserProfile: (typeof import('./src/api/users'))['updateUserProfile']
   const updateWikiPage: (typeof import('./src/api/wiki-pages'))['updateWikiPage']
   const updateWikiPageComment: (typeof import('./src/api/wiki-pages'))['updateWikiPageComment']
+  const updateWorkItem: (typeof import('./src/api/work-items'))['updateWorkItem']
   const updateWorkItemComment: (typeof import('./src/api/work-items'))['updateWorkItemComment']
   const useAppToast: (typeof import('./src/composables/useAppToast'))['useAppToast']
   const useAttrs: (typeof import('vue'))['useAttrs']
@@ -324,9 +326,12 @@ declare global {
   import('./src/types/wiki-page')
   // @ts-ignore
   export type {
+    ValueArea,
     WorkItemStatus,
     WorkItemType,
     WorkItem,
+    Planning,
+    Classification,
     CreateWorkItemRequest,
     TagBriefResponse,
     WorkItemsStats,
@@ -356,6 +361,7 @@ declare module 'vue' {
     readonly ShortcutCategory: UnwrapRef<(typeof import('./src/types/index'))['ShortcutCategory']>
     readonly Surface: UnwrapRef<(typeof import('./src/types/layout'))['Surface']>
     readonly TagImportJobStatus: UnwrapRef<(typeof import('./src/types/tag'))['TagImportJobStatus']>
+    readonly ValueArea: UnwrapRef<(typeof import('./src/types/work-item'))['ValueArea']>
     readonly WorkItemStatus: UnwrapRef<(typeof import('./src/types/work-item'))['WorkItemStatus']>
     readonly WorkItemType: UnwrapRef<(typeof import('./src/types/work-item'))['WorkItemType']>
     readonly acceptHMRUpdate: UnwrapRef<(typeof import('pinia'))['acceptHMRUpdate']>
@@ -544,6 +550,7 @@ declare module 'vue' {
     readonly updateWikiPageComment: UnwrapRef<
       (typeof import('./src/api/wiki-pages'))['updateWikiPageComment']
     >
+    readonly updateWorkItem: UnwrapRef<(typeof import('./src/api/work-items'))['updateWorkItem']>
     readonly updateWorkItemComment: UnwrapRef<
       (typeof import('./src/api/work-items'))['updateWorkItemComment']
     >
