@@ -101,7 +101,8 @@ onBeforeMount(() => {
 const { isVisible, showDialog } = useDialog()
 
 function hideDialog() {
-  router.replace({ query: undefined })
+  const { workItemId, ...rest } = route.query
+  router.replace({ query: rest })
   isVisible.value = false
 }
 
@@ -219,6 +220,7 @@ defineExpose({
                 v-model="workItem.description"
                 rows="2"
                 placeholder="Click to add Description"
+                auto-resize
                 fluid
               />
             </AccordionContent>
@@ -232,6 +234,7 @@ defineExpose({
                 v-model="workItem.acceptanceCriteria"
                 rows="2"
                 placeholder="Click to add Acceptance Criteria"
+                auto-resize
                 fluid
               />
             </AccordionContent>

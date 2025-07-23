@@ -7,9 +7,16 @@ type InputTextInstance = InstanceType<typeof InputText> & {
   $el: HTMLElement
 }
 const searchInputRef = useTemplateRef<InputTextInstance>('searchInput')
+const searchQuery = ref('')
 
-function toggleSearchBar() {
-  layoutState.searchBarActive = !layoutState.searchBarActive
+const router = useRouter()
+
+function redirectToWisdomExtractor() {
+  layoutState.searchBarActive = false
+  router.push({
+    name: '/projects/[projectId]/wisdom-extractor',
+    query: { q: searchQuery.value },
+  })
 }
 
 function focusOnInput() {
@@ -36,8 +43,9 @@ function focusOnInput() {
         type="text"
         class="p-inputtext search-input"
         ref="searchInput"
+        v-model="searchQuery"
         placeholder="Search"
-        @keydown.enter="toggleSearchBar"
+        @keydown.enter="redirectToWisdomExtractor"
       />
     </div>
   </Dialog>

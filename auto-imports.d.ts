@@ -24,6 +24,7 @@ declare global {
   const acceptHMRUpdate: (typeof import('pinia'))['acceptHMRUpdate']
   const addComment: (typeof import('./src/api/wiki-pages'))['addComment']
   const addDays: (typeof import('./src/utils/date'))['addDays']
+  const addTagToWorkItem: (typeof import('./src/api/work-items'))['addTagToWorkItem']
   const addWikiPageComment: (typeof import('./src/api/wiki-pages'))['addWikiPageComment']
   const addWorkItemComment: (typeof import('./src/api/work-items'))['addWorkItemComment']
   const addWorkItemToSprint: (typeof import('./src/api/sprints'))['addWorkItemToSprint']
@@ -60,6 +61,7 @@ declare global {
   const deleteWorkItemComment: (typeof import('./src/api/work-items'))['deleteWorkItemComment']
   const displayError: (typeof import('./src/composables/displayError'))['displayError']
   const effectScope: (typeof import('vue'))['effectScope']
+  const extractWisdom: (typeof import('./src/api/wisdom-extractor'))['extractWisdom']
   const format: (typeof import('./src/utils/date'))['format']
   const formatDistanceToNow: (typeof import('./src/utils/date'))['formatDistanceToNow']
   const formatEnumOptions: (typeof import('./src/utils/index'))['formatEnumOptions']
@@ -139,12 +141,15 @@ declare global {
   const ref: (typeof import('vue'))['ref']
   const registerUser: (typeof import('./src/api/users'))['registerUser']
   const remove: (typeof import('./src/api/http'))['remove']
+  const removeTagFromWorkItem: (typeof import('./src/api/work-items'))['removeTagFromWorkItem']
   const resolveComponent: (typeof import('vue'))['resolveComponent']
+  const searchWorkItems: (typeof import('./src/api/work-items'))['searchWorkItems']
   const shallowReactive: (typeof import('vue'))['shallowReactive']
   const shallowReadonly: (typeof import('vue'))['shallowReadonly']
   const shallowRef: (typeof import('vue'))['shallowRef']
   const shortcuts: (typeof import('./src/composables/useShortcuts'))['shortcuts']
   const storeToRefs: (typeof import('pinia'))['storeToRefs']
+  const summarizeText: (typeof import('./src/api/wisdom-extractor'))['summarizeText']
   const toRaw: (typeof import('vue'))['toRaw']
   const toRef: (typeof import('vue'))['toRef']
   const toRefs: (typeof import('vue'))['toRefs']
@@ -325,6 +330,9 @@ declare global {
   } from './src/types/wiki-page'
   import('./src/types/wiki-page')
   // @ts-ignore
+  export type { WisdomResponse, WorkItemWithDistanceResponse } from './src/types/wisdom-extractor'
+  import('./src/types/wisdom-extractor')
+  // @ts-ignore
   export type {
     ValueArea,
     WorkItemStatus,
@@ -366,6 +374,9 @@ declare module 'vue' {
     readonly WorkItemType: UnwrapRef<(typeof import('./src/types/work-item'))['WorkItemType']>
     readonly acceptHMRUpdate: UnwrapRef<(typeof import('pinia'))['acceptHMRUpdate']>
     readonly addDays: UnwrapRef<(typeof import('./src/utils/date'))['addDays']>
+    readonly addTagToWorkItem: UnwrapRef<
+      (typeof import('./src/api/work-items'))['addTagToWorkItem']
+    >
     readonly addWikiPageComment: UnwrapRef<
       (typeof import('./src/api/wiki-pages'))['addWikiPageComment']
     >
@@ -423,6 +434,9 @@ declare module 'vue' {
       (typeof import('./src/composables/displayError'))['displayError']
     >
     readonly effectScope: UnwrapRef<(typeof import('vue'))['effectScope']>
+    readonly extractWisdom: UnwrapRef<
+      (typeof import('./src/api/wisdom-extractor'))['extractWisdom']
+    >
     readonly format: UnwrapRef<(typeof import('./src/utils/date'))['format']>
     readonly formatDistanceToNow: UnwrapRef<
       (typeof import('./src/utils/date'))['formatDistanceToNow']
@@ -527,6 +541,9 @@ declare module 'vue' {
     readonly ref: UnwrapRef<(typeof import('vue'))['ref']>
     readonly registerUser: UnwrapRef<(typeof import('./src/api/users'))['registerUser']>
     readonly remove: UnwrapRef<(typeof import('./src/api/http'))['remove']>
+    readonly removeTagFromWorkItem: UnwrapRef<
+      (typeof import('./src/api/work-items'))['removeTagFromWorkItem']
+    >
     readonly resolveComponent: UnwrapRef<(typeof import('vue'))['resolveComponent']>
     readonly shallowReactive: UnwrapRef<(typeof import('vue'))['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<(typeof import('vue'))['shallowReadonly']>

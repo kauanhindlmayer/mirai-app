@@ -39,6 +39,7 @@ declare module 'vue-router/auto-routes' {
     '/projects/[projectId]/wiki-pages/[wikiPageId]/': RouteRecordInfo<'/projects/[projectId]/wiki-pages/[wikiPageId]/', '/projects/:projectId/wiki-pages/:wikiPageId', { projectId: ParamValue<true>, wikiPageId: ParamValue<true> }, { projectId: ParamValue<false>, wikiPageId: ParamValue<false> }>,
     '/projects/[projectId]/wiki-pages/[wikiPageId]/edit': RouteRecordInfo<'/projects/[projectId]/wiki-pages/[wikiPageId]/edit', '/projects/:projectId/wiki-pages/:wikiPageId/edit', { projectId: ParamValue<true>, wikiPageId: ParamValue<true> }, { projectId: ParamValue<false>, wikiPageId: ParamValue<false> }>,
     '/projects/[projectId]/wiki-pages/new': RouteRecordInfo<'/projects/[projectId]/wiki-pages/new', '/projects/:projectId/wiki-pages/new', { projectId: ParamValue<true> }, { projectId: ParamValue<false> }>,
+    '/projects/[projectId]/wisdom-extractor': RouteRecordInfo<'/projects/[projectId]/wisdom-extractor', '/projects/:projectId/wisdom-extractor', { projectId: ParamValue<true> }, { projectId: ParamValue<false> }>,
     '/projects/[projectId]/work-items': RouteRecordInfo<'/projects/[projectId]/work-items', '/projects/:projectId/work-items', { projectId: ParamValue<true> }, { projectId: ParamValue<false> }>,
     '/register': RouteRecordInfo<'/register', '/register', Record<never, never>, Record<never, never>>,
   }
