@@ -119,7 +119,7 @@ defineExpose({
     v-model:visible="isVisible"
     modal
     maximizable
-    :style="{ width: '90vw', maxWidth: '1200px', height: '85vh' }"
+    :style="{ width: '75vw', height: '85vh' }"
     :content-style="{ height: '100%', margin: '0', padding: '0' }"
     :draggable="false"
     @hide="hideDialog"
@@ -210,7 +210,7 @@ defineExpose({
         <span class="ml-auto mr-5">Last Updated: {{ workItemLastUpdated }}</span>
       </div>
       <div class="flex w-full gap-4">
-        <Accordion :value="['0', '1', '2']" multiple class="w-[70%]">
+        <Accordion :value="['0', '1', '2']" multiple class="w-[65%]">
           <AccordionPanel value="0">
             <AccordionHeader>
               <span class="text-lg">Description</span>
@@ -253,7 +253,7 @@ defineExpose({
           </AccordionPanel>
         </Accordion>
 
-        <Accordion :value="['0', '1']" multiple class="w-[30%]">
+        <Accordion :value="['0', '1']" multiple class="w-[32.5%]">
           <AccordionPanel value="0">
             <AccordionHeader>
               <span class="text-lg">Planning</span>
@@ -295,11 +295,25 @@ defineExpose({
               </div>
             </AccordionContent>
           </AccordionPanel>
-          <AccordionPanel value="2">
+        </Accordion>
+
+        <Accordion :value="['0', '1']" multiple class="w-[32.5%]">
+          <AccordionPanel value="0">
+            <AccordionHeader>
+              <span class="text-lg">Development</span>
+            </AccordionHeader>
+            <AccordionContent>
+              Link a GitHub commit, pull request or branch to this work item to see the status of
+              your development.
+            </AccordionContent>
+          </AccordionPanel>
+          <AccordionPanel value="1">
             <AccordionHeader>
               <span class="text-lg">Related Work Items</span>
             </AccordionHeader>
-            <AccordionContent> Related Work Items content goes here </AccordionContent>
+            <AccordionContent>
+              Add an existing work item as a related item to this work item.
+            </AccordionContent>
           </AccordionPanel>
         </Accordion>
       </div>

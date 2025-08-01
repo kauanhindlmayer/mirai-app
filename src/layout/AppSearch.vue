@@ -17,6 +17,7 @@ function redirectToWisdomExtractor() {
     name: '/projects/[projectId]/wisdom-extractor',
     query: { q: searchQuery.value },
   })
+  searchQuery.value = ''
 }
 
 function focusOnInput() {
