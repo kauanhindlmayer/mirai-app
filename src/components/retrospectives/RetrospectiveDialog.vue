@@ -27,7 +27,7 @@ const defaultValues = {
   template: ProcessTemplate.Classic,
 }
 
-const initialValues = computed(() => {
+function getInitialValues(): Partial<Retrospective> {
   if (isUpdateMode.value && props.retrospective) {
     return {
       title: props.retrospective.title,
@@ -36,25 +36,15 @@ const initialValues = computed(() => {
     }
   }
   return defaultValues
-})
+}
 
-const form = ref<Partial<Retrospective>>({ ...initialValues.value })
+const form = ref<Partial<Retrospective>>({ ...getInitialValues() })
 
-watch(
-  () => props.retrospective,
-  (newRetrospective) => {
-    if (newRetrospective) {
-      Object.assign(form.value, {
-        title: newRetrospective.title,
-        maxVotesPerUser: newRetrospective.maxVotesPerUser,
-        template: newRetrospective.template,
-      })
-    } else {
-      Object.assign(form.value, defaultValues)
-    }
-  },
-  { immediate: true },
-)
+watch(() => props.retrospective, resetForm, { immediate: true })
+
+function resetForm() {
+  Object.assign(form.value, getInitialValues())
+}
 
 const templates = formatEnumOptions(ProcessTemplate)
 const titlePlaceholder = computed(() => {
@@ -67,13 +57,13 @@ const titlePlaceholder = computed(() => {
 const createRetrospectiveSchema = object({
   title: string().required('Title is a required field'),
   maxVotesPerUser: number().min(3).max(12).required('Max Votes Per User is a required field'),
-  template: string().required('Template is a required field'),
+  template: string().oneOf(Object.values(ProcessTemplate)).required('Template is a required field'),
 })
 
 const resolver = ref(yupResolver(createRetrospectiveSchema))
 const queryCache = useQueryCache()
 
-const { mutate: createRetrospectiveFn } = useMutation({
+const { mutate: createRetrospectiveFn, isLoading: isCreating } = useMutation({
   mutation: (data: Partial<Retrospective>) =>
     createRetrospective({ ...data, teamId: teamId.value! }),
   onSuccess: () => {
@@ -82,7 +72,7 @@ const { mutate: createRetrospectiveFn } = useMutation({
   },
 })
 
-const { mutate: updateRetrospectiveFn } = useMutation({
+const { mutate: updateRetrospectiveFn, isLoading: isUpdating } = useMutation({
   mutation: (data: Partial<Retrospective>) =>
     updateRetrospective(teamId.value!, props.retrospective!.id, { ...data }),
   onSuccess: () => {
@@ -91,6 +81,8 @@ const { mutate: updateRetrospectiveFn } = useMutation({
     hideDialog()
   },
 })
+
+const isSubmitting = computed(() => isCreating.value || isUpdating.value)
 
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
@@ -106,11 +98,11 @@ const { isVisible, showDialog } = useDialog()
 
 function hideDialog() {
   isVisible.value = false
-  Object.assign(form.value, initialValues.value)
+  resetForm()
 }
 
 function openDialog() {
-  Object.assign(form.value, initialValues.value)
+  resetForm()
   showDialog()
 }
 
@@ -128,7 +120,7 @@ defineExpose({
       </span>
     </template>
     <Form
-      :initial-values="initialValues"
+      :initial-values="getInitialValues()"
       :resolver
       class="flex flex-col h-full"
       @submit="onFormSubmit"
@@ -192,7 +184,7 @@ defineExpose({
 
       <div class="flex justify-end gap-2 mt-4">
         <Button type="button" label="Cancel" severity="secondary" @click="hideDialog" />
-        <Button type="submit" :label="submitButtonLabel" />
+        <Button type="submit" :label="submitButtonLabel" :disabled="isSubmitting" />
       </div>
     </Form>
   </Dialog>
