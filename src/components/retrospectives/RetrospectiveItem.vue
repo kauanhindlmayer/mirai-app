@@ -23,7 +23,7 @@ function toggleMenuItems(event: MouseEvent) {
 
 function confirmDeleteRetrospectiveItem() {
   confirm.require({
-    header: 'Delete Item?',
+    header: 'Delete Item',
     message: `Are you sure you want to delete the item '${item.content}'?`,
     rejectProps: {
       label: 'Cancel',

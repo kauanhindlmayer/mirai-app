@@ -45,3 +45,7 @@ export function deleteRetrospectiveItem(
     `/teams/${teamId}/retrospectives/${retrospectiveId}/columns/${columnId}/items/${itemId}`,
   )
 }
+
+export function deleteRetrospective(teamId: string, retrospectiveId: string): Promise<void> {
+  return http.delete(`/teams/${teamId}/retrospectives/${retrospectiveId}`)
+}

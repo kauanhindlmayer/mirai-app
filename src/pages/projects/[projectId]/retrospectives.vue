@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import type { Menu } from 'primevue'
+import { useConfirm, type Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
+import { deleteRetrospective } from '~/api/retrospectives'
 import RetrospectiveDialog from '~/components/retrospectives/RetrospectiveDialog.vue'
 
 const pageStore = usePageStore()
@@ -91,6 +92,35 @@ function openEditRetrospectiveDialog() {
   retrospectiveDialogRef.value?.showDialog()
 }
 
+const confirm = useConfirm()
+
+async function confirmDeleteRetrospective() {
+  confirm.require({
+    header: 'Delete Retrospective',
+    message: 'Are you sure you want to delete this retrospective?',
+    rejectProps: {
+      label: 'Cancel',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Delete',
+      severity: 'danger',
+    },
+    accept: deleteRetrospectiveFn,
+  })
+}
+
+const { mutate: deleteRetrospectiveFn } = useMutation({
+  mutation: () => deleteRetrospective(teamId.value!, retrospectiveId.value),
+  onSuccess: () => {
+    queryCache.invalidateQueries({ key: ['retrospectives', teamId.value!] })
+    queryCache.invalidateQueries({ key: ['retrospective', retrospectiveId.value] })
+    selectedRetrospective.value = null
+    retrospectiveToEdit.value = undefined
+  },
+})
+
 const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
 const menuItems = ref<MenuItem[]>([
   {
@@ -111,7 +141,7 @@ const menuItems = ref<MenuItem[]>([
   {
     label: 'Delete Retrospective',
     icon: 'pi pi-trash',
-    disabled: true,
+    command: confirmDeleteRetrospective,
   },
 ])
 
