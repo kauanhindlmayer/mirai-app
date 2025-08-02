@@ -27,6 +27,14 @@ export function createRetrospectiveItem(
   })
 }
 
+export function updateRetrospective(
+  teamId: string,
+  retrospectiveId: string,
+  retrospective: Partial<Retrospective>,
+): Promise<void> {
+  return http.put(`/teams/${teamId}/retrospectives/${retrospectiveId}`, retrospective)
+}
+
 export function deleteRetrospectiveItem(
   teamId: string,
   retrospectiveId: string,

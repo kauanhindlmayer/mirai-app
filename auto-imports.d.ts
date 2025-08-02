@@ -160,6 +160,7 @@ declare global {
   const updatePersona: (typeof import('./src/api/personas'))['updatePersona']
   const updateProfilePicture: (typeof import('./src/api/users'))['updateProfilePicture']
   const updateProject: (typeof import('./src/api/projects'))['updateProject']
+  const updateRetrospective: (typeof import('./src/api/retrospectives'))['updateRetrospective']
   const updateTag: (typeof import('./src/api/tags'))['updateTag']
   const updateUserProfile: (typeof import('./src/api/users'))['updateUserProfile']
   const updateWikiPage: (typeof import('./src/api/wiki-pages'))['updateWikiPage']
@@ -561,6 +562,9 @@ declare module 'vue' {
       (typeof import('./src/api/users'))['updateProfilePicture']
     >
     readonly updateProject: UnwrapRef<(typeof import('./src/api/projects'))['updateProject']>
+    readonly updateRetrospective: UnwrapRef<
+      (typeof import('./src/api/retrospectives'))['updateRetrospective']
+    >
     readonly updateTag: UnwrapRef<(typeof import('./src/api/tags'))['updateTag']>
     readonly updateUserProfile: UnwrapRef<(typeof import('./src/api/users'))['updateUserProfile']>
     readonly updateWikiPage: UnwrapRef<(typeof import('./src/api/wiki-pages'))['updateWikiPage']>

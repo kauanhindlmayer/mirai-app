@@ -74,6 +74,7 @@ declare module 'vue' {
     RadioButton: typeof import('primevue/radiobutton')['default']
     RetrospectiveBoard: typeof import('./src/components/retrospectives/RetrospectiveBoard.vue')['default']
     RetrospectiveColumn: typeof import('./src/components/retrospectives/RetrospectiveColumn.vue')['default']
+    RetrospectiveDialog: typeof import('./src/components/retrospectives/RetrospectiveDialog.vue')['default']
     RetrospectiveItem: typeof import('./src/components/retrospectives/RetrospectiveItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

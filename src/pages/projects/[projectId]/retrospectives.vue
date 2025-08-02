@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import CreateRetrospectiveDialog from '~/components/retrospectives/CreateRetrospectiveDialog.vue'
+import RetrospectiveDialog from '~/components/retrospectives/RetrospectiveDialog.vue'
 
 const pageStore = usePageStore()
 pageStore.setTitle('Retrospectives - Boards')
@@ -77,20 +77,46 @@ function setBreadcrumbs() {
   ])
 }
 
+const retrospectiveDialogRef =
+  useTemplateRef<InstanceType<typeof RetrospectiveDialog>>('retrospectiveDialog')
+const retrospectiveToEdit = ref<Retrospective | undefined>(undefined)
+
+function openCreateRetrospectiveDialog() {
+  retrospectiveToEdit.value = undefined
+  retrospectiveDialogRef.value?.showDialog()
+}
+
+function openEditRetrospectiveDialog() {
+  retrospectiveToEdit.value = retrospective.value
+  retrospectiveDialogRef.value?.showDialog()
+}
+
 const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menu')
 const menuItems = ref<MenuItem[]>([
-  { label: 'Create New Retrospective', icon: 'pi pi-plus', command: openCreateRetrospectiveDialog },
-  { label: 'Edit Retrospective', icon: 'pi pi-pencil', disabled: true },
-  { label: 'Copy Retrospective Link', icon: 'pi pi-link', command: copyRetrospectiveLink },
-  { label: 'Delete Retrospective', icon: 'pi pi-trash', disabled: true },
+  {
+    label: 'Create New Retrospective',
+    icon: 'pi pi-plus',
+    command: openCreateRetrospectiveDialog,
+  },
+  {
+    label: 'Edit Retrospective',
+    icon: 'pi pi-pencil',
+    command: openEditRetrospectiveDialog,
+  },
+  {
+    label: 'Copy Retrospective Link',
+    icon: 'pi pi-link',
+    command: copyRetrospectiveLink,
+  },
+  {
+    label: 'Delete Retrospective',
+    icon: 'pi pi-trash',
+    disabled: true,
+  },
 ])
 
 function toggleMenuItems(event: MouseEvent) {
   menuRef.value?.toggle(event)
-}
-
-function openCreateRetrospectiveDialog() {
-  createRetrospectiveDialogRef.value?.showDialog()
 }
 
 const toast = useAppToast()
@@ -99,10 +125,6 @@ function copyRetrospectiveLink() {
   navigator.clipboard.writeText(window.location.href)
   toast.showSuccess({ detail: `The link to the retrospective has been copied to the clipboard` })
 }
-
-const createRetrospectiveDialogRef = useTemplateRef<InstanceType<typeof CreateRetrospectiveDialog>>(
-  'createRetrospectiveDialog',
-)
 
 const retrospectiveHub = useSignalR('/hubs/retrospective')
 const queryCache = useQueryCache()
@@ -193,5 +215,5 @@ onBeforeMount(async () => {
       </div>
     </div>
   </div>
-  <CreateRetrospectiveDialog ref="createRetrospectiveDialog" />
+  <RetrospectiveDialog ref="retrospectiveDialog" :retrospective="retrospectiveToEdit" />
 </template>
