@@ -50,7 +50,7 @@ const { mutate: deleteRetrospectiveItemFn } = useMutation({
 </script>
 
 <template>
-  <div class="card flex justify-between p-4 mb-0!">
+  <div class="relative card flex justify-between p-4 mb-0!">
     <div class="flex flex-col gap-2">
       <p class="text-surface-900 dark:text-surface-0 mb-4 text-wrap w-[200px]">
         {{ item.content }}
@@ -60,7 +60,7 @@ const { mutate: deleteRetrospectiveItemFn } = useMutation({
       </p>
     </div>
 
-    <div class="-mr-4">
+    <div class="absolute right-1 top-1">
       <Button
         icon="pi pi-ellipsis-v"
         severity="secondary"
