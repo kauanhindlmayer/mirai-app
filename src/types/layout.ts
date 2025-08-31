@@ -70,6 +70,7 @@ export type LayoutState = {
   rightMenuVisible: boolean
   isConfigSidebarVisible: boolean
   isKeyboardShortcutsSidebarVisible: boolean
+  isProfileSidebarVisible: boolean
   staticMenuMobileActive: boolean
   menuHoverActive: boolean
   searchBarActive: boolean

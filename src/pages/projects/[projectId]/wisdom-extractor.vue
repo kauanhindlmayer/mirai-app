@@ -33,6 +33,13 @@ function openWorkItemDialog(workItemId: string) {
   })
 }
 
+function formatAnswer(answer: string) {
+  return answer
+    .replace(/\n/g, '<br>')
+    .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
+    .replace(/- /g, '• ')
+}
+
 function setBreadcrumbs() {
   pageStore.setBreadcrumbs([
     { label: project.value.name, route: `/projects/${project.value.id}/summary` },
@@ -121,9 +128,8 @@ onMounted(() => {
                 <div
                   v-else-if="wisdom.answer"
                   class="prose dark:prose-invert max-w-none text-sm leading-relaxed"
-                >
-                  {{ wisdom.answer }}
-                </div>
+                  v-html="formatAnswer(wisdom.answer)"
+                />
 
                 <div v-else class="text-sm text-surface-500 italic">No answer available.</div>
               </div>

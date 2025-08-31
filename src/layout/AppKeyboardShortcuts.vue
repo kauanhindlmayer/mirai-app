@@ -12,7 +12,7 @@ const panelsShortcuts = shortcuts.filter((s) => s.category === ShortcutCategory.
     v-model:visible="layoutState.isKeyboardShortcutsSidebarVisible"
     position="right"
     header="Keyboard Shortcuts"
-    class="w-96!"
+    :style="{ width: '340px' }"
     :pt="{ pcCloseButton: { root: 'ml-auto' } }"
   >
     <div class="grid grid-cols-1 gap-4">

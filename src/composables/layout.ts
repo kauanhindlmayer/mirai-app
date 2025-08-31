@@ -24,6 +24,7 @@ const layoutState = reactive<LayoutState>({
   rightMenuVisible: false,
   isConfigSidebarVisible: false,
   isKeyboardShortcutsSidebarVisible: false,
+  isProfileSidebarVisible: false,
   staticMenuMobileActive: false,
   menuHoverActive: false,
   searchBarActive: false,
@@ -57,6 +58,7 @@ export function useLayout() {
     layoutState.menuHoverActive = false
     layoutState.isConfigSidebarVisible = false
     layoutState.isKeyboardShortcutsSidebarVisible = false
+    layoutState.isProfileSidebarVisible = false
   }
 
   function onConfigSidebarToggle() {
@@ -71,6 +73,13 @@ export function useLayout() {
       clearAllSidebars()
     }
     layoutState.isKeyboardShortcutsSidebarVisible = !layoutState.isKeyboardShortcutsSidebarVisible
+  }
+
+  function onProfileSidebarToggle() {
+    if (isSidebarActive.value) {
+      clearAllSidebars()
+    }
+    layoutState.isProfileSidebarVisible = !layoutState.isProfileSidebarVisible
   }
   function onSearchBarToggle() {
     layoutState.searchBarActive = !layoutState.searchBarActive
@@ -102,6 +111,7 @@ export function useLayout() {
     setActiveMenuItem,
     onConfigSidebarToggle,
     onKeyboardShortcutsSidebarToggle,
+    onProfileSidebarToggle,
     onMenuToggle,
     onSearchBarToggle,
     isSidebarActive,

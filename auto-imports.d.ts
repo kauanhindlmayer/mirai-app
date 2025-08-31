@@ -157,6 +157,7 @@ declare global {
   const toValue: (typeof import('vue'))['toValue']
   const triggerRef: (typeof import('vue'))['triggerRef']
   const unref: (typeof import('vue'))['unref']
+  const updateAvatar: (typeof import('./src/api/users'))['updateAvatar']
   const updateComment: (typeof import('./src/api/wiki-pages'))['updateComment']
   const updatePersona: (typeof import('./src/api/personas'))['updatePersona']
   const updateProfilePicture: (typeof import('./src/api/users'))['updateProfilePicture']
@@ -561,10 +562,8 @@ declare module 'vue' {
     readonly toValue: UnwrapRef<(typeof import('vue'))['toValue']>
     readonly triggerRef: UnwrapRef<(typeof import('vue'))['triggerRef']>
     readonly unref: UnwrapRef<(typeof import('vue'))['unref']>
+    readonly updateAvatar: UnwrapRef<(typeof import('./src/api/users'))['updateAvatar']>
     readonly updatePersona: UnwrapRef<(typeof import('./src/api/personas'))['updatePersona']>
-    readonly updateProfilePicture: UnwrapRef<
-      (typeof import('./src/api/users'))['updateProfilePicture']
-    >
     readonly updateProject: UnwrapRef<(typeof import('./src/api/projects'))['updateProject']>
     readonly updateRetrospective: UnwrapRef<
       (typeof import('./src/api/retrospectives'))['updateRetrospective']

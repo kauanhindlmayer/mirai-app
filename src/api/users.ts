@@ -23,8 +23,10 @@ export function updateUserProfile(request: UpdateUserProfileRequest): Promise<vo
   return http.put('/users/profile', request)
 }
 
-export function updateProfilePicture(file: File): Promise<void> {
+export function updateAvatar(file: File): Promise<void> {
   const formData = new FormData()
   formData.append('file', file)
-  return http.patch('/users/profile/picture', formData)
+  return http.patch('/users/avatar', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
 }

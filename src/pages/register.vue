@@ -16,10 +16,18 @@ const form = ref({
 const registerUserSchema = object({
   firstName: string()
     .required('First Name is a required field')
-    .matches(/^[a-zA-Z]+$/, 'First Name must contain only letters'),
+    .max(50, 'First Name must be less than 50 characters')
+    .matches(
+      /^[\p{L}\p{M}\s'-]+$/u,
+      'First Name can only contain letters, spaces, hyphens, and apostrophes',
+    ),
   lastName: string()
     .required('Last Name is a required field')
-    .matches(/^[a-zA-Z]+$/, 'Last Name must contain only letters'),
+    .max(100, 'Last Name must be less than 100 characters')
+    .matches(
+      /^[\p{L}\p{M}\s'-]+$/u,
+      'Last Name can only contain letters, spaces, hyphens, and apostrophes',
+    ),
   email: string().email('Email must be a valid email').required('Email is a required field'),
   password: string()
     .required('Password is a required field')

@@ -6,6 +6,7 @@ const {
   onMenuToggle,
   onConfigSidebarToggle,
   onKeyboardShortcutsSidebarToggle,
+  onProfileSidebarToggle,
   onSearchBarToggle,
 } = useLayout()
 
@@ -191,7 +192,8 @@ function logout() {
             <ul class="flex flex-col gap-1">
               <li>
                 <a
-                  class="label-small dark:text-surface-400 flex gap-2 py-2 px-2.5 rounded-lg items-center opacity-50 pointer-events-none cursor-not-allowed"
+                  class="label-small dark:text-surface-400 flex gap-2 py-2 px-2.5 rounded-lg items-center hover:bg-emphasis transition-colors duration-150 cursor-pointer"
+                  @click="onProfileSidebarToggle"
                 >
                   <i class="pi pi-user" />
                   <span>Profile</span>

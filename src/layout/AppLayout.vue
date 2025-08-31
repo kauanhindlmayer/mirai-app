@@ -45,6 +45,8 @@ function bindOutsideClickListener() {
         layoutState.staticMenuMobileActive = false
         layoutState.menuHoverActive = false
         layoutState.isConfigSidebarVisible = false
+        layoutState.isKeyboardShortcutsSidebarVisible = false
+        layoutState.isProfileSidebarVisible = false
       }
     }
 
@@ -90,6 +92,7 @@ function isOutsideClicked(event: MouseEvent) {
     <AppConfig />
     <AppKeyboardShortcuts />
     <AppSearch />
+    <UserProfileSidebar />
     <Toast />
     <div class="layout-mask" />
   </div>
