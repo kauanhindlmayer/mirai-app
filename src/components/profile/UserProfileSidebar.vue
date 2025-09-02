@@ -22,7 +22,7 @@ const originalProfileData = ref<UpdateUserProfileRequest>({
 
 const avatarFile = ref<File | null>(null)
 const avatarPreview = ref<string | null>(null)
-const fileInput = ref<HTMLInputElement>()
+const fileInput = useTemplateRef<InstanceType<typeof HTMLInputElement>>('fileInput')
 
 const hasUnsavedChanges = computed(() => {
   return (
@@ -82,19 +82,31 @@ const { mutate: updateAvatarFn, isLoading: isUpdatingAvatar } = useMutation({
 })
 
 watchEffect(() => {
-  if (user.value) {
-    profileForm.firstName = user.value.firstName
-    profileForm.lastName = user.value.lastName
-    originalProfileData.value.firstName = user.value.firstName
-    originalProfileData.value.lastName = user.value.lastName
-  }
+  if (!user.value) return
+  profileForm.firstName = user.value.firstName
+  profileForm.lastName = user.value.lastName
+  originalProfileData.value.firstName = user.value.firstName
+  originalProfileData.value.lastName = user.value.lastName
 })
 
 function onFileSelect(event: Event) {
   const input = event.target as HTMLInputElement
   const file = input.files?.[0]
   if (!file) return
-  processSelectedFile(file)
+  if (!file.type.startsWith('image/')) {
+    toast.showError({ detail: 'Please select a valid image file' })
+    return
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    toast.showError({ detail: 'Image size must be less than 5MB' })
+    return
+  }
+  avatarFile.value = file
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    avatarPreview.value = e.target?.result as string
+  }
+  reader.readAsDataURL(file)
 }
 
 async function handleUpdateProfile({ valid }: FormSubmitEvent) {
@@ -111,23 +123,6 @@ function resetAvatarSelection() {
   avatarFile.value = null
   avatarPreview.value = null
   if (fileInput.value) fileInput.value.value = ''
-}
-
-function processSelectedFile(file: File) {
-  if (!file.type.startsWith('image/')) {
-    toast.showError({ detail: 'Please select a valid image file' })
-    return
-  }
-  if (file.size > 5 * 1024 * 1024) {
-    toast.showError({ detail: 'Image size must be less than 5MB' })
-    return
-  }
-  avatarFile.value = file
-  const reader = new FileReader()
-  reader.onload = (e) => {
-    avatarPreview.value = e.target?.result as string
-  }
-  reader.readAsDataURL(file)
 }
 </script>
 
@@ -149,8 +144,10 @@ function processSelectedFile(file: File) {
       <ProgressSpinner size="small" />
     </div>
     <div class="flex flex-col gap-8 mb-6">
-      <div>
-        <h3 class="text-lg font-medium text-surface-900 dark:text-surface-0 mb-3">Avatar</h3>
+      <section>
+        <h3 class="text-lg font-medium text-surface-900 dark:text-surface-0 mb-3">
+          Profile Picture
+        </h3>
 
         <div class="flex items-center gap-3">
           <Avatar
@@ -174,8 +171,8 @@ function processSelectedFile(file: File) {
               severity="secondary"
               outlined
               size="small"
-              @click="($refs.fileInput as HTMLInputElement)?.click()"
               class="w-full"
+              @click="fileInput?.click()"
             />
             <p class="text-xs text-surface-500 dark:text-surface-400 mt-1">
               Accepts PNG or JPG files up to 5MB
@@ -187,34 +184,33 @@ function processSelectedFile(file: File) {
           <Button
             label="Save"
             icon="pi pi-check"
-            @click="handleUpdateAvatar"
             :loading="isUpdatingAvatar"
             size="small"
             class="flex-1"
+            @click="handleUpdateAvatar"
           />
           <Button
             icon="pi pi-times"
             severity="secondary"
             outlined
-            @click="resetAvatarSelection"
             :disabled="isUpdatingAvatar"
             size="small"
+            @click="resetAvatarSelection"
           />
         </div>
-      </div>
+      </section>
     </div>
 
-    <div>
+    <section>
       <h3 class="text-lg font-medium text-surface-900 dark:text-surface-0 mb-3">
         Personal Information
       </h3>
-
       <Form
         :resolver
         :initial-values="profileForm"
         class="flex flex-col gap-3"
-        @submit="handleUpdateProfile"
         validate-on="blur"
+        @submit="handleUpdateProfile"
       >
         <FormField v-slot="$field" name="firstName">
           <label for="firstName" class="text-sm font-medium text-surface-700 dark:text-surface-200">
@@ -266,6 +262,6 @@ function processSelectedFile(file: File) {
           class="mt-2"
         />
       </Form>
-    </div>
+    </section>
   </Drawer>
 </template>
