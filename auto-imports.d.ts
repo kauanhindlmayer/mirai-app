@@ -60,7 +60,7 @@ declare global {
   const deleteWikiPageComment: (typeof import('./src/api/wiki-pages'))['deleteWikiPageComment']
   const deleteWorkItem: (typeof import('./src/api/work-items'))['deleteWorkItem']
   const deleteWorkItemComment: (typeof import('./src/api/work-items'))['deleteWorkItemComment']
-  const displayError: (typeof import('./src/composables/displayError'))['displayError']
+  const displayError: (typeof import('./src/utils/display-error'))['displayError']
   const effectScope: (typeof import('vue'))['effectScope']
   const extractWisdom: (typeof import('./src/api/wisdom-extractor'))['extractWisdom']
   const format: (typeof import('./src/utils/date'))['format']
@@ -148,7 +148,7 @@ declare global {
   const shallowReactive: (typeof import('vue'))['shallowReactive']
   const shallowReadonly: (typeof import('vue'))['shallowReadonly']
   const shallowRef: (typeof import('vue'))['shallowRef']
-  const shortcuts: (typeof import('./src/composables/useShortcuts'))['shortcuts']
+  const shortcuts: (typeof import('./src/composables/shortcuts'))['shortcuts']
   const storeToRefs: (typeof import('pinia'))['storeToRefs']
   const summarizeText: (typeof import('./src/api/wisdom-extractor'))['summarizeText']
   const toRaw: (typeof import('vue'))['toRaw']
@@ -169,13 +169,13 @@ declare global {
   const updateWikiPageComment: (typeof import('./src/api/wiki-pages'))['updateWikiPageComment']
   const updateWorkItem: (typeof import('./src/api/work-items'))['updateWorkItem']
   const updateWorkItemComment: (typeof import('./src/api/work-items'))['updateWorkItemComment']
-  const useAppToast: (typeof import('./src/composables/useAppToast'))['useAppToast']
+  const useAppToast: (typeof import('./src/composables/app-toast'))['useAppToast']
   const useAttrs: (typeof import('vue'))['useAttrs']
   const useCache: (typeof import('piniaColada'))['useCache']
   const useCssModule: (typeof import('vue'))['useCssModule']
   const useCssVars: (typeof import('vue'))['useCssVars']
-  const useDialog: (typeof import('./src/composables/useDialog'))['useDialog']
-  const useDrawer: (typeof import('./src/composables/useDialog'))['useDrawer']
+  const useDialog: (typeof import('./src/composables/dialog'))['useDialog']
+  const useDrawer: (typeof import('./src/composables/dialog'))['useDrawer']
   const useId: (typeof import('vue'))['useId']
   const useLayout: (typeof import('./src/composables/layout'))['useLayout']
   const useLink: (typeof import('vue-router'))['useLink']
@@ -190,8 +190,8 @@ declare global {
   const useQueryCache: (typeof import('@pinia/colada'))['useQueryCache']
   const useRoute: (typeof import('vue-router'))['useRoute']
   const useRouter: (typeof import('vue-router'))['useRouter']
-  const useShortcuts: (typeof import('./src/composables/useShortcuts'))['useShortcuts']
-  const useSignalR: (typeof import('./src/composables/useSignalR'))['useSignalR']
+  const useShortcuts: (typeof import('./src/composables/shortcuts'))['useShortcuts']
+  const useSignalR: (typeof import('./src/composables/signal-r'))['useSignalR']
   const useSlots: (typeof import('vue'))['useSlots']
   const useTeamStore: (typeof import('./src/stores/team'))['useTeamStore']
   const useTeams: (typeof import('./src/queries/teams'))['useTeams']
@@ -226,9 +226,6 @@ declare global {
     WritableComputedRef,
   } from 'vue'
   import('vue')
-  // @ts-ignore
-  export type { ApiErrorResponse } from './src/composables/displayError'
-  import('./src/composables/displayError')
   // @ts-ignore
   export type {
     Board,
@@ -358,6 +355,9 @@ declare global {
   // @ts-ignore
   export type { DateType } from './src/utils/date'
   import('./src/utils/date')
+  // @ts-ignore
+  export type { ApiErrorResponse } from './src/utils/display-error'
+  import('./src/utils/display-error')
 }
 
 // for vue template auto import
@@ -443,9 +443,7 @@ declare module 'vue' {
     readonly deleteWorkItemComment: UnwrapRef<
       (typeof import('./src/api/work-items'))['deleteWorkItemComment']
     >
-    readonly displayError: UnwrapRef<
-      (typeof import('./src/composables/displayError'))['displayError']
-    >
+    readonly displayError: UnwrapRef<(typeof import('./src/utils/display-error'))['displayError']>
     readonly effectScope: UnwrapRef<(typeof import('vue'))['effectScope']>
     readonly extractWisdom: UnwrapRef<
       (typeof import('./src/api/wisdom-extractor'))['extractWisdom']
@@ -561,7 +559,7 @@ declare module 'vue' {
     readonly shallowReactive: UnwrapRef<(typeof import('vue'))['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<(typeof import('vue'))['shallowReadonly']>
     readonly shallowRef: UnwrapRef<(typeof import('vue'))['shallowRef']>
-    readonly shortcuts: UnwrapRef<(typeof import('./src/composables/useShortcuts'))['shortcuts']>
+    readonly shortcuts: UnwrapRef<(typeof import('./src/composables/shortcuts'))['shortcuts']>
     readonly storeToRefs: UnwrapRef<(typeof import('pinia'))['storeToRefs']>
     readonly toRaw: UnwrapRef<(typeof import('vue'))['toRaw']>
     readonly toRef: UnwrapRef<(typeof import('vue'))['toRef']>
@@ -585,12 +583,12 @@ declare module 'vue' {
     readonly updateWorkItemComment: UnwrapRef<
       (typeof import('./src/api/work-items'))['updateWorkItemComment']
     >
-    readonly useAppToast: UnwrapRef<(typeof import('./src/composables/useAppToast'))['useAppToast']>
+    readonly useAppToast: UnwrapRef<(typeof import('./src/composables/app-toast'))['useAppToast']>
     readonly useAttrs: UnwrapRef<(typeof import('vue'))['useAttrs']>
     readonly useCssModule: UnwrapRef<(typeof import('vue'))['useCssModule']>
     readonly useCssVars: UnwrapRef<(typeof import('vue'))['useCssVars']>
-    readonly useDialog: UnwrapRef<(typeof import('./src/composables/useDialog'))['useDialog']>
-    readonly useDrawer: UnwrapRef<(typeof import('./src/composables/useDialog'))['useDrawer']>
+    readonly useDialog: UnwrapRef<(typeof import('./src/composables/dialog'))['useDialog']>
+    readonly useDrawer: UnwrapRef<(typeof import('./src/composables/dialog'))['useDrawer']>
     readonly useId: UnwrapRef<(typeof import('vue'))['useId']>
     readonly useLayout: UnwrapRef<(typeof import('./src/composables/layout'))['useLayout']>
     readonly useMeta: UnwrapRef<(typeof import('vue-meta'))['useMeta']>
@@ -606,10 +604,8 @@ declare module 'vue' {
     readonly useQueryCache: UnwrapRef<(typeof import('@pinia/colada'))['useQueryCache']>
     readonly useRoute: UnwrapRef<(typeof import('vue-router'))['useRoute']>
     readonly useRouter: UnwrapRef<(typeof import('vue-router'))['useRouter']>
-    readonly useShortcuts: UnwrapRef<
-      (typeof import('./src/composables/useShortcuts'))['useShortcuts']
-    >
-    readonly useSignalR: UnwrapRef<(typeof import('./src/composables/useSignalR'))['useSignalR']>
+    readonly useShortcuts: UnwrapRef<(typeof import('./src/composables/shortcuts'))['useShortcuts']>
+    readonly useSignalR: UnwrapRef<(typeof import('./src/composables/signal-r'))['useSignalR']>
     readonly useSlots: UnwrapRef<(typeof import('vue'))['useSlots']>
     readonly useTeamStore: UnwrapRef<(typeof import('./src/stores/team'))['useTeamStore']>
     readonly useTeams: UnwrapRef<(typeof import('./src/queries/teams'))['useTeams']>

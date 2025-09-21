@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { shortcuts } from '~/composables/useShortcuts'
+import { shortcuts } from '~/composables/shortcuts'
 import { ShortcutCategory } from '~/types'
 
 const { layoutState } = useLayout()

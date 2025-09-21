@@ -1,5 +1,5 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios'
-import { useAppToast } from '~/composables/useAppToast'
+import { useAppToast } from '~/composables/app-toast'
 import { useUserStore } from '~/stores/user'
 import type { RequestConfig } from '~/types'
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useAppToast } from './useAppToast'
+import { useAppToast } from '~/composables/app-toast'
 
 export interface ApiErrorResponse {
   type: string

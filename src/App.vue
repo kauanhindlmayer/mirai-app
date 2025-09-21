@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useShortcuts } from '~/composables/useShortcuts'
+import { useShortcuts } from '~/composables/shortcuts'
 
 useMeta({
   title: 'Mirai',
