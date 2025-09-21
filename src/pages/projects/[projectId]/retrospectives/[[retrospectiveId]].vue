@@ -13,6 +13,9 @@ const { project } = storeToRefs(projectStore)
 const teamStore = useTeamStore()
 const { teamId } = storeToRefs(teamStore)
 
+const route = useRoute('/projects/[projectId]/retrospectives/[[retrospectiveId]]')
+const router = useRouter()
+
 const selectedTeam = ref<Team | null>(null)
 const selectedRetrospective = ref<RetrospectiveSummary | null>(null)
 const retrospectiveId = computed(() => selectedRetrospective.value?.id ?? '')
@@ -46,11 +49,16 @@ function forceRerender() {
   componentKey.value += 1
 }
 
-watch(() => retrospectives.value, selectFirstRetrospective)
+watch(() => retrospectives.value, selectRetrospective)
 
-function selectFirstRetrospective() {
+function selectRetrospective() {
   if (!retrospectives.value.length) return
-  selectedRetrospective.value = retrospectives.value[0]
+  const { projectId, retrospectiveId } = route.params
+  const retrospective = retrospectives.value.find((r) => r.id === retrospectiveId)
+  selectedRetrospective.value = retrospective ?? retrospectives.value[0]
+  if (!retrospectiveId) {
+    router.replace(`/projects/${projectId}/retrospectives/${selectedRetrospective.value.id}`)
+  }
 }
 
 const { teams, isLoading: isLoadingTeams } = useTeams()
@@ -67,6 +75,15 @@ watch(
   async (newSelectedTeam) => {
     if (!newSelectedTeam) return
     teamStore.setTeamId(newSelectedTeam.id)
+  },
+)
+
+watch(
+  () => selectedRetrospective.value,
+  (newRetrospective) => {
+    if (!newRetrospective) return
+    if (route.params.retrospectiveId === newRetrospective.id) return
+    router.replace(`/projects/${route.params.projectId}/retrospectives/${newRetrospective.id}`)
   },
 )
 
@@ -118,6 +135,7 @@ const { mutate: deleteRetrospectiveFn } = useMutation({
     queryCache.invalidateQueries({ key: ['retrospective', retrospectiveId.value] })
     selectedRetrospective.value = null
     retrospectiveToEdit.value = undefined
+    router.replace(`/projects/${route.params.projectId}/retrospectives`)
   },
 })
 
@@ -172,7 +190,7 @@ async function initializeRetrospectiveHub() {
 onBeforeMount(async () => {
   setBreadcrumbs()
   selectFirstTeam()
-  selectFirstRetrospective()
+  selectRetrospective()
   await initializeRetrospectiveHub()
 })
 </script>
