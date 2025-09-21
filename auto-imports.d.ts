@@ -243,7 +243,14 @@ declare global {
   } from './src/types/board'
   import('./src/types/board')
   // @ts-ignore
-  export type { DashboardResponse, BurnupPoint, BurndownPoint } from './src/types/dashboard'
+  export type {
+    DashboardResponse,
+    BurnupPoint,
+    BurndownPoint,
+    CycleTimePoint,
+    LeadTimePoint,
+    VelocityPoint,
+  } from './src/types/dashboard'
   import('./src/types/dashboard')
   // @ts-ignore
   export type {
