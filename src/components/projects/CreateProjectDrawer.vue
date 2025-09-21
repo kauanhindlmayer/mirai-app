@@ -3,6 +3,7 @@ import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { object, string } from 'yup'
 import type { Project } from '~/types/project'
+import { cacheKeys } from '~/utils/cache-keys'
 
 const organizationStore = useOrganizationStore()
 const { organization } = storeToRefs(organizationStore)
@@ -29,7 +30,7 @@ const { mutate: createProjectFn, isLoading } = useMutation({
   mutation: createProject,
   onSuccess: () => {
     hideDrawer()
-    queryCache.invalidateQueries({ key: ['projects', organization.value.id] })
+    queryCache.invalidateQueries({ key: cacheKeys.projects.list(organization.value.id) })
   },
   onError: displayError,
 })

@@ -2,6 +2,7 @@
 import { useConfirm, type Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import type { RetrospectiveItem } from '~/types/retrospective'
+import { cacheKeys } from '~/utils/cache-keys'
 
 const teamStore = useTeamStore()
 const { teamId } = storeToRefs(teamStore)
@@ -44,7 +45,9 @@ const confirm = useConfirm()
 const { mutate: deleteRetrospectiveItemFn } = useMutation({
   mutation: () => deleteRetrospectiveItem(teamId.value!, retrospectiveId, columnId, item.id),
   onSuccess: () => {
-    queryCache.invalidateQueries({ key: ['retrospective', retrospectiveId] })
+    queryCache.invalidateQueries({
+      key: cacheKeys.retrospectives.get(teamId.value!, retrospectiveId),
+    })
   },
 })
 </script>

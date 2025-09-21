@@ -5,6 +5,7 @@ import type { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import { number, object, string } from 'yup'
 import type { Board, Column, CreateBoardColumnRequest } from '~/types/board'
+import { cacheKeys } from '~/utils/cache-keys'
 
 const teamStore = useTeamStore()
 
@@ -150,7 +151,7 @@ const { mutate: createColumnFn } = useMutation({
   mutation: (payload: CreateBoardColumnRequest) =>
     createColumn(teamStore.teamId!, board.id, payload),
   onSuccess: () => {
-    queryCache.invalidateQueries({ key: ['board', board.id] })
+    queryCache.invalidateQueries({ key: cacheKeys.boards.get(teamStore.teamId!, board.id) })
     hideDrawer()
   },
   onError: displayError,

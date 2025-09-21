@@ -3,6 +3,7 @@ import { useConfirm, type Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import { deleteRetrospective } from '~/api/retrospectives'
 import RetrospectiveDialog from '~/components/retrospectives/RetrospectiveDialog.vue'
+import { cacheKeys } from '~/utils/cache-keys'
 
 const pageStore = usePageStore()
 pageStore.setTitle('Retrospectives - Boards')
@@ -114,8 +115,10 @@ async function confirmDeleteRetrospective() {
 const { mutate: deleteRetrospectiveFn } = useMutation({
   mutation: () => deleteRetrospective(teamId.value!, retrospectiveId.value),
   onSuccess: () => {
-    queryCache.invalidateQueries({ key: ['retrospectives', teamId.value!] })
-    queryCache.invalidateQueries({ key: ['retrospective', retrospectiveId.value] })
+    queryCache.invalidateQueries({ key: cacheKeys.retrospectives.list(teamId.value!) })
+    queryCache.invalidateQueries({
+      key: cacheKeys.retrospectives.get(teamId.value!, retrospectiveId.value),
+    })
     selectedRetrospective.value = null
     retrospectiveToEdit.value = undefined
   },
@@ -160,7 +163,9 @@ const retrospectiveHub = useSignalR('/hubs/retrospective')
 const queryCache = useQueryCache()
 
 function invalidateRetrospectiveQuery() {
-  queryCache.invalidateQueries({ key: ['retrospective', retrospectiveId.value] })
+  queryCache.invalidateQueries({
+    key: cacheKeys.retrospectives.get(teamId.value!, retrospectiveId.value),
+  })
 }
 
 async function initializeRetrospectiveHub() {

@@ -6,6 +6,7 @@ import {
   type DataTableSortEvent,
 } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
+import { cacheKeys } from '~/utils/cache-keys'
 
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
@@ -50,7 +51,7 @@ const queryCache = useQueryCache()
 const { mutate: deleteWorkItemFn } = useMutation({
   mutation: async () => deleteWorkItem(project.value.id, selectedWorkItem.value!.id),
   onSuccess() {
-    queryCache.invalidateQueries({ key: ['work-items', filters.value] })
+    queryCache.invalidateQueries({ key: cacheKeys.workItems.filtered(filters.value) })
     toast.showSuccess({ detail: 'Work item has been deleted successfully' })
     clearSelectedWorkItem()
   },

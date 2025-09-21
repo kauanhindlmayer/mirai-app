@@ -7,6 +7,7 @@ import {
   type DataTableSortEvent,
 } from 'primevue'
 import { deleteTags } from '~/api/tags'
+import { cacheKeys } from '~/utils/cache-keys'
 
 const pageStore = usePageStore()
 pageStore.setTitle('Tags - Boards')
@@ -28,7 +29,7 @@ const queryCache = useQueryCache()
 const { mutate: addTag } = useMutation({
   mutation: (_: MouseEvent) => createTag(project.value.id, newTag.value),
   onSuccess: async () => {
-    await queryCache.invalidateQueries({ key: ['tags'] })
+    await queryCache.invalidateQueries({ key: cacheKeys.tags.list(project.value.id) })
     newTag.value = { name: '', description: '', color: '' }
   },
   onError: displayError,
@@ -44,7 +45,7 @@ const { mutate: updateTagFn } = useMutation({
     })
   },
   onSuccess: async () => {
-    await queryCache.invalidateQueries({ key: ['tags'] })
+    await queryCache.invalidateQueries({ key: cacheKeys.tags.list(project.value.id) })
   },
   onError: displayError,
 })
@@ -75,7 +76,7 @@ const { mutate: deleteTagFn } = useMutation({
       selectedTags.value.map((tag) => tag.id),
     ),
   onSuccess: async () => {
-    await queryCache.invalidateQueries({ key: ['tags'] })
+    await queryCache.invalidateQueries({ key: cacheKeys.tags.list(project.value.id) })
     selectedTags.value = []
   },
   onError: displayError,

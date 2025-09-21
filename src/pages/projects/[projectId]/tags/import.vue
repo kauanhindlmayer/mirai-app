@@ -2,6 +2,7 @@
 import { usePrimeVue, type FileUploadSelectEvent } from 'primevue'
 import { createTagImportJob, listTagImportJobs } from '~/api/tag-import-jobs'
 import { getJobStatusSeverity } from '~/utils/tag'
+import { cacheKeys } from '~/utils/cache-keys'
 
 const pageStore = usePageStore()
 pageStore.setTitle('Tags - Boards')
@@ -38,7 +39,7 @@ const queryCache = useQueryCache()
 const { mutate: createTagImportJobFn } = useMutation({
   mutation: (event: FileUploadSelectEvent) => createTagImportJob(project.value.id, event.files[0]),
   onSuccess: async () => {
-    await queryCache.invalidateQueries({ key: ['tagImportJobs', project.value.id] })
+    await queryCache.invalidateQueries({ key: cacheKeys.tags.importJobs(project.value.id) })
   },
   onError: displayError,
 })

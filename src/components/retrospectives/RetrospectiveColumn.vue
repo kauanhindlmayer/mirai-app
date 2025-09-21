@@ -4,6 +4,7 @@ import type { InputText } from 'primevue'
 import { object, string, ValidationError } from 'yup'
 import RetrospectiveItemComponent from '~/components/retrospectives/RetrospectiveItem.vue'
 import type { RetrospectiveColumn, RetrospectiveItem } from '~/types/retrospective'
+import { cacheKeys } from '~/utils/cache-keys'
 
 const teamStore = useTeamStore()
 const { teamId } = storeToRefs(teamStore)
@@ -37,7 +38,9 @@ const { mutate: createRetrospectiveItemFn } = useMutation({
   mutation: () =>
     createRetrospectiveItem(teamId.value!, retrospectiveId, column.id, newItemContent.value),
   onSuccess: () => {
-    queryCache.invalidateQueries({ key: ['retrospective', retrospectiveId] })
+    queryCache.invalidateQueries({
+      key: cacheKeys.retrospectives.get(teamId.value!, retrospectiveId),
+    })
     closeNewItemInput()
   },
 })

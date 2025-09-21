@@ -2,6 +2,7 @@
 import BoardSettingsDrawer from '~/components/boards/BoardSettingsDrawer.vue'
 import { BacklogLevel } from '~/types/team'
 import { formatEnumOptions } from '~/utils'
+import { cacheKeys } from '~/utils/cache-keys'
 
 const pageStore = usePageStore()
 const teamStore = useTeamStore()
@@ -25,7 +26,7 @@ watch(
 )
 
 const { data: board, isLoading: isLoadingBoard } = useQuery({
-  key: () => ['board', selectedBoard.value?.id || ''],
+  key: () => cacheKeys.boards.get(teamStore.teamId!, selectedBoard.value?.id || ''),
   query: async () => getBoard(teamStore.teamId!, selectedBoard.value?.id || ''),
   enabled: () => !!selectedBoard.value,
 })

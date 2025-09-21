@@ -8,6 +8,7 @@ import { createWorkItem } from '~/api/work-items'
 import type { Card, Column, DraggableEvent, MoveCardRequest } from '~/types/board'
 import { WorkItemType, type CreateWorkItemRequest } from '~/types/work-item'
 import { formatEnumOptions } from '~/utils'
+import { cacheKeys } from '~/utils/cache-keys'
 
 const { boardId, column } = defineProps<{
   boardId: string
@@ -38,7 +39,7 @@ const { mutate: moveCardFn } = useMutation({
   mutation: (payload: MoveCardMutationPayload) =>
     moveCard(teamId.value!, boardId, payload.columnId, payload.cardId, payload.request),
   onSuccess: () => {
-    queryCache.invalidateQueries({ key: ['board', boardId] })
+    queryCache.invalidateQueries({ key: cacheKeys.boards.get(teamId.value!, boardId) })
   },
   onError: displayError,
 })
@@ -105,8 +106,8 @@ const { project } = storeToRefs(projectStore)
 const { mutate: createWorkItemFn, isLoading } = useMutation({
   mutation: () => createWorkItem(project.value.id, form.value),
   onSuccess: () => {
-    queryCache.invalidateQueries({ key: ['work-items', project.value.id] })
-    queryCache.invalidateQueries({ key: ['board', boardId] })
+    queryCache.invalidateQueries({ key: cacheKeys.workItems.list(project.value.id) })
+    queryCache.invalidateQueries({ key: cacheKeys.boards.get(teamId.value!, boardId) })
     hidePopover()
   },
 })

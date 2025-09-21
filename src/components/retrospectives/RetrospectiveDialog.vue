@@ -5,6 +5,7 @@ import { number, object, string } from 'yup'
 import { updateRetrospective } from '~/api/retrospectives'
 import { ProcessTemplate, type Retrospective } from '~/types/retrospective'
 import { formatEnumOptions } from '~/utils'
+import { cacheKeys } from '~/utils/cache-keys'
 
 interface Props {
   retrospective?: Retrospective | null
@@ -67,7 +68,7 @@ const { mutate: createRetrospectiveFn, isLoading: isCreating } = useMutation({
   mutation: (data: Partial<Retrospective>) =>
     createRetrospective({ ...data, teamId: teamId.value! }),
   onSuccess: () => {
-    queryCache.invalidateQueries({ key: ['retrospectives', teamId.value!] })
+    queryCache.invalidateQueries({ key: cacheKeys.retrospectives.list(teamId.value!) })
     hideDialog()
   },
 })
@@ -76,8 +77,10 @@ const { mutate: updateRetrospectiveFn, isLoading: isUpdating } = useMutation({
   mutation: (data: Partial<Retrospective>) =>
     updateRetrospective(teamId.value!, props.retrospective!.id, { ...data }),
   onSuccess: () => {
-    queryCache.invalidateQueries({ key: ['retrospectives', teamId.value!] })
-    queryCache.invalidateQueries({ key: ['retrospective', props.retrospective!.id] })
+    queryCache.invalidateQueries({ key: cacheKeys.retrospectives.list(teamId.value!) })
+    queryCache.invalidateQueries({
+      key: cacheKeys.retrospectives.get(teamId.value!, props.retrospective!.id),
+    })
     hideDialog()
   },
 })

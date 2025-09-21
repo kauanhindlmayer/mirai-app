@@ -2,6 +2,7 @@ import { defineQuery, useQuery } from '@pinia/colada'
 import { ref } from 'vue'
 import { getWorkItemsStats } from '~/api/work-items'
 import type { WorkItemsStats } from '~/types/work-item'
+import { cacheKeys } from '~/utils/cache-keys'
 
 export const useWorkItemsStats = defineQuery(() => {
   const route = useRoute('/projects/[projectId]/work-items')
@@ -9,7 +10,7 @@ export const useWorkItemsStats = defineQuery(() => {
 
   const query = useQuery({
     staleTime: 1000 * 60,
-    key: () => ['work-items-stats', route.params.projectId, periodInDays.value],
+    key: () => cacheKeys.workItems.stats(route.params.projectId, periodInDays.value),
     query: () => getWorkItemsStats(route.params.projectId, periodInDays.value),
     placeholderData: () => ({}) as WorkItemsStats,
   })

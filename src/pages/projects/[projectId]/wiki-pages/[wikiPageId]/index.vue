@@ -3,6 +3,7 @@ import { useConfirm, type Menu, type TreeSelectionKeys } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import type { TreeNode } from 'primevue/treenode'
 import MoveWikiPageDrawer from '~/components/wiki-pages/MoveWikiPageDrawer.vue'
+import { cacheKeys } from '~/utils/cache-keys'
 
 const pageStore = usePageStore()
 pageStore.setTitle('Wiki Pages - Overview')
@@ -122,7 +123,7 @@ const queryCache = useQueryCache()
 const { mutate: deleteWikiPageFn } = useMutation({
   mutation: () => deleteWikiPage(project.value.id, wikiPage.value!.id),
   onSuccess: async () => {
-    await queryCache.invalidateQueries({ key: ['wiki-pages', project.value.id] })
+    await queryCache.invalidateQueries({ key: cacheKeys.wikiPages.list(project.value.id) })
     toast.showSuccess({ detail: 'Wiki page deleted successfully' })
     router.push(`/projects/${project.value.id}/wiki-pages`)
   },

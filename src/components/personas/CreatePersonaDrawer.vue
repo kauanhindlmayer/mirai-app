@@ -4,6 +4,7 @@ import { yupResolver } from '@primevue/forms/resolvers/yup'
 import type { FileUploadSelectEvent } from 'primevue'
 import { object, string } from 'yup'
 import type { CreatePersonaRequest } from '~/types/persona'
+import { cacheKeys } from '~/utils/cache-keys'
 
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
@@ -34,7 +35,7 @@ const { mutate: createPersonaFn, isLoading } = useMutation({
   mutation: (request: CreatePersonaRequest) => createPersona(project.value.id, request),
   onSuccess: () => {
     hideDrawer()
-    queryCache.invalidateQueries({ key: ['personas', project.value.id] })
+    queryCache.invalidateQueries({ key: cacheKeys.personas.list(project.value.id) })
   },
   onError: displayError,
 })

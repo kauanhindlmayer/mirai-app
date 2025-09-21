@@ -4,6 +4,7 @@ import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { object, string } from 'yup'
 import type { Project } from '~/types/project'
+import { cacheKeys } from '~/utils/cache-keys'
 
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
@@ -39,7 +40,7 @@ const { mutate: updateProjectFn, isLoading } = useMutation({
   },
   onSettled: (_data, _error, _vars, { newProject }) => {
     if (!newProject) return
-    queryCache.invalidateQueries({ key: ['project', newProject.id] })
+    queryCache.invalidateQueries({ key: cacheKeys.projects.get(newProject.id) })
   },
   onError(_error, projectInfo, { newProject, oldProject }) {
     if (newProject === queryCache.getQueryData(['project', projectInfo.id])) {

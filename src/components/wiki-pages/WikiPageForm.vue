@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useConfirm } from 'primevue'
+import { cacheKeys } from '~/utils/cache-keys'
 
 const confirm = useConfirm()
 const { project } = storeToRefs(useProjectStore())
@@ -60,7 +61,7 @@ const { mutate: createWikiPageFn } = useMutation({
       parentWikiPageId,
     }),
   onSuccess: async (wikiPageId: string) => {
-    queryCache.invalidateQueries({ key: ['wiki-pages', project.value.id] })
+    queryCache.invalidateQueries({ key: cacheKeys.wikiPages.list(project.value.id) })
     toast.showSuccess({ detail: 'Wiki page created successfully' })
     emit('close', wikiPageId)
   },
@@ -74,8 +75,10 @@ const { mutate: updateWikiPageFn } = useMutation({
       content: content.value,
     }),
   onSuccess: async () => {
-    queryCache.invalidateQueries({ key: ['wiki-pages', project.value.id] })
-    queryCache.invalidateQueries({ key: ['wiki-page', wikiPage.value!.id] })
+    queryCache.invalidateQueries({ key: cacheKeys.wikiPages.list(project.value.id) })
+    queryCache.invalidateQueries({
+      key: cacheKeys.wikiPages.get(project.value.id, wikiPage.value!.id),
+    })
     toast.showSuccess({ detail: 'Wiki page updated successfully' })
     emit('close', wikiPage.value!.id)
   },

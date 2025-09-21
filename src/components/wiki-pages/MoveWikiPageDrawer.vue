@@ -2,6 +2,7 @@
 import type { TreeSelectionKeys } from 'primevue'
 import type { TreeNode } from 'primevue/treenode'
 import type { WikiPageSummary } from '~/types/wiki-page'
+import { cacheKeys } from '~/utils/cache-keys'
 
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
@@ -34,7 +35,7 @@ const { mutate: moveWikiPageFn } = useMutation({
     })
   },
   onSuccess() {
-    queryCache.invalidateQueries({ key: ['wiki-pages', project.value.id] })
+    queryCache.invalidateQueries({ key: cacheKeys.wikiPages.list(project.value.id) })
     hideDrawer()
   },
 })

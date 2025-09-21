@@ -2,13 +2,14 @@ import { defineQuery, useQuery } from '@pinia/colada'
 import { storeToRefs } from 'pinia'
 import { getWikiPage, getWikiPageStats, listWikiPages } from '~/api/wiki-pages'
 import { useProjectStore } from '~/stores/project'
+import { cacheKeys } from '~/utils/cache-keys'
 
 export const useWikiPages = defineQuery(() => {
   const { project } = storeToRefs(useProjectStore())
 
   const query = useQuery({
     staleTime: 1000 * 60,
-    key: () => ['wiki-pages', project.value.id],
+    key: () => cacheKeys.wikiPages.list(project.value.id),
     query: () => listWikiPages(project.value.id),
     enabled: () => !!project.value,
     placeholderData: [],
@@ -26,7 +27,7 @@ export const useWikiPage = defineQuery(() => {
 
   const query = useQuery({
     staleTime: 1000 * 60,
-    key: () => ['wiki-page', route.params.wikiPageId],
+    key: () => cacheKeys.wikiPages.get(project.value.id, route.params.wikiPageId),
     query: () => getWikiPage(project.value.id, route.params.wikiPageId),
     enabled: () => 'wikiPageId' in route.params,
   })
@@ -43,7 +44,7 @@ export const useWikiPageStats = defineQuery(() => {
 
   const query = useQuery({
     staleTime: 1000 * 60,
-    key: () => ['wiki-page-stats', route.params.wikiPageId],
+    key: () => cacheKeys.wikiPages.stats(project.value.id, route.params.wikiPageId),
     query: () => getWikiPageStats(project.value.id, route.params.wikiPageId),
     enabled: () => 'wikiPageId' in route.params,
   })

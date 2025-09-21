@@ -2,6 +2,7 @@
 import { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import { addWikiPageComment, deleteWikiPageComment } from '~/api/wiki-pages'
+import { cacheKeys } from '~/utils/cache-keys'
 
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
@@ -68,8 +69,12 @@ const { mutate: deleteCommentFn } = useMutation({
 })
 
 function invalidateWikiPageQuery() {
-  queryCache.invalidateQueries({ key: ['wiki-page', wikiPage.value!.id] })
-  queryCache.invalidateQueries({ key: ['wiki-page-stats', wikiPage.value!.id] })
+  queryCache.invalidateQueries({
+    key: cacheKeys.wikiPages.get(project.value.id, wikiPage.value!.id),
+  })
+  queryCache.invalidateQueries({
+    key: cacheKeys.wikiPages.stats(project.value.id, wikiPage.value!.id),
+  })
 }
 
 const wikiPageLastUpdated = computed(() =>

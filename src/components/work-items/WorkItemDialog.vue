@@ -8,6 +8,7 @@ import {
   updateWorkItem,
 } from '~/api/work-items'
 import { ValueArea, WorkItemStatus, type TagBriefResponse } from '~/types/work-item'
+import { cacheKeys } from '~/utils/cache-keys'
 
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
@@ -50,7 +51,7 @@ const { mutate: removeTagFromWorkItemFn } = useMutation({
   mutation: (tag: TagBriefResponse) =>
     removeTagFromWorkItem(project.value.id, workItemId.value!, tag.name),
   onSuccess() {
-    queryCache.invalidateQueries({ key: ['work-items'] })
+    queryCache.invalidateQueries({ key: cacheKeys.workItems.list(project.value.id) })
     toast.showSuccess({ detail: 'Tag removed successfully' })
   },
 })
@@ -60,8 +61,9 @@ const queryCache = useQueryCache()
 const { mutate: updateWorkItemFn } = useMutation({
   mutation: (_: Event) => updateWorkItem(project.value.id, workItemId.value!, workItem.value!),
   onSuccess() {
-    queryCache.invalidateQueries({ key: ['board'] })
-    queryCache.invalidateQueries({ key: ['work-items'] })
+    // Invalidate all boards since we don't know which boards contain this work item
+    queryCache.invalidateQueries({ key: ['boards'] })
+    queryCache.invalidateQueries({ key: cacheKeys.workItems.list(project.value.id) })
     toast.showSuccess({ detail: 'Work Item updated successfully' })
     hideDialog()
   },
@@ -71,7 +73,7 @@ const { mutate: addCommentFn } = useMutation({
   mutation: (content: string) =>
     addWorkItemComment(project.value.id, workItemId.value!, { content }),
   onSuccess() {
-    queryCache.invalidateQueries({ key: ['work-items'] })
+    queryCache.invalidateQueries({ key: cacheKeys.workItems.list(project.value.id) })
     toast.showSuccess({ detail: 'Comment added successfully' })
   },
 })
@@ -80,7 +82,7 @@ const { mutate: deleteCommentFn } = useMutation({
   mutation: (commentId: string) =>
     deleteWorkItemComment(project.value.id, workItemId.value!, commentId),
   onSuccess() {
-    queryCache.invalidateQueries({ key: ['work-items'] })
+    queryCache.invalidateQueries({ key: cacheKeys.workItems.list(project.value.id) })
     toast.showSuccess({ detail: 'Comment deleted successfully' })
   },
 })
