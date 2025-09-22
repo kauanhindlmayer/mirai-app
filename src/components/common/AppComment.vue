@@ -7,6 +7,11 @@ const { comment } = defineProps<{
   comment: Comment
 }>()
 
+const userStore = useUserStore()
+const { user } = storeToRefs(userStore)
+
+const isCommentOwner = computed(() => user.value?.id === comment.author.id)
+
 const emit = defineEmits<{
   (event: 'delete-comment', commentId: string): void
   (event: 'update-comment', commentId: string, content: string): void
@@ -102,12 +107,27 @@ function updateComment() {
           <Button label="Update" @click="updateComment" />
         </div>
       </div>
-      <p v-else class="leading-normal mb-0 my-4">{{ comment.content }}</p>
+      <p v-else class="leading-normal mb-0 my-4" :class="{ 'opacity-60': comment.isPending }">
+        {{ comment.content }}
+      </p>
     </div>
   </div>
   <div class="flex place-self-start">
-    <Button icon="pi pi-pencil" severity="secondary" text @click="startEditing" />
-    <Button icon="pi pi-ellipsis-h" severity="secondary" text @click="toggleMenuItems" />
+    <Button
+      v-if="isCommentOwner"
+      icon="pi pi-pencil"
+      severity="secondary"
+      text
+      :disabled="comment.isPending"
+      @click="startEditing"
+    />
+    <Button
+      icon="pi pi-ellipsis-h"
+      severity="secondary"
+      text
+      :disabled="comment.isPending"
+      @click="toggleMenuItems"
+    />
     <Menu ref="menu" popup :model="menuItems" />
   </div>
 </template>

@@ -59,9 +59,11 @@ export type Comment = {
   content: string
   createdAtUtc: string
   updatedAtUtc: string
+  isPending?: boolean
 }
 
 export type Author = {
+  id: string
   name: string
   imageUrl: string
 }

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
-import { addWikiPageComment, deleteWikiPageComment } from '~/api/wiki-pages'
+import { addWikiPageComment, deleteWikiPageComment, updateWikiPageComment } from '~/api/wiki-pages'
+import type { WikiPage } from '~/types/wiki-page'
 
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
@@ -64,6 +65,48 @@ const { mutate: deleteCommentFn } = useMutation({
   onSuccess() {
     invalidateWikiPageQuery()
     toast.showSuccess({ detail: 'Comment deleted successfully' })
+  },
+})
+
+const { mutate: updateCommentFn } = useMutation({
+  mutation: ({ commentId, content }: { commentId: string; content: string }) => {
+    return updateWikiPageComment(project.value.id, wikiPage.value!.id, commentId, { content })
+  },
+  onMutate({ commentId, content }: { commentId: string; content: string }) {
+    queryCache.cancelQueries({ key: ['wiki-page', wikiPage.value!.id] })
+
+    const previousWikiPage = queryCache.getQueryData(['wiki-page', wikiPage.value!.id])
+
+    queryCache.setQueryData(['wiki-page', wikiPage.value!.id], (old: WikiPage | undefined) => {
+      if (!old) return {} as WikiPage
+      return {
+        ...old,
+        comments: old.comments.map((comment) => {
+          if (comment.id !== commentId) return comment
+
+          return {
+            ...comment,
+            content,
+            updatedAtUtc: new Date().toISOString(),
+            isPending: true,
+          }
+        }),
+      }
+    })
+
+    return { previousWikiPage }
+  },
+  onError(_error, _variables, context) {
+    if (context?.previousWikiPage) {
+      queryCache.setQueryData(['wiki-page', wikiPage.value!.id], context.previousWikiPage)
+    }
+    toast.showError({ detail: 'Failed to update comment' })
+  },
+  onSuccess() {
+    toast.showSuccess({ detail: 'Comment updated successfully' })
+  },
+  onSettled() {
+    invalidateWikiPageQuery()
   },
 })
 
@@ -143,6 +186,7 @@ function redirectToEditPage() {
       :comments="wikiPage.comments"
       @add-comment="addCommentFn"
       @delete-comment="deleteCommentFn"
+      @update-comment="(commentId, content) => updateCommentFn({ commentId, content })"
     />
   </div>
 </template>

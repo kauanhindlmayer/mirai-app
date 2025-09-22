@@ -7,6 +7,7 @@ defineProps<{ comments: Comment[] }>()
 const emit = defineEmits<{
   (event: 'delete-comment', commentId: string): void
   (event: 'add-comment', content: string): void
+  (event: 'update-comment', commentId: string, content: string): void
 }>()
 
 const confirm = useConfirm()
@@ -49,6 +50,10 @@ async function addComment() {
 async function deleteComment(commentId: string) {
   emit('delete-comment', commentId)
 }
+
+async function updateComment(commentId: string, content: string) {
+  emit('update-comment', commentId, content)
+}
 </script>
 
 <template>
@@ -58,7 +63,11 @@ async function deleteComment(commentId: string) {
       :key="comment.id"
       class="flex justify-between p-4 mb-4 border border-surface-200 dark:border-surface-700 rounded-sm"
     >
-      <AppComment :comment="comment" @delete-comment="deleteComment" />
+      <AppComment
+        :comment="comment"
+        @delete-comment="deleteComment"
+        @update-comment="updateComment"
+      />
     </li>
     <li class="flex flex-col p-4 mb-4">
       <div class="flex mb-4">
