@@ -24,7 +24,7 @@ const { isEditing, isAdding } = defineProps<{
 
 const expandedKeys = ref<{ [key: string]: boolean }>({})
 const selectedKey = ref<TreeSelectionKeys | undefined>(undefined)
-const nodes = computed(() => wikiPages.value.map((page, index) => toNode(page, index === 0)))
+const nodes = computed(() => wikiPages.value?.map((page, index) => toNode(page, index === 0)) ?? [])
 
 function toNode(page: WikiPageSummary, isRoot: boolean = false): TreeNode {
   return {
@@ -54,13 +54,13 @@ const route = useRoute('/projects/[projectId]/wiki-pages/[wikiPageId]/')
 watch([() => wikiPages.value, () => route.params.wikiPageId], selectWikiPage)
 
 function selectWikiPage() {
-  if (!wikiPages.value.length || isAdding) return
+  if (!wikiPages.value?.length || isAdding) return
   const { wikiPageId } = route.params
-  const parentWikiPage = wikiPages.value.find(
+  const parentWikiPage = wikiPages.value?.find(
     (page) => page.id === wikiPageId || page.subPages.some((subPage) => subPage.id === wikiPageId),
   )
   const wikiPage = parentWikiPage?.subPages.find((subPage) => subPage.id === wikiPageId)
-  const selectedWikiPageId = wikiPage?.id || parentWikiPage?.id || wikiPages.value[0].id
+  const selectedWikiPageId = wikiPage?.id || parentWikiPage?.id || wikiPages.value?.[0]?.id
   expandedKeys.value = parentWikiPage ? { [parentWikiPage.id]: true } : {}
   selectedKey.value = { [selectedWikiPageId]: true }
 }

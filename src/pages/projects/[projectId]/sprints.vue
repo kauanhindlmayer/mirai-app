@@ -31,7 +31,7 @@ const { data: sprints, isLoading: isLoadingSprints } = useQuery({
 })
 
 function selectFirstSprint() {
-  if (!sprints.value.length) return
+  if (!sprints.value?.length) return
   selectedSprint.value = sprints.value[0]
 }
 
@@ -87,7 +87,7 @@ function calculateWorkingDays(startDate: DateType, endDate: DateType) {
   return workingDays
 }
 
-const nodes = computed(() => backlog.value.map(toNode))
+const nodes = computed(() => backlog.value?.map(toNode) ?? [])
 
 function toNode(workItem: BacklogResponse): TreeNode {
   return {
@@ -107,7 +107,7 @@ function openWorkItemDialog(workItemId: string) {
 const { teams, isLoading } = useTeams()
 
 function selectFirstTeam() {
-  if (!teams.value.length) return
+  if (!teams.value?.length) return
   selectedTeam.value = teams.value[0]
 }
 

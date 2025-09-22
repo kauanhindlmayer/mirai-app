@@ -10,7 +10,7 @@ const { wikiPages } = useWikiPages()
 const { wikiPage } = useWikiPage()
 
 const selectedKey = ref<TreeSelectionKeys | undefined>(undefined)
-const nodes = computed(() => wikiPages.value.map(toNode))
+const nodes = computed(() => wikiPages.value?.map(toNode) ?? [])
 const title = computed(() => `Move '${wikiPage.value?.title}'?`)
 const isSaveButtonDisabled = computed(() => !selectedKey.value)
 

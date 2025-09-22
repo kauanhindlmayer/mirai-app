@@ -52,9 +52,9 @@ onMounted(() => {
               icon="pi pi-user"
               size="xlarge"
               class="mr-4"
-              :label="getInitials(project.name)"
+              :label="getInitials(project?.name ?? '')"
             />
-            <div class="font-semibold text-2xl">{{ project.name }}</div>
+            <div class="font-semibold text-2xl">{{ project?.name }}</div>
           </div>
           <Button label="Invite" icon="pi pi-user-plus" disabled />
         </div>
@@ -65,7 +65,7 @@ onMounted(() => {
         <div class="flex justify-between items-center">
           <div class="font-semibold text-xl">About this Project</div>
           <Button
-            v-if="project.description"
+            v-if="project?.description"
             icon="pi pi-pencil"
             severity="secondary"
             variant="text"
@@ -73,8 +73,8 @@ onMounted(() => {
             @click="editProjectDrawerRef?.showDrawer"
           />
         </div>
-        <div v-if="project.description">
-          <div>{{ project.description }}</div>
+        <div v-if="project?.description">
+          <div>{{ project?.description }}</div>
         </div>
         <div v-else class="flex justify-between items-center">
           <div>
@@ -108,14 +108,14 @@ onMounted(() => {
           <div class="flex items-center">
             <Button icon="pi pi-file-plus" severity="secondary" />
             <div class="flex flex-col items-start ml-2">
-              <div class="text-xl font-semibold">{{ stats.workItemsCreated }}</div>
+              <div class="text-xl font-semibold">{{ stats?.workItemsCreated }}</div>
               <div class="text-sm text-gray-500">Work Items Created</div>
             </div>
           </div>
           <div class="flex items-center">
             <Button icon="pi pi-file-check" severity="secondary" />
             <div class="flex flex-col items-start ml-2">
-              <div class="text-xl font-semibold">{{ stats.workItemsCompleted }}</div>
+              <div class="text-xl font-semibold">{{ stats?.workItemsCompleted }}</div>
               <div class="text-sm text-gray-500">Work Items Completed</div>
             </div>
           </div>

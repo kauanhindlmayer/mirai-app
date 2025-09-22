@@ -52,10 +52,10 @@ function forceRerender() {
 watch(() => retrospectives.value, selectRetrospective)
 
 function selectRetrospective() {
-  if (!retrospectives.value.length) return
+  if (!retrospectives.value?.length) return
   const { projectId, retrospectiveId } = route.params
-  const retrospective = retrospectives.value.find((r) => r.id === retrospectiveId)
-  selectedRetrospective.value = retrospective ?? retrospectives.value[0]
+  const retrospective = retrospectives.value?.find((r) => r.id === retrospectiveId)
+  selectedRetrospective.value = retrospective ?? retrospectives.value?.[0]
   if (!retrospectiveId) {
     router.replace(`/projects/${projectId}/retrospectives/${selectedRetrospective.value.id}`)
   }
@@ -66,7 +66,7 @@ const { teams, isLoading: isLoadingTeams } = useTeams()
 watch(() => teams.value, selectFirstTeam)
 
 function selectFirstTeam() {
-  if (!teams.value.length) return
+  if (!teams.value?.length) return
   selectedTeam.value = teams.value[0]
 }
 
@@ -221,7 +221,7 @@ onBeforeMount(async () => {
           <TabList>
             <Tab value="0">Board</Tab>
             <Tab value="1" disabled>History</Tab>
-            <div v-if="retrospectives.length" class="ml-auto flex items-center mr-6">
+            <div v-if="retrospectives?.length" class="ml-auto flex items-center mr-6">
               <Select
                 v-model="selectedRetrospective"
                 :options="retrospectives"

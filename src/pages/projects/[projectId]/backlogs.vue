@@ -22,7 +22,7 @@ watch(
   },
 )
 
-const nodes = computed(() => backlog.value.map(toNode))
+const nodes = computed(() => backlog.value?.map(toNode) ?? [])
 
 function toNode(workItem: BacklogResponse): TreeNode {
   return {
@@ -71,7 +71,7 @@ const { data: teams, isLoading } = useQuery({
 })
 
 function selectTeam() {
-  if (!teams.value.length) return
+  if (!teams.value?.length) return
   selectedTeam.value = teams.value[0]
 }
 
