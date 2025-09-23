@@ -6,6 +6,7 @@ import {
   deleteWorkItemComment,
   removeTagFromWorkItem,
   updateWorkItem,
+  updateWorkItemComment,
 } from '~/api/work-items'
 import { ValueArea, WorkItemStatus, type TagBriefResponse } from '~/types/work-item'
 
@@ -82,6 +83,15 @@ const { mutate: deleteCommentFn } = useMutation({
   onSuccess() {
     queryCache.invalidateQueries({ key: ['work-items'] })
     toast.showSuccess({ detail: 'Comment deleted successfully' })
+  },
+})
+
+const { mutate: updateCommentFn } = useMutation({
+  mutation: ({ commentId, content }: { commentId: string; content: string }) =>
+    updateWorkItemComment(project.value.id, workItemId.value!, commentId, { content }),
+  onSuccess() {
+    queryCache.invalidateQueries({ key: ['work-items'] })
+    toast.showSuccess({ detail: 'Comment updated successfully' })
   },
 })
 
@@ -248,6 +258,7 @@ defineExpose({
                 :comments="workItem.comments"
                 @add-comment="addCommentFn"
                 @delete-comment="deleteCommentFn"
+                @update-comment="(commentId, content) => updateCommentFn({ commentId, content })"
               />
             </AccordionContent>
           </AccordionPanel>
