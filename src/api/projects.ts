@@ -16,3 +16,7 @@ export function listProjects(organizationId: string): Promise<Project[]> {
 export function updateProject(project: Partial<Project> & { id: string }): Promise<string> {
   return http.put(`/organizations/${project.organizationId}/projects/${project.id}`, project)
 }
+
+export function deleteProject(projectId: string, organizationId: string): Promise<void> {
+  return http.delete(`/organizations/${organizationId}/projects/${projectId}`)
+}

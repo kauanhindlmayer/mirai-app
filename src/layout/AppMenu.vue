@@ -68,6 +68,18 @@ const menuItems = computed<MenuItem[]>(() => [
       },
     ],
   },
+  { separator: true },
+  {
+    label: 'Settings',
+    icon: 'pi pi-fw pi-cog',
+    items: [
+      {
+        label: 'Project Settings',
+        icon: 'pi pi-fw pi-cog',
+        to: `/projects/${project.value.id}/settings`,
+      },
+    ],
+  },
 ])
 </script>
 

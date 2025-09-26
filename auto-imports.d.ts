@@ -52,6 +52,7 @@ declare global {
   const deleteColumn: (typeof import('./src/api/boards'))['deleteColumn']
   const deleteComment: (typeof import('./src/api/wiki-pages'))['deleteComment']
   const deletePersona: (typeof import('./src/api/personas'))['deletePersona']
+  const deleteProject: (typeof import('./src/api/projects'))['deleteProject']
   const deleteRetrospective: (typeof import('./src/api/retrospectives'))['deleteRetrospective']
   const deleteRetrospectiveItem: (typeof import('./src/api/retrospectives'))['deleteRetrospectiveItem']
   const deleteTag: (typeof import('./src/api/tags'))['deleteTag']
@@ -427,6 +428,7 @@ declare module 'vue' {
     readonly deleteBoard: UnwrapRef<(typeof import('./src/api/boards'))['deleteBoard']>
     readonly deleteColumn: UnwrapRef<(typeof import('./src/api/boards'))['deleteColumn']>
     readonly deletePersona: UnwrapRef<(typeof import('./src/api/personas'))['deletePersona']>
+    readonly deleteProject: UnwrapRef<(typeof import('./src/api/projects'))['deleteProject']>
     readonly deleteRetrospective: UnwrapRef<
       (typeof import('./src/api/retrospectives'))['deleteRetrospective']
     >

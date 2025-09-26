@@ -31,6 +31,7 @@ declare module 'vue-router/auto-routes' {
     '/projects/[projectId]/dashboards': RouteRecordInfo<'/projects/[projectId]/dashboards', '/projects/:projectId/dashboards', { projectId: ParamValue<true> }, { projectId: ParamValue<false> }>,
     '/projects/[projectId]/personas': RouteRecordInfo<'/projects/[projectId]/personas', '/projects/:projectId/personas', { projectId: ParamValue<true> }, { projectId: ParamValue<false> }>,
     '/projects/[projectId]/retrospectives/[[retrospectiveId]]': RouteRecordInfo<'/projects/[projectId]/retrospectives/[[retrospectiveId]]', '/projects/:projectId/retrospectives/:retrospectiveId?', { projectId: ParamValue<true>, retrospectiveId?: ParamValueZeroOrOne<true> }, { projectId: ParamValue<false>, retrospectiveId?: ParamValueZeroOrOne<false> }>,
+    '/projects/[projectId]/settings': RouteRecordInfo<'/projects/[projectId]/settings', '/projects/:projectId/settings', { projectId: ParamValue<true> }, { projectId: ParamValue<false> }>,
     '/projects/[projectId]/sprints': RouteRecordInfo<'/projects/[projectId]/sprints', '/projects/:projectId/sprints', { projectId: ParamValue<true> }, { projectId: ParamValue<false> }>,
     '/projects/[projectId]/summary': RouteRecordInfo<'/projects/[projectId]/summary', '/projects/:projectId/summary', { projectId: ParamValue<true> }, { projectId: ParamValue<false> }>,
     '/projects/[projectId]/tags/': RouteRecordInfo<'/projects/[projectId]/tags/', '/projects/:projectId/tags', { projectId: ParamValue<true> }, { projectId: ParamValue<false> }>,
