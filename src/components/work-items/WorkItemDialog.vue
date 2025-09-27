@@ -159,11 +159,8 @@ defineExpose({
         </div>
         <div class="flex justify-between items-center ml-5 mb-2 py-2">
           <div class="flex items-center gap-2">
-            <div>
-              <Avatar shape="circle" icon="pi pi-user" class="mr-2" />
-              <span class="text-surface-900 dark:text-surface-0">
-                {{ workItem.assignedTo || 'Unassigned' }}
-              </span>
+            <div class="flex items-center gap-2">
+              <AssigneeSelector v-model="workItem.assignee" class="min-w-48" />
             </div>
             <div class="flex items-center gap-2 ml-6">
               <Chip

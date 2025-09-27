@@ -70,7 +70,12 @@ export function updateWorkItem(
   workItemId: string,
   request: Partial<WorkItem>,
 ): Promise<void> {
-  return http.put(`/projects/${projectId}/work-items/${workItemId}`, request)
+  const payload = {
+    ...request,
+    assigneeId: request.assignee ? request.assignee.id : null,
+  }
+  delete payload.assignee
+  return http.put(`/projects/${projectId}/work-items/${workItemId}`, payload)
 }
 
 export function addTagToWorkItem(

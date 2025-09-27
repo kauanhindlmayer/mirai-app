@@ -26,7 +26,7 @@ const { teams, isLoading } = useTeams()
                 />
                 <span class="font-medium">{{ data.name }}</span>
               </div>
-              <Tag v-if="data.isDefault || true" value="Default" severity="secondary" />
+              <Tag v-if="data.isDefault" value="Default" severity="secondary" />
             </div>
           </template>
         </Column>

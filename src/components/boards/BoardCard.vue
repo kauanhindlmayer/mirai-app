@@ -30,7 +30,6 @@ function openWorkItemDialog() {
       {{ getStatusLabel(card.workItem.status) }}
     </div>
 
-    <!-- TODO: Replace with AutoComplete -->
     <div class="flex items-center">
       <Avatar
         shape="circle"
@@ -55,13 +54,16 @@ function openWorkItemDialog() {
   height: 1.25rem;
   border: none;
 }
-.story-points-input > .p-inputnumber-input,
-.p-autocomplete-input {
+.story-points-input > .p-inputnumber-input {
   border: none !important;
   box-shadow: none !important;
 }
-.p-inputtext:hover,
-.p-inputtext:focus {
+.board-item .p-inputtext:not(.p-autocomplete-input) {
+  border: none !important;
+  box-shadow: none !important;
+}
+.board-item .p-inputtext:hover,
+.board-item .p-inputtext:focus {
   border: 1px solid var(--p-inputtext-border-color) !important;
   box-shadow: var(--p-inputtext-shadow) !important;
 }

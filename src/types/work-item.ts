@@ -11,7 +11,8 @@ export type WorkItem = {
   classification: Classification
   tags: TagBriefResponse[]
   comments: Comment[]
-  assignedTo: string
+  assigneeId?: string
+  assignee?: AssigneeResponse
   createdAtUtc?: string
   updatedAtUtc: string
 }
@@ -40,6 +41,20 @@ export type TagBriefResponse = {
   id: string
   name: string
   color: string
+}
+
+export type AssigneeResponse = {
+  id: string
+  fullName: string
+  email: string
+  imageUrl?: string
+}
+
+export type ProjectUserResponse = {
+  id: string
+  fullName: string
+  email: string
+  imageUrl?: string
 }
 
 export enum WorkItemStatus {

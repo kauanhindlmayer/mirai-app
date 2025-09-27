@@ -81,6 +81,8 @@ declare global {
   const getMoreTagsTooltip: (typeof import('./src/utils/work-item'))['getMoreTagsTooltip']
   const getPersona: (typeof import('./src/api/personas'))['getPersona']
   const getProject: (typeof import('./src/api/projects'))['getProject']
+  const getProjectUsers: (typeof import('./src/api/projects'))['getProjectUsers']
+  const getProjectUsersForAssignment: (typeof import('./src/api/projects'))['getProjectUsersForAssignment']
   const getRetrospective: (typeof import('./src/api/retrospectives'))['getRetrospective']
   const getStatusLabel: (typeof import('./src/utils/work-item'))['getStatusLabel']
   const getStatusSeverity: (typeof import('./src/utils/work-item'))['getStatusSeverity']
@@ -350,6 +352,8 @@ declare global {
     Classification,
     CreateWorkItemRequest,
     TagBriefResponse,
+    AssigneeResponse,
+    ProjectUserResponse,
     WorkItemsStats,
   } from './src/types/work-item'
   import('./src/types/work-item')
@@ -477,6 +481,7 @@ declare module 'vue' {
     >
     readonly getPersona: UnwrapRef<(typeof import('./src/api/personas'))['getPersona']>
     readonly getProject: UnwrapRef<(typeof import('./src/api/projects'))['getProject']>
+    readonly getProjectUsers: UnwrapRef<(typeof import('./src/api/projects'))['getProjectUsers']>
     readonly getRetrospective: UnwrapRef<
       (typeof import('./src/api/retrospectives'))['getRetrospective']
     >
