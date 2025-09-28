@@ -1,4 +1,5 @@
 import http from '~/api/http'
+import type { PaginatedList } from '~/types'
 import type { Project } from '~/types/project'
 import type { ProjectUserResponse } from '~/types/work-item'
 
@@ -25,9 +26,14 @@ export function deleteProject(organizationId: string, projectId: string): Promis
 export function getProjectUsers(
   organizationId: string,
   projectId: string,
-  search?: string,
-): Promise<ProjectUserResponse[]> {
-  return http.get(`/organizations/${organizationId}/projects/${projectId}/users`, {
-    params: search ? { search } : undefined,
-  })
+  searchTerm?: string,
+  page = 1,
+  pageSize = 10,
+): Promise<PaginatedList<ProjectUserResponse>> {
+  const params: Record<string, string> = {
+    page: page.toString(),
+    pageSize: pageSize.toString(),
+  }
+  if (searchTerm) params.q = searchTerm
+  return http.get(`/organizations/${organizationId}/projects/${projectId}/users`, { params })
 }
