@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import CreateProjectDrawer from '~/components/projects/CreateProjectDrawer.vue'
+import CreateOrganizationDrawer from '~/components/organizations/CreateOrganizationDrawer.vue'
 
 const organizationStore = useOrganizationStore()
 const { organization } = storeToRefs(organizationStore)
@@ -10,6 +11,10 @@ pageStore.resetBreadcrumbs()
 
 const createProjectDrawerRef =
   useTemplateRef<InstanceType<typeof CreateProjectDrawer>>('createProjectDrawer')
+
+const createOrganizationDrawerRef = useTemplateRef<InstanceType<typeof CreateOrganizationDrawer>>(
+  'createOrganizationDrawer',
+)
 
 const { data: organizations, isLoading: isLoadingOrganizations } = useQuery({
   key: () => ['organizations'],
@@ -52,7 +57,7 @@ onMounted(selectFirstOrganization)
               text
               size="small"
               icon="pi pi-plus"
-              disabled
+              @click="createOrganizationDrawerRef?.showDrawer"
             />
           </div>
         </template>
@@ -87,4 +92,5 @@ onMounted(selectFirstOrganization)
     </TabPanels>
   </Tabs>
   <CreateProjectDrawer ref="createProjectDrawer" />
+  <CreateOrganizationDrawer ref="createOrganizationDrawer" />
 </template>

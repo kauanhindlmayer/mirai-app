@@ -44,6 +44,7 @@ declare module 'vue' {
     CommentsSection: typeof import('./src/components/common/CommentsSection.vue')['default']
     ConfirmDialog: typeof import('primevue/confirmdialog')['default']
     ContextMenu: typeof import('primevue/contextmenu')['default']
+    CreateOrganizationDrawer: typeof import('./src/components/organizations/CreateOrganizationDrawer.vue')['default']
     CreatePersonaDrawer: typeof import('./src/components/personas/CreatePersonaDrawer.vue')['default']
     CreateProjectDrawer: typeof import('./src/components/projects/CreateProjectDrawer.vue')['default']
     CreateSprintDialog: typeof import('./src/components/sprints/CreateSprintDialog.vue')['default']
