@@ -10,3 +10,11 @@ export type CreateOrganizationRequest = {
   name: string
   description: string
 }
+
+export type OrganizationUserResponse = {
+  id: string
+  fullName: string
+  email: string
+  imageUrl?: string
+  lastActiveAtUtc?: string
+}

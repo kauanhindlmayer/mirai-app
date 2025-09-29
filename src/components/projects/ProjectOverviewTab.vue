@@ -167,10 +167,16 @@ function onDeleteProject() {
             href="#"
             class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 underline transition-colors"
           >
-            Learn more about deleting projects
+            Learn more about deleting projects.
           </a>
         </p>
-        <Button label="Delete" severity="danger" :loading="isDeleting" @click="onDeleteProject" />
+        <Button
+          label="Delete"
+          severity="danger"
+          :loading="isDeleting"
+          disabled
+          @click="onDeleteProject"
+        />
       </div>
     </div>
   </div>

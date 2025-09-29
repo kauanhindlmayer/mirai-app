@@ -1,5 +1,10 @@
 import http from '~/api/http'
-import type { CreateOrganizationRequest, Organization } from '~/types/organization'
+import type { PaginatedList, PaginationFilter } from '~/types'
+import type {
+  CreateOrganizationRequest,
+  Organization,
+  OrganizationUserResponse,
+} from '~/types/organization'
 
 export function createOrganization(request: CreateOrganizationRequest): Promise<string> {
   return http.post(`/organizations`, request)
@@ -7,4 +12,13 @@ export function createOrganization(request: CreateOrganizationRequest): Promise<
 
 export function listOrganizations(): Promise<Organization[]> {
   return http.get(`/organizations`)
+}
+
+export function getOrganizationUsers(
+  organizationId: string,
+  filters: PaginationFilter,
+): Promise<PaginatedList<OrganizationUserResponse>> {
+  return http.get(`/organizations/${organizationId}/users`, {
+    params: filters as unknown as Record<string, string>,
+  })
 }

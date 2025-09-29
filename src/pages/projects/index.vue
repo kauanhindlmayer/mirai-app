@@ -66,9 +66,8 @@ onMounted(selectFirstOrganization)
         icon="pi pi-cog"
         severity="secondary"
         text
-        disabled
         v-tooltip.bottom="'Organization Settings'"
-        @click="createProjectDrawerRef?.showDrawer"
+        @click="$router.push(`/organizations/${organization.id}/settings`)"
       />
     </div>
     <Button label="New Project" icon="pi pi-plus" @click="createProjectDrawerRef?.showDrawer" />

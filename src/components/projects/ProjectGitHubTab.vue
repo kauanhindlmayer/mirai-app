@@ -22,7 +22,7 @@
               </a>
               and see the status of your development from within Mirai Boards.
             </p>
-            <Button label="Connect your GitHub Account" class="w-fit" />
+            <Button label="Connect your GitHub Account" class="w-fit" disabled />
           </div>
         </div>
       </div>

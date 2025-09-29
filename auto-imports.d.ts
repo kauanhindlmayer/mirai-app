@@ -79,6 +79,7 @@ declare global {
   const getInitials: (typeof import('./src/utils/index'))['getInitials']
   const getJobStatusSeverity: (typeof import('./src/utils/tag'))['getJobStatusSeverity']
   const getMoreTagsTooltip: (typeof import('./src/utils/work-item'))['getMoreTagsTooltip']
+  const getOrganizationUsers: (typeof import('./src/api/organizations'))['getOrganizationUsers']
   const getPersona: (typeof import('./src/api/personas'))['getPersona']
   const getProject: (typeof import('./src/api/projects'))['getProject']
   const getProjectUsers: (typeof import('./src/api/projects'))['getProjectUsers']
@@ -186,6 +187,7 @@ declare global {
   const useModel: (typeof import('vue'))['useModel']
   const useMutation: (typeof import('@pinia/colada'))['useMutation']
   const useOrganizationStore: (typeof import('./src/stores/organization'))['useOrganizationStore']
+  const useOrganizationUsers: (typeof import('./src/queries/organizations'))['useOrganizationUsers']
   const usePageStore: (typeof import('./src/stores/page'))['usePageStore']
   const useProject: (typeof import('./src/queries/projects'))['useProject']
   const useProjectStore: (typeof import('./src/stores/project'))['useProjectStore']
@@ -283,7 +285,11 @@ declare global {
   } from './src/types/layout'
   import('./src/types/layout')
   // @ts-ignore
-  export type { Organization, CreateOrganizationRequest } from './src/types/organization'
+  export type {
+    Organization,
+    CreateOrganizationRequest,
+    OrganizationUserResponse,
+  } from './src/types/organization'
   import('./src/types/organization')
   // @ts-ignore
   export type {
@@ -479,6 +485,9 @@ declare module 'vue' {
     readonly getMoreTagsTooltip: UnwrapRef<
       (typeof import('./src/utils/work-item'))['getMoreTagsTooltip']
     >
+    readonly getOrganizationUsers: UnwrapRef<
+      (typeof import('./src/api/organizations'))['getOrganizationUsers']
+    >
     readonly getPersona: UnwrapRef<(typeof import('./src/api/personas'))['getPersona']>
     readonly getProject: UnwrapRef<(typeof import('./src/api/projects'))['getProject']>
     readonly getProjectUsers: UnwrapRef<(typeof import('./src/api/projects'))['getProjectUsers']>
@@ -603,6 +612,9 @@ declare module 'vue' {
     readonly useMutation: UnwrapRef<(typeof import('@pinia/colada'))['useMutation']>
     readonly useOrganizationStore: UnwrapRef<
       (typeof import('./src/stores/organization'))['useOrganizationStore']
+    >
+    readonly useOrganizationUsers: UnwrapRef<
+      (typeof import('./src/queries/organizations'))['useOrganizationUsers']
     >
     readonly usePageStore: UnwrapRef<(typeof import('./src/stores/page'))['usePageStore']>
     readonly useProject: UnwrapRef<(typeof import('./src/queries/projects'))['useProject']>

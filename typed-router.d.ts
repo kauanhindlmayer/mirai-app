@@ -24,6 +24,8 @@ declare module 'vue-router/auto-routes' {
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
     '/not-found': RouteRecordInfo<'/not-found', '/not-found', Record<never, never>, Record<never, never>>,
     '/oops': RouteRecordInfo<'/oops', '/oops', Record<never, never>, Record<never, never>>,
+    '/organizations': RouteRecordInfo<'/organizations', '/organizations', Record<never, never>, Record<never, never>>,
+    '/organizations/[organizationId]/settings': RouteRecordInfo<'/organizations/[organizationId]/settings', '/organizations/:organizationId/settings', { organizationId: ParamValue<true> }, { organizationId: ParamValue<false> }>,
     '/projects': RouteRecordInfo<'/projects', '/projects', Record<never, never>, Record<never, never>>,
     '/projects/': RouteRecordInfo<'/projects/', '/projects', Record<never, never>, Record<never, never>>,
     '/projects/[projectId]/backlogs': RouteRecordInfo<'/projects/[projectId]/backlogs', '/projects/:projectId/backlogs', { projectId: ParamValue<true> }, { projectId: ParamValue<false> }>,
