@@ -2,9 +2,16 @@
 @import 'primeicons/primeicons.css';
 @import '~/assets/layout/layout.scss';
 
-.board-tabs .p-tablist-tab-list,
-.board-tabs .p-tab.p-disabled {
+.board-tabs .p-tablist-tab-list {
   border: none !important;
+}
+
+.board-tabs .p-tablist-tab-list .p-tab {
+  border-bottom: 2px solid var(--p-content-border-color) !important;
+}
+
+.board-tabs .p-tablist-tab-list .p-tab.p-tab-active {
+  border-bottom-color: var(--p-primary-color) !important;
 }
 
 .p-tabpanels {

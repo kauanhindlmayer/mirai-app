@@ -11,6 +11,10 @@ export type CreateOrganizationRequest = {
   description: string
 }
 
+export type AddUserToOrganizationRequest = {
+  email: string
+}
+
 export type OrganizationUserResponse = {
   id: string
   fullName: string

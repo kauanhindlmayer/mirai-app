@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import type { DataTablePageEvent, DataTableSortEvent } from 'primevue'
 import { useOrganizationUsers } from '~/queries/organizations'
+import AddUserToOrganizationDrawer from './AddUserToOrganizationDrawer.vue'
 
+const route = useRoute('/organizations/[organizationId]/settings')
 const { users, isPending, isLoading, filters } = useOrganizationUsers()
+
+const addUserDrawerRef =
+  useTemplateRef<InstanceType<typeof AddUserToOrganizationDrawer>>('addUserDrawer')
 
 function onPaginate(event: DataTablePageEvent) {
   filters.value.page = event.page + 1
@@ -15,7 +20,7 @@ function onSort(event: DataTableSortEvent) {
 }
 
 function addUser() {
-  // TODO: Implement add user functionality
+  addUserDrawerRef.value?.showDrawer()
 }
 </script>
 
@@ -109,5 +114,10 @@ function addUser() {
         </template>
       </DataTable>
     </div>
+
+    <AddUserToOrganizationDrawer
+      ref="addUserDrawer"
+      :organization-id="route.params.organizationId"
+    />
   </div>
 </template>

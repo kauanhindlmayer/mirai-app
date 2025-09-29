@@ -5,10 +5,9 @@ import { WorkItemStatus, WorkItemType } from '~/types/work-item'
 export function getStatusSeverity(status: WorkItemStatus): string {
   const severityMap: Record<WorkItemStatus, string> = {
     [WorkItemStatus.New]: 'info',
-    [WorkItemStatus.InProgress]: 'warning',
+    [WorkItemStatus.Active]: 'warning',
     [WorkItemStatus.Resolved]: 'success',
     [WorkItemStatus.Closed]: 'success',
-    [WorkItemStatus.Reopened]: 'warning',
     [WorkItemStatus.Removed]: 'danger',
   }
 
@@ -18,10 +17,9 @@ export function getStatusSeverity(status: WorkItemStatus): string {
 export function getStatusLabel(status: WorkItemStatus): string {
   const statusMap: Record<WorkItemStatus, string> = {
     [WorkItemStatus.New]: 'New',
-    [WorkItemStatus.InProgress]: 'In Progress',
+    [WorkItemStatus.Active]: 'Active',
     [WorkItemStatus.Resolved]: 'Resolved',
     [WorkItemStatus.Closed]: 'Closed',
-    [WorkItemStatus.Reopened]: 'Reopened',
     [WorkItemStatus.Removed]: 'Removed',
   }
 

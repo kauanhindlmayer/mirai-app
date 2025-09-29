@@ -64,9 +64,9 @@ defineExpose({
     }"
   >
     <template #header>
-      <span class="text-surface-900 dark:text-surface-0 text-xl font-bold"
-        >Create New Organization</span
-      >
+      <span class="text-surface-900 dark:text-surface-0 text-xl font-bold">
+        Create New Organization
+      </span>
     </template>
     <Form :resolver @submit="onFormSubmit" class="flex flex-col h-full">
       <div class="grow">

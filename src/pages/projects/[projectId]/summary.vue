@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import EditProjectDrawer from '~/components/projects/EditProjectDrawer.vue'
+import InviteUserDrawer from '~/components/projects/InviteUserDrawer.vue'
 
 const organizationStore = useOrganizationStore()
 const { organization } = storeToRefs(organizationStore)
@@ -9,6 +10,8 @@ pageStore.setTitle('Summary - Overview')
 
 const editProjectDrawerRef =
   useTemplateRef<InstanceType<typeof EditProjectDrawer>>('editProjectDrawer')
+const inviteUserDrawerRef =
+  useTemplateRef<InstanceType<typeof InviteUserDrawer>>('inviteUserDrawer')
 
 const periods = ref([
   { label: 'Last 1 day', value: 1 },
@@ -56,7 +59,7 @@ onMounted(() => {
             />
             <div class="font-semibold text-2xl">{{ project?.name }}</div>
           </div>
-          <Button label="Invite" icon="pi pi-user-plus" disabled />
+          <Button label="Invite" icon="pi pi-user-plus" @click="inviteUserDrawerRef?.showDrawer" />
         </div>
       </div>
     </div>
@@ -140,4 +143,5 @@ onMounted(() => {
     </div>
   </div>
   <EditProjectDrawer ref="editProjectDrawer" />
+  <InviteUserDrawer ref="inviteUserDrawer" />
 </template>

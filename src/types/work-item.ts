@@ -59,10 +59,9 @@ export type ProjectUserResponse = {
 
 export enum WorkItemStatus {
   New = 'New',
-  InProgress = 'InProgress',
-  Closed = 'Closed',
+  Active = 'Active',
   Resolved = 'Resolved',
-  Reopened = 'Reopened',
+  Closed = 'Closed',
   Removed = 'Removed',
 }
 

@@ -109,6 +109,7 @@ onMounted(setBreadcrumbs)
           :rows-per-page-options="[5, 10, 20, 50]"
           :loading="isLoading"
           :page-count="workItems?.totalPages"
+          striped-rows
           lazy
           paginator
           table-style="min-width: 50rem"
