@@ -12,7 +12,7 @@ const boardSettingsDrawerRef =
   useTemplateRef<InstanceType<typeof BoardSettingsDrawer>>('boardSettingsDrawer')
 
 const selectedBoard = ref<BoardSummary | null>(null)
-const selectedBacklogLevel = ref(WorkItemType.UserStory)
+const selectedBacklogLevel = ref(BacklogLevel.UserStory)
 const backlogLevels = formatEnumOptions(BacklogLevel)
 
 watch(
@@ -24,9 +24,11 @@ watch(
   },
 )
 
+const selectedBoardId = computed(() => selectedBoard.value?.id ?? '')
+
 const { data: board, isLoading: isLoadingBoard } = useQuery({
-  key: () => ['board', selectedBoard.value?.id || ''],
-  query: async () => getBoard(teamStore.teamId!, selectedBoard.value?.id || ''),
+  key: () => ['board', selectedBoardId.value, selectedBacklogLevel.value],
+  query: async () => getBoard(teamStore.teamId!, selectedBoardId.value, selectedBacklogLevel.value),
   enabled: () => !!selectedBoard.value,
 })
 
@@ -100,7 +102,6 @@ onBeforeMount(() => {
                 option-label="label"
                 option-value="value"
                 class="ml-2"
-                disabled
               />
               <Button
                 icon="pi pi-filter"

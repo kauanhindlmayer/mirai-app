@@ -25,6 +25,7 @@ declare global {
   const addComment: (typeof import('./src/api/wiki-pages'))['addComment']
   const addDays: (typeof import('./src/utils/date'))['addDays']
   const addTagToWorkItem: (typeof import('./src/api/work-items'))['addTagToWorkItem']
+  const addUserToOrganization: (typeof import('./src/api/organizations'))['addUserToOrganization']
   const addWikiPageComment: (typeof import('./src/api/wiki-pages'))['addWikiPageComment']
   const addWorkItemComment: (typeof import('./src/api/work-items'))['addWorkItemComment']
   const addWorkItemToSprint: (typeof import('./src/api/sprints'))['addWorkItemToSprint']
@@ -288,6 +289,7 @@ declare global {
   export type {
     Organization,
     CreateOrganizationRequest,
+    AddUserToOrganizationRequest,
     OrganizationUserResponse,
   } from './src/types/organization'
   import('./src/types/organization')
@@ -397,6 +399,9 @@ declare module 'vue' {
     readonly addDays: UnwrapRef<(typeof import('./src/utils/date'))['addDays']>
     readonly addTagToWorkItem: UnwrapRef<
       (typeof import('./src/api/work-items'))['addTagToWorkItem']
+    >
+    readonly addUserToOrganization: UnwrapRef<
+      (typeof import('./src/api/organizations'))['addUserToOrganization']
     >
     readonly addWikiPageComment: UnwrapRef<
       (typeof import('./src/api/wiki-pages'))['addWikiPageComment']

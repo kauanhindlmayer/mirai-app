@@ -11,6 +11,7 @@ declare module 'vue' {
     AccordionContent: typeof import('primevue/accordioncontent')['default']
     AccordionHeader: typeof import('primevue/accordionheader')['default']
     AccordionPanel: typeof import('primevue/accordionpanel')['default']
+    AddUserToOrganizationDrawer: typeof import('./src/components/organizations/AddUserToOrganizationDrawer.vue')['default']
     AppBreadcrumb: typeof import('./src/layout/AppBreadcrumb.vue')['default']
     AppComment: typeof import('./src/components/common/AppComment.vue')['default']
     AppConfig: typeof import('./src/layout/AppConfig.vue')['default']

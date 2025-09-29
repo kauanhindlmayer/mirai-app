@@ -6,13 +6,20 @@ import type {
   CreateBoardRequest,
   MoveCardRequest,
 } from '~/types/board'
+import type { BacklogLevel } from '~/types/team'
 
 export function createBoard(teamId: string, request: CreateBoardRequest): Promise<string> {
   return http.post(`/teams/${teamId}/boards`, request)
 }
 
-export function getBoard(teamId: string, boardId: string): Promise<Board> {
-  return http.get(`/teams/${teamId}/boards/${boardId}`)
+export function getBoard(
+  teamId: string,
+  boardId: string,
+  backlogLevel?: BacklogLevel,
+): Promise<Board> {
+  const params = {} as Record<string, string>
+  if (backlogLevel) params.backlogLevel = backlogLevel
+  return http.get(`/teams/${teamId}/boards/${boardId}`, { params })
 }
 
 export function listBoards(projectId: string): Promise<BoardSummary[]> {
