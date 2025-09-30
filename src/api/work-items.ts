@@ -18,9 +18,13 @@ export function listWorkItems(
   projectId: string,
   filters: PaginationFilter,
 ): Promise<PaginatedList<WorkItem>> {
-  return http.get(`/projects/${projectId}/work-items`, {
-    params: filters as unknown as Record<string, string>,
-  })
+  const params: Record<string, string> = {
+    page: filters.page.toString(),
+    pageSize: filters.pageSize.toString(),
+  }
+  if (filters.sort) params.sort = filters.sort
+  if (filters.searchTerm) params.q = filters.searchTerm
+  return http.get(`/projects/${projectId}/work-items`, { params })
 }
 
 export function deleteWorkItem(projectId: string, workItemId: string): Promise<void> {

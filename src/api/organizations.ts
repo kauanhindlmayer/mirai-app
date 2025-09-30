@@ -1,10 +1,10 @@
 import http from '~/api/http'
 import type { PaginatedList, PaginationFilter } from '~/types'
 import type {
+  AddUserToOrganizationRequest,
   CreateOrganizationRequest,
   Organization,
   OrganizationUserResponse,
-  AddUserToOrganizationRequest,
 } from '~/types/organization'
 
 export function createOrganization(request: CreateOrganizationRequest): Promise<string> {

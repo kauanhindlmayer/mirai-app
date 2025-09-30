@@ -60,7 +60,7 @@ const { mutate: createWikiPageFn } = useMutation({
       parentWikiPageId,
     }),
   onSuccess: async (wikiPageId: string) => {
-    queryCache.invalidateQueries({ key: ['wiki-pages', project.value.id] })
+    queryCache.invalidateQueries({ key: ['wiki-pages', project.value.id], exact: false })
     toast.showSuccess({ detail: 'Wiki page created successfully' })
     emit('close', wikiPageId)
   },
@@ -74,8 +74,8 @@ const { mutate: updateWikiPageFn } = useMutation({
       content: content.value,
     }),
   onSuccess: async () => {
-    queryCache.invalidateQueries({ key: ['wiki-pages', project.value.id] })
-    queryCache.invalidateQueries({ key: ['wiki-page', wikiPage.value!.id] })
+    queryCache.invalidateQueries({ key: ['wiki-pages', project.value.id], exact: false })
+    queryCache.invalidateQueries({ key: ['wiki-page', wikiPage.value!.id], exact: false })
     toast.showSuccess({ detail: 'Wiki page updated successfully' })
     emit('close', wikiPage.value!.id)
   },

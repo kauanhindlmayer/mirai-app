@@ -4,7 +4,7 @@ import type { Card } from '~/types/board'
 const { card } = defineProps<{ card: Card }>()
 
 const assignee = computed(() => card.workItem.assignee)
-const storyPoints = ref(card.workItem.storyPoints)
+const storyPoints = computed(() => card.workItem.storyPoints)
 
 const router = useRouter()
 

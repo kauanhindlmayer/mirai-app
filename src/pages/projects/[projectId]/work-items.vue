@@ -131,11 +131,15 @@ onMounted(setBreadcrumbs)
               </div>
             </template>
           </Column>
-          <Column field="assignedTo" header="Assigned To">
+          <Column field="assignee" header="Assigned To">
             <template #body="{ data }">
               <div class="flex items-center gap-2">
-                <Avatar shape="circle" icon="pi pi-user" />
-                {{ data.assignedTo ? data.assignedTo.name : 'Unassigned' }}
+                <Avatar
+                  shape="circle"
+                  :image="data.assignee?.imageUrl"
+                  :icon="!data.assignee?.imageUrl ? 'pi pi-user' : undefined"
+                />
+                {{ data.assignee?.name ?? 'Unassigned' }}
               </div>
             </template>
           </Column>

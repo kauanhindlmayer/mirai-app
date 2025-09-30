@@ -21,6 +21,7 @@ watch(
   (newCards) => {
     cards.value = [...newCards]
   },
+  { deep: true },
 )
 
 const teamStore = useTeamStore()
