@@ -1,13 +1,16 @@
 <script setup lang="ts">
+import { onClickOutside } from '@vueuse/core'
 import type { Menu } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 import {
+  addTagToWorkItem,
   addWorkItemComment,
   deleteWorkItemComment,
   removeTagFromWorkItem,
   updateWorkItem,
   updateWorkItemComment,
 } from '~/api/work-items'
+import type { Tag } from '~/types/tag'
 import { ValueArea, WorkItemStatus, type TagBriefResponse } from '~/types/work-item'
 
 const projectStore = useProjectStore()
@@ -55,6 +58,43 @@ const { mutate: removeTagFromWorkItemFn } = useMutation({
     toast.showSuccess({ detail: 'Tag removed successfully' })
   },
 })
+
+const selectedTag = ref<Tag | null>(null)
+const showTagSelector = ref(false)
+const tagSelectorRef = useTemplateRef<HTMLDivElement>('tagSelectorRef')
+
+onClickOutside(
+  tagSelectorRef,
+  (event) => {
+    const target = event.target as HTMLElement
+    if (target.closest('.p-autocomplete-overlay')) return
+    showTagSelector.value = false
+  },
+  { ignore: ['.p-autocomplete-overlay'] },
+)
+
+const { mutate: addTagToWorkItemFn } = useMutation({
+  mutation: (tag: Tag) => addTagToWorkItem(project.value.id, workItemId.value!, tag.name),
+  onSuccess() {
+    queryCache.invalidateQueries({ key: ['work-items'] })
+    queryCache.invalidateQueries({ key: ['board'] })
+    toast.showSuccess({ detail: 'Tag added successfully' })
+    selectedTag.value = null
+  },
+})
+
+watch(selectedTag, (tag) => {
+  if (!tag) return
+  const tagExists = workItem.value?.tags.some((t) => t.name === tag.name)
+  if (tagExists) {
+    toast.showError({ detail: 'Tag already added to work item' })
+    selectedTag.value = null
+    return
+  }
+  addTagToWorkItemFn(tag)
+  showTagSelector.value = false
+})
+
 const toast = useAppToast()
 const queryCache = useQueryCache()
 
@@ -157,8 +197,8 @@ defineExpose({
             </InputGroupAddon>
           </InputGroup>
         </div>
-        <div class="flex justify-between items-center ml-5 mb-2 py-2">
-          <div class="flex items-center gap-2">
+        <div class="flex justify-between items-center ml-5 mb-2 mr-4 py-2">
+          <div class="flex items-center gap-2 flex-1">
             <div class="flex items-center gap-2">
               <AssigneeSelector v-model="workItem.assignee" class="min-w-48" />
             </div>
@@ -170,10 +210,23 @@ defineExpose({
                 removable
                 @remove="removeTagFromWorkItemFn(tag)"
               />
+              <div ref="tagSelectorRef" class="inline-block">
+                <TagSelector v-if="showTagSelector" v-model="selectedTag" class="max-w-48" />
+                <Button
+                  v-else
+                  icon="pi pi-plus"
+                  severity="secondary"
+                  text
+                  rounded
+                  size="small"
+                  v-tooltip.bottom="'Add tag'"
+                  @click="showTagSelector = true"
+                />
+              </div>
             </div>
           </div>
 
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 flex-shrink-0 ml-4">
             <Button
               label="Save and Close"
               severity="secondary"
