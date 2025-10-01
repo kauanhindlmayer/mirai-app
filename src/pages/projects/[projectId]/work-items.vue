@@ -135,9 +135,10 @@ onMounted(setBreadcrumbs)
             <template #body="{ data }">
               <div class="flex items-center gap-2">
                 <Avatar
-                  shape="circle"
                   :image="data.assignee?.imageUrl"
                   :icon="!data.assignee?.imageUrl ? 'pi pi-user' : undefined"
+                  pt:image:class="rounded-lg!"
+                  class="rounded-lg!"
                 />
                 {{ data.assignee?.name ?? 'Unassigned' }}
               </div>

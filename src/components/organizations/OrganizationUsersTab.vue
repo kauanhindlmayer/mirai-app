@@ -48,12 +48,11 @@ function addUser() {
         <Column field="fullName" header="Name" sortable>
           <template #body="{ data }">
             <div class="flex items-center space-x-3">
-              <Avatar v-if="data.imageUrl" :image="data.imageUrl" size="normal" />
+              <Avatar v-if="data.imageUrl" :image="data.imageUrl" pt:image:class="rounded-lg!" />
               <Avatar
                 v-else
                 :label="data.fullName.charAt(0)"
-                class="bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300"
-                size="normal"
+                class="bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded-avatar"
               />
               <div>
                 <div class="font-medium">{{ data.fullName }}</div>

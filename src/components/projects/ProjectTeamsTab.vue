@@ -32,15 +32,18 @@ const { teams, isLoading } = useTeams()
         </Column>
         <Column field="description" header="Description">
           <template #body="{ data }">
-            <span class="text-surface-600 dark:text-surface-400">
+            <span
+              class="text-surface-600 dark:text-surface-400 block truncate max-w-md"
+              :title="data.description"
+            >
               {{ data.description || 'No description' }}
             </span>
           </template>
         </Column>
-        <Column field="members" header="Members">
+        <Column field="memberCount" header="Members">
           <template #body="{ data }">
             <span class="text-surface-600 dark:text-surface-400">
-              {{ data.members?.length || 0 }} members
+              {{ data.memberCount || 0 }} members
             </span>
           </template>
         </Column>

@@ -32,10 +32,10 @@ function openWorkItemDialog() {
 
     <div class="flex items-center">
       <Avatar
-        shape="circle"
         :image="assignee?.imageUrl || undefined"
         :icon="assignee?.imageUrl ? undefined : 'pi pi-user'"
-        class="mr-2"
+        pt:image:class="rounded-lg!"
+        class="mr-2 rounded-lg!"
       />
       <span class="text-surface-900 dark:text-surface-0">
         {{ assignee?.name || 'Unassigned' }}
