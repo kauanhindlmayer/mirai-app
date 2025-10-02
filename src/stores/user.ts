@@ -11,8 +11,7 @@ export const useUserStore = defineStore('users', () => {
   }
 
   function logout() {
-    user.value = null
-    localStorage.removeItem('accessToken')
+    localStorage.clear()
     router.push('/login')
   }
 

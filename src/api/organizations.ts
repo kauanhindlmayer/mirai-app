@@ -18,10 +18,16 @@ export function listOrganizations(): Promise<Organization[]> {
 export function getOrganizationUsers(
   organizationId: string,
   filters: PaginationFilter,
+  excludeProjectId?: string,
 ): Promise<PaginatedList<OrganizationUserResponse>> {
-  return http.get(`/organizations/${organizationId}/users`, {
-    params: filters as unknown as Record<string, string>,
-  })
+  const params: Record<string, string> = {
+    page: filters.page.toString(),
+    pageSize: filters.pageSize.toString(),
+  }
+  if (filters.sort) params.sort = filters.sort
+  if (filters.searchTerm) params.searchTerm = filters.searchTerm
+  if (excludeProjectId) params.excludeProjectId = excludeProjectId
+  return http.get(`/organizations/${organizationId}/users`, { params })
 }
 
 export function addUserToOrganization(

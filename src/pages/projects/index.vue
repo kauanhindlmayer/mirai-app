@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import CreateProjectDrawer from '~/components/projects/CreateProjectDrawer.vue'
 import CreateOrganizationDrawer from '~/components/organizations/CreateOrganizationDrawer.vue'
+import CreateProjectDrawer from '~/components/projects/CreateProjectDrawer.vue'
 
 const organizationStore = useOrganizationStore()
 const { organization } = storeToRefs(organizationStore)
+
+const isOrganizationSelected = computed(() => !!organization.value?.id)
 
 const pageStore = usePageStore()
 pageStore.setTitle('Projects - Home')
@@ -22,7 +24,7 @@ const { data: organizations, isLoading: isLoadingOrganizations } = useQuery({
   placeholderData: () => [] as Organization[],
 })
 
-const { data: projects, isLoading } = useQuery({
+const { data: projects } = useQuery({
   key: () => ['projects', organization.value.id],
   query: () => listProjects(organization.value.id),
   enabled: () => !!organization.value.id,
@@ -45,6 +47,7 @@ onMounted(selectFirstOrganization)
         v-model="organization"
         :options="organizations"
         :loading="isLoadingOrganizations"
+        placeholder="Select an organization..."
         class="my-4"
         option-label="name"
       >
@@ -66,11 +69,17 @@ onMounted(selectFirstOrganization)
         icon="pi pi-cog"
         severity="secondary"
         text
+        :disabled="!isOrganizationSelected"
         v-tooltip.bottom="'Organization Settings'"
         @click="$router.push(`/organizations/${organization.id}/settings`)"
       />
     </div>
-    <Button label="New Project" icon="pi pi-plus" @click="createProjectDrawerRef?.showDrawer" />
+    <Button
+      label="New Project"
+      icon="pi pi-plus"
+      :disabled="!isOrganizationSelected"
+      @click="createProjectDrawerRef?.showDrawer"
+    />
   </header>
   <Tabs value="0">
     <TabList>
@@ -80,13 +89,26 @@ onMounted(selectFirstOrganization)
     </TabList>
     <TabPanels>
       <TabPanel value="0">
-        <div v-if="isLoading">Loading projects...</div>
-        <div v-else-if="projects?.length">
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-            <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
-          </div>
+        <EmptyState
+          v-if="!isOrganizationSelected"
+          icon="pi pi-building"
+          title="No organization selected"
+          message="Select an organization from the dropdown above to view and manage projects."
+        />
+
+        <div
+          v-else-if="projects?.length"
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4"
+        >
+          <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
         </div>
-        <div v-else>No projects found.</div>
+
+        <EmptyState
+          v-else
+          icon="pi pi-folder-open"
+          title="No projects found"
+          message="Create a project to plan and track work with your team."
+        />
       </TabPanel>
     </TabPanels>
   </Tabs>

@@ -5,9 +5,8 @@ import { object, string } from 'yup'
 import { addUserToOrganization } from '~/api/organizations'
 import type { AddUserToOrganizationRequest } from '~/types/organization'
 
-const props = defineProps<{
-  organizationId: string
-}>()
+const organizationStore = useOrganizationStore()
+const { organization } = storeToRefs(organizationStore)
 
 const form = ref<AddUserToOrganizationRequest>({
   email: '',
@@ -25,15 +24,14 @@ const queryCache = useQueryCache()
 
 const { mutate: addUser, isLoading } = useMutation({
   mutation: (request: AddUserToOrganizationRequest) =>
-    addUserToOrganization(props.organizationId, request),
+    addUserToOrganization(organization.value.id, request),
   onSuccess: () => {
     toast.showSuccess({ summary: 'Success', detail: 'User added to organization successfully' })
     queryCache.invalidateQueries({ key: ['organization-users'] })
     hideDrawer()
     form.value.email = ''
   },
-  onError: (error) => {
-    console.error('Error adding user to organization:', error)
+  onError: () => {
     toast.showError({ summary: 'Error', detail: 'Failed to add user to organization' })
   },
 })
@@ -65,12 +63,12 @@ defineExpose({
       <div class="grow space-y-4">
         <FormField v-slot="$field" name="email">
           <label for="email" class="font-medium text-surface-900 dark:text-surface-0">
-            Email Address
+            User Email <span class="text-red-500">*</span>
           </label>
           <InputText
             input-id="email"
             v-model="form.email"
-            placeholder="Enter user's email address"
+            placeholder="name@example.com"
             class="w-full"
           />
           <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">
@@ -81,7 +79,7 @@ defineExpose({
 
       <div class="flex justify-end mt-4 gap-2">
         <Button type="button" label="Cancel" severity="secondary" @click="hideDrawer" />
-        <Button type="submit" label="Add User" :loading="isLoading" />
+        <Button type="submit" label="Add" :loading="isLoading" />
       </div>
     </Form>
   </Drawer>

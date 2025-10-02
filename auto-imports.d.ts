@@ -26,6 +26,7 @@ declare global {
   const addDays: (typeof import('./src/utils/date'))['addDays']
   const addTagToWorkItem: (typeof import('./src/api/work-items'))['addTagToWorkItem']
   const addUserToOrganization: (typeof import('./src/api/organizations'))['addUserToOrganization']
+  const addUserToProject: (typeof import('./src/api/projects'))['addUserToProject']
   const addWikiPageComment: (typeof import('./src/api/wiki-pages'))['addWikiPageComment']
   const addWorkItemComment: (typeof import('./src/api/work-items'))['addWorkItemComment']
   const addWorkItemToSprint: (typeof import('./src/api/sprints'))['addWorkItemToSprint']
@@ -176,6 +177,7 @@ declare global {
   const updateWorkItemComment: (typeof import('./src/api/work-items'))['updateWorkItemComment']
   const useAppToast: (typeof import('./src/composables/app-toast'))['useAppToast']
   const useAttrs: (typeof import('vue'))['useAttrs']
+  const useAvailableProjectUsers: (typeof import('./src/queries/organizations'))['useAvailableProjectUsers']
   const useCache: (typeof import('piniaColada'))['useCache']
   const useCssModule: (typeof import('vue'))['useCssModule']
   const useCssVars: (typeof import('vue'))['useCssVars']
@@ -189,6 +191,7 @@ declare global {
   const useMutation: (typeof import('@pinia/colada'))['useMutation']
   const useOrganizationStore: (typeof import('./src/stores/organization'))['useOrganizationStore']
   const useOrganizationUsers: (typeof import('./src/queries/organizations'))['useOrganizationUsers']
+  const useOrganizationUsersNotInProject: (typeof import('./src/queries/organizations'))['useOrganizationUsersNotInProject']
   const usePageStore: (typeof import('./src/stores/page'))['usePageStore']
   const useProject: (typeof import('./src/queries/projects'))['useProject']
   const useProjectStore: (typeof import('./src/stores/project'))['useProjectStore']
@@ -403,6 +406,7 @@ declare module 'vue' {
     readonly addUserToOrganization: UnwrapRef<
       (typeof import('./src/api/organizations'))['addUserToOrganization']
     >
+    readonly addUserToProject: UnwrapRef<(typeof import('./src/api/projects'))['addUserToProject']>
     readonly addWikiPageComment: UnwrapRef<
       (typeof import('./src/api/wiki-pages'))['addWikiPageComment']
     >
@@ -606,6 +610,9 @@ declare module 'vue' {
     >
     readonly useAppToast: UnwrapRef<(typeof import('./src/composables/app-toast'))['useAppToast']>
     readonly useAttrs: UnwrapRef<(typeof import('vue'))['useAttrs']>
+    readonly useAvailableProjectUsers: UnwrapRef<
+      (typeof import('./src/queries/organizations'))['useAvailableProjectUsers']
+    >
     readonly useCssModule: UnwrapRef<(typeof import('vue'))['useCssModule']>
     readonly useCssVars: UnwrapRef<(typeof import('vue'))['useCssVars']>
     readonly useDialog: UnwrapRef<(typeof import('./src/composables/dialog'))['useDialog']>

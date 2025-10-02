@@ -37,3 +37,11 @@ export function getProjectUsers(
   if (searchTerm) params.q = searchTerm
   return http.get(`/organizations/${organizationId}/projects/${projectId}/users`, { params })
 }
+
+export function addUserToProject(
+  organizationId: string,
+  projectId: string,
+  userId: string,
+): Promise<void> {
+  return http.post(`/organizations/${organizationId}/projects/${projectId}/users`, { userId })
+}

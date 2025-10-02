@@ -3,8 +3,7 @@ import type { DataTablePageEvent, DataTableSortEvent } from 'primevue'
 import { useOrganizationUsers } from '~/queries/organizations'
 import AddUserToOrganizationDrawer from './AddUserToOrganizationDrawer.vue'
 
-const route = useRoute('/organizations/[organizationId]/settings')
-const { users, isPending, isLoading, filters } = useOrganizationUsers()
+const { users, filters, isLoading } = useOrganizationUsers()
 
 const addUserDrawerRef =
   useTemplateRef<InstanceType<typeof AddUserToOrganizationDrawer>>('addUserDrawer')
@@ -37,7 +36,7 @@ function addUser() {
         :rows="filters.pageSize"
         :total-records="users?.totalCount || 0"
         :rows-per-page-options="[5, 10, 20, 50]"
-        :loading="isPending"
+        :loading="isLoading"
         :page-count="users?.totalPages || 0"
         lazy
         paginator
@@ -98,7 +97,7 @@ function addUser() {
           </template>
         </Column>
         <template #empty>
-          <div v-if="!isPending && !isLoading" class="text-center py-12">
+          <div v-if="!isLoading" class="text-center py-12">
             <div class="mb-4">
               <i class="pi pi-users text-4xl text-surface-400 dark:text-surface-600"></i>
             </div>
@@ -114,9 +113,6 @@ function addUser() {
       </DataTable>
     </div>
 
-    <AddUserToOrganizationDrawer
-      ref="addUserDrawer"
-      :organization-id="route.params.organizationId"
-    />
+    <AddUserToOrganizationDrawer ref="addUserDrawer" />
   </div>
 </template>

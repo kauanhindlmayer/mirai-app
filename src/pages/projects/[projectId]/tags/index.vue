@@ -198,17 +198,12 @@ onBeforeMount(setBreadcrumbs)
           <Column header="Associations" field="workItemsCount" sortable />
           <Column header="Actions" row-editor />
           <template #empty>
-            <div v-if="!isLoading" class="text-center py-24">
-              <div class="mb-4">
-                <i class="pi pi-tag text-4xl text-surface-400 dark:text-surface-600"></i>
-              </div>
-              <div class="text-lg font-medium text-surface-900 dark:text-surface-0 mb-2">
-                No tags found
-              </div>
-              <div class="text-surface-600 dark:text-surface-400 mb-4">
-                Create tags to categorize and organize your work items.
-              </div>
-            </div>
+            <EmptyState
+              v-if="!isLoading"
+              icon="pi pi-tag"
+              title="No tags found"
+              message="Create tags to categorize and organize your work items."
+            />
           </template>
         </DataTable>
       </div>
