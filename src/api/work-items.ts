@@ -5,7 +5,12 @@ import type {
   PaginationFilter,
   UpdateCommentRequest,
 } from '~/types'
-import type { CreateWorkItemRequest, WorkItem, WorkItemsStats } from '~/types/work-item'
+import type {
+  CreateWorkItemLinkRequest,
+  CreateWorkItemRequest,
+  WorkItem,
+  WorkItemsStats,
+} from '~/types/work-item'
 
 export function createWorkItem(
   projectId: string,
@@ -96,4 +101,20 @@ export function removeTagFromWorkItem(
   tagName: string,
 ): Promise<void> {
   return http.delete(`/projects/${projectId}/work-items/${workItemId}/tags/${tagName}`)
+}
+
+export function createWorkItemLink(
+  projectId: string,
+  workItemId: string,
+  request: CreateWorkItemLinkRequest,
+): Promise<string> {
+  return http.post(`/projects/${projectId}/work-items/${workItemId}/links`, request)
+}
+
+export function deleteWorkItemLink(
+  projectId: string,
+  workItemId: string,
+  linkId: string,
+): Promise<void> {
+  return http.delete(`/projects/${projectId}/work-items/${workItemId}/links/${linkId}`)
 }

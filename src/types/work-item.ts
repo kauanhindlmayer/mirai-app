@@ -1,6 +1,7 @@
 import type { Comment } from '~/types'
 
 export type WorkItem = {
+  id?: string
   code: number
   title: string
   description?: string
@@ -11,6 +12,8 @@ export type WorkItem = {
   classification: Classification
   tags: TagBriefResponse[]
   comments: Comment[]
+  outgoingLinks: WorkItemLink[]
+  incomingLinks: WorkItemLink[]
   assigneeId?: string
   assignee?: AssigneeResponse
   createdAtUtc?: string
@@ -76,4 +79,32 @@ export enum WorkItemType {
 export type WorkItemsStats = {
   workItemsCreated: number
   workItemsCompleted: number
+}
+
+export type WorkItemLink = {
+  id: string
+  targetWorkItem: RelatedWorkItemResponse
+  linkType: string
+  comment?: string
+}
+
+export type RelatedWorkItemResponse = {
+  id: string
+  code: number
+  title: string
+  type: WorkItemType
+  status: WorkItemStatus
+}
+
+export enum WorkItemLinkType {
+  Related = 'Related',
+  Affects = 'Affects',
+  Predecessor = 'Predecessor',
+  Duplicate = 'Duplicate',
+}
+
+export type CreateWorkItemLinkRequest = {
+  targetWorkItemId: string
+  linkType: WorkItemLinkType
+  comment?: string
 }

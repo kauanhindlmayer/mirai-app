@@ -11,12 +11,18 @@ const { project } = storeToRefs(projectStore)
 const toast = useAppToast()
 const queryCache = useQueryCache()
 
+const { isVisible, showDrawer } = useDrawer()
+
 const form = ref<Partial<Project> & { id: string }>({
   id: project.value.id,
   name: project.value.name,
   description: project.value.description,
   organizationId: project.value.organizationId,
 })
+
+function hideDrawer() {
+  isVisible.value = false
+}
 
 const updateProjectSchema = object({
   description: string().max(500, 'Description must not exceed 500 characters'),
@@ -53,8 +59,6 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
   updateProjectFn(form.value)
 }
-
-const { isVisible, showDrawer, hideDrawer } = useDrawer()
 
 defineExpose({
   showDrawer,

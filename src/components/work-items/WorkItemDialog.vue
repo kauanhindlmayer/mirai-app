@@ -5,13 +5,20 @@ import type { MenuItem } from 'primevue/menuitem'
 import {
   addTagToWorkItem,
   addWorkItemComment,
+  createWorkItemLink,
   deleteWorkItemComment,
+  deleteWorkItemLink,
   removeTagFromWorkItem,
   updateWorkItem,
   updateWorkItemComment,
 } from '~/api/work-items'
 import type { Tag } from '~/types/tag'
-import { ValueArea, WorkItemStatus, type TagBriefResponse } from '~/types/work-item'
+import {
+  ValueArea,
+  WorkItemStatus,
+  type CreateWorkItemLinkRequest,
+  type TagBriefResponse,
+} from '~/types/work-item'
 
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
@@ -132,6 +139,23 @@ const { mutate: updateCommentFn } = useMutation({
   onSuccess() {
     queryCache.invalidateQueries({ key: ['work-items'] })
     toast.showSuccess({ detail: 'Comment updated successfully' })
+  },
+})
+
+const { mutate: createLinkFn } = useMutation({
+  mutation: (request: CreateWorkItemLinkRequest) =>
+    createWorkItemLink(project.value.id, workItemId.value!, request),
+  onSuccess() {
+    queryCache.invalidateQueries({ key: ['work-items'] })
+    toast.showSuccess({ detail: 'Link created successfully' })
+  },
+})
+
+const { mutate: deleteLinkFn } = useMutation({
+  mutation: (linkId: string) => deleteWorkItemLink(project.value.id, workItemId.value!, linkId),
+  onSuccess() {
+    queryCache.invalidateQueries({ key: ['work-items'] })
+    toast.showSuccess({ detail: 'Link removed successfully' })
   },
 })
 
@@ -373,7 +397,14 @@ defineExpose({
               <span class="text-lg">Related Work Items</span>
             </AccordionHeader>
             <AccordionContent>
-              Add an existing work item as a related item to this work item.
+              <RelatedWorkItemsSection
+                :outgoing-links="workItem.outgoingLinks"
+                :incoming-links="workItem.incomingLinks"
+                :project-id="project.id"
+                :work-item-id="workItemId"
+                @delete-link="deleteLinkFn"
+                @create-link="createLinkFn"
+              />
             </AccordionContent>
           </AccordionPanel>
         </Accordion>

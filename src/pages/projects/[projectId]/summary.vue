@@ -22,13 +22,11 @@ const periods = ref([
 const { stats, periodInDays: selectedPeriod } = useWorkItemsStats()
 const { project } = useProject()
 
-const members = [
-  { id: '1', name: 'Alice Johnson', image: 'https://i.pravatar.cc/40?img=1' },
-  { id: '2', name: 'Bob Smith', image: 'https://i.pravatar.cc/40?img=2' },
-  { id: '3', name: 'Charlie Brown', image: 'https://i.pravatar.cc/40?img=3' },
-  { id: '4', name: 'David Wilson', image: 'https://i.pravatar.cc/40?img=4' },
-  { id: '5', name: 'Grace Hall', image: 'https://i.pravatar.cc/40?img=5' },
-]
+const { data: members } = useQuery({
+  key: () => ['project-users', organization.value.id, project.value.id],
+  query: () => getProjectUsers(organization.value.id, project.value.id, undefined, 1, 6),
+  enabled: () => !!organization.value.id && !!project.value.id,
+})
 
 function setBreadcrumbs(project: Project) {
   pageStore.setBreadcrumbs([
@@ -55,9 +53,9 @@ onMounted(() => {
               icon="pi pi-user"
               size="xlarge"
               class="mr-4"
-              :label="getInitials(project?.name ?? '')"
+              :label="getInitials(project.name)"
             />
-            <div class="font-semibold text-2xl">{{ project?.name }}</div>
+            <div class="font-semibold text-2xl">{{ project.name }}</div>
           </div>
           <Button label="Invite" icon="pi pi-user-plus" @click="addUserDrawerRef?.showDrawer" />
         </div>
@@ -68,7 +66,7 @@ onMounted(() => {
         <div class="flex justify-between items-center">
           <div class="font-semibold text-xl">About this Project</div>
           <Button
-            v-if="project?.description"
+            v-if="project.description"
             icon="pi pi-pencil"
             severity="secondary"
             variant="text"
@@ -76,8 +74,8 @@ onMounted(() => {
             @click="editProjectDrawerRef?.showDrawer"
           />
         </div>
-        <div v-if="project?.description">
-          <div>{{ project?.description }}</div>
+        <div v-if="project.description">
+          <div>{{ project.description }}</div>
         </div>
         <div v-else class="flex justify-between items-center">
           <div>
@@ -127,18 +125,24 @@ onMounted(() => {
       <div class="card">
         <div class="flex items-center mb-4">
           <div class="font-semibold text-xl mr-2">Members</div>
-          <Badge value="7" severity="secondary" />
+          <Badge :value="members?.totalCount" severity="secondary" />
         </div>
-        <AvatarGroup>
+        <AvatarGroup v-if="members?.items.length">
           <Avatar
-            v-for="member in members"
-            :image="member.image"
+            v-for="member in members?.items"
+            :image="member.imageUrl"
+            :icon="!member.imageUrl ? 'pi pi-user' : undefined"
             :key="member.id"
             shape="circle"
-            v-tooltip.bottom="member.name"
+            v-tooltip.bottom="member.fullName"
           />
-          <Avatar label="+2" shape="circle" />
+          <Avatar
+            v-if="members?.hasNextPage"
+            :label="`+${members?.totalCount - members?.items.length}`"
+            shape="circle"
+          />
         </AvatarGroup>
+        <div v-else class="text-surface-500">No members in this project</div>
       </div>
     </div>
   </div>

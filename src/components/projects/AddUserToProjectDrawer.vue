@@ -4,7 +4,6 @@ import { yupResolver } from '@primevue/forms/resolvers/yup'
 import type { SelectFilterEvent } from 'primevue/select'
 import { object, string } from 'yup'
 import { addUserToProject } from '~/api/projects'
-import { useAvailableProjectUsers } from '~/queries/organizations'
 
 const organizationStore = useOrganizationStore()
 const { organization } = storeToRefs(organizationStore)
@@ -12,7 +11,7 @@ const { organization } = storeToRefs(organizationStore)
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
 
-const { isVisible, showDrawer, hideDrawer } = useDrawer()
+const { isVisible, showDrawer } = useDrawer()
 
 const inviteUserSchema = object({
   userId: string().required('User is required'),
@@ -21,26 +20,33 @@ const inviteUserSchema = object({
 
 const resolver = ref(yupResolver(inviteUserSchema))
 
-const form = ref({
+const initialValues = {
   userId: '',
-  teamId: null as string | null,
-})
+  teamId: null,
+}
+
+const form = ref({ ...initialValues })
 
 const {
-  users: availableUsers,
+  data: availableUsers,
   isLoading: isLoadingAvailableUsers,
   filters,
-} = useAvailableProjectUsers()
+} = useAvailableProjectUsers(organization.value.id, project.value.id, isVisible)
 
 const selectedUser = computed(() =>
-  availableUsers.value?.items.find((u) => u.id === form.value.userId),
+  availableUsers.value?.items.find((u: OrganizationUserResponse) => u.id === form.value.userId),
 )
 
 function onUserFilter(event: SelectFilterEvent) {
   filters.value.searchTerm = event.value
 }
 
-const { teams, isLoading: isLoadingTeams } = useTeams()
+const { data: teams, isLoading: isLoadingTeams } = useQuery({
+  key: () => ['teams', project.value.id],
+  query: () => listTeams(project.value.id),
+  placeholderData: () => [] as Team[],
+  enabled: () => isVisible.value,
+})
 
 const toast = useAppToast()
 
@@ -48,8 +54,6 @@ const { mutate: addUserToProjectFn } = useMutation({
   mutation: (userId: string) => addUserToProject(organization.value.id, project.value.id, userId),
   onSuccess: () => {
     toast.showSuccess({ detail: 'User added to project successfully' })
-    form.value.userId = ''
-    form.value.teamId = null
     hideDrawer()
   },
   onError: () => {
@@ -60,6 +64,11 @@ const { mutate: addUserToProjectFn } = useMutation({
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
   addUserToProjectFn(form.value.userId)
+}
+
+function hideDrawer() {
+  isVisible.value = false
+  Object.assign(form.value, initialValues)
 }
 
 defineExpose({

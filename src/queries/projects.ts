@@ -13,8 +13,10 @@ export const useProject = defineQuery(() => {
     placeholderData: () => ({}) as Project,
   })
 
+  const project = computed(() => query.data.value as Project)
+
   return {
     ...query,
-    project: query.data,
+    project,
   }
 })

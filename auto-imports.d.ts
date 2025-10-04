@@ -19,6 +19,7 @@ declare global {
   const Surface: (typeof import('./src/types/layout'))['Surface']
   const TagImportJobStatus: (typeof import('./src/types/tag'))['TagImportJobStatus']
   const ValueArea: (typeof import('./src/types/work-item'))['ValueArea']
+  const WorkItemLinkType: (typeof import('./src/types/work-item'))['WorkItemLinkType']
   const WorkItemStatus: (typeof import('./src/types/work-item'))['WorkItemStatus']
   const WorkItemType: (typeof import('./src/types/work-item'))['WorkItemType']
   const acceptHMRUpdate: (typeof import('pinia'))['acceptHMRUpdate']
@@ -46,6 +47,7 @@ declare global {
   const createTeam: (typeof import('./src/api/teams'))['createTeam']
   const createWikiPage: (typeof import('./src/api/wiki-pages'))['createWikiPage']
   const createWorkItem: (typeof import('./src/api/work-items'))['createWorkItem']
+  const createWorkItemLink: (typeof import('./src/api/work-items'))['createWorkItemLink']
   const customRef: (typeof import('vue'))['customRef']
   const defineAsyncComponent: (typeof import('vue'))['defineAsyncComponent']
   const defineComponent: (typeof import('vue'))['defineComponent']
@@ -63,6 +65,7 @@ declare global {
   const deleteWikiPageComment: (typeof import('./src/api/wiki-pages'))['deleteWikiPageComment']
   const deleteWorkItem: (typeof import('./src/api/work-items'))['deleteWorkItem']
   const deleteWorkItemComment: (typeof import('./src/api/work-items'))['deleteWorkItemComment']
+  const deleteWorkItemLink: (typeof import('./src/api/work-items'))['deleteWorkItemLink']
   const displayError: (typeof import('./src/utils/display-error'))['displayError']
   const effectScope: (typeof import('vue'))['effectScope']
   const extractWisdom: (typeof import('./src/api/wisdom-extractor'))['extractWisdom']
@@ -358,6 +361,7 @@ declare global {
     ValueArea,
     WorkItemStatus,
     WorkItemType,
+    WorkItemLinkType,
     WorkItem,
     Planning,
     Classification,
@@ -366,6 +370,9 @@ declare global {
     AssigneeResponse,
     ProjectUserResponse,
     WorkItemsStats,
+    WorkItemLink,
+    RelatedWorkItemResponse,
+    CreateWorkItemLinkRequest,
   } from './src/types/work-item'
   import('./src/types/work-item')
   // @ts-ignore
@@ -396,6 +403,9 @@ declare module 'vue' {
     readonly Surface: UnwrapRef<(typeof import('./src/types/layout'))['Surface']>
     readonly TagImportJobStatus: UnwrapRef<(typeof import('./src/types/tag'))['TagImportJobStatus']>
     readonly ValueArea: UnwrapRef<(typeof import('./src/types/work-item'))['ValueArea']>
+    readonly WorkItemLinkType: UnwrapRef<
+      (typeof import('./src/types/work-item'))['WorkItemLinkType']
+    >
     readonly WorkItemStatus: UnwrapRef<(typeof import('./src/types/work-item'))['WorkItemStatus']>
     readonly WorkItemType: UnwrapRef<(typeof import('./src/types/work-item'))['WorkItemType']>
     readonly acceptHMRUpdate: UnwrapRef<(typeof import('pinia'))['acceptHMRUpdate']>
@@ -440,6 +450,9 @@ declare module 'vue' {
     readonly createTeam: UnwrapRef<(typeof import('./src/api/teams'))['createTeam']>
     readonly createWikiPage: UnwrapRef<(typeof import('./src/api/wiki-pages'))['createWikiPage']>
     readonly createWorkItem: UnwrapRef<(typeof import('./src/api/work-items'))['createWorkItem']>
+    readonly createWorkItemLink: UnwrapRef<
+      (typeof import('./src/api/work-items'))['createWorkItemLink']
+    >
     readonly customRef: UnwrapRef<(typeof import('vue'))['customRef']>
     readonly defineAsyncComponent: UnwrapRef<(typeof import('vue'))['defineAsyncComponent']>
     readonly defineComponent: UnwrapRef<(typeof import('vue'))['defineComponent']>
@@ -463,6 +476,9 @@ declare module 'vue' {
     readonly deleteWorkItem: UnwrapRef<(typeof import('./src/api/work-items'))['deleteWorkItem']>
     readonly deleteWorkItemComment: UnwrapRef<
       (typeof import('./src/api/work-items'))['deleteWorkItemComment']
+    >
+    readonly deleteWorkItemLink: UnwrapRef<
+      (typeof import('./src/api/work-items'))['deleteWorkItemLink']
     >
     readonly displayError: UnwrapRef<(typeof import('./src/utils/display-error'))['displayError']>
     readonly effectScope: UnwrapRef<(typeof import('vue'))['effectScope']>
