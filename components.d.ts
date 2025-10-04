@@ -27,6 +27,7 @@ declare module 'vue' {
     AppTag: typeof import('./src/components/tags/AppTag.vue')['default']
     AppTopbar: typeof import('./src/layout/AppTopbar.vue')['default']
     AssigneeSelector: typeof import('./src/components/work-items/AssigneeSelector.vue')['default']
+    AttachmentsSection: typeof import('./src/components/work-items/AttachmentsSection.vue')['default']
     AutoComplete: typeof import('primevue/autocomplete')['default']
     Avatar: typeof import('primevue/avatar')['default']
     AvatarGroup: typeof import('primevue/avatargroup')['default']

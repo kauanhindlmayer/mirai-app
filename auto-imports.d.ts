@@ -64,9 +64,11 @@ declare global {
   const deleteWikiPage: (typeof import('./src/api/wiki-pages'))['deleteWikiPage']
   const deleteWikiPageComment: (typeof import('./src/api/wiki-pages'))['deleteWikiPageComment']
   const deleteWorkItem: (typeof import('./src/api/work-items'))['deleteWorkItem']
+  const deleteWorkItemAttachment: (typeof import('./src/api/work-items'))['deleteWorkItemAttachment']
   const deleteWorkItemComment: (typeof import('./src/api/work-items'))['deleteWorkItemComment']
   const deleteWorkItemLink: (typeof import('./src/api/work-items'))['deleteWorkItemLink']
   const displayError: (typeof import('./src/utils/display-error'))['displayError']
+  const downloadWorkItemAttachment: (typeof import('./src/api/work-items'))['downloadWorkItemAttachment']
   const effectScope: (typeof import('vue'))['effectScope']
   const extractWisdom: (typeof import('./src/api/wisdom-extractor'))['extractWisdom']
   const format: (typeof import('./src/utils/date'))['format']
@@ -178,6 +180,7 @@ declare global {
   const updateWikiPageComment: (typeof import('./src/api/wiki-pages'))['updateWikiPageComment']
   const updateWorkItem: (typeof import('./src/api/work-items'))['updateWorkItem']
   const updateWorkItemComment: (typeof import('./src/api/work-items'))['updateWorkItemComment']
+  const uploadWorkItemAttachment: (typeof import('./src/api/work-items'))['uploadWorkItemAttachment']
   const useAppToast: (typeof import('./src/composables/app-toast'))['useAppToast']
   const useAttrs: (typeof import('vue'))['useAttrs']
   const useAvailableProjectUsers: (typeof import('./src/queries/organizations'))['useAvailableProjectUsers']
@@ -373,6 +376,7 @@ declare global {
     WorkItemLink,
     RelatedWorkItemResponse,
     CreateWorkItemLinkRequest,
+    WorkItemAttachment,
   } from './src/types/work-item'
   import('./src/types/work-item')
   // @ts-ignore
@@ -474,6 +478,9 @@ declare module 'vue' {
       (typeof import('./src/api/wiki-pages'))['deleteWikiPageComment']
     >
     readonly deleteWorkItem: UnwrapRef<(typeof import('./src/api/work-items'))['deleteWorkItem']>
+    readonly deleteWorkItemAttachment: UnwrapRef<
+      (typeof import('./src/api/work-items'))['deleteWorkItemAttachment']
+    >
     readonly deleteWorkItemComment: UnwrapRef<
       (typeof import('./src/api/work-items'))['deleteWorkItemComment']
     >
@@ -481,6 +488,9 @@ declare module 'vue' {
       (typeof import('./src/api/work-items'))['deleteWorkItemLink']
     >
     readonly displayError: UnwrapRef<(typeof import('./src/utils/display-error'))['displayError']>
+    readonly downloadWorkItemAttachment: UnwrapRef<
+      (typeof import('./src/api/work-items'))['downloadWorkItemAttachment']
+    >
     readonly effectScope: UnwrapRef<(typeof import('vue'))['effectScope']>
     readonly extractWisdom: UnwrapRef<
       (typeof import('./src/api/wisdom-extractor'))['extractWisdom']
@@ -623,6 +633,9 @@ declare module 'vue' {
     readonly updateWorkItem: UnwrapRef<(typeof import('./src/api/work-items'))['updateWorkItem']>
     readonly updateWorkItemComment: UnwrapRef<
       (typeof import('./src/api/work-items'))['updateWorkItemComment']
+    >
+    readonly uploadWorkItemAttachment: UnwrapRef<
+      (typeof import('./src/api/work-items'))['uploadWorkItemAttachment']
     >
     readonly useAppToast: UnwrapRef<(typeof import('./src/composables/app-toast'))['useAppToast']>
     readonly useAttrs: UnwrapRef<(typeof import('vue'))['useAttrs']>

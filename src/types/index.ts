@@ -2,6 +2,7 @@ export type RequestConfig = {
   headers?: Record<string, string>
   params?: Record<string, string>
   data?: unknown
+  responseType?: 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream'
 }
 
 export type PaginatedList<T> = {

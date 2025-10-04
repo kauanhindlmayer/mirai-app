@@ -6,11 +6,13 @@ import {
   addTagToWorkItem,
   addWorkItemComment,
   createWorkItemLink,
+  deleteWorkItemAttachment,
   deleteWorkItemComment,
   deleteWorkItemLink,
   removeTagFromWorkItem,
   updateWorkItem,
   updateWorkItemComment,
+  uploadWorkItemAttachment,
 } from '~/api/work-items'
 import type { Tag } from '~/types/tag'
 import {
@@ -156,6 +158,23 @@ const { mutate: deleteLinkFn } = useMutation({
   onSuccess() {
     queryCache.invalidateQueries({ key: ['work-items'] })
     toast.showSuccess({ detail: 'Link removed successfully' })
+  },
+})
+
+const { mutate: uploadAttachmentFn } = useMutation({
+  mutation: (file: File) => uploadWorkItemAttachment(project.value.id, workItemId.value!, file),
+  onSuccess() {
+    queryCache.invalidateQueries({ key: ['work-items'] })
+    toast.showSuccess({ detail: 'File uploaded successfully' })
+  },
+})
+
+const { mutate: deleteAttachmentFn } = useMutation({
+  mutation: (attachmentId: string) =>
+    deleteWorkItemAttachment(project.value.id, workItemId.value!, attachmentId),
+  onSuccess() {
+    queryCache.invalidateQueries({ key: ['work-items'] })
+    toast.showSuccess({ detail: 'Attachment deleted successfully' })
   },
 })
 
@@ -382,17 +401,30 @@ defineExpose({
           </AccordionPanel>
         </Accordion>
 
-        <Accordion :value="['0', '1']" multiple class="w-[32.5%]">
+        <Accordion :value="['1', '2']" multiple class="w-[32.5%]">
           <AccordionPanel value="0">
             <AccordionHeader>
               <span class="text-lg">Development</span>
             </AccordionHeader>
             <AccordionContent>
-              Link a GitHub commit, pull request or branch to this work item to see the status of
-              your development.
+              Link a GitHub pull request to this work item to see the status of your development.
             </AccordionContent>
           </AccordionPanel>
           <AccordionPanel value="1">
+            <AccordionHeader>
+              <span class="text-lg">Attachments</span>
+            </AccordionHeader>
+            <AccordionContent>
+              <AttachmentsSection
+                :attachments="workItem.attachments"
+                :project-id="project.id"
+                :work-item-id="workItemId"
+                @upload-attachment="uploadAttachmentFn"
+                @delete-attachment="deleteAttachmentFn"
+              />
+            </AccordionContent>
+          </AccordionPanel>
+          <AccordionPanel value="2">
             <AccordionHeader>
               <span class="text-lg">Related Work Items</span>
             </AccordionHeader>

@@ -118,3 +118,33 @@ export function deleteWorkItemLink(
 ): Promise<void> {
   return http.delete(`/projects/${projectId}/work-items/${workItemId}/links/${linkId}`)
 }
+
+export function uploadWorkItemAttachment(
+  projectId: string,
+  workItemId: string,
+  file: File,
+): Promise<string> {
+  const formData = new FormData()
+  formData.append('file', file)
+  return http.post(`/projects/${projectId}/work-items/${workItemId}/attachments`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+}
+
+export function downloadWorkItemAttachment(
+  projectId: string,
+  workItemId: string,
+  attachmentId: string,
+): Promise<Blob> {
+  return http.get(`/projects/${projectId}/work-items/${workItemId}/attachments/${attachmentId}`, {
+    responseType: 'blob',
+  })
+}
+
+export function deleteWorkItemAttachment(
+  projectId: string,
+  workItemId: string,
+  attachmentId: string,
+): Promise<void> {
+  return http.delete(`/projects/${projectId}/work-items/${workItemId}/attachments/${attachmentId}`)
+}

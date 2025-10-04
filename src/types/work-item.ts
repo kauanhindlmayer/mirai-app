@@ -12,6 +12,7 @@ export type WorkItem = {
   classification: Classification
   tags: TagBriefResponse[]
   comments: Comment[]
+  attachments: WorkItemAttachment[]
   outgoingLinks: WorkItemLink[]
   incomingLinks: WorkItemLink[]
   assigneeId?: string
@@ -107,4 +108,13 @@ export type CreateWorkItemLinkRequest = {
   targetWorkItemId: string
   linkType: WorkItemLinkType
   comment?: string
+}
+
+export type WorkItemAttachment = {
+  id: string
+  fileName: string
+  contentType: string
+  fileSizeBytes: number
+  uploadedById: string
+  createdAtUtc: string
 }
