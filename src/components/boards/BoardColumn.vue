@@ -6,15 +6,56 @@ import Draggable from 'vuedraggable/src/vuedraggable'
 import { mixed, object, string } from 'yup'
 import { createWorkItem } from '~/api/work-items'
 import type { Card, Column, DraggableEvent, MoveCardRequest } from '~/types/board'
+import type { BacklogLevel } from '~/types/team'
 import { WorkItemType, type CreateWorkItemRequest } from '~/types/work-item'
 import { formatEnumOptions } from '~/utils'
 
-const { boardId, column } = defineProps<{
+const { boardId, column, backlogLevel } = defineProps<{
   boardId: string
   column: Column
+  backlogLevel?: BacklogLevel
 }>()
 
-const cards = computed(() => column.cards)
+const loadedCards = ref<Card[]>([])
+const currentPage = ref(1)
+
+const cards = computed(() => {
+  const initialCards = column.cards
+  if (loadedCards.value.length > 0) {
+    return loadedCards.value
+  }
+  return initialCards
+})
+
+const hasMoreCards = ref(column.hasMoreCards)
+const totalCardCount = ref(column.totalCardCount)
+
+watch(
+  () => column.cards,
+  () => {
+    if (loadedCards.value.length === 0) {
+      hasMoreCards.value = column.hasMoreCards
+      totalCardCount.value = column.totalCardCount
+      currentPage.value = 1
+    }
+  },
+)
+
+const loadedCardCount = computed(() => cards.value.length)
+const remainingCardCount = computed(() => totalCardCount.value - loadedCardCount.value)
+
+const { mutate: loadMoreCardsFn, isLoading: isLoadingMore } = useMutation({
+  mutation: (_: MouseEvent) => {
+    currentPage.value += 1
+    return getColumnCards(boardId, column.id, backlogLevel, currentPage.value, 20)
+  },
+  onSuccess: (response) => {
+    loadedCards.value = [...cards.value, ...response.cards]
+    hasMoreCards.value = response.hasMoreCards
+    totalCardCount.value = response.totalCardCount
+  },
+  onError: displayError,
+})
 
 type MoveCardMutationPayload = {
   columnId: string
@@ -125,7 +166,7 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
         <span
           :class="[cards.length > column.wipLimit ? 'text-red-700' : 'text-green-700', 'text-xl']"
         >
-          {{ cards.length }}
+          {{ column.totalCardCount }}
         </span>
         / {{ column.wipLimit }}
       </div>
@@ -187,5 +228,18 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
         </div>
       </template>
     </Draggable>
+
+    <Button
+      v-if="hasMoreCards"
+      text
+      size="small"
+      class="w-full mt-2"
+      :loading="isLoadingMore"
+      @click="loadMoreCardsFn"
+    >
+      <span class="text-sm">
+        Show {{ remainingCardCount }} more item{{ remainingCardCount !== 1 ? 's' : '' }}
+      </span>
+    </Button>
   </div>
 </template>

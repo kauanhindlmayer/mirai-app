@@ -22,6 +22,8 @@ export type Column = {
   wipLimit?: number
   definitionOfDone?: string
   cards: Card[]
+  hasMoreCards: boolean
+  totalCardCount: number
 }
 
 export type Card = {
@@ -31,6 +33,12 @@ export type Card = {
   workItem: WorkItem
   updatedAtUtc: string
   createdAtUtc: string
+}
+
+export type ColumnCardsResponse = {
+  cards: Card[]
+  hasMoreCards: boolean
+  totalCardCount: number
 }
 
 type WorkItem = {

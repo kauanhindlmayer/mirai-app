@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import type { Board } from '~/types/board'
+import type { BacklogLevel } from '~/types/team'
 
 defineProps<{
   board: Board
+  backlogLevel?: BacklogLevel
 }>()
 </script>
 
@@ -13,6 +15,7 @@ defineProps<{
       :key="column.id"
       :board-id="board.id"
       :column="column"
+      :backlog-level="backlogLevel"
     />
     <WorkItemDialog />
   </div>

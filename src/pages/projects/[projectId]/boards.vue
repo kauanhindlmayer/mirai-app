@@ -132,7 +132,13 @@ onBeforeMount(() => {
           </TabList>
           <TabPanels>
             <TabPanel value="0">
-              <Board v-if="board" :loading="isLoadingBoard" :board="board" class="mt-4" />
+              <Board
+                v-if="board"
+                :loading="isLoadingBoard"
+                :board="board"
+                :backlog-level="selectedBacklogLevel"
+                class="mt-4"
+              />
             </TabPanel>
           </TabPanels>
         </Tabs>

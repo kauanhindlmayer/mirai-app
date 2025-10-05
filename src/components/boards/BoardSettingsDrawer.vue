@@ -21,6 +21,8 @@ function addColumn() {
     position: 1,
     isDefault: false,
     cards: [],
+    hasMoreCards: false,
+    totalCardCount: 0,
   })
   newColumnId.value++
 }
@@ -128,6 +130,8 @@ function insertColumn(position: number) {
     position: 1,
     isDefault: false,
     cards: [],
+    hasMoreCards: false,
+    totalCardCount: 0,
   })
   newColumnId.value++
 }

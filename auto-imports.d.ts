@@ -79,6 +79,7 @@ declare global {
   const getBacklogLevelLabel: (typeof import('./src/utils/work-item'))['getBacklogLevelLabel']
   const getBoard: (typeof import('./src/api/boards'))['getBoard']
   const getColorName: (typeof import('./src/utils/tag'))['getColorName']
+  const getColumnCards: (typeof import('./src/api/boards'))['getColumnCards']
   const getCurrentInstance: (typeof import('vue'))['getCurrentInstance']
   const getCurrentScope: (typeof import('vue'))['getCurrentScope']
   const getCurrentUser: (typeof import('./src/api/users'))['getCurrentUser']
@@ -247,6 +248,7 @@ declare global {
     BoardSummary,
     Column,
     Card,
+    ColumnCardsResponse,
     Assignee,
     CreateBoardRequest,
     MoveCardRequest,
@@ -507,6 +509,7 @@ declare module 'vue' {
     >
     readonly getBoard: UnwrapRef<(typeof import('./src/api/boards'))['getBoard']>
     readonly getColorName: UnwrapRef<(typeof import('./src/utils/tag'))['getColorName']>
+    readonly getColumnCards: UnwrapRef<(typeof import('./src/api/boards'))['getColumnCards']>
     readonly getCurrentInstance: UnwrapRef<(typeof import('vue'))['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<(typeof import('vue'))['getCurrentScope']>
     readonly getCurrentUser: UnwrapRef<(typeof import('./src/api/users'))['getCurrentUser']>

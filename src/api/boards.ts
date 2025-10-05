@@ -2,6 +2,7 @@ import http from '~/api/http'
 import type {
   Board,
   BoardSummary,
+  ColumnCardsResponse,
   CreateBoardColumnRequest,
   CreateBoardRequest,
   MoveCardRequest,
@@ -41,4 +42,19 @@ export function createColumn(boardId: string, request: CreateBoardColumnRequest)
 
 export function deleteColumn(boardId: string, columnId: string): Promise<void> {
   return http.delete(`/boards/${boardId}/columns/${columnId}`)
+}
+
+export function getColumnCards(
+  boardId: string,
+  columnId: string,
+  backlogLevel?: BacklogLevel,
+  page: number = 1,
+  pageSize: number = 20,
+): Promise<ColumnCardsResponse> {
+  const params: Record<string, string> = {
+    page: page.toString(),
+    pageSize: pageSize.toString(),
+  }
+  if (backlogLevel) params.backlogLevel = backlogLevel
+  return http.get(`/boards/${boardId}/columns/${columnId}/cards`, { params })
 }
