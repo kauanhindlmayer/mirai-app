@@ -6,8 +6,6 @@ import type { MenuItem } from 'primevue/menuitem'
 import { number, object, string } from 'yup'
 import type { Board, Column, CreateBoardColumnRequest } from '~/types/board'
 
-const teamStore = useTeamStore()
-
 const { board } = defineProps<{
   board: Board
 }>()
@@ -85,7 +83,7 @@ function toggleMenuItems(event: MouseEvent) {
 }
 
 const { mutate: removeColumn } = useMutation({
-  mutation: () => deleteColumn(teamStore.teamId!, board.id, selectedColumnId.value),
+  mutation: () => deleteColumn(board.id, selectedColumnId.value),
   onSuccess: () => {
     const index = columns.value.findIndex((column) => column.id === selectedColumnId.value)
     if (index === -1) return
@@ -147,8 +145,7 @@ const resolver = ref(yupResolver(createBoardColumnSchema))
 const queryCache = useQueryCache()
 
 const { mutate: createColumnFn } = useMutation({
-  mutation: (payload: CreateBoardColumnRequest) =>
-    createColumn(teamStore.teamId!, board.id, payload),
+  mutation: (payload: CreateBoardColumnRequest) => createColumn(board.id, payload),
   onSuccess: () => {
     queryCache.invalidateQueries({ key: ['board', board.id] })
     hideDrawer()

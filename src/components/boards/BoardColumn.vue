@@ -14,18 +14,7 @@ const { boardId, column } = defineProps<{
   column: Column
 }>()
 
-const cards = ref<Card[]>([...column.cards])
-
-watch(
-  () => column.cards,
-  (newCards) => {
-    cards.value = [...newCards]
-  },
-  { deep: true },
-)
-
-const teamStore = useTeamStore()
-const { teamId } = storeToRefs(teamStore)
+const cards = computed(() => column.cards)
 
 type MoveCardMutationPayload = {
   columnId: string
@@ -37,7 +26,7 @@ const queryCache = useQueryCache()
 
 const { mutate: moveCardFn } = useMutation({
   mutation: (payload: MoveCardMutationPayload) =>
-    moveCard(teamId.value!, boardId, payload.columnId, payload.cardId, payload.request),
+    moveCard(boardId, payload.columnId, payload.cardId, payload.request),
   onSuccess: () => {
     queryCache.invalidateQueries({ key: ['board', boardId] })
   },
@@ -71,6 +60,9 @@ async function onChange(event: DraggableEvent<Card>) {
     })
   }
 }
+
+const teamStore = useTeamStore()
+const { teamId } = storeToRefs(teamStore)
 
 const initialValues: CreateWorkItemRequest = {
   title: '',
@@ -131,12 +123,9 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
       </div>
       <div v-if="column.wipLimit">
         <span
-          :class="[
-            column.cards.length > column.wipLimit ? 'text-red-700' : 'text-green-700',
-            'text-xl',
-          ]"
+          :class="[cards.length > column.wipLimit ? 'text-red-700' : 'text-green-700', 'text-xl']"
         >
-          {{ column.cards.length }}
+          {{ cards.length }}
         </span>
         / {{ column.wipLimit }}
       </div>

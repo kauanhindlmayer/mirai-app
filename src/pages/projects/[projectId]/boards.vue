@@ -28,7 +28,7 @@ const selectedBoardId = computed(() => selectedBoard.value?.id ?? '')
 
 const { data: board, isLoading: isLoadingBoard } = useQuery({
   key: () => ['board', selectedBoardId.value, selectedBacklogLevel.value],
-  query: async () => getBoard(teamStore.teamId!, selectedBoardId.value, selectedBacklogLevel.value),
+  query: async () => getBoard(selectedBoardId.value, selectedBacklogLevel.value),
   enabled: () => !!selectedBoard.value,
 })
 

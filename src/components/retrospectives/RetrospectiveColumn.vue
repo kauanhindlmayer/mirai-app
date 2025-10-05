@@ -5,9 +5,6 @@ import { object, string, ValidationError } from 'yup'
 import RetrospectiveItemComponent from '~/components/retrospectives/RetrospectiveItem.vue'
 import type { RetrospectiveColumn, RetrospectiveItem } from '~/types/retrospective'
 
-const teamStore = useTeamStore()
-const { teamId } = storeToRefs(teamStore)
-
 const { retrospectiveId, column } = defineProps<{
   retrospectiveId: string
   column: RetrospectiveColumn
@@ -34,8 +31,7 @@ function closeNewItemInput() {
 const queryCache = useQueryCache()
 
 const { mutate: createRetrospectiveItemFn } = useMutation({
-  mutation: () =>
-    createRetrospectiveItem(teamId.value!, retrospectiveId, column.id, newItemContent.value),
+  mutation: () => createRetrospectiveItem(retrospectiveId, column.id, newItemContent.value),
   onSuccess: () => {
     queryCache.invalidateQueries({ key: ['retrospective', retrospectiveId] })
     closeNewItemInput()

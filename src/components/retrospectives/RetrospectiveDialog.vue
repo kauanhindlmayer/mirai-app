@@ -74,7 +74,7 @@ const { mutate: createRetrospectiveFn, isLoading: isCreating } = useMutation({
 
 const { mutate: updateRetrospectiveFn, isLoading: isUpdating } = useMutation({
   mutation: (data: Partial<Retrospective>) =>
-    updateRetrospective(teamId.value!, props.retrospective!.id, { ...data }),
+    updateRetrospective(props.retrospective!.id, { ...data }),
   onSuccess: () => {
     queryCache.invalidateQueries({ key: ['retrospectives', teamId.value!] })
     queryCache.invalidateQueries({ key: ['retrospective', props.retrospective!.id] })

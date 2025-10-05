@@ -37,7 +37,7 @@ watch(
 
 const { data: retrospective } = useQuery({
   key: () => ['retrospective', retrospectiveId.value],
-  query: async () => getRetrospective(teamId.value!, retrospectiveId.value),
+  query: async () => getRetrospective(retrospectiveId.value),
   enabled: () => !!selectedRetrospective.value,
 })
 
@@ -129,7 +129,7 @@ async function confirmDeleteRetrospective() {
 }
 
 const { mutate: deleteRetrospectiveFn } = useMutation({
-  mutation: () => deleteRetrospective(teamId.value!, retrospectiveId.value),
+  mutation: () => deleteRetrospective(retrospectiveId.value),
   onSuccess: () => {
     queryCache.invalidateQueries({ key: ['retrospectives', teamId.value!] })
     queryCache.invalidateQueries({ key: ['retrospective', retrospectiveId.value] })
