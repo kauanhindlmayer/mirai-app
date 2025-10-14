@@ -5,7 +5,7 @@ import type { BurndownPoint } from '~/types/dashboard'
 const { layoutConfig, isDarkTheme } = useLayout()
 const { burndownData = [] } = defineProps<{
   isLoading: boolean
-  burndownData: BurndownPoint[]
+  burndownData?: BurndownPoint[]
   dateRange: string
 }>()
 

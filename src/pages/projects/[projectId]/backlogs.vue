@@ -3,14 +3,16 @@ import type { TreeNode } from 'primevue/treenode'
 import { formatEnumOptions } from '~/utils'
 
 const pageStore = usePageStore()
-const teamStore = useTeamStore()
+pageStore.setTitle('Backlogs - Boards')
+
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
+
 const { onMenuToggle } = useLayout()
 
-const selectedTeam = ref<Team | null>(null)
+const { selectedTeam, teams, isLoadingTeams } = useTeamSelection()
 const selectedBacklogLevel = ref(BacklogLevel.Feature)
-const backlogLevels = formatEnumOptions(BacklogLevel)
+const backlogLevelOptions = formatEnumOptions(BacklogLevel)
 
 watch(
   () => selectedTeam.value,
@@ -18,7 +20,6 @@ watch(
     if (!newSelectedTeam) return
     const backlogLevelName = getBacklogLevelLabel(selectedBacklogLevel.value)
     pageStore.setTitle(`${selectedTeam.value?.name} ${backlogLevelName} Backlog - Boards`)
-    teamStore.setTeamId(newSelectedTeam.id)
   },
 )
 
@@ -64,19 +65,6 @@ function openWorkItemDialog(workItemId: string) {
   router.replace({ query: { workItemId } })
 }
 
-const { data: teams, isLoading } = useQuery({
-  key: () => ['teams', project.value.id],
-  query: () => listTeams(project.value.id),
-  placeholderData: () => [] as Team[],
-})
-
-function selectTeam() {
-  if (!teams.value?.length) return
-  selectedTeam.value = teams.value[0]
-}
-
-watch(() => teams.value, selectTeam)
-
 const { data: backlog, isLoading: isBacklogLoading } = useQuery({
   key: () => ['backlog', selectedTeam.value?.id || '', selectedBacklogLevel.value],
   query: async () => getBacklog(selectedTeam.value!.id, undefined, selectedBacklogLevel.value),
@@ -92,10 +80,7 @@ function setBreadcrumbs() {
   ])
 }
 
-onBeforeMount(() => {
-  setBreadcrumbs()
-  selectTeam()
-})
+onBeforeMount(setBreadcrumbs)
 </script>
 
 <template>
@@ -107,7 +92,7 @@ onBeforeMount(() => {
             <Select
               v-model="selectedTeam"
               :options="teams"
-              :loading="isLoading"
+              :loading="isLoadingTeams"
               option-label="name"
             />
             <Button
@@ -133,7 +118,7 @@ onBeforeMount(() => {
             <div class="ml-auto flex items-center mr-6">
               <Select
                 v-model="selectedBacklogLevel"
-                :options="backlogLevels"
+                :options="backlogLevelOptions"
                 option-label="label"
                 option-value="value"
                 class="ml-2"

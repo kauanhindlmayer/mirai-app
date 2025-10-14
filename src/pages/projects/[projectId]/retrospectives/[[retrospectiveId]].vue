@@ -16,7 +16,7 @@ const { teamId } = storeToRefs(teamStore)
 const route = useRoute('/projects/[projectId]/retrospectives/[[retrospectiveId]]')
 const router = useRouter()
 
-const selectedTeam = ref<Team | null>(null)
+const { selectedTeam, teams, isLoadingTeams } = useTeamSelection()
 const selectedRetrospective = ref<RetrospectiveSummary | null>(null)
 const retrospectiveId = computed(() => selectedRetrospective.value?.id ?? '')
 
@@ -26,14 +26,6 @@ const { data: retrospectives, isLoading } = useQuery({
   enabled: () => !!teamId.value,
   placeholderData: () => [] as RetrospectiveSummary[],
 })
-
-watch(
-  () => selectedTeam.value,
-  (newSelectedTeam) => {
-    if (!newSelectedTeam) return
-    teamStore.setTeamId(newSelectedTeam.id)
-  },
-)
 
 const { data: retrospective } = useQuery({
   key: () => ['retrospective', retrospectiveId.value],
@@ -60,23 +52,6 @@ function selectRetrospective() {
     router.replace(`/projects/${projectId}/retrospectives/${selectedRetrospective.value.id}`)
   }
 }
-
-const { teams, isLoading: isLoadingTeams } = useTeams()
-
-watch(() => teams.value, selectFirstTeam)
-
-function selectFirstTeam() {
-  if (!teams.value?.length) return
-  selectedTeam.value = teams.value[0]
-}
-
-watch(
-  () => selectedTeam.value,
-  async (newSelectedTeam) => {
-    if (!newSelectedTeam) return
-    teamStore.setTeamId(newSelectedTeam.id)
-  },
-)
 
 watch(
   () => selectedRetrospective.value,
@@ -189,7 +164,6 @@ async function initializeRetrospectiveHub() {
 
 onBeforeMount(async () => {
   setBreadcrumbs()
-  selectFirstTeam()
   selectRetrospective()
   await initializeRetrospectiveHub()
 })

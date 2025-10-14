@@ -5,7 +5,7 @@ import type { VelocityPoint } from '~/types/dashboard'
 const { layoutConfig, isDarkTheme } = useLayout()
 const { velocityData = [] } = defineProps<{
   isLoading: boolean
-  velocityData: VelocityPoint[]
+  velocityData?: VelocityPoint[]
   dateRange: string
 }>()
 

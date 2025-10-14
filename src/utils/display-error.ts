@@ -1,15 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { AxiosError } from 'axios'
 import { useAppToast } from '~/composables/app-toast'
+import type { ApiErrorResponse } from '~/types'
 
-export interface ApiErrorResponse {
-  type: string
-  title: string
-  status: number
-  traceId: string
-}
-
-export function displayError(error: any) {
+export function displayError(error: AxiosError<ApiErrorResponse>) {
   const toast = useAppToast()
-  const message = error.response.data.title || 'An error occurred'
+  const message = error.response?.data.title || 'An error occurred'
   toast.showError({ detail: message })
 }

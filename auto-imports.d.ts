@@ -209,6 +209,7 @@ declare global {
   const useShortcuts: (typeof import('./src/composables/shortcuts'))['useShortcuts']
   const useSignalR: (typeof import('./src/composables/signal-r'))['useSignalR']
   const useSlots: (typeof import('vue'))['useSlots']
+  const useTeamSelection: (typeof import('./src/composables/useTeamSelection'))['useTeamSelection']
   const useTeamStore: (typeof import('./src/stores/team'))['useTeamStore']
   const useTeams: (typeof import('./src/queries/teams'))['useTeams']
   const useTemplateRef: (typeof import('vue'))['useTemplateRef']

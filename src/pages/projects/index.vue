@@ -6,6 +6,10 @@ const organizationStore = useOrganizationStore()
 const { organization } = storeToRefs(organizationStore)
 
 const isOrganizationSelected = computed(() => !!organization.value?.id)
+const hasNoOrganizations = computed(
+  () => !isLoadingOrganizations.value && organizations.value?.length === 0,
+)
+const hasNoProjects = computed(() => !isLoadingProjects.value && projects.value?.length === 0)
 
 const pageStore = usePageStore()
 pageStore.setTitle('Projects - Home')
@@ -24,7 +28,7 @@ const { data: organizations, isLoading: isLoadingOrganizations } = useQuery({
   placeholderData: () => [] as Organization[],
 })
 
-const { data: projects } = useQuery({
+const { data: projects, isLoading: isLoadingProjects } = useQuery({
   key: () => ['projects', organization.value.id],
   query: () => listProjects(organization.value.id),
   enabled: () => !!organization.value.id,
@@ -90,25 +94,29 @@ onMounted(selectFirstOrganization)
     <TabPanels>
       <TabPanel value="0">
         <EmptyState
-          v-if="!isOrganizationSelected"
+          v-if="hasNoOrganizations"
           icon="pi pi-building"
-          title="No organization selected"
-          message="Select an organization from the dropdown above to view and manage projects."
+          title="No organizations found"
+          message="Create an organization to start managing projects with your team."
         />
 
         <div
-          v-else-if="projects?.length"
+          v-else-if="isLoadingProjects"
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4"
         >
-          <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
+          <ProjectCardSkeleton v-for="i in 8" :key="i" />
         </div>
 
         <EmptyState
-          v-else
+          v-else-if="hasNoProjects"
           icon="pi pi-folder-open"
           title="No projects found"
           message="Create a project to plan and track work with your team."
         />
+
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+          <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
+        </div>
       </TabPanel>
     </TabPanels>
   </Tabs>

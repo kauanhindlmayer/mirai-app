@@ -5,7 +5,7 @@ import type { LeadTimePoint } from '~/types/dashboard'
 const { layoutConfig, isDarkTheme } = useLayout()
 const { leadTimeData = [] } = defineProps<{
   isLoading: boolean
-  leadTimeData: LeadTimePoint[]
+  leadTimeData?: LeadTimePoint[]
   dateRange: string
 }>()
 

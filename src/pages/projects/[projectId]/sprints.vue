@@ -3,25 +3,16 @@ import type { TreeNode } from 'primevue/treenode'
 import CreateSprintDialog from '~/components/sprints/CreateSprintDialog.vue'
 
 const pageStore = usePageStore()
-const teamStore = useTeamStore()
 const projectStore = useProjectStore()
 const { project } = storeToRefs(projectStore)
 const { onMenuToggle } = useLayout()
 
-const selectedTeam = ref<Team | null>(null)
+const { selectedTeam, teams, isLoadingTeams } = useTeamSelection()
 const selectedSprint = ref<Sprint | null>(null)
 const selectedBacklogLevel = ref<BacklogLevel>(BacklogLevel.UserStory)
 
 const createSprintDialogRef =
   useTemplateRef<InstanceType<typeof CreateSprintDialog>>('createSprintDialog')
-
-watch(
-  () => selectedTeam.value,
-  async (newSelectedTeam) => {
-    if (!newSelectedTeam) return
-    teamStore.setTeamId(newSelectedTeam.id)
-  },
-)
 
 const { data: sprints, isLoading: isLoadingSprints } = useQuery({
   key: () => ['sprints', selectedTeam.value?.id || ''],
@@ -104,15 +95,6 @@ function openWorkItemDialog(workItemId: string) {
   router.replace({ query: { workItemId } })
 }
 
-const { teams, isLoading } = useTeams()
-
-function selectFirstTeam() {
-  if (!teams.value?.length) return
-  selectedTeam.value = teams.value[0]
-}
-
-watch(() => teams.value, selectFirstTeam)
-
 function setBreadcrumbs() {
   pageStore.setBreadcrumbs([
     { label: project.value.name, route: `/projects/${project.value.id}/summary` },
@@ -123,7 +105,6 @@ function setBreadcrumbs() {
 
 onBeforeMount(() => {
   setBreadcrumbs()
-  selectFirstTeam()
   selectFirstSprint()
 })
 </script>
@@ -137,7 +118,7 @@ onBeforeMount(() => {
             <Select
               v-model="selectedTeam"
               :options="teams"
-              :loading="isLoading"
+              :loading="isLoadingTeams"
               option-label="name"
             />
             <Button

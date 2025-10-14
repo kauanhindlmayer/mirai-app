@@ -11,27 +11,7 @@ const { project } = storeToRefs(projectStore)
 const teamStore = useTeamStore()
 const { teamId } = storeToRefs(teamStore)
 
-const selectedTeam = ref<Team | null>()
-
-const { data: teams, isLoading: isLoadingTeams } = useQuery({
-  key: () => ['teams'],
-  query: () => listTeams(project.value.id),
-})
-
-watch(
-  () => selectedTeam.value,
-  async (newSelectedTeam) => {
-    if (!newSelectedTeam) return
-    teamStore.setTeamId(newSelectedTeam.id)
-  },
-)
-
-function selectTeam() {
-  if (!teams.value?.length) return
-  selectedTeam.value = teams.value[0]
-}
-
-watch(() => teams.value, selectTeam)
+const { selectedTeam, teams, isLoadingTeams } = useTeamSelection()
 
 const {
   data: dashboardData,
@@ -68,10 +48,7 @@ function setBreadcrumbs() {
   ])
 }
 
-onBeforeMount(() => {
-  setBreadcrumbs()
-  selectTeam()
-})
+onBeforeMount(setBreadcrumbs)
 </script>
 
 <template>
@@ -118,35 +95,35 @@ onBeforeMount(() => {
     <div class="col-span-12 lg:col-span-6">
       <BurndownChart
         :is-loading="isLoading"
-        :burndown-data="dashboardData?.burndownData ?? []"
+        :burndown-data="dashboardData?.burndownData"
         :date-range="dateRange"
       />
     </div>
     <div class="col-span-12 lg:col-span-6">
       <BurnupChart
         :is-loading="isLoading"
-        :burnup-data="dashboardData?.burnupData ?? []"
+        :burnup-data="dashboardData?.burnupData"
         :date-range="dateRange"
       />
     </div>
     <div class="col-span-12 xl:col-span-4">
       <CycleTimeChart
         :is-loading="isLoading"
-        :cycle-time-data="dashboardData?.cycleTimeData ?? []"
+        :cycle-time-data="dashboardData?.cycleTimeData"
         :date-range="dateRange"
       />
     </div>
     <div class="col-span-12 xl:col-span-4">
       <LeadTimeChart
         :is-loading="isLoading"
-        :lead-time-data="dashboardData?.leadTimeData ?? []"
+        :lead-time-data="dashboardData?.leadTimeData"
         :date-range="dateRange"
       />
     </div>
     <div class="col-span-12 xl:col-span-4">
       <VelocityChart
         :is-loading="isLoading"
-        :velocity-data="dashboardData?.velocityData ?? []"
+        :velocity-data="dashboardData?.velocityData"
         :date-range="dateRange"
       />
     </div>

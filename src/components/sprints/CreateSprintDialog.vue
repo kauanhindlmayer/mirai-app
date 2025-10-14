@@ -4,11 +4,13 @@ import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { date, object, string } from 'yup'
 import type { CreateSprintRequest } from '~/types/sprint'
 
-const form = ref<CreateSprintRequest>({
+const initialValues: CreateSprintRequest = {
   name: '',
   startDate: null,
   endDate: null,
-})
+}
+
+const form = ref<CreateSprintRequest>({ ...initialValues })
 
 const createSprintSchema = object({
   name: string().required('Name is a required field'),
@@ -23,16 +25,20 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
   hideDialog()
 }
 
-const { isVisible, showDialog, hideDialog } = useDialog()
+const { isVisible, showDialog } = useDialog()
+
+function hideDialog() {
+  isVisible.value = false
+  Object.assign(form.value, initialValues)
+}
 
 defineExpose({
   showDialog,
-  hideDialog,
 })
 </script>
 
 <template>
-  <Dialog v-model:visible="isVisible" :style="{ width: '450px' }" modal>
+  <Dialog v-model:visible="isVisible" :style="{ width: '450px' }" modal @hide="hideDialog">
     <template #header>
       <span class="text-surface-900 dark:text-surface-0 text-xl font-bold">Create Sprint</span>
     </template>

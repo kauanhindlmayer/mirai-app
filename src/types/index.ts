@@ -25,6 +25,13 @@ export type Link = {
   method: string
 }
 
+export type ApiErrorResponse = {
+  type: string
+  title: string
+  status: number
+  traceId: string
+}
+
 export type PaginationFilter = {
   page: number
   pageSize: number

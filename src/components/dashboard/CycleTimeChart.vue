@@ -5,7 +5,7 @@ import type { CycleTimePoint } from '~/types/dashboard'
 const { layoutConfig, isDarkTheme } = useLayout()
 const { cycleTimeData = [] } = defineProps<{
   isLoading: boolean
-  cycleTimeData: CycleTimePoint[]
+  cycleTimeData?: CycleTimePoint[]
   dateRange: string
 }>()
 

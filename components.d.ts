@@ -81,6 +81,7 @@ declare module 'vue' {
     Popover: typeof import('primevue/popover')['default']
     ProgressSpinner: typeof import('primevue/progressspinner')['default']
     ProjectCard: typeof import('./src/components/projects/ProjectCard.vue')['default']
+    ProjectCardSkeleton: typeof import('./src/components/projects/ProjectCardSkeleton.vue')['default']
     ProjectGitHubTab: typeof import('./src/components/projects/ProjectGitHubTab.vue')['default']
     ProjectOverviewTab: typeof import('./src/components/projects/ProjectOverviewTab.vue')['default']
     ProjectTeamsTab: typeof import('./src/components/projects/ProjectTeamsTab.vue')['default']
