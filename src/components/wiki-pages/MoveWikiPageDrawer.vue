@@ -3,8 +3,7 @@ import type { TreeSelectionKeys } from 'primevue'
 import type { TreeNode } from 'primevue/treenode'
 import type { WikiPageSummary } from '~/types/wiki-page'
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 
 const { wikiPages } = useWikiPages()
 const { wikiPage } = useWikiPage()

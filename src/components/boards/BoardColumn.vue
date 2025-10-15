@@ -102,8 +102,7 @@ async function onChange(event: DraggableEvent<Card>) {
   }
 }
 
-const teamStore = useTeamStore()
-const { teamId } = storeToRefs(teamStore)
+const { teamId } = useTeamContext()
 
 const initialValues: CreateWorkItemRequest = {
   title: '',
@@ -131,10 +130,9 @@ function hidePopover() {
   Object.assign(form.value, initialValues)
 }
 
-const workItemTypes = formatEnumOptions(WorkItemType)
+const workItemTypeOptions = formatEnumOptions(WorkItemType)
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 
 const { mutate: createWorkItemFn, isLoading } = useMutation({
   mutation: () => createWorkItem(project.value.id, form.value),
@@ -196,7 +194,7 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
             <Select
               v-model="form.type"
               class="w-36"
-              :options="workItemTypes"
+              :options="workItemTypeOptions"
               option-label="label"
               option-value="value"
               placeholder="Select a template"

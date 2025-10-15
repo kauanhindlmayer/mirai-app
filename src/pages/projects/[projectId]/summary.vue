@@ -2,9 +2,6 @@
 import AddUserToProjectDrawer from '~/components/projects/AddUserToProjectDrawer.vue'
 import EditProjectDrawer from '~/components/projects/EditProjectDrawer.vue'
 
-const organizationStore = useOrganizationStore()
-const { organization } = storeToRefs(organizationStore)
-
 const pageStore = usePageStore()
 pageStore.setTitle('Summary - Overview')
 
@@ -20,7 +17,11 @@ const periods = ref([
 ])
 
 const { stats, periodInDays: selectedPeriod } = useWorkItemsStats()
-const { project } = useProject()
+
+const organizationStore = useOrganizationStore()
+const { organization } = storeToRefs(organizationStore)
+
+const { project } = useProjectContext()
 
 const { data: members } = useQuery({
   key: () => ['project-users', organization.value.id, project.value.id],

@@ -7,8 +7,7 @@ import MoveWikiPageDrawer from '~/components/wiki-pages/MoveWikiPageDrawer.vue'
 const pageStore = usePageStore()
 pageStore.setTitle('Wiki Pages - Overview')
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 
 const confirm = useConfirm()
 const toast = useAppToast()

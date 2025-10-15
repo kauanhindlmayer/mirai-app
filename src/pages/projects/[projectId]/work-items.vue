@@ -7,13 +7,11 @@ import {
 } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
-
 const pageStore = usePageStore()
 pageStore.setTitle('Work Items - Boards')
 
 const toast = useAppToast()
+const { project } = useProjectContext()
 
 const selectedWorkItem = ref<(WorkItem & { id: string }) | null>(null)
 

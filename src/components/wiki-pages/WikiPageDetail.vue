@@ -4,8 +4,7 @@ import type { MenuItem } from 'primevue/menuitem'
 import { addWikiPageComment, deleteWikiPageComment, updateWikiPageComment } from '~/api/wiki-pages'
 import type { WikiPage } from '~/types/wiki-page'
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 
 const { wikiPage } = useWikiPage()
 const { wikiPageStats } = useWikiPageStats()

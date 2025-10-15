@@ -7,16 +7,12 @@ import RetrospectiveDialog from '~/components/retrospectives/RetrospectiveDialog
 const pageStore = usePageStore()
 pageStore.setTitle('Retrospectives - Boards')
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
-
-const teamStore = useTeamStore()
-const { teamId } = storeToRefs(teamStore)
+const { project } = useProjectContext()
 
 const route = useRoute('/projects/[projectId]/retrospectives/[[retrospectiveId]]')
 const router = useRouter()
 
-const { selectedTeam, teams, isLoadingTeams } = useTeamSelection()
+const { teamId, selectedTeam, teams, isLoadingTeams } = useTeamSelection()
 const selectedRetrospective = ref<RetrospectiveSummary | null>(null)
 const retrospectiveId = computed(() => selectedRetrospective.value?.id ?? '')
 

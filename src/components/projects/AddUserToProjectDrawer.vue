@@ -8,8 +8,7 @@ import { addUserToProject } from '~/api/projects'
 const organizationStore = useOrganizationStore()
 const { organization } = storeToRefs(organizationStore)
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 
 const { isVisible, showDrawer } = useDrawer()
 

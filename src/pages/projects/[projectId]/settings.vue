@@ -9,7 +9,7 @@ const { organization } = storeToRefs(organizationStore)
 const pageStore = usePageStore()
 pageStore.setTitle('Settings')
 
-const { project } = useProject()
+const { project } = useProjectContext()
 
 const activeTab = ref('overview')
 

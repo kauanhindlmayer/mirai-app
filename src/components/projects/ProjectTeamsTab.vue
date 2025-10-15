@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { teams, isLoading } = useTeams()
+const { teams, isLoading } = useTeamSelection()
 </script>
 
 <template>

@@ -201,6 +201,7 @@ declare global {
   const useOrganizationUsersNotInProject: (typeof import('./src/queries/organizations'))['useOrganizationUsersNotInProject']
   const usePageStore: (typeof import('./src/stores/page'))['usePageStore']
   const useProject: (typeof import('./src/queries/projects'))['useProject']
+  const useProjectContext: (typeof import('./src/composables/project-context'))['useProjectContext']
   const useProjectStore: (typeof import('./src/stores/project'))['useProjectStore']
   const useQuery: (typeof import('@pinia/colada'))['useQuery']
   const useQueryCache: (typeof import('@pinia/colada'))['useQueryCache']
@@ -209,7 +210,8 @@ declare global {
   const useShortcuts: (typeof import('./src/composables/shortcuts'))['useShortcuts']
   const useSignalR: (typeof import('./src/composables/signal-r'))['useSignalR']
   const useSlots: (typeof import('vue'))['useSlots']
-  const useTeamSelection: (typeof import('./src/composables/useTeamSelection'))['useTeamSelection']
+  const useTeamContext: (typeof import('./src/composables/team-context'))['useTeamContext']
+  const useTeamSelection: (typeof import('./src/composables/team-context'))['useTeamSelection']
   const useTeamStore: (typeof import('./src/stores/team'))['useTeamStore']
   const useTeams: (typeof import('./src/queries/teams'))['useTeams']
   const useTemplateRef: (typeof import('vue'))['useTemplateRef']
@@ -274,6 +276,7 @@ declare global {
     PaginatedList,
     HateoasResponse,
     Link,
+    ApiErrorResponse,
     PaginationFilter,
     Shortcut,
     AddCommentRequest,
@@ -385,9 +388,6 @@ declare global {
   // @ts-ignore
   export type { DateType } from './src/utils/date'
   import('./src/utils/date')
-  // @ts-ignore
-  export type { ApiErrorResponse } from './src/utils/display-error'
-  import('./src/utils/display-error')
 }
 
 // for vue template auto import
@@ -662,8 +662,9 @@ declare module 'vue' {
       (typeof import('./src/queries/organizations'))['useOrganizationUsers']
     >
     readonly usePageStore: UnwrapRef<(typeof import('./src/stores/page'))['usePageStore']>
-    readonly useProject: UnwrapRef<(typeof import('./src/queries/projects'))['useProject']>
-    readonly useProjectStore: UnwrapRef<(typeof import('./src/stores/project'))['useProjectStore']>
+    readonly useProjectContext: UnwrapRef<
+      (typeof import('./src/composables/project-context'))['useProjectContext']
+    >
     readonly useQuery: UnwrapRef<(typeof import('@pinia/colada'))['useQuery']>
     readonly useQueryCache: UnwrapRef<(typeof import('@pinia/colada'))['useQueryCache']>
     readonly useRoute: UnwrapRef<(typeof import('vue-router'))['useRoute']>
@@ -671,8 +672,12 @@ declare module 'vue' {
     readonly useShortcuts: UnwrapRef<(typeof import('./src/composables/shortcuts'))['useShortcuts']>
     readonly useSignalR: UnwrapRef<(typeof import('./src/composables/signal-r'))['useSignalR']>
     readonly useSlots: UnwrapRef<(typeof import('vue'))['useSlots']>
-    readonly useTeamStore: UnwrapRef<(typeof import('./src/stores/team'))['useTeamStore']>
-    readonly useTeams: UnwrapRef<(typeof import('./src/queries/teams'))['useTeams']>
+    readonly useTeamContext: UnwrapRef<
+      (typeof import('./src/composables/team-context'))['useTeamContext']
+    >
+    readonly useTeamSelection: UnwrapRef<
+      (typeof import('./src/composables/team-context'))['useTeamSelection']
+    >
     readonly useTemplateRef: UnwrapRef<(typeof import('vue'))['useTemplateRef']>
     readonly useUserStore: UnwrapRef<(typeof import('./src/stores/user'))['useUserStore']>
     readonly useWikiPage: UnwrapRef<(typeof import('./src/queries/wiki-pages'))['useWikiPage']>

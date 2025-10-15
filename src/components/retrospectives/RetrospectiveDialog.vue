@@ -14,8 +14,7 @@ const props = withDefaults(defineProps<Props>(), {
   retrospective: null,
 })
 
-const teamStore = useTeamStore()
-const { teamId } = storeToRefs(teamStore)
+const { teamId } = useTeamContext()
 
 const isUpdateMode = computed(() => !!props.retrospective)
 const dialogTitle = computed(() => `${isUpdateMode.value ? 'Update' : 'Create'} Retrospective`)
@@ -46,7 +45,7 @@ function resetForm() {
   Object.assign(form.value, getInitialValues())
 }
 
-const templates = formatEnumOptions(ProcessTemplate)
+const processTemplateOptions = formatEnumOptions(ProcessTemplate)
 const titlePlaceholder = computed(() => {
   if (isUpdateMode.value) {
     return 'Enter retrospective title'
@@ -166,7 +165,7 @@ defineExpose({
         <Select
           v-model="form.template"
           class="w-full"
-          :options="templates"
+          :options="processTemplateOptions"
           option-label="label"
           option-value="value"
           placeholder="Select a template"

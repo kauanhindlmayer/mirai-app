@@ -12,8 +12,7 @@ const queryCache = useQueryCache()
 const router = useRouter()
 const confirm = useConfirm()
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 
 const organizationStore = useOrganizationStore()
 const { organization } = storeToRefs(organizationStore)

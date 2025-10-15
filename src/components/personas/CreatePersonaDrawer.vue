@@ -5,8 +5,7 @@ import type { FileUploadSelectEvent } from 'primevue'
 import { object, string } from 'yup'
 import type { CreatePersonaRequest } from '~/types/persona'
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 
 const initialValues: CreatePersonaRequest = {
   name: '',

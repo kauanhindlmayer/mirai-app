@@ -5,13 +5,9 @@ import type { MenuItem } from 'primevue/menuitem'
 const pageStore = usePageStore()
 pageStore.setTitle('Dashboard - Overview')
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 
-const teamStore = useTeamStore()
-const { teamId } = storeToRefs(teamStore)
-
-const { selectedTeam, teams, isLoadingTeams } = useTeamSelection()
+const { teamId, selectedTeam, teams, isLoadingTeams } = useTeamSelection()
 
 const {
   data: dashboardData,

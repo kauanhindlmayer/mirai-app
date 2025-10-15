@@ -5,8 +5,7 @@ import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { object, string } from 'yup'
 import type { Project } from '~/types/project'
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 
 const toast = useAppToast()
 const queryCache = useQueryCache()

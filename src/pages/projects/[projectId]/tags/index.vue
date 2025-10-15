@@ -11,8 +11,7 @@ import { deleteTags } from '~/api/tags'
 const pageStore = usePageStore()
 pageStore.setTitle('Tags - Boards')
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 
 const selectedTags = ref<Tag[]>([])
 const editingRows = ref([])

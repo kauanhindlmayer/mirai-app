@@ -4,8 +4,7 @@ import { BacklogLevel } from '~/types/team'
 import { formatEnumOptions } from '~/utils'
 
 const pageStore = usePageStore()
-const teamStore = useTeamStore()
-const { project } = storeToRefs(useProjectStore())
+const { project } = useProjectContext()
 const { onMenuToggle } = useLayout()
 
 const boardSettingsDrawerRef =
@@ -13,14 +12,13 @@ const boardSettingsDrawerRef =
 
 const selectedBoard = ref<BoardSummary | null>(null)
 const selectedBacklogLevel = ref(BacklogLevel.UserStory)
-const backlogLevels = formatEnumOptions(BacklogLevel)
+const backlogLevelOptions = formatEnumOptions(BacklogLevel)
 
 watch(
   () => selectedBoard.value,
   async (newSelectedBoard) => {
     if (!newSelectedBoard) return
     pageStore.setTitle(`${selectedBoard.value?.name} Stories Board - Boards`)
-    teamStore.setTeamId(newSelectedBoard.teamId)
   },
 )
 
@@ -41,6 +39,7 @@ function redirectToBacklogView() {
 const { data: boards, isLoading } = useQuery({
   key: () => ['boards', project.value.id],
   query: () => listBoards(project.value.id),
+  enabled: () => !!project.value.id,
 })
 
 function selectFirstBoard() {
@@ -98,7 +97,7 @@ onBeforeMount(() => {
             <div class="ml-auto flex items-center mr-6">
               <Select
                 v-model="selectedBacklogLevel"
-                :options="backlogLevels"
+                :options="backlogLevelOptions"
                 option-label="label"
                 option-value="value"
                 class="ml-2"

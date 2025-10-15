@@ -5,8 +5,7 @@ import CreatePersonaDrawer from '~/components/personas/CreatePersonaDrawer.vue'
 const pageStore = usePageStore()
 pageStore.setTitle('Personas - Boards')
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 
 const createPersonaDrawerRef =
   useTemplateRef<InstanceType<typeof CreatePersonaDrawer>>('createPersonaDrawer')

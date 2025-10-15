@@ -3,8 +3,7 @@ import type { TreeNode } from 'primevue/treenode'
 import CreateSprintDialog from '~/components/sprints/CreateSprintDialog.vue'
 
 const pageStore = usePageStore()
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 const { onMenuToggle } = useLayout()
 
 const { selectedTeam, teams, isLoadingTeams } = useTeamSelection()

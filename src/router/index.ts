@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { handleHotUpdate, routes } from 'vue-router/auto-routes'
-import { ensureProjectLoaded } from '~/router/guards'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -13,7 +12,5 @@ const router = createRouter({
 if (import.meta.hot) {
   handleHotUpdate(router)
 }
-
-router.beforeEach(ensureProjectLoaded)
 
 export default router

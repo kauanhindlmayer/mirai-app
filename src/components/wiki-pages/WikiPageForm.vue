@@ -2,7 +2,7 @@
 import { useConfirm } from 'primevue'
 
 const confirm = useConfirm()
-const { project } = storeToRefs(useProjectStore())
+const { project } = useProjectContext()
 
 const { parentWikiPageId } = defineProps<{
   parentWikiPageId?: string

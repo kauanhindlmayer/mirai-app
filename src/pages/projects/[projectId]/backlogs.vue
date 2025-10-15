@@ -5,8 +5,7 @@ import { formatEnumOptions } from '~/utils'
 const pageStore = usePageStore()
 pageStore.setTitle('Backlogs - Boards')
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 
 const { onMenuToggle } = useLayout()
 

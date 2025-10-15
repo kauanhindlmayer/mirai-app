@@ -22,16 +22,15 @@ import {
   type TagBriefResponse,
 } from '~/types/work-item'
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 
 const router = useRouter()
 const route = useRoute()
 
 const workItemId = computed(() => route.query.workItemId as string)
 
-const workItemStatuses = formatEnumOptions(WorkItemStatus)
-const valueAreas = formatEnumOptions(ValueArea)
+const workItemStatusOptions = formatEnumOptions(WorkItemStatus)
+const valueAreaOptions = formatEnumOptions(ValueArea)
 
 const workItemLastUpdated = computed(() =>
   format(workItem.value!.updatedAtUtc ?? workItem.value!.createdAtUtc, 'MMM d'),
@@ -294,7 +293,7 @@ defineExpose({
         <span class="mr-4">State:</span>
         <Select
           v-model="workItem.status"
-          :options="workItemStatuses"
+          :options="workItemStatusOptions"
           option-label="label"
           option-value="value"
           class="ml-2"
@@ -391,7 +390,7 @@ defineExpose({
                   </label>
                   <Select
                     v-model="workItem.classification.valueArea"
-                    :options="valueAreas"
+                    :options="valueAreaOptions"
                     option-label="label"
                     option-value="value"
                   />

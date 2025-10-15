@@ -8,8 +8,7 @@ defineProps<{ disabled?: boolean }>()
 
 const selectedTag = defineModel<Tag | null>()
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 
 const searchTerm = ref('')
 const page = ref(1)

@@ -4,8 +4,7 @@ import { extractWisdom } from '~/api/wisdom-extractor'
 const pageStore = usePageStore()
 pageStore.setTitle('Wisdom Extractor')
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 
 const route = useRoute()
 const question = computed(() => route.query.q as string)

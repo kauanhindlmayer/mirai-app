@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { MenuItem } from 'primevue/menuitem'
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 
 const menuItems = computed<MenuItem[]>(() => [
   {

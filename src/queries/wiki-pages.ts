@@ -1,10 +1,9 @@
 import { defineQuery, useQuery } from '@pinia/colada'
-import { storeToRefs } from 'pinia'
 import { getWikiPage, getWikiPageStats, listWikiPages } from '~/api/wiki-pages'
-import { useProjectStore } from '~/stores/project'
+import { useProjectContext } from '~/composables/project-context'
 
 export const useWikiPages = defineQuery(() => {
-  const { project } = storeToRefs(useProjectStore())
+  const { project } = useProjectContext()
 
   const query = useQuery({
     staleTime: 1000 * 60,
@@ -21,7 +20,7 @@ export const useWikiPages = defineQuery(() => {
 })
 
 export const useWikiPage = defineQuery(() => {
-  const { project } = storeToRefs(useProjectStore())
+  const { project } = useProjectContext()
   const route = useRoute('/projects/[projectId]/wiki-pages/[wikiPageId]/')
 
   const query = useQuery({
@@ -38,7 +37,7 @@ export const useWikiPage = defineQuery(() => {
 })
 
 export const useWikiPageStats = defineQuery(() => {
-  const { project } = storeToRefs(useProjectStore())
+  const { project } = useProjectContext()
   const route = useRoute('/projects/[projectId]/wiki-pages/[wikiPageId]/')
 
   const query = useQuery({

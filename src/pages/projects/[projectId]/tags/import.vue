@@ -6,8 +6,7 @@ import { getJobStatusSeverity } from '~/utils/tag'
 const pageStore = usePageStore()
 pageStore.setTitle('Tags - Boards')
 
-const projectStore = useProjectStore()
-const { project } = storeToRefs(projectStore)
+const { project } = useProjectContext()
 
 const router = useRouter()
 

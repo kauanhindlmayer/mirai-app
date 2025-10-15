@@ -9,10 +9,9 @@ defineProps<{ disabled?: boolean }>()
 const assignee = defineModel<AssigneeResponse | null>()
 
 const organizationStore = useOrganizationStore()
-const projectStore = useProjectStore()
+const { project } = useProjectContext()
 
 const { organization } = storeToRefs(organizationStore)
-const { project } = storeToRefs(projectStore)
 
 const searchTerm = ref('')
 const page = ref(1)
