@@ -58,14 +58,6 @@ watch(
   },
 )
 
-function setBreadcrumbs() {
-  pageStore.setBreadcrumbs([
-    { label: project.value.name, route: `/projects/${project.value.id}/summary` },
-    { label: 'Boards', route: `/projects/${project.value.id}/boards` },
-    { label: 'Retrospectives', route: `/projects/${project.value.id}/retrospectives` },
-  ])
-}
-
 const retrospectiveDialogRef =
   useTemplateRef<InstanceType<typeof RetrospectiveDialog>>('retrospectiveDialog')
 const retrospectiveToEdit = ref<Retrospective | undefined>(undefined)
@@ -158,8 +150,17 @@ async function initializeRetrospectiveHub() {
   retrospectiveHub.on('delete-retrospective-item', invalidateRetrospectiveQuery)
 }
 
+function setBreadcrumbs() {
+  pageStore.setBreadcrumbs([
+    { label: project.value.name, route: `/projects/${project.value.id}/summary` },
+    { label: 'Boards', route: `/projects/${project.value.id}/boards` },
+    { label: 'Retrospectives', route: `/projects/${project.value.id}/retrospectives` },
+  ])
+}
+
+watch(project, setBreadcrumbs, { immediate: true })
+
 onBeforeMount(async () => {
-  setBreadcrumbs()
   selectRetrospective()
   await initializeRetrospectiveHub()
 })

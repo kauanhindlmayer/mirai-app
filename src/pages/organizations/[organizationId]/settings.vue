@@ -1,25 +1,21 @@
 <script setup lang="ts">
 import OrganizationUsersTab from '~/components/organizations/OrganizationUsersTab.vue'
 
-const organizationStore = useOrganizationStore()
-const { organization } = storeToRefs(organizationStore)
-
 const pageStore = usePageStore()
 pageStore.setTitle('Organization Settings')
 
+const { organization } = useOrganizationContext()
+
 const activeTab = ref('users')
 
-function setBreadcrumbs(organization: Organization) {
+function setBreadcrumbs() {
   pageStore.setBreadcrumbs([
-    { label: organization.name, route: '/projects' },
-    { label: 'Settings', route: `/organizations/${organization.id}/settings` },
+    { label: organization.value.name, route: '/projects' },
+    { label: 'Settings', route: `/organizations/${organization.value.id}/settings` },
   ])
 }
 
-onMounted(() => {
-  if (!organization.value) return
-  setBreadcrumbs(organization.value)
-})
+watch(organization, setBreadcrumbs, { immediate: true })
 </script>
 
 <template>

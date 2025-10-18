@@ -25,7 +25,7 @@ function selectFirstSprint() {
   selectedSprint.value = sprints.value[0]
 }
 
-watch(() => sprints.value, selectFirstSprint)
+watch(sprints, selectFirstSprint)
 
 watch(
   () => selectedSprint.value,
@@ -102,10 +102,7 @@ function setBreadcrumbs() {
   ])
 }
 
-onBeforeMount(() => {
-  setBreadcrumbs()
-  selectFirstSprint()
-})
+watch(project, setBreadcrumbs, { immediate: true })
 </script>
 
 <template>

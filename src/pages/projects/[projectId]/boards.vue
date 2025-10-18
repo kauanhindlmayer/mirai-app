@@ -47,7 +47,7 @@ function selectFirstBoard() {
   selectedBoard.value = boards.value[0]
 }
 
-watch(() => boards.value, selectFirstBoard)
+watch(boards, selectFirstBoard, { immediate: true })
 
 function setBreadcrumbs() {
   pageStore.setBreadcrumbs([
@@ -57,10 +57,7 @@ function setBreadcrumbs() {
   ])
 }
 
-onBeforeMount(() => {
-  setBreadcrumbs()
-  selectFirstBoard()
-})
+watch(project, setBreadcrumbs, { immediate: true })
 </script>
 
 <template>

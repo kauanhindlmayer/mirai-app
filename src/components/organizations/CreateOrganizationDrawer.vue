@@ -21,7 +21,7 @@ const createOrganizationSchema = object({
 
 const resolver = ref(yupResolver(createOrganizationSchema))
 const queryCache = useQueryCache()
-const organizationStore = useOrganizationStore()
+const { setOrganization } = useOrganizationContext()
 
 const { mutate: createOrganizationFn, isLoading } = useMutation({
   mutation: createOrganization,
@@ -31,7 +31,7 @@ const { mutate: createOrganizationFn, isLoading } = useMutation({
     const organizations = await listOrganizations()
     const newOrganization = organizations.find((organization) => organization.id === organizationId)
     if (!newOrganization) return
-    organizationStore.setOrganization(newOrganization)
+    setOrganization(newOrganization)
   },
   onError: displayError,
 })

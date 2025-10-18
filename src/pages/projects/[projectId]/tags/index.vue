@@ -115,13 +115,13 @@ function setBreadcrumbs() {
   ])
 }
 
+watch(project, setBreadcrumbs, { immediate: true })
+
 const router = useRouter()
 
 function redirectToTagImports() {
   router.push(`/projects/${project.value.id}/tags/import`)
 }
-
-onBeforeMount(setBreadcrumbs)
 </script>
 
 <template>

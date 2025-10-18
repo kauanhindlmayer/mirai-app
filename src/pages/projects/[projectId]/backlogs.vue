@@ -79,7 +79,7 @@ function setBreadcrumbs() {
   ])
 }
 
-onBeforeMount(setBreadcrumbs)
+watch(project, setBreadcrumbs, { immediate: true })
 </script>
 
 <template>

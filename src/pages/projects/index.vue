@@ -2,15 +2,6 @@
 import CreateOrganizationDrawer from '~/components/organizations/CreateOrganizationDrawer.vue'
 import CreateProjectDrawer from '~/components/projects/CreateProjectDrawer.vue'
 
-const organizationStore = useOrganizationStore()
-const { organization } = storeToRefs(organizationStore)
-
-const isOrganizationSelected = computed(() => !!organization.value?.id)
-const hasNoOrganizations = computed(
-  () => !isLoadingOrganizations.value && organizations.value?.length === 0,
-)
-const hasNoProjects = computed(() => !isLoadingProjects.value && projects.value?.length === 0)
-
 const pageStore = usePageStore()
 pageStore.setTitle('Projects - Home')
 pageStore.resetBreadcrumbs()
@@ -21,6 +12,14 @@ const createProjectDrawerRef =
 const createOrganizationDrawerRef = useTemplateRef<InstanceType<typeof CreateOrganizationDrawer>>(
   'createOrganizationDrawer',
 )
+
+const { organization, setOrganization } = useOrganizationContext()
+
+const isOrganizationSelected = computed(() => !!organization.value?.id)
+const hasNoOrganizations = computed(
+  () => !isLoadingOrganizations.value && organizations.value?.length === 0,
+)
+const hasNoProjects = computed(() => !isLoadingProjects.value && projects.value?.length === 0)
 
 const { data: organizations, isLoading: isLoadingOrganizations } = useQuery({
   key: () => ['organizations'],
@@ -36,19 +35,18 @@ const { data: projects, isLoading: isLoadingProjects } = useQuery({
 
 function selectFirstOrganization() {
   if (!organizations.value || organizations.value.length === 0) return
-  organization.value = organizations.value[0]
+  setOrganization(organizations.value[0])
 }
 
-watch(() => organizations.value, selectFirstOrganization)
-
-onMounted(selectFirstOrganization)
+watch(organizations, selectFirstOrganization, { immediate: true })
 </script>
 
 <template>
   <header class="flex justify-between items-center">
     <div class="flex items-center space-x-1">
       <Select
-        v-model="organization"
+        :model-value="organization"
+        @update:model-value="setOrganization"
         :options="organizations"
         :loading="isLoadingOrganizations"
         placeholder="Select an organization..."

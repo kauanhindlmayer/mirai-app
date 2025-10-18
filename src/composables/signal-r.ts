@@ -24,7 +24,6 @@ export function useSignalR(hub: string) {
     try {
       await connection.value.start()
       isConnected.value = true
-      console.log('Connected to SignalR hub')
     } catch (err) {
       console.error('Error connecting to SignalR hub:', err)
     }
@@ -35,7 +34,6 @@ export function useSignalR(hub: string) {
     await connection.value.stop()
     connection.value = null
     isConnected.value = false
-    console.log('Disconnected from SignalR hub')
   }
 
   function on(event: string, callback: (...args: unknown[]) => void) {

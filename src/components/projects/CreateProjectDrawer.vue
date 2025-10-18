@@ -4,8 +4,7 @@ import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { object, string } from 'yup'
 import type { Project } from '~/types/project'
 
-const organizationStore = useOrganizationStore()
-const { organization } = storeToRefs(organizationStore)
+const { organizationId } = useOrganizationContext()
 
 const initialValues = {
   name: '',
@@ -29,14 +28,14 @@ const { mutate: createProjectFn, isLoading } = useMutation({
   mutation: createProject,
   onSuccess: () => {
     hideDrawer()
-    queryCache.invalidateQueries({ key: ['projects', organization.value.id] })
+    queryCache.invalidateQueries({ key: ['projects', organizationId.value] })
   },
   onError: displayError,
 })
 
 function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
-  createProjectFn({ ...form.value, organizationId: organization.value.id })
+  createProjectFn({ ...form.value, organizationId: organizationId.value })
 }
 
 const { isVisible, showDrawer } = useDrawer()

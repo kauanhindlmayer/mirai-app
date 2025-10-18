@@ -13,9 +13,7 @@ const router = useRouter()
 const confirm = useConfirm()
 
 const { project } = useProjectContext()
-
-const organizationStore = useOrganizationStore()
-const { organization } = storeToRefs(organizationStore)
+const { organizationId } = useOrganizationContext()
 
 const form = ref<Partial<Project> & { id: string }>({
   id: project.value.id,
@@ -67,7 +65,7 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
 }
 
 const { mutate: deleteProjectFn, isLoading: isDeleting } = useMutation({
-  mutation: () => deleteProject(project.value.id, organization.value.id),
+  mutation: () => deleteProject(project.value.id, organizationId.value),
   onSuccess: () => {
     toast.showSuccess({ detail: 'Project deleted successfully' })
     router.push('/projects')

@@ -47,10 +47,9 @@ function setBreadcrumbs() {
   ])
 }
 
-onMounted(() => {
-  setBreadcrumbs()
-  extractWisdomFn()
-})
+watch(project, setBreadcrumbs, { immediate: true })
+
+onMounted(extractWisdomFn)
 </script>
 
 <template>

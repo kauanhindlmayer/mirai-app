@@ -42,15 +42,6 @@ const { mutate: createTagImportJobFn } = useMutation({
   onError: displayError,
 })
 
-function setBreadcrumbs() {
-  pageStore.setBreadcrumbs([
-    { label: project.value.name, route: `/projects/${project.value.id}/summary` },
-    { label: 'Boards', route: `/projects/${project.value.id}/boards` },
-    { label: 'Tags', route: `/projects/${project.value.id}/tags` },
-    { label: 'Import', route: `/projects/${project.value.id}/tags/import` },
-  ])
-}
-
 const filters = ref<PaginationFilter>({
   page: 1,
   pageSize: 5,
@@ -64,7 +55,16 @@ const { data: tagImportJobs, isLoading } = useQuery({
   placeholderData: (previousData) => previousData,
 })
 
-onBeforeMount(setBreadcrumbs)
+function setBreadcrumbs() {
+  pageStore.setBreadcrumbs([
+    { label: project.value.name, route: `/projects/${project.value.id}/summary` },
+    { label: 'Boards', route: `/projects/${project.value.id}/boards` },
+    { label: 'Tags', route: `/projects/${project.value.id}/tags` },
+    { label: 'Import', route: `/projects/${project.value.id}/tags/import` },
+  ])
+}
+
+watch(project, setBreadcrumbs, { immediate: true })
 </script>
 
 <template>

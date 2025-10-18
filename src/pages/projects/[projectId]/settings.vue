@@ -3,28 +3,23 @@ import ProjectGitHubTab from '~/components/projects/ProjectGitHubTab.vue'
 import ProjectOverviewTab from '~/components/projects/ProjectOverviewTab.vue'
 import ProjectTeamsTab from '~/components/projects/ProjectTeamsTab.vue'
 
-const organizationStore = useOrganizationStore()
-const { organization } = storeToRefs(organizationStore)
-
 const pageStore = usePageStore()
 pageStore.setTitle('Settings')
 
 const { project } = useProjectContext()
+const { organization } = useOrganizationContext()
 
 const activeTab = ref('overview')
 
-function setBreadcrumbs(project: Project) {
+function setBreadcrumbs() {
   pageStore.setBreadcrumbs([
     { label: organization.value.name, route: '/projects' },
-    { label: project.name, route: `/projects/${project.id}/summary` },
-    { label: 'Settings', route: `/projects/${project.id}/settings` },
+    { label: project.value.name, route: `/projects/${project.value.id}/summary` },
+    { label: 'Settings', route: `/projects/${project.value.id}/settings` },
   ])
 }
 
-onMounted(() => {
-  if (!project.value) return
-  setBreadcrumbs(project.value)
-})
+watch([organization, project], setBreadcrumbs, { immediate: true })
 </script>
 
 <template>

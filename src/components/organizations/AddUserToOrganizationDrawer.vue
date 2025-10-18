@@ -5,8 +5,7 @@ import { object, string } from 'yup'
 import { addUserToOrganization } from '~/api/organizations'
 import type { AddUserToOrganizationRequest } from '~/types/organization'
 
-const organizationStore = useOrganizationStore()
-const { organization } = storeToRefs(organizationStore)
+const { organizationId } = useOrganizationContext()
 
 const form = ref<AddUserToOrganizationRequest>({
   email: '',
@@ -18,18 +17,16 @@ const addUserSchema = object({
 
 const resolver = ref(yupResolver(addUserSchema))
 
-const { isVisible, showDrawer, hideDrawer } = useDrawer()
 const toast = useAppToast()
 const queryCache = useQueryCache()
 
 const { mutate: addUser, isLoading } = useMutation({
   mutation: (request: AddUserToOrganizationRequest) =>
-    addUserToOrganization(organization.value.id, request),
+    addUserToOrganization(organizationId.value, request),
   onSuccess: () => {
     toast.showSuccess({ summary: 'Success', detail: 'User added to organization successfully' })
     queryCache.invalidateQueries({ key: ['organization-users'] })
     hideDrawer()
-    form.value.email = ''
   },
   onError: () => {
     toast.showError({ summary: 'Error', detail: 'Failed to add user to organization' })
@@ -39,6 +36,13 @@ const { mutate: addUser, isLoading } = useMutation({
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
   addUser(form.value)
+}
+
+const { isVisible, showDrawer } = useDrawer()
+
+function hideDrawer() {
+  isVisible.value = false
+  form.value.email = ''
 }
 
 defineExpose({
@@ -55,6 +59,7 @@ defineExpose({
     :pt="{
       pcCloseButton: { root: 'ml-auto' },
     }"
+    @hide="hideDrawer"
   >
     <template #header>
       <span class="text-surface-900 dark:text-surface-0 text-xl font-bold">Add User</span>

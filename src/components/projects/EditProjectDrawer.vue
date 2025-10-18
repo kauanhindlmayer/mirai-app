@@ -10,14 +10,23 @@ const { project } = useProjectContext()
 const toast = useAppToast()
 const queryCache = useQueryCache()
 
-const { isVisible, showDrawer } = useDrawer()
+const { isVisible } = useDrawer()
 
-const form = ref<Partial<Project> & { id: string }>({
-  id: project.value.id,
-  name: project.value.name,
-  description: project.value.description,
-  organizationId: project.value.organizationId,
-})
+function getFormData() {
+  return {
+    id: project.value.id,
+    name: project.value.name,
+    description: project.value.description,
+    organizationId: project.value.organizationId,
+  }
+}
+
+const form = ref<Partial<Project> & { id: string }>(getFormData())
+
+function showDrawer() {
+  form.value = getFormData()
+  isVisible.value = true
+}
 
 function hideDrawer() {
   isVisible.value = false

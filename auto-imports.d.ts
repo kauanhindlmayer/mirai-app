@@ -196,6 +196,7 @@ declare global {
   const useMeta: (typeof import('vue-meta'))['useMeta']
   const useModel: (typeof import('vue'))['useModel']
   const useMutation: (typeof import('@pinia/colada'))['useMutation']
+  const useOrganizationContext: (typeof import('./src/composables/organization-context'))['useOrganizationContext']
   const useOrganizationStore: (typeof import('./src/stores/organization'))['useOrganizationStore']
   const useOrganizationUsers: (typeof import('./src/queries/organizations'))['useOrganizationUsers']
   const useOrganizationUsersNotInProject: (typeof import('./src/queries/organizations'))['useOrganizationUsersNotInProject']
@@ -655,8 +656,8 @@ declare module 'vue' {
     readonly useMeta: UnwrapRef<(typeof import('vue-meta'))['useMeta']>
     readonly useModel: UnwrapRef<(typeof import('vue'))['useModel']>
     readonly useMutation: UnwrapRef<(typeof import('@pinia/colada'))['useMutation']>
-    readonly useOrganizationStore: UnwrapRef<
-      (typeof import('./src/stores/organization'))['useOrganizationStore']
+    readonly useOrganizationContext: UnwrapRef<
+      (typeof import('./src/composables/organization-context'))['useOrganizationContext']
     >
     readonly useOrganizationUsers: UnwrapRef<
       (typeof import('./src/queries/organizations'))['useOrganizationUsers']

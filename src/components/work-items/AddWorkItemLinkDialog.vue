@@ -61,12 +61,13 @@ function handleSearch(event: AutoCompleteCompleteEvent) {
 
 function handleCreate() {
   if (!isFormValid.value) return
-  emit('link-created', form.value)
+  emit('link-created', { ...form.value })
   hideDialog()
 }
 
 function hideDialog() {
   isVisible.value = false
+  selectedWorkItem.value = null
   Object.assign(form.value, initialValues)
 }
 

@@ -43,11 +43,6 @@ watch(
   },
 )
 
-onMounted(async () => {
-  setBreadcrumbs()
-  selectWikiPage()
-})
-
 const route = useRoute('/projects/[projectId]/wiki-pages/[wikiPageId]/')
 
 watch([() => wikiPages.value, () => route.params.wikiPageId], selectWikiPage)
@@ -158,6 +153,8 @@ function setBreadcrumbs() {
     { label: 'Wiki Pages', route: `/projects/${project.value.id}/wiki-pages` },
   ])
 }
+
+watch(project, setBreadcrumbs, { immediate: true })
 </script>
 
 <template>

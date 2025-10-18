@@ -5,9 +5,7 @@ import type { SelectFilterEvent } from 'primevue/select'
 import { object, string } from 'yup'
 import { addUserToProject } from '~/api/projects'
 
-const organizationStore = useOrganizationStore()
-const { organization } = storeToRefs(organizationStore)
-
+const { organizationId } = useOrganizationContext()
 const { project } = useProjectContext()
 
 const { isVisible, showDrawer } = useDrawer()
@@ -30,7 +28,7 @@ const {
   data: availableUsers,
   isLoading: isLoadingAvailableUsers,
   filters,
-} = useAvailableProjectUsers(organization.value.id, project.value.id, isVisible)
+} = useAvailableProjectUsers(organizationId.value, project.value.id, isVisible)
 
 const selectedUser = computed(() =>
   availableUsers.value?.items.find((u: OrganizationUserResponse) => u.id === form.value.userId),
@@ -48,11 +46,13 @@ const { data: teams, isLoading: isLoadingTeams } = useQuery({
 })
 
 const toast = useAppToast()
+const queryCache = useQueryCache()
 
 const { mutate: addUserToProjectFn } = useMutation({
-  mutation: (userId: string) => addUserToProject(organization.value.id, project.value.id, userId),
+  mutation: (userId: string) => addUserToProject(organizationId.value, project.value.id, userId),
   onSuccess: () => {
     toast.showSuccess({ detail: 'User added to project successfully' })
+    queryCache.invalidateQueries({ key: ['project-users'] })
     hideDrawer()
   },
   onError: () => {
@@ -84,6 +84,7 @@ defineExpose({
     :pt="{
       pcCloseButton: { root: 'ml-auto' },
     }"
+    @hide="hideDrawer"
   >
     <template #header>
       <span class="text-surface-900 dark:text-surface-0 text-xl font-bold">Add User</span>

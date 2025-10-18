@@ -18,10 +18,10 @@ const periods = ref([
 
 const { stats, periodInDays: selectedPeriod } = useWorkItemsStats()
 
-const organizationStore = useOrganizationStore()
-const { organization } = storeToRefs(organizationStore)
+const { organization } = useOrganizationContext()
+const { project, isLoading, isPending } = useProjectContext()
 
-const { project } = useProjectContext()
+const isLoadingProject = computed(() => isLoading.value || isPending.value)
 
 const { data: members } = useQuery({
   key: () => ['project-users', organization.value.id, project.value.id],
@@ -29,19 +29,16 @@ const { data: members } = useQuery({
   enabled: () => !!organization.value.id && !!project.value.id,
 })
 
-function setBreadcrumbs(project: Project) {
+function setBreadcrumbs() {
   pageStore.setBreadcrumbs([
     { label: organization.value.name, route: '/projects' },
-    { label: project.name, route: `/projects/${project.id}/summary` },
-    { label: 'Overview', route: `/projects/${project.id}/summary` },
-    { label: 'Summary', route: `/projects/${project.id}/summary` },
+    { label: project.value.name, route: `/projects/${project.value.id}/summary` },
+    { label: 'Overview', route: `/projects/${project.value.id}/summary` },
+    { label: 'Summary', route: `/projects/${project.value.id}/summary` },
   ])
 }
 
-onMounted(() => {
-  if (!project.value) return
-  setBreadcrumbs(project.value)
-})
+watch([organization, project], setBreadcrumbs, { immediate: true })
 </script>
 
 <template>
@@ -67,7 +64,7 @@ onMounted(() => {
         <div class="flex justify-between items-center">
           <div class="font-semibold text-xl">About this Project</div>
           <Button
-            v-if="project.description"
+            v-if="!isLoadingProject"
             icon="pi pi-pencil"
             severity="secondary"
             variant="text"
@@ -75,7 +72,7 @@ onMounted(() => {
             @click="editProjectDrawerRef?.showDrawer"
           />
         </div>
-        <div v-if="project.description">
+        <div v-if="isLoadingProject || project.description">
           <div>{{ project.description }}</div>
         </div>
         <div v-else class="flex justify-between items-center">

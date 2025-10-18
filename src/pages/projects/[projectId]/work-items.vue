@@ -80,6 +80,7 @@ const { data: workItems, isLoading } = useQuery({
   key: () => ['work-items', filters.value],
   query: () => listWorkItems(project.value.id, filters.value),
   placeholderData: (previousData) => previousData,
+  enabled: () => !!project.value.id,
 })
 
 function setBreadcrumbs() {
@@ -90,7 +91,7 @@ function setBreadcrumbs() {
   ])
 }
 
-onMounted(setBreadcrumbs)
+watch(project, setBreadcrumbs, { immediate: true })
 </script>
 
 <template>

@@ -8,10 +8,8 @@ defineProps<{ disabled?: boolean }>()
 
 const assignee = defineModel<AssigneeResponse | null>()
 
-const organizationStore = useOrganizationStore()
+const { organizationId } = useOrganizationContext()
 const { project } = useProjectContext()
-
-const { organization } = storeToRefs(organizationStore)
 
 const searchTerm = ref('')
 const page = ref(1)
@@ -25,7 +23,7 @@ const {
 } = useQuery({
   key: () => ['project-users', project.value.id, searchTerm.value, page.value],
   query: () =>
-    getProjectUsers(organization.value.id, project.value.id, searchTerm.value, page.value, 10),
+    getProjectUsers(organizationId.value, project.value.id, searchTerm.value, page.value, 10),
   enabled: () => false,
 })
 
