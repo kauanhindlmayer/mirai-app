@@ -2,84 +2,115 @@
 import type { MenuItem } from 'primevue/menuitem'
 
 const { project } = useProjectContext()
+const { organization } = useOrganizationContext()
 
-const menuItems = computed<MenuItem[]>(() => [
-  {
-    label: 'Overview',
-    icon: 'pi pi-fw pi-home',
-    items: [
+const menuItems = computed<MenuItem[]>(() => {
+  if (!project.value.id) {
+    return [
       {
-        label: 'Summary',
-        icon: 'pi pi-fw pi-file',
-        to: `/projects/${project.value.id}/summary`,
+        label: 'Overview',
+        icon: 'pi pi-fw pi-home',
+        items: [
+          {
+            label: 'Projects',
+            icon: 'pi pi-fw pi-list',
+            to: `/organizations/${organization.value.id}/projects`,
+          },
+        ],
       },
+      { separator: true },
       {
-        label: 'Dashboards',
-        icon: 'pi pi-fw pi-chart-bar',
-        to: `/projects/${project.value.id}/dashboards`,
-      },
-      {
-        label: 'Wiki Pages',
-        icon: 'pi pi-fw pi-book',
-        to: `/projects/${project.value.id}/wiki-pages`,
-      },
-    ],
-  },
-  { separator: true },
-  {
-    label: 'Boards',
-    icon: 'pi pi-fw pi-th-large',
-    items: [
-      {
-        label: 'Work Items',
-        icon: 'pi pi-fw pi-list',
-        to: `/projects/${project.value.id}/work-items`,
-      },
-      {
-        label: 'Boards',
-        icon: 'pi pi-fw pi-th-large',
-        to: `/projects/${project.value.id}/boards`,
-      },
-      {
-        label: 'Backlogs',
-        icon: 'pi pi-fw pi-calendar',
-        to: `/projects/${project.value.id}/backlogs`,
-      },
-      {
-        label: 'Sprints',
-        icon: 'pi pi-fw pi-calendar-times',
-        to: `/projects/${project.value.id}/sprints`,
-      },
-      {
-        label: 'Personas',
-        icon: 'pi pi-fw pi-users',
-        to: `/projects/${project.value.id}/personas`,
-      },
-      {
-        label: 'Retrospectives',
-        icon: 'pi pi-fw pi-comments',
-        to: `/projects/${project.value.id}/retrospectives`,
-      },
-      {
-        label: 'Tags',
-        icon: 'pi pi-fw pi-tags',
-        to: `/projects/${project.value.id}/tags`,
-      },
-    ],
-  },
-  { separator: true },
-  {
-    label: 'Settings',
-    icon: 'pi pi-fw pi-cog',
-    items: [
-      {
-        label: 'Project Settings',
+        label: 'Settings',
         icon: 'pi pi-fw pi-cog',
-        to: `/projects/${project.value.id}/settings`,
+        items: [
+          {
+            label: 'Organization Settings',
+            icon: 'pi pi-fw pi-cog',
+            to: `/organizations/${organization.value.id}/settings`,
+          },
+        ],
       },
-    ],
-  },
-])
+    ]
+  }
+
+  return [
+    {
+      label: 'Overview',
+      icon: 'pi pi-fw pi-home',
+      items: [
+        {
+          label: 'Summary',
+          icon: 'pi pi-fw pi-file',
+          to: `/projects/${project.value.id}/summary`,
+        },
+        {
+          label: 'Dashboards',
+          icon: 'pi pi-fw pi-chart-bar',
+          to: `/projects/${project.value.id}/dashboards`,
+        },
+        {
+          label: 'Wiki Pages',
+          icon: 'pi pi-fw pi-book',
+          to: `/projects/${project.value.id}/wiki-pages`,
+        },
+      ],
+    },
+    { separator: true },
+    {
+      label: 'Boards',
+      icon: 'pi pi-fw pi-th-large',
+      items: [
+        {
+          label: 'Work Items',
+          icon: 'pi pi-fw pi-list',
+          to: `/projects/${project.value.id}/work-items`,
+        },
+        {
+          label: 'Boards',
+          icon: 'pi pi-fw pi-th-large',
+          to: `/projects/${project.value.id}/boards`,
+        },
+        {
+          label: 'Backlogs',
+          icon: 'pi pi-fw pi-calendar',
+          to: `/projects/${project.value.id}/backlogs`,
+        },
+        {
+          label: 'Sprints',
+          icon: 'pi pi-fw pi-calendar-times',
+          to: `/projects/${project.value.id}/sprints`,
+        },
+        {
+          label: 'Personas',
+          icon: 'pi pi-fw pi-users',
+          to: `/projects/${project.value.id}/personas`,
+        },
+        {
+          label: 'Retrospectives',
+          icon: 'pi pi-fw pi-comments',
+          to: `/projects/${project.value.id}/retrospectives`,
+        },
+        {
+          label: 'Tags',
+          icon: 'pi pi-fw pi-tags',
+          to: `/projects/${project.value.id}/tags`,
+        },
+      ],
+    },
+    { separator: true },
+    {
+      label: 'Settings',
+      icon: 'pi pi-fw pi-cog',
+      items: [
+        {
+          label: 'Project Settings',
+          icon: 'pi pi-fw pi-cog',
+          to: `/projects/${project.value.id}/settings`,
+        },
+      ],
+    },
+  ]
+})
 </script>
 
 <template>

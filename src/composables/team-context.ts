@@ -1,5 +1,4 @@
 import { defineQuery, useQuery } from '@pinia/colada'
-import { useStorage } from '@vueuse/core'
 import { listTeams } from '~/api/teams'
 import type { Team } from '~/types/team'
 import { useProjectContext } from './project-context'
@@ -10,35 +9,25 @@ import { useProjectContext } from './project-context'
  * remembers the last selected team.
  */
 export const useTeamContext = defineQuery(() => {
-  const route = useRoute()
   const { projectId } = useProjectContext()
 
-  const queryTeamId = computed(() => route.query.teamId as string | undefined)
-
-  const storageKey = computed(() => `team-selection-${projectId.value}`)
-  const persistedTeamId = useStorage<string | null>(storageKey.value, null)
-
   const teamId = computed({
-    get: () => queryTeamId.value || persistedTeamId.value,
+    get: () => {
+      const key = `team-selection-${projectId.value}`
+      return localStorage.getItem(key)
+    },
     set: (value: string | null) => {
-      persistedTeamId.value = value
+      const key = `team-selection-${projectId.value}`
+      if (value) {
+        localStorage.setItem(key, value)
+      } else {
+        localStorage.removeItem(key)
+      }
     },
   })
 
-  watch(queryTeamId, (id) => {
-    if (id) {
-      persistedTeamId.value = id
-    }
-  })
-
-  watch(projectId, () => {
-    if (!queryTeamId.value) {
-      persistedTeamId.value = null
-    }
-  })
-
   function setTeamId(id: string | null) {
-    persistedTeamId.value = id
+    teamId.value = id
   }
 
   return {

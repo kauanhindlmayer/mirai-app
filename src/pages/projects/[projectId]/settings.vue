@@ -13,7 +13,7 @@ const activeTab = ref('overview')
 
 function setBreadcrumbs() {
   pageStore.setBreadcrumbs([
-    { label: organization.value.name, route: '/projects' },
+    { label: organization.value.name, route: `/organizations/${organization.value.id}/projects` },
     { label: project.value.name, route: `/projects/${project.value.id}/summary` },
     { label: 'Settings', route: `/projects/${project.value.id}/settings` },
   ])

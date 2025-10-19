@@ -1,6 +1,9 @@
 <script setup lang="ts">
-definePage({
-  redirect: '/projects',
+const { organizationId } = useOrganizationContext()
+const router = useRouter()
+
+onMounted(() => {
+  router.replace(`/organizations/${organizationId.value || 'default'}/projects`)
 })
 </script>
 

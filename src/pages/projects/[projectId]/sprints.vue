@@ -25,7 +25,7 @@ function selectFirstSprint() {
   selectedSprint.value = sprints.value[0]
 }
 
-watch(sprints, selectFirstSprint)
+watch(sprints, selectFirstSprint, { immediate: true })
 
 watch(
   () => selectedSprint.value,

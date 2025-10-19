@@ -68,7 +68,7 @@ const { mutate: deleteProjectFn, isLoading: isDeleting } = useMutation({
   mutation: () => deleteProject(project.value.id, organizationId.value),
   onSuccess: () => {
     toast.showSuccess({ detail: 'Project deleted successfully' })
-    router.push('/projects')
+    router.push(`/organizations/${organizationId.value}/projects`)
   },
   onError: () => {
     toast.showError({ detail: 'An error occurred while deleting the project' })

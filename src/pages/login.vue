@@ -27,7 +27,7 @@ const { mutate: loginUserFn, isLoading } = useMutation({
   },
   onSuccess: (user: User) => {
     userStore.setUser(user)
-    router.push('/projects')
+    router.push('/')
   },
   onError: displayError,
 })

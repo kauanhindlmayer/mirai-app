@@ -13,6 +13,8 @@ const createOrganizationDrawerRef = useTemplateRef<InstanceType<typeof CreateOrg
   'createOrganizationDrawer',
 )
 
+const route = useRoute('/organizations/[organizationId]/projects')
+const router = useRouter()
 const { organization, setOrganization } = useOrganizationContext()
 
 const isOrganizationSelected = computed(() => !!organization.value?.id)
@@ -33,12 +35,26 @@ const { data: projects, isLoading: isLoadingProjects } = useQuery({
   enabled: () => !!organization.value.id,
 })
 
-function selectFirstOrganization() {
-  if (!organizations.value || organizations.value.length === 0) return
-  setOrganization(organizations.value[0])
+function handleOrganizationSelection() {
+  if (!organizations.value?.length) return
+
+  const routeOrganizationId = route.params.organizationId
+  const isDefaultRoute = !routeOrganizationId || routeOrganizationId === 'default'
+
+  if (isDefaultRoute) {
+    const firstOrganization = organizations.value[0]
+    setOrganization(firstOrganization)
+    router.replace(`/organizations/${firstOrganization.id}/projects`)
+    return
+  }
+
+  if (routeOrganizationId !== organization.value?.id) {
+    const routeOrganization = organizations.value.find((org) => org.id === routeOrganizationId)
+    if (routeOrganization) setOrganization(routeOrganization)
+  }
 }
 
-watch(organizations, selectFirstOrganization, { immediate: true })
+watch(organizations, handleOrganizationSelection, { immediate: true })
 </script>
 
 <template>
@@ -46,12 +62,12 @@ watch(organizations, selectFirstOrganization, { immediate: true })
     <div class="flex items-center space-x-1">
       <Select
         :model-value="organization"
-        @update:model-value="setOrganization"
         :options="organizations"
         :loading="isLoadingOrganizations"
         placeholder="Select an organization..."
         class="my-4"
         option-label="name"
+        @update:model-value="setOrganization"
       >
         <template #footer>
           <div class="p-1">
