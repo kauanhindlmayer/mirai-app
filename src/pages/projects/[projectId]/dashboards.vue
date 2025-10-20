@@ -6,18 +6,17 @@ const pageStore = usePageStore()
 pageStore.setTitle('Dashboard - Overview')
 
 const { project } = useProjectContext()
-
-const { teamId, selectedTeam, teams, isLoadingTeams } = useTeamSelection()
+const { team, teams, isLoadingTeams } = useTeamSelection()
 
 const {
   data: dashboardData,
   isLoading,
   refetch: refetchDashboardData,
 } = useQuery({
-  key: () => ['dashboard', teamId.value!],
-  query: () => getDashboardData(teamId.value!),
+  key: () => ['dashboard', team.value.id],
+  query: () => getDashboardData(team.value.id),
   placeholderData: () => ({}) as DashboardResponse,
-  enabled: () => !!teamId.value,
+  enabled: () => !!team.value.id,
 })
 
 const dateRange = computed(() => {
@@ -53,7 +52,7 @@ watch(project, setBreadcrumbs, { immediate: true })
       <Toolbar>
         <template #start>
           <Select
-            v-model="selectedTeam"
+            v-model="team"
             :options="teams"
             :loading="isLoadingTeams"
             option-label="name"

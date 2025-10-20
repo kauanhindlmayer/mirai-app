@@ -15,7 +15,7 @@ const createOrganizationDrawerRef = useTemplateRef<InstanceType<typeof CreateOrg
 
 const route = useRoute('/organizations/[organizationId]/projects')
 const router = useRouter()
-const { organization, setOrganization } = useOrganizationContext()
+const { organization } = useOrganizationContext()
 
 const isOrganizationSelected = computed(() => !!organization.value?.id)
 const hasNoOrganizations = computed(
@@ -23,16 +23,16 @@ const hasNoOrganizations = computed(
 )
 const hasNoProjects = computed(() => !isLoadingProjects.value && projects.value?.length === 0)
 
-const { data: organizations, isLoading: isLoadingOrganizations } = useQuery({
-  key: () => ['organizations'],
-  query: () => listOrganizations(),
-  placeholderData: () => [] as Organization[],
-})
-
 const { data: projects, isLoading: isLoadingProjects } = useQuery({
   key: () => ['projects', organization.value.id],
   query: () => listProjects(organization.value.id),
   enabled: () => !!organization.value.id,
+})
+
+const { data: organizations, isLoading: isLoadingOrganizations } = useQuery({
+  key: () => ['organizations'],
+  query: () => listOrganizations(),
+  placeholderData: () => [] as Organization[],
 })
 
 function handleOrganizationSelection() {
@@ -43,14 +43,14 @@ function handleOrganizationSelection() {
 
   if (isDefaultRoute) {
     const firstOrganization = organizations.value[0]
-    setOrganization(firstOrganization)
+    organization.value = firstOrganization
     router.replace(`/organizations/${firstOrganization.id}/projects`)
     return
   }
 
   if (routeOrganizationId !== organization.value?.id) {
     const routeOrganization = organizations.value.find((org) => org.id === routeOrganizationId)
-    if (routeOrganization) setOrganization(routeOrganization)
+    if (routeOrganization) organization.value = routeOrganization
   }
 }
 
@@ -61,13 +61,12 @@ watch(organizations, handleOrganizationSelection, { immediate: true })
   <header class="flex justify-between items-center">
     <div class="flex items-center space-x-1">
       <Select
-        :model-value="organization"
+        v-model="organization"
         :options="organizations"
         :loading="isLoadingOrganizations"
         placeholder="Select an organization..."
         class="my-4"
         option-label="name"
-        @update:model-value="setOrganization"
       >
         <template #footer>
           <div class="p-1">

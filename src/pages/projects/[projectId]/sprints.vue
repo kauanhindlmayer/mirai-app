@@ -3,10 +3,11 @@ import type { TreeNode } from 'primevue/treenode'
 import CreateSprintDialog from '~/components/sprints/CreateSprintDialog.vue'
 
 const pageStore = usePageStore()
-const { project } = useProjectContext()
 const { onMenuToggle } = useLayout()
 
-const { selectedTeam, teams, isLoadingTeams } = useTeamSelection()
+const { project } = useProjectContext()
+const { team, teams, isLoadingTeams } = useTeamSelection()
+
 const selectedSprint = ref<Sprint | null>(null)
 const selectedBacklogLevel = ref<BacklogLevel>(BacklogLevel.UserStory)
 
@@ -14,9 +15,9 @@ const createSprintDialogRef =
   useTemplateRef<InstanceType<typeof CreateSprintDialog>>('createSprintDialog')
 
 const { data: sprints, isLoading: isLoadingSprints } = useQuery({
-  key: () => ['sprints', selectedTeam.value?.id || ''],
-  query: () => listSprints(selectedTeam.value!.id),
-  enabled: () => !!selectedTeam.value,
+  key: () => ['sprints', team.value.id],
+  query: () => listSprints(team.value.id),
+  enabled: () => !!team.value.id,
   placeholderData: () => [] as Sprint[],
 })
 
@@ -31,19 +32,14 @@ watch(
   () => selectedSprint.value,
   async (newSelectedSprint) => {
     if (!newSelectedSprint) return
-    pageStore.setTitle(`${selectedTeam.value?.name} ${newSelectedSprint.name} Backlog - Boards`)
+    pageStore.setTitle(`${team.value.name} ${newSelectedSprint.name} Backlog - Boards`)
   },
 )
 
 const { data: backlog, isLoading: isLoadingBacklog } = useQuery({
-  key: () => [
-    'backlog',
-    selectedTeam.value?.id || '',
-    selectedSprint.value?.id || '',
-    selectedBacklogLevel.value,
-  ],
+  key: () => ['backlog', team.value.id, selectedSprint.value?.id ?? '', selectedBacklogLevel.value],
   query: async () =>
-    getBacklog(selectedTeam.value!.id, selectedSprint.value!.id, selectedBacklogLevel.value),
+    getBacklog(team.value.id, selectedSprint.value!.id, selectedBacklogLevel.value),
   enabled: () => !!selectedSprint.value,
   placeholderData: () => [] as BacklogResponse[],
 })
@@ -111,12 +107,7 @@ watch(project, setBreadcrumbs, { immediate: true })
       <div class="board-container card">
         <div class="flex justify-between items-center mb-4">
           <div class="flex items-center space-x-1">
-            <Select
-              v-model="selectedTeam"
-              :options="teams"
-              :loading="isLoadingTeams"
-              option-label="name"
-            />
+            <Select v-model="team" :options="teams" :loading="isLoadingTeams" option-label="name" />
             <Button
               icon="pi pi-users"
               severity="secondary"

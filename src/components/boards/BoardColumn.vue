@@ -104,13 +104,13 @@ async function onChange(event: DraggableEvent<Card>) {
 
 const { teamId } = useTeamContext()
 
-const initialValues: CreateWorkItemRequest = {
+const getInitialValues = (): CreateWorkItemRequest => ({
   title: '',
   type: WorkItemType.UserStory,
-  assignedTeamId: teamId.value!,
-}
+  assignedTeamId: teamId.value,
+})
 
-const form = ref<CreateWorkItemRequest>({ ...initialValues })
+const form = ref<CreateWorkItemRequest>(getInitialValues())
 
 const createWorkItemSchema = object({
   title: string().required('Title is a required field'),
@@ -127,7 +127,7 @@ function togglePopover(event: Event) {
 
 function hidePopover() {
   popover.value?.hide()
-  Object.assign(form.value, initialValues)
+  Object.assign(form.value, getInitialValues())
 }
 
 const workItemTypeOptions = formatEnumOptions(WorkItemType)

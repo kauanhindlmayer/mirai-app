@@ -1,82 +1,44 @@
-import { defineQuery, useQuery } from '@pinia/colada'
+import { useQuery } from '@pinia/colada'
+import { StorageSerializers, useStorage } from '@vueuse/core'
 import { listTeams } from '~/api/teams'
 import type { Team } from '~/types/team'
 import { useProjectContext } from './project-context'
 
-/**
- * Provides access to the current team context with per-project persistence.
- * Team selection is persisted in localStorage per project, so each project
- * remembers the last selected team.
- */
-export const useTeamContext = defineQuery(() => {
-  const { projectId } = useProjectContext()
-
-  const teamId = computed({
-    get: () => {
-      const key = `team-selection-${projectId.value}`
-      return localStorage.getItem(key)
-    },
-    set: (value: string | null) => {
-      const key = `team-selection-${projectId.value}`
-      if (value) {
-        localStorage.setItem(key, value)
-      } else {
-        localStorage.removeItem(key)
-      }
-    },
+export function useTeamContext() {
+  const team = useStorage<Team>('team', {} as Team, undefined, {
+    serializer: StorageSerializers.object,
   })
 
-  function setTeamId(id: string | null) {
-    teamId.value = id
-  }
+  const teamId = computed(() => team.value.id ?? '')
 
   return {
+    team,
     teamId,
-    setTeamId,
   }
-})
+}
 
-/**
- * Fetches all teams for the current project and provides team selection logic.
- * Automatically selects the first team if no team is selected.
- */
-export const useTeamSelection = defineQuery(() => {
+export function useTeamSelection() {
   const { projectId } = useProjectContext()
-  const { teamId, setTeamId } = useTeamContext()
+  const { team, teamId } = useTeamContext()
 
   const query = useQuery({
     key: () => ['teams', projectId.value],
     query: () => listTeams(projectId.value),
     enabled: () => !!projectId.value,
-    placeholderData: () => [] as Team[],
   })
 
-  const selectedTeam = computed(() => {
-    if (!teamId.value || !query.data.value?.length) return null
-    return query.data.value.find((team) => team.id === teamId.value) ?? null
-  })
-
-  watch(
-    query.data,
-    (newTeams) => {
-      if (newTeams?.length && !teamId.value) {
-        setTeamId(newTeams[0].id)
-      }
-    },
-    { immediate: true },
-  )
-
-  function setSelectedTeam(team: Team | null) {
-    setTeamId(team?.id ?? null)
+  function selectFirstTeam() {
+    if (team.value.id || !query.data.value?.length) return
+    team.value = query.data.value[0]
   }
+
+  watch(query.data, selectFirstTeam, { immediate: true })
 
   return {
     ...query,
-    teamId,
     teams: query.data,
-    selectedTeam,
-    setSelectedTeam,
-    setTeamId,
     isLoadingTeams: query.isLoading,
+    team,
+    teamId,
   }
-})
+}

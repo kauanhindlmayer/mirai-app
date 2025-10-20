@@ -5,20 +5,20 @@ import { formatEnumOptions } from '~/utils'
 const pageStore = usePageStore()
 pageStore.setTitle('Backlogs - Boards')
 
-const { project } = useProjectContext()
-
 const { onMenuToggle } = useLayout()
 
-const { selectedTeam, teams, isLoadingTeams } = useTeamSelection()
+const { project } = useProjectContext()
+const { team, teams, isLoadingTeams } = useTeamSelection()
+
 const selectedBacklogLevel = ref(BacklogLevel.Feature)
 const backlogLevelOptions = formatEnumOptions(BacklogLevel)
 
 watch(
-  () => selectedTeam.value,
-  async (newSelectedTeam) => {
-    if (!newSelectedTeam) return
+  () => team.value,
+  async (newTeam) => {
+    if (!newTeam) return
     const backlogLevelName = getBacklogLevelLabel(selectedBacklogLevel.value)
-    pageStore.setTitle(`${selectedTeam.value?.name} ${backlogLevelName} Backlog - Boards`)
+    pageStore.setTitle(`${newTeam.name} ${backlogLevelName} Backlog - Boards`)
   },
 )
 
@@ -65,9 +65,9 @@ function openWorkItemDialog(workItemId: string) {
 }
 
 const { data: backlog, isLoading: isBacklogLoading } = useQuery({
-  key: () => ['backlog', selectedTeam.value?.id || '', selectedBacklogLevel.value],
-  query: async () => getBacklog(selectedTeam.value!.id, undefined, selectedBacklogLevel.value),
-  enabled: () => !!selectedTeam.value,
+  key: () => ['backlog', team.value.id, selectedBacklogLevel.value],
+  query: () => getBacklog(team.value.id, undefined, selectedBacklogLevel.value),
+  enabled: () => !!team.value.id,
   placeholderData: () => [] as BacklogResponse[],
 })
 
@@ -88,12 +88,7 @@ watch(project, setBreadcrumbs, { immediate: true })
       <div class="board-container card">
         <div class="flex justify-between items-center mb-4">
           <div class="flex items-center space-x-1">
-            <Select
-              v-model="selectedTeam"
-              :options="teams"
-              :loading="isLoadingTeams"
-              option-label="name"
-            />
+            <Select v-model="team" :options="teams" :loading="isLoadingTeams" option-label="name" />
             <Button
               icon="pi pi-users"
               severity="secondary"

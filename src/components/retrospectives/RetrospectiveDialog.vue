@@ -64,9 +64,9 @@ const queryCache = useQueryCache()
 
 const { mutate: createRetrospectiveFn, isLoading: isCreating } = useMutation({
   mutation: (data: Partial<Retrospective>) =>
-    createRetrospective({ ...data, teamId: teamId.value! }),
+    createRetrospective({ ...data, teamId: teamId.value }),
   onSuccess: () => {
-    queryCache.invalidateQueries({ key: ['retrospectives', teamId.value!] })
+    queryCache.invalidateQueries({ key: ['retrospectives', teamId.value] })
     hideDialog()
   },
 })
@@ -75,7 +75,7 @@ const { mutate: updateRetrospectiveFn, isLoading: isUpdating } = useMutation({
   mutation: (data: Partial<Retrospective>) =>
     updateRetrospective(props.retrospective!.id, { ...data }),
   onSuccess: () => {
-    queryCache.invalidateQueries({ key: ['retrospectives', teamId.value!] })
+    queryCache.invalidateQueries({ key: ['retrospectives', teamId.value] })
     queryCache.invalidateQueries({ key: ['retrospective', props.retrospective!.id] })
     hideDialog()
   },

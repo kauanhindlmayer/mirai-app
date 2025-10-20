@@ -8,18 +8,18 @@ const pageStore = usePageStore()
 pageStore.setTitle('Retrospectives - Boards')
 
 const { project } = useProjectContext()
+const { team, teams, isLoadingTeams } = useTeamSelection()
 
 const route = useRoute('/projects/[projectId]/retrospectives/[[retrospectiveId]]')
 const router = useRouter()
 
-const { teamId, selectedTeam, teams, isLoadingTeams } = useTeamSelection()
 const selectedRetrospective = ref<RetrospectiveSummary | null>(null)
 const retrospectiveId = computed(() => selectedRetrospective.value?.id ?? '')
 
 const { data: retrospectives, isLoading } = useQuery({
-  key: () => ['retrospectives', teamId.value!],
-  query: () => listRetrospectives(teamId.value!),
-  enabled: () => !!teamId.value,
+  key: () => ['retrospectives', team.value.id],
+  query: () => listRetrospectives(team.value.id),
+  enabled: () => !!team.value.id,
   placeholderData: () => [] as RetrospectiveSummary[],
 })
 
@@ -94,7 +94,7 @@ async function confirmDeleteRetrospective() {
 const { mutate: deleteRetrospectiveFn } = useMutation({
   mutation: () => deleteRetrospective(retrospectiveId.value),
   onSuccess: () => {
-    queryCache.invalidateQueries({ key: ['retrospectives', teamId.value!] })
+    queryCache.invalidateQueries({ key: ['retrospectives', team.value.id] })
     queryCache.invalidateQueries({ key: ['retrospective', retrospectiveId.value] })
     selectedRetrospective.value = null
     retrospectiveToEdit.value = undefined
@@ -172,12 +172,7 @@ onBeforeMount(async () => {
       <div class="board-container card">
         <div class="flex justify-between items-center mb-4">
           <div class="flex items-center space-x-1">
-            <Select
-              v-model="selectedTeam"
-              :options="teams"
-              :loading="isLoadingTeams"
-              option-label="name"
-            />
+            <Select v-model="team" :options="teams" :loading="isLoadingTeams" option-label="name" />
             <Button
               icon="pi pi-users"
               severity="secondary"

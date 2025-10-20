@@ -14,7 +14,7 @@ const { teams, isLoading } = useTeamSelection()
         <ProgressSpinner size="50" strokeWidth="4" />
       </div>
 
-      <DataTable v-else-if="teams && teams.length > 0" :value="teams" stripedRows>
+      <DataTable v-else-if="teams?.length" :value="teams" stripedRows>
         <Column field="name" header="Name">
           <template #body="{ data }">
             <div class="flex items-center justify-between w-full">
