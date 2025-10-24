@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import { useMutation, useQueryCache } from '@pinia/colada'
 import type { FormSubmitEvent } from '@primevue/forms'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import { date, object, string } from 'yup'
 import type { CreateSprintRequest } from '~/types/sprint'
+
+const { team } = useTeamContext()
+
+const toast = useAppToast()
+const queryCache = useQueryCache()
 
 const initialValues: CreateSprintRequest = {
   name: '',
@@ -20,9 +26,19 @@ const createSprintSchema = object({
 
 const resolver = ref(yupResolver(createSprintSchema))
 
+const { mutate: createSprintFn, isLoading } = useMutation({
+  mutation: (request: CreateSprintRequest) => createSprint(team.value.id, request),
+  onSuccess: () => {
+    queryCache.invalidateQueries({ key: ['sprints', team.value.id] })
+    toast.showSuccess({ detail: 'Sprint created successfully' })
+    hideDialog()
+  },
+  onError: displayError,
+})
+
 async function onFormSubmit({ valid }: FormSubmitEvent) {
   if (!valid) return
-  hideDialog()
+  createSprintFn(form.value)
 }
 
 const { isVisible, showDialog } = useDialog()
@@ -77,7 +93,7 @@ defineExpose({
 
       <div class="flex justify-end gap-2 mt-4">
         <Button type="button" label="Cancel" severity="secondary" @click="hideDialog" />
-        <Button type="submit" label="Create" />
+        <Button type="submit" label="Create" :disabled="isLoading" />
       </div>
     </Form>
   </Dialog>
