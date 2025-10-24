@@ -146,12 +146,14 @@ const createBoardColumnSchema = object({
 
 const resolver = ref(yupResolver(createBoardColumnSchema))
 
+const toast = useAppToast()
 const queryCache = useQueryCache()
 
 const { mutate: createColumnFn } = useMutation({
   mutation: (payload: CreateBoardColumnRequest) => createColumn(board.id, payload),
   onSuccess: () => {
     queryCache.invalidateQueries({ key: ['board', board.id] })
+    toast.showSuccess({ detail: 'Column created successfully' })
     hideDrawer()
   },
   onError: displayError,

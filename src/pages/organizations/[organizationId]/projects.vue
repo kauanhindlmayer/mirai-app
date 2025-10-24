@@ -6,6 +6,11 @@ const pageStore = usePageStore()
 pageStore.setTitle('Projects - Home')
 pageStore.resetBreadcrumbs()
 
+const route = useRoute('/organizations/[organizationId]/projects')
+const router = useRouter()
+
+const { organization } = useOrganizationContext()
+
 const createProjectDrawerRef =
   useTemplateRef<InstanceType<typeof CreateProjectDrawer>>('createProjectDrawer')
 
@@ -13,15 +18,9 @@ const createOrganizationDrawerRef = useTemplateRef<InstanceType<typeof CreateOrg
   'createOrganizationDrawer',
 )
 
-const route = useRoute('/organizations/[organizationId]/projects')
-const router = useRouter()
-const { organization } = useOrganizationContext()
-
-const isOrganizationSelected = computed(() => !!organization.value?.id)
-const hasNoOrganizations = computed(
-  () => !isLoadingOrganizations.value && organizations.value?.length === 0,
-)
-const hasNoProjects = computed(() => !isLoadingProjects.value && projects.value?.length === 0)
+const isOrganizationSelected = computed(() => !!organization.value.id)
+const hasNoOrganizations = computed(() => !isLoading.value && !organizations.value?.length)
+const hasNoProjects = computed(() => !isLoadingProjects.value && !projects.value?.length)
 
 const { data: projects, isLoading: isLoadingProjects } = useQuery({
   key: () => ['projects', organization.value.id],
@@ -29,7 +28,7 @@ const { data: projects, isLoading: isLoadingProjects } = useQuery({
   enabled: () => !!organization.value.id,
 })
 
-const { data: organizations, isLoading: isLoadingOrganizations } = useQuery({
+const { data: organizations, isLoading } = useQuery({
   key: () => ['organizations'],
   query: () => listOrganizations(),
   placeholderData: () => [] as Organization[],
@@ -63,7 +62,7 @@ watch(organizations, handleOrganizationSelection, { immediate: true })
       <Select
         v-model="organization"
         :options="organizations"
-        :loading="isLoadingOrganizations"
+        :loading="isLoading"
         placeholder="Select an organization..."
         class="my-4"
         option-label="name"

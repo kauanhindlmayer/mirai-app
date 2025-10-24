@@ -60,6 +60,8 @@ const createRetrospectiveSchema = object({
 })
 
 const resolver = ref(yupResolver(createRetrospectiveSchema))
+
+const toast = useAppToast()
 const queryCache = useQueryCache()
 
 const { mutate: createRetrospectiveFn, isLoading: isCreating } = useMutation({
@@ -67,6 +69,7 @@ const { mutate: createRetrospectiveFn, isLoading: isCreating } = useMutation({
     createRetrospective({ ...data, teamId: teamId.value }),
   onSuccess: () => {
     queryCache.invalidateQueries({ key: ['retrospectives', teamId.value] })
+    toast.showSuccess({ detail: 'Retrospective created successfully' })
     hideDialog()
   },
 })
@@ -77,6 +80,7 @@ const { mutate: updateRetrospectiveFn, isLoading: isUpdating } = useMutation({
   onSuccess: () => {
     queryCache.invalidateQueries({ key: ['retrospectives', teamId.value] })
     queryCache.invalidateQueries({ key: ['retrospective', props.retrospective!.id] })
+    toast.showSuccess({ detail: 'Retrospective updated successfully' })
     hideDialog()
   },
 })

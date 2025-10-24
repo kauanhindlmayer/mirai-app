@@ -6,7 +6,7 @@ export function useOrganizationContext() {
     serializer: StorageSerializers.object,
   })
 
-  const organizationId = computed(() => organization.value?.id ?? '')
+  const organizationId = computed(() => organization.value.id)
 
   return {
     organization,

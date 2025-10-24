@@ -22,12 +22,14 @@ const newTag = ref<CreateTagRequest>({
   color: '',
 })
 
+const toast = useAppToast()
 const queryCache = useQueryCache()
 
 const { mutate: addTag } = useMutation({
   mutation: (_: MouseEvent) => createTag(project.value.id, newTag.value),
   onSuccess: async () => {
     await queryCache.invalidateQueries({ key: ['tags'] })
+    toast.showSuccess({ detail: 'Tag created successfully' })
     newTag.value = { name: '', description: '', color: '' }
   },
   onError: displayError,
@@ -44,6 +46,7 @@ const { mutate: updateTagFn } = useMutation({
   },
   onSuccess: async () => {
     await queryCache.invalidateQueries({ key: ['tags'] })
+    toast.showSuccess({ detail: 'Tag updated successfully' })
   },
   onError: displayError,
 })
@@ -75,6 +78,7 @@ const { mutate: deleteTagFn } = useMutation({
     ),
   onSuccess: async () => {
     await queryCache.invalidateQueries({ key: ['tags'] })
+    toast.showSuccess({ detail: 'Selected tags deleted successfully' })
     selectedTags.value = []
   },
   onError: displayError,

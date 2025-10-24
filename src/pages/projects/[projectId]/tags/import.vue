@@ -32,12 +32,14 @@ function formatSize(bytes: number) {
   return `${formattedSize} ${sizes[i]}`
 }
 
+const toast = useAppToast()
 const queryCache = useQueryCache()
 
 const { mutate: createTagImportJobFn } = useMutation({
   mutation: (event: FileUploadSelectEvent) => createTagImportJob(project.value.id, event.files[0]),
   onSuccess: async () => {
     await queryCache.invalidateQueries({ key: ['tagImportJobs', project.value.id] })
+    toast.showSuccess({ detail: 'Tag import job created successfully' })
   },
   onError: displayError,
 })

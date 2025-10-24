@@ -660,9 +660,6 @@ declare module 'vue' {
     readonly useOrganizationContext: UnwrapRef<
       (typeof import('./src/composables/organization-context'))['useOrganizationContext']
     >
-    readonly useOrganizationSelection: UnwrapRef<
-      (typeof import('./src/composables/organization-context'))['useOrganizationSelection']
-    >
     readonly useOrganizationUsers: UnwrapRef<
       (typeof import('./src/queries/organizations'))['useOrganizationUsers']
     >

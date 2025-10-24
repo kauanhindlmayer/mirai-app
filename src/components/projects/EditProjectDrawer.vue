@@ -51,6 +51,9 @@ const { mutate: updateProjectFn, isLoading } = useMutation({
     hideDrawer()
     return { oldProject, newProject }
   },
+  onSuccess: () => {
+    toast.showSuccess({ detail: 'Project updated successfully' })
+  },
   onSettled: (_data, _error, _vars, { newProject }) => {
     if (!newProject) return
     queryCache.invalidateQueries({ key: ['project', newProject.id] })

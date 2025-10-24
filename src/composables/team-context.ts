@@ -9,7 +9,7 @@ export function useTeamContext() {
     serializer: StorageSerializers.object,
   })
 
-  const teamId = computed(() => team.value.id ?? '')
+  const teamId = computed(() => team.value.id)
 
   return {
     team,

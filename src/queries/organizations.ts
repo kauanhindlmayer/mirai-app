@@ -1,8 +1,7 @@
 import { defineQuery, useQuery } from '@pinia/colada'
 import type { Ref } from 'vue'
 import { getOrganizationUsers } from '~/api/organizations'
-import type { PaginatedList, PaginationFilter } from '~/types'
-import type { OrganizationUserResponse } from '~/types/organization'
+import type { PaginationFilter } from '~/types'
 
 export const useOrganizationUsers = defineQuery(() => {
   const route = useRoute('/organizations/[organizationId]/settings')
@@ -19,7 +18,6 @@ export const useOrganizationUsers = defineQuery(() => {
     key: () => ['organization-users', route.params.organizationId, filters.value],
     query: () => getOrganizationUsers(route.params.organizationId, filters.value),
     enabled: () => !!route.params.organizationId,
-    placeholderData: () => ({}) as PaginatedList<OrganizationUserResponse>,
   })
 
   return {

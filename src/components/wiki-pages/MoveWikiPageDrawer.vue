@@ -22,6 +22,7 @@ function toNode(page: WikiPageSummary): TreeNode {
   }
 }
 
+const toast = useAppToast()
 const queryCache = useQueryCache()
 
 const { mutate: moveWikiPageFn } = useMutation({
@@ -34,6 +35,7 @@ const { mutate: moveWikiPageFn } = useMutation({
   },
   onSuccess() {
     queryCache.invalidateQueries({ key: ['wiki-pages', project.value.id] })
+    toast.showSuccess({ detail: 'Wiki page moved successfully' })
     hideDrawer()
   },
 })

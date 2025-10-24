@@ -22,13 +22,16 @@ const createProjectSchema = object({
 })
 
 const resolver = ref(yupResolver(createProjectSchema))
+
+const toast = useAppToast()
 const queryCache = useQueryCache()
 
 const { mutate: createProjectFn, isLoading } = useMutation({
   mutation: createProject,
   onSuccess: () => {
-    hideDrawer()
     queryCache.invalidateQueries({ key: ['projects', organizationId.value] })
+    toast.showSuccess({ detail: 'Project created successfully' })
+    hideDrawer()
   },
   onError: displayError,
 })

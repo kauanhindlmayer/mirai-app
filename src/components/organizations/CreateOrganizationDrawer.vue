@@ -20,18 +20,22 @@ const createOrganizationSchema = object({
 })
 
 const resolver = ref(yupResolver(createOrganizationSchema))
+
+const toast = useAppToast()
 const queryCache = useQueryCache()
+
 const { organization } = useOrganizationContext()
 
 const { mutate: createOrganizationFn, isLoading } = useMutation({
   mutation: createOrganization,
   onSuccess: async (organizationId: string) => {
-    hideDrawer()
     await queryCache.invalidateQueries({ key: ['organizations'] })
+    toast.showSuccess({ detail: 'Organization created successfully' })
     const organizations = await listOrganizations()
     const newOrganization = organizations.find((org) => org.id === organizationId)
     if (!newOrganization) return
     organization.value = newOrganization
+    hideDrawer()
   },
   onError: displayError,
 })

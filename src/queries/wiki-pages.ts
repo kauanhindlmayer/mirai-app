@@ -10,7 +10,6 @@ export const useWikiPages = defineQuery(() => {
     key: () => ['wiki-pages', project.value.id],
     query: () => listWikiPages(project.value.id),
     enabled: () => !!project.value,
-    placeholderData: [],
   })
 
   return {

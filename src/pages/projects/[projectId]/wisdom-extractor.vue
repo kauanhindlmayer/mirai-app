@@ -7,6 +7,8 @@ pageStore.setTitle('Wisdom Extractor')
 const { project } = useProjectContext()
 
 const route = useRoute()
+const router = useRouter()
+
 const question = computed(() => route.query.q as string)
 
 const wisdom = ref<WisdomResponse>({
@@ -20,8 +22,6 @@ const { mutate: extractWisdomFn, isLoading } = useMutation({
     wisdom.value = wisdomResponse
   },
 })
-
-const router = useRouter()
 
 function openWorkItemDialog(workItemId: string) {
   router.replace({

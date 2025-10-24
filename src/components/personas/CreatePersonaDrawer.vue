@@ -27,13 +27,15 @@ const createPersonaSchema = object({
 
 const resolver = ref(yupResolver(createPersonaSchema))
 
+const toast = useAppToast()
 const queryCache = useQueryCache()
 
 const { mutate: createPersonaFn, isLoading } = useMutation({
   mutation: (request: CreatePersonaRequest) => createPersona(project.value.id, request),
   onSuccess: () => {
-    hideDrawer()
     queryCache.invalidateQueries({ key: ['personas', project.value.id] })
+    toast.showSuccess({ detail: 'Persona created successfully' })
+    hideDrawer()
   },
   onError: displayError,
 })
