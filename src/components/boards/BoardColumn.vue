@@ -102,7 +102,7 @@ async function onChange(event: DraggableEvent<Card>) {
   }
 }
 
-const { teamId } = useTeamContext()
+const { teamId } = useTeamSelection()
 
 const getInitialValues = (): CreateWorkItemRequest => ({
   title: '',
@@ -141,6 +141,7 @@ const { mutate: createWorkItemFn, isLoading } = useMutation({
     queryCache.invalidateQueries({ key: ['board', boardId] })
     hidePopover()
   },
+  onError: displayError,
 })
 
 async function onFormSubmit({ valid }: FormSubmitEvent) {

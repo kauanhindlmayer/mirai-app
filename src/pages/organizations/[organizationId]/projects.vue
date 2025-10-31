@@ -43,7 +43,6 @@ function handleOrganizationSelection() {
   if (isDefaultRoute) {
     const firstOrganization = organizations.value[0]
     organization.value = firstOrganization
-    router.replace(`/organizations/${firstOrganization.id}/projects`)
     return
   }
 
@@ -54,6 +53,14 @@ function handleOrganizationSelection() {
 }
 
 watch(organizations, handleOrganizationSelection, { immediate: true })
+
+watch(organization, (newOrg) => {
+  if (!newOrg?.id) return
+  const currentRouteOrgId = route.params.organizationId
+  if (currentRouteOrgId !== newOrg.id) {
+    router.replace(`/organizations/${newOrg.id}/projects`)
+  }
+})
 </script>
 
 <template>

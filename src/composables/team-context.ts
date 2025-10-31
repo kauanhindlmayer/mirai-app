@@ -4,11 +4,11 @@ import { listTeams } from '~/api/teams'
 import type { Team } from '~/types/team'
 import { useProjectContext } from './project-context'
 
-export function useTeamContext() {
-  const team = useStorage<Team>('team', {} as Team, undefined, {
-    serializer: StorageSerializers.object,
-  })
+const team = useStorage<Team>('team', {} as Team, undefined, {
+  serializer: StorageSerializers.object,
+})
 
+export function useTeamContext() {
   const teamId = computed(() => team.value.id)
 
   return {
