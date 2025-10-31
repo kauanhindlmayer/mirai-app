@@ -45,7 +45,7 @@ watch(
 
 const route = useRoute('/projects/[projectId]/wiki-pages/[wikiPageId]/')
 
-watch([wikiPages.value, route.params.wikiPageId], selectWikiPage, { immediate: true })
+watch([wikiPages, () => route.params.wikiPageId], selectWikiPage, { immediate: true })
 
 function selectWikiPage() {
   if (!wikiPages.value?.length || isAdding) return
