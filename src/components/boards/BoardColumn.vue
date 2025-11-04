@@ -104,13 +104,12 @@ async function onChange(event: DraggableEvent<Card>) {
 
 const { teamId } = useTeamSelection()
 
-const getInitialValues = (): CreateWorkItemRequest => ({
+const initialValues = {
   title: '',
   type: WorkItemType.UserStory,
-  assignedTeamId: teamId.value,
-})
+}
 
-const form = ref<CreateWorkItemRequest>(getInitialValues())
+const form = ref({ ...initialValues })
 
 const createWorkItemSchema = object({
   title: string().required('Title is a required field'),
@@ -127,7 +126,7 @@ function togglePopover(event: Event) {
 
 function hidePopover() {
   popover.value?.hide()
-  Object.assign(form.value, getInitialValues())
+  Object.assign(form.value, initialValues)
 }
 
 const workItemTypeOptions = formatEnumOptions(WorkItemType)
@@ -135,7 +134,11 @@ const workItemTypeOptions = formatEnumOptions(WorkItemType)
 const { project } = useProjectContext()
 
 const { mutate: createWorkItemFn, isLoading } = useMutation({
-  mutation: () => createWorkItem(project.value.id, form.value),
+  mutation: () =>
+    createWorkItem(project.value.id, {
+      ...form.value,
+      assignedTeamId: teamId.value,
+    }),
   onSuccess: () => {
     queryCache.invalidateQueries({ key: ['work-items', project.value.id] })
     queryCache.invalidateQueries({ key: ['board', boardId] })

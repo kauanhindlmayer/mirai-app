@@ -16,7 +16,7 @@ const createOrganizationSchema = object({
     .min(3, 'Name must be at least 3 characters long')
     .max(255, 'Name must not exceed 255 characters')
     .required('Name is a required field'),
-  description: string().max(500, 'Description must not exceed 500 characters'),
+  description: string().max(500, 'Description must not exceed 500 characters').nullable(),
 })
 
 const resolver = ref(yupResolver(createOrganizationSchema))
