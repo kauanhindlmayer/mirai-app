@@ -31,7 +31,7 @@ const tabs = [
 const selectedTab = ref(tabs[0].id)
 
 function redirectToDocs() {
-  window.open('https://miraihq.com/en', '_blank')
+  window.open('http://docs.miraihq.com', '_blank')
 }
 
 function contactSupport() {

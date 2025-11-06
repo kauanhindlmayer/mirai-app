@@ -12,7 +12,7 @@
             </h3>
             <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
               <a
-                href="https://miraihq.com/en/"
+                href="http://docs.miraihq.com/"
                 target="_blank"
                 class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 underline transition-colors"
               >
