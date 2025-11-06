@@ -1,15 +1,16 @@
-FROM node:20 as build
+FROM node:20 AS build
 
 WORKDIR /app
 
-COPY package.json package.json
-COPY package-lock.json package-lock.json
+COPY package*.json ./
 
-RUN npm install
+RUN npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 
 COPY . .
 
-RUN npm run build
+ENV VITE_API_URL=""
+
+RUN npm run build-only
 
 FROM nginx:alpine
 
