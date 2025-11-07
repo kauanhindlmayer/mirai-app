@@ -112,6 +112,7 @@ declare global {
   const isReactive: (typeof import('vue'))['isReactive']
   const isReadonly: (typeof import('vue'))['isReadonly']
   const isRef: (typeof import('vue'))['isRef']
+  const isTokenExpired: (typeof import('./src/utils/index'))['isTokenExpired']
   const isWeekend: (typeof import('./src/utils/date'))['isWeekend']
   const listBoards: (typeof import('./src/api/boards'))['listBoards']
   const listOrganizations: (typeof import('./src/api/organizations'))['listOrganizations']
@@ -561,6 +562,7 @@ declare module 'vue' {
     readonly isReactive: UnwrapRef<(typeof import('vue'))['isReactive']>
     readonly isReadonly: UnwrapRef<(typeof import('vue'))['isReadonly']>
     readonly isRef: UnwrapRef<(typeof import('vue'))['isRef']>
+    readonly isTokenExpired: UnwrapRef<(typeof import('./src/utils/index'))['isTokenExpired']>
     readonly isWeekend: UnwrapRef<(typeof import('./src/utils/date'))['isWeekend']>
     readonly listBoards: UnwrapRef<(typeof import('./src/api/boards'))['listBoards']>
     readonly listOrganizations: UnwrapRef<
