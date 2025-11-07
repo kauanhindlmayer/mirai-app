@@ -28,11 +28,15 @@ export function useTeamSelection() {
   })
 
   function selectFirstTeam() {
-    if (team.value.id || !query.data.value?.length) return
-    team.value = query.data.value[0]
+    if (!query.data.value?.length) return
+    const currentTeamExists = query.data.value.some((t) => t.id === team.value.id)
+    if (!team.value.id || !currentTeamExists) {
+      team.value = query.data.value[0]
+    }
   }
 
   watch(query.data, selectFirstTeam, { immediate: true })
+  watch(projectId, selectFirstTeam)
 
   return {
     ...query,
