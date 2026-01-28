@@ -153,7 +153,7 @@ const { mutate: createColumnFn } = useMutation({
   mutation: (payload: CreateBoardColumnRequest) => createColumn(board.id, payload),
   onSuccess: () => {
     queryCache.invalidateQueries({ key: ['board', board.id] })
-    toast.showSuccess({ detail: 'Column created successfully' })
+    toast.success('Column created successfully')
     hideDrawer()
   },
   onError: displayError,

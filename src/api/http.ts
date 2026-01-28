@@ -26,7 +26,7 @@ function handleApiError(error: AxiosError) {
 
   if (error.response?.status === Status401Unauthorized) {
     const userStore = useUserStore()
-    toast.showError({ detail: 'Your session has expired. Please log in again.' })
+    toast.error('Your session has expired. Please log in again.')
     userStore.logout()
   }
 

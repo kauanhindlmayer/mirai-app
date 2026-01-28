@@ -52,7 +52,7 @@ const { mutate: updateProjectFn, isLoading } = useMutation({
     return { oldProject, newProject }
   },
   onSuccess: () => {
-    toast.showSuccess({ detail: 'Project updated successfully' })
+    toast.success('Project updated successfully')
   },
   onSettled: (_data, _error, _vars, { newProject }) => {
     if (!newProject) return
@@ -62,7 +62,7 @@ const { mutate: updateProjectFn, isLoading } = useMutation({
     if (newProject === queryCache.getQueryData(['project', projectInfo.id])) {
       queryCache.setQueryData(['project', projectInfo.id], oldProject)
     }
-    toast.showError({ detail: "An error occurred while updating the project's description" })
+    toast.error("An error occurred while updating the project's description")
   },
 })
 

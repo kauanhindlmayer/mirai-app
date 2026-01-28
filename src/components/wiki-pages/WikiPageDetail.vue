@@ -54,7 +54,7 @@ const { mutate: addCommentFn } = useMutation({
     addWikiPageComment(project.value.id, wikiPage.value!.id, { content }),
   onSuccess() {
     invalidateWikiPageQuery()
-    toast.showSuccess({ detail: 'Comment added successfully' })
+    toast.success('Comment added successfully')
   },
 })
 
@@ -63,7 +63,7 @@ const { mutate: deleteCommentFn } = useMutation({
     deleteWikiPageComment(project.value.id, wikiPage.value!.id, commentId),
   onSuccess() {
     invalidateWikiPageQuery()
-    toast.showSuccess({ detail: 'Comment deleted successfully' })
+    toast.success('Comment deleted successfully')
   },
 })
 
@@ -99,10 +99,10 @@ const { mutate: updateCommentFn } = useMutation({
     if (context?.previousWikiPage) {
       queryCache.setQueryData(['wiki-page', wikiPage.value!.id], context.previousWikiPage)
     }
-    toast.showError({ detail: 'Failed to update comment' })
+    toast.error('Failed to update comment')
   },
   onSuccess() {
-    toast.showSuccess({ detail: 'Comment updated successfully' })
+    toast.success('Comment updated successfully')
   },
   onSettled() {
     invalidateWikiPageQuery()

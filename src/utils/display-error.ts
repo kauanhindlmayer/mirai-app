@@ -5,5 +5,5 @@ import type { ApiErrorResponse } from '~/types'
 export function displayError(error: AxiosError<ApiErrorResponse>) {
   const toast = useAppToast()
   const message = error.response?.data.title || 'An error occurred'
-  toast.showError({ detail: message })
+  toast.error(message)
 }

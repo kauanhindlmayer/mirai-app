@@ -30,7 +30,7 @@ const { mutate: createProjectFn, isLoading } = useMutation({
   mutation: createProject,
   onSuccess: () => {
     queryCache.invalidateQueries({ key: ['projects', organizationId.value] })
-    toast.showSuccess({ detail: 'Project created successfully' })
+    toast.success('Project created successfully')
     hideDrawer()
   },
   onError: displayError,

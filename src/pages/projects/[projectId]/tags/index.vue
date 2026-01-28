@@ -29,7 +29,7 @@ const { mutate: addTag } = useMutation({
   mutation: (_: MouseEvent) => createTag(project.value.id, newTag.value),
   onSuccess: async () => {
     await queryCache.invalidateQueries({ key: ['tags'] })
-    toast.showSuccess({ detail: 'Tag created successfully' })
+    toast.success('Tag created successfully')
     newTag.value = { name: '', description: '', color: '' }
   },
   onError: displayError,
@@ -46,7 +46,7 @@ const { mutate: updateTagFn } = useMutation({
   },
   onSuccess: async () => {
     await queryCache.invalidateQueries({ key: ['tags'] })
-    toast.showSuccess({ detail: 'Tag updated successfully' })
+    toast.success('Tag updated successfully')
   },
   onError: displayError,
 })
@@ -78,7 +78,7 @@ const { mutate: deleteTagFn } = useMutation({
     ),
   onSuccess: async () => {
     await queryCache.invalidateQueries({ key: ['tags'] })
-    toast.showSuccess({ detail: 'Selected tags deleted successfully' })
+    toast.success('Selected tags deleted successfully')
     selectedTags.value = []
   },
   onError: displayError,

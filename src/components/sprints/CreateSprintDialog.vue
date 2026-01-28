@@ -30,7 +30,7 @@ const { mutate: createSprintFn, isLoading } = useMutation({
   mutation: (request: CreateSprintRequest) => createSprint(team.value.id, request),
   onSuccess: () => {
     queryCache.invalidateQueries({ key: ['sprints', team.value.id] })
-    toast.showSuccess({ detail: 'Sprint created successfully' })
+    toast.success('Sprint created successfully')
     hideDialog()
   },
   onError: displayError,

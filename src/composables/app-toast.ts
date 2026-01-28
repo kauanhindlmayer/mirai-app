@@ -2,31 +2,32 @@ import toastEventBus from 'primevue/toasteventbus'
 
 type ToastOptions = {
   summary?: string
-  detail: string
   life?: number
 }
 
 export function useAppToast() {
-  const showSuccess = ({ summary = 'Success', detail, life = 3000 }: ToastOptions) => {
+  const success = (message: string, options: ToastOptions = {}) => {
+    const { summary = 'Success', life = 3000 } = options
     toastEventBus.emit('add', {
       severity: 'success',
       summary,
-      detail,
+      detail: message,
       life,
     })
   }
 
-  const showError = ({ summary = 'Error', detail, life = 3000 }: ToastOptions) => {
+  const error = (message: string, options: ToastOptions = {}) => {
+    const { summary = 'Error', life = 3000 } = options
     toastEventBus.emit('add', {
       severity: 'error',
       summary,
-      detail,
+      detail: message,
       life,
     })
   }
 
   return {
-    showSuccess,
-    showError,
+    success,
+    error,
   }
 }

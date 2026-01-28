@@ -97,7 +97,7 @@ function addSubPage() {
 
 function copyPagePath() {
   navigator.clipboard.writeText(`/projects/${project.value.id}/wiki-pages/${wikiPage.value?.id}`)
-  toast.showSuccess({ detail: 'Page path copied to clipboard' })
+  toast.success('Page path copied to clipboard')
 }
 
 const moveWikiPageDrawerRef =
@@ -117,7 +117,7 @@ const { mutate: deleteWikiPageFn } = useMutation({
   mutation: () => deleteWikiPage(project.value.id, wikiPage.value!.id),
   onSuccess: async () => {
     await queryCache.invalidateQueries({ key: ['wiki-pages', project.value.id] })
-    toast.showSuccess({ detail: 'Wiki page deleted successfully' })
+    toast.success('Wiki page deleted successfully')
     router.push(`/projects/${project.value.id}/wiki-pages`)
   },
   onError: displayError,

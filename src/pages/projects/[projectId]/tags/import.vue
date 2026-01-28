@@ -39,7 +39,7 @@ const { mutate: createTagImportJobFn } = useMutation({
   mutation: (event: FileUploadSelectEvent) => createTagImportJob(project.value.id, event.files[0]),
   onSuccess: async () => {
     await queryCache.invalidateQueries({ key: ['tagImportJobs', project.value.id] })
-    toast.showSuccess({ detail: 'Tag import job created successfully' })
+    toast.success('Tag import job created successfully')
   },
   onError: displayError,
 })

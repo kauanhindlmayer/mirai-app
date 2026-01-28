@@ -96,7 +96,7 @@ const { mutate: deleteRetrospectiveFn } = useMutation({
   onSuccess: () => {
     queryCache.invalidateQueries({ key: ['retrospectives', team.value.id] })
     queryCache.invalidateQueries({ key: ['retrospective', retrospectiveId.value] })
-    toast.showSuccess({ detail: 'Retrospective deleted successfully' })
+    toast.success('Retrospective deleted successfully')
     selectedRetrospective.value = null
     retrospectiveToEdit.value = undefined
     router.replace(`/projects/${route.params.projectId}/retrospectives`)
@@ -133,7 +133,7 @@ function toggleMenuItems(event: MouseEvent) {
 
 function copyRetrospectiveLink() {
   navigator.clipboard.writeText(window.location.href)
-  toast.showSuccess({ detail: `The link to the retrospective has been copied to the clipboard` })
+  toast.success(`The link to the retrospective has been copied to the clipboard`)
 }
 
 const retrospectiveHub = useSignalR('/hubs/retrospective')

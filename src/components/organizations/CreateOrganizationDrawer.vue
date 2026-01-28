@@ -30,7 +30,7 @@ const { mutate: createOrganizationFn, isLoading } = useMutation({
   mutation: createOrganization,
   onSuccess: async (organizationId: string) => {
     await queryCache.invalidateQueries({ key: ['organizations'] })
-    toast.showSuccess({ detail: 'Organization created successfully' })
+    toast.success('Organization created successfully')
     const organizations = await listOrganizations()
     const newOrganization = organizations.find((org) => org.id === organizationId)
     if (!newOrganization) return

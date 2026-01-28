@@ -34,7 +34,7 @@ const { mutate: createPersonaFn, isLoading } = useMutation({
   mutation: (request: CreatePersonaRequest) => createPersona(project.value.id, request),
   onSuccess: () => {
     queryCache.invalidateQueries({ key: ['personas', project.value.id] })
-    toast.showSuccess({ detail: 'Persona created successfully' })
+    toast.success('Persona created successfully')
     hideDrawer()
   },
   onError: displayError,

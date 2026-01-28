@@ -35,7 +35,7 @@ const { mutate: moveWikiPageFn } = useMutation({
   },
   onSuccess() {
     queryCache.invalidateQueries({ key: ['wiki-pages', project.value.id] })
-    toast.showSuccess({ detail: 'Wiki page moved successfully' })
+    toast.success('Wiki page moved successfully')
     hideDrawer()
   },
 })

@@ -24,12 +24,12 @@ const { mutate: addUser, isLoading } = useMutation({
   mutation: (request: AddUserToOrganizationRequest) =>
     addUserToOrganization(organizationId.value, request),
   onSuccess: () => {
-    toast.showSuccess({ summary: 'Success', detail: 'User added to organization successfully' })
+    toast.success('User added to organization successfully')
     queryCache.invalidateQueries({ key: ['organization-users'] })
     hideDrawer()
   },
   onError: () => {
-    toast.showError({ summary: 'Error', detail: 'Failed to add user to organization' })
+    toast.error('Failed to add user to organization')
   },
 })
 

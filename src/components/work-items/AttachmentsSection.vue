@@ -52,7 +52,7 @@ async function handleDownload(attachment: WorkItemAttachment) {
     document.body.removeChild(link)
     window.URL.revokeObjectURL(url)
   } catch (error) {
-    toast.showError({ detail: 'Failed to download attachment' })
+    toast.error('Failed to download attachment')
   }
 }
 </script>

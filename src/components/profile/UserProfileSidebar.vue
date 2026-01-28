@@ -63,7 +63,7 @@ const { mutate: updateProfileFn, isLoading: isUpdatingProfile } = useMutation({
     userStore.setUser(user)
     originalProfileData.value.firstName = profileForm.firstName
     originalProfileData.value.lastName = profileForm.lastName
-    toast.showSuccess({ detail: 'Profile updated successfully' })
+    toast.success('Profile updated successfully')
   },
   onError: displayError,
 })
@@ -76,7 +76,7 @@ const { mutate: updateAvatarFn, isLoading: isUpdatingAvatar } = useMutation({
   onSuccess: (user: User) => {
     userStore.setUser(user)
     resetAvatarSelection()
-    toast.showSuccess({ detail: 'Avatar updated successfully' })
+    toast.success('Avatar updated successfully')
   },
   onError: displayError,
 })
@@ -94,11 +94,11 @@ function onFileSelect(event: Event) {
   const file = input.files?.[0]
   if (!file) return
   if (!file.type.startsWith('image/')) {
-    toast.showError({ detail: 'Please select a valid image file' })
+    toast.error('Please select a valid image file')
     return
   }
   if (file.size > 5 * 1024 * 1024) {
-    toast.showError({ detail: 'Image size must be less than 5MB' })
+    toast.error('Image size must be less than 5MB')
     return
   }
   avatarFile.value = file

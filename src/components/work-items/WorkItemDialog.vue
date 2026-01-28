@@ -63,7 +63,7 @@ const { mutate: removeTagFromWorkItemFn } = useMutation({
     removeTagFromWorkItem(project.value.id, workItemId.value!, tag.name),
   onSuccess() {
     queryCache.invalidateQueries({ key: ['work-items'] })
-    toast.showSuccess({ detail: 'Tag removed successfully' })
+    toast.success('Tag removed successfully')
   },
 })
 
@@ -86,7 +86,7 @@ const { mutate: addTagToWorkItemFn } = useMutation({
   onSuccess() {
     queryCache.invalidateQueries({ key: ['work-items'] })
     queryCache.invalidateQueries({ key: ['board'] })
-    toast.showSuccess({ detail: 'Tag added successfully' })
+    toast.success('Tag added successfully')
     selectedTag.value = null
   },
 })
@@ -95,7 +95,7 @@ watch(selectedTag, (tag) => {
   if (!tag) return
   const tagExists = workItem.value?.tags.some((t) => t.name === tag.name)
   if (tagExists) {
-    toast.showError({ detail: 'Tag already added to work item' })
+    toast.error('Tag already added to work item')
     selectedTag.value = null
     return
   }
@@ -111,7 +111,7 @@ const { mutate: updateWorkItemFn } = useMutation({
   onSuccess() {
     queryCache.invalidateQueries({ key: ['board'] })
     queryCache.invalidateQueries({ key: ['work-items'] })
-    toast.showSuccess({ detail: 'Work Item updated successfully' })
+    toast.success('Work Item updated successfully')
     hideDialog()
   },
 })
@@ -121,7 +121,7 @@ const { mutate: addCommentFn } = useMutation({
     addWorkItemComment(project.value.id, workItemId.value!, { content }),
   onSuccess() {
     queryCache.invalidateQueries({ key: ['work-items'] })
-    toast.showSuccess({ detail: 'Comment added successfully' })
+    toast.success('Comment added successfully')
   },
 })
 
@@ -130,7 +130,7 @@ const { mutate: deleteCommentFn } = useMutation({
     deleteWorkItemComment(project.value.id, workItemId.value!, commentId),
   onSuccess() {
     queryCache.invalidateQueries({ key: ['work-items'] })
-    toast.showSuccess({ detail: 'Comment deleted successfully' })
+    toast.success('Comment deleted successfully')
   },
 })
 
@@ -139,7 +139,7 @@ const { mutate: updateCommentFn } = useMutation({
     updateWorkItemComment(project.value.id, workItemId.value!, commentId, { content }),
   onSuccess() {
     queryCache.invalidateQueries({ key: ['work-items'] })
-    toast.showSuccess({ detail: 'Comment updated successfully' })
+    toast.success('Comment updated successfully')
   },
 })
 
@@ -148,7 +148,7 @@ const { mutate: createLinkFn } = useMutation({
     createWorkItemLink(project.value.id, workItemId.value!, request),
   onSuccess() {
     queryCache.invalidateQueries({ key: ['work-items'] })
-    toast.showSuccess({ detail: 'Link created successfully' })
+    toast.success('Link created successfully')
   },
 })
 
@@ -156,7 +156,7 @@ const { mutate: deleteLinkFn } = useMutation({
   mutation: (linkId: string) => deleteWorkItemLink(project.value.id, workItemId.value!, linkId),
   onSuccess() {
     queryCache.invalidateQueries({ key: ['work-items'] })
-    toast.showSuccess({ detail: 'Link removed successfully' })
+    toast.success('Link removed successfully')
   },
 })
 
@@ -164,7 +164,7 @@ const { mutate: uploadAttachmentFn } = useMutation({
   mutation: (file: File) => uploadWorkItemAttachment(project.value.id, workItemId.value!, file),
   onSuccess() {
     queryCache.invalidateQueries({ key: ['work-items'] })
-    toast.showSuccess({ detail: 'File uploaded successfully' })
+    toast.success('File uploaded successfully')
   },
 })
 
@@ -173,7 +173,7 @@ const { mutate: deleteAttachmentFn } = useMutation({
     deleteWorkItemAttachment(project.value.id, workItemId.value!, attachmentId),
   onSuccess() {
     queryCache.invalidateQueries({ key: ['work-items'] })
-    toast.showSuccess({ detail: 'Attachment deleted successfully' })
+    toast.success('Attachment deleted successfully')
   },
 })
 

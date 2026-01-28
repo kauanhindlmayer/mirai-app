@@ -51,12 +51,12 @@ const queryCache = useQueryCache()
 const { mutate: addUserToProjectFn } = useMutation({
   mutation: (userId: string) => addUserToProject(organizationId.value, project.value.id, userId),
   onSuccess: () => {
-    toast.showSuccess({ detail: 'User added to project successfully' })
+    toast.success('User added to project successfully')
     queryCache.invalidateQueries({ key: ['project-users'] })
     hideDrawer()
   },
   onError: () => {
-    toast.showError({ detail: 'Failed to add user to project' })
+    toast.error('Failed to add user to project')
   },
 })
 

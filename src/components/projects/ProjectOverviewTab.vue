@@ -45,7 +45,7 @@ const { mutate: updateProjectFn, isLoading } = useMutation({
     return { oldProject, newProject }
   },
   onSuccess: () => {
-    toast.showSuccess({ detail: 'Project settings updated successfully' })
+    toast.success('Project settings updated successfully')
   },
   onSettled: (_data, _error, _vars, { newProject }) => {
     if (!newProject) return
@@ -55,7 +55,7 @@ const { mutate: updateProjectFn, isLoading } = useMutation({
     if (newProject === queryCache.getQueryData(['project', projectInfo.id])) {
       queryCache.setQueryData(['project', projectInfo.id], oldProject)
     }
-    toast.showError({ detail: 'An error occurred while updating the project settings' })
+    toast.error('An error occurred while updating the project settings')
   },
 })
 
@@ -67,11 +67,11 @@ async function onFormSubmit({ valid }: FormSubmitEvent) {
 const { mutate: deleteProjectFn, isLoading: isDeleting } = useMutation({
   mutation: () => deleteProject(project.value.id, organizationId.value),
   onSuccess: () => {
-    toast.showSuccess({ detail: 'Project deleted successfully' })
+    toast.success('Project deleted successfully')
     router.push(`/organizations/${organizationId.value}/projects`)
   },
   onError: () => {
-    toast.showError({ detail: 'An error occurred while deleting the project' })
+    toast.error('An error occurred while deleting the project')
   },
 })
 

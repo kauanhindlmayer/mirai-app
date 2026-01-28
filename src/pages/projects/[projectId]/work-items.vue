@@ -39,7 +39,7 @@ async function copyWorkItemToClipboard() {
   const workItemDataString = `${code}\t${getTypeLabel(type)}\t${title}\t${getStatusLabel(status)}`
   const workItemString = [header, workItemDataString].join('\n')
   await navigator.clipboard.writeText(workItemString)
-  toast.showSuccess({ detail: 'Work item data copied to clipboard' })
+  toast.success('Work item data copied to clipboard')
   clearSelectedWorkItem()
 }
 
@@ -49,7 +49,7 @@ const { mutate: deleteWorkItemFn } = useMutation({
   mutation: async () => deleteWorkItem(project.value.id, selectedWorkItem.value!.id),
   onSuccess() {
     queryCache.invalidateQueries({ key: ['work-items', filters.value] })
-    toast.showSuccess({ detail: 'Work item has been deleted successfully' })
+    toast.success('Work item has been deleted successfully')
     clearSelectedWorkItem()
   },
   onError: displayError,
